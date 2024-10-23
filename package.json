@@ -43,6 +43,8 @@
     "@nextui-org/theme": "^2.2.11",
     "@nextui-org/tooltip": "^2.0.41",
     "@nextui-org/user": "^2.0.34",
+    "@stripe/react-stripe-js": "^2.8.1",
+    "@stripe/stripe-js": "^4.9.0",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.6",
     "@tailwindcss/typography": "^0.5.15",
