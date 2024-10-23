@@ -5,7 +5,7 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import Link from "next/link"
 import { Input } from "@nextui-org/input"
 
-import { login } from "../actions"
+import { login } from "./actions"
 
 export default async function Login() {
 
