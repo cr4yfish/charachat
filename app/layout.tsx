@@ -4,6 +4,8 @@ import "./globals.css";
 import { NextUIProvider } from "@nextui-org/system";
 import { ThemeProvider } from "@/components/theme-provider";
 
+import { Toaster } from "@/components/ui/toaster"
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -79,6 +81,7 @@ export default function RootLayout({
         >
           <NextUIProvider>
             {children}
+            <Toaster />
           </NextUIProvider>
         </ThemeProvider>
       </body>
