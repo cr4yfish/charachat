@@ -8,10 +8,12 @@ import { startChat } from "./actions";
 import { getChats } from "@/functions/db/chat";
 
 import {
-    Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
+    Card, CardHeader, CardTitle, CardDescription
 } from "@/components/ui/card";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import CharacterCard from "@/components/character/CharacterCard";
+import CharacterDetailsAccordion from "@/components/character/CharacterDetailsAccordion";
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 
@@ -25,33 +27,25 @@ export default async function CharacterView({ params: { characterId } }: { param
     }
 
     const userChats = await getChats(characterId);
-   
+    
     return (
         <>
         <div className="flex flex-col gap-4">
 
             <div className="flex flex-col gap-2">
-                <h2 className="prose dark:prose-invert font-bold text-2xl">{character.name}</h2>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>{character.name}</CardTitle>
-                        <CardDescription>{character.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p>{character.bio}</p>
-                        <p>{character.intro}</p>
-                    </CardContent>
-                    <CardFooter>
-                        <form>
-                            <input type="hidden" name="characterId" value={characterId} />
-                            <Button type="submit" formAction={startChat} >Start Chat</Button>
-                        </form>
-                    </CardFooter>
-                </Card>
+                <h2 className="prose dark:prose-invert font-bold text-4xl">{character.name}</h2>
+                <CharacterCard hasLink={false} character={character} />
+
+                <CharacterDetailsAccordion character={character} />
+
+                <form>
+                    <input type="hidden" name="characterId" value={characterId} />
+                    <Button fullWidth color="primary" variant="shadow" type="submit" formAction={startChat} >Start Chat</Button>
+                </form>
             </div>
             
             <div className="flex flex-col gap-2">
-                <h2 className="prose dark:prose-invert font-bold text-2xl">Your Chats</h2>
+                <h2 className="prose dark:prose-invert font-bold text-xl">Your Chats with {character.name}</h2>
                 <ScrollArea className=" h-full max-h-[50vh]">
                     <div className="flex flex-col gap-2 h-fit">
                         {userChats.map((chat) => (
@@ -66,6 +60,9 @@ export default async function CharacterView({ params: { characterId } }: { param
                         ))}
                     </div>
                 </ScrollArea>
+                {userChats.length == 0 && (
+                    <p className="dark:prose-invert dark:text-slate-400">You have no chats with this character.</p>   
+                )}
             </div>
             
         </div>

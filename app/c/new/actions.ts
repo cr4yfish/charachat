@@ -17,6 +17,7 @@ export const saveCharacter = async (formData: FormData): Promise<void> => {
         name: formData.get("name") as string,
         description: formData.get("description") as string,
         bio: formData.get("bio") as string,
+        image_link: formData.get("image_link") as string,
         intro: formData.get("intro") as string,
         book: formData.get("book") as string,
         id: uuidV4(),

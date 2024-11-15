@@ -13,6 +13,7 @@ export default async function NewCharacter() {
             <Input name="name" isRequired label="Character Name" />
             <Input name="description" isRequired label="Character Description" />
             <Textarea name="bio" isRequired label="Character Bio" />
+            <Input name="image_link" isRequired label="Image Link" />
             <Textarea name="intro" label="Character Intro" />
             <Textarea name="book" label="Character Book" />
             <Button formAction={saveCharacter} type="submit" >Save</Button>

@@ -9,6 +9,7 @@ export type Character = {
     description: string;
     avatar: string;
     avatarUrl?: string;
+    image_link?: string;
     bio: string;
     intro: string;
     book: string;

@@ -67,9 +67,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-black dark h-screen overflow-hidden">
+    <html lang="en" className="bg-black dark h-screen overflow-x-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen overflow-hidden antialiased bg-neutral-900/75`}
+        className={`${geistSans.variable} ${geistMono.variable} h-screen overflow-x-hidden overflow-y-auto antialiased bg-neutral-900/75`}
       >
         <ThemeProvider
           attribute={"class"}

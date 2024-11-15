@@ -19,7 +19,7 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
 export const getCharacters = cache(async (): Promise<Character[]> => {
     const { data, error } = await createClient().from("characters").select(`
         *,
-        profiles!characters_owner_fkey1 (*)    
+        profiles!characters_owner_fkey (*) 
     `);
     
     if (error) {
@@ -28,7 +28,8 @@ export const getCharacters = cache(async (): Promise<Character[]> => {
 
     return data.map((db: any) => {
         return {
-            ...db
+            ...db,
+            owner: db.profiles
         }
     });
 })
