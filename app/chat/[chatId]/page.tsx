@@ -42,7 +42,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
 
     const profile = await getCurrentUser();
 
-    if(!profile.user?.id) {
+    if(!profile.user) {
         return <p>Not logged in</p>
     }
 
