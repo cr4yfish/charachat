@@ -7,7 +7,6 @@ import { createClient } from "@/utils/supabase/supabase";
 
 export const saveCharacter = async (formData: FormData): Promise<void> => {
 
-    console.log("Saving character");
     const { data: { user } } = await createClient().auth.getUser();
 
     if(!user) {
@@ -33,8 +32,6 @@ export const saveCharacter = async (formData: FormData): Promise<void> => {
     if (error) {
         throw error;
     }
-
-    console.log(data);
 
     if(data) {
         redirect(`/c/${data.id}`);

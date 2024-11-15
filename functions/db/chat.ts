@@ -63,7 +63,6 @@ type CreateChatProps = {
 }
 
 export const createChat = async ({ chatId, userId, characterId, title, description } : CreateChatProps): Promise<Chat> => {
-    console.log(chatId, userId, characterId, title, description);
     const { data, error } = await createClient()
     .from("chats")
     .insert([{

@@ -29,8 +29,7 @@ export async function POST(req: Request) {
     }
 
     if(message.content !== "") {
-        const res = await addMessage(message);
-        console.log(res);
+        await addMessage(message);
     }
 
   
@@ -63,14 +62,12 @@ export async function POST(req: Request) {
                 parameters: z.object({ memory: z.string() }),
                 execute: async ({ memory }: { memory: string }) => {
 
-                    console.log("Adding memory to chat", chat.id, memory);
                     try {
-                        const res = await updateChat({
+                        await updateChat({
                             ...chat,
                             dynamic_book: `${chat.dynamic_book}\n${memory}`.trimEnd(),
                         })
                         
-                        console.log(res)
                         return memory;
                     } catch (error) {
                         console.error(error);

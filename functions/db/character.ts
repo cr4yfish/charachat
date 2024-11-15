@@ -26,8 +26,6 @@ export const getCharacters = cache(async (): Promise<Character[]> => {
         throw error;
     }
 
-    console.log(data);
-
     return data.map((db: any) => {
         return {
             ...db

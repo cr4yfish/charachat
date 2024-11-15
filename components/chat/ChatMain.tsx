@@ -38,11 +38,7 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
             profile: user,
             chat: chat
         },
-        async onToolCall({ toolCall }) {
-            console.log("Tool call", toolCall);
-        },
-        onFinish: async (message, options) => {
-            console.log("Finished", message, options);
+        onFinish: async (message) => {
             scrollToBottom();
             if (inputRef.current) {
                 inputRef.current.focus();
@@ -62,8 +58,7 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content
             if(newMessage.content !== "") {
-                const res = await addMessage(newMessage);
-                console.log(res);
+                await addMessage(newMessage);
             }
 
         }
@@ -76,7 +71,6 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
     }, []);
 
     const loadMoreMessages = async () => {
-        console.log("Loading more messages");
         setIsLoading(true);
         const newMessages = await getMessages({
             chatId: chat.id,
