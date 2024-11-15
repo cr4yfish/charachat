@@ -12,7 +12,7 @@ Lets you create a character or use a pre-made one and chat with them. The charac
 - [ ] Character data features (stuff the AI knows)
     - [x] Character data
     - [x] User data
-    - [ ] Static Background information
+    - [x] Static Background information
     - [x] Aquiring new information on its own
 - [ ] Character Chat features
     - [x] Basic text chat
