@@ -119,7 +119,7 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
                 loadMore={async () => await loadMoreMessages()}
                 hasMore={canLoadMore}
                 threshold={50}
-                loader={isLoading ? <div className=" w-full flex items-center justify-center py-4 " key={0}><Spinner size="sm" /></div> : <></>}
+                loader={isLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
                 className="flex flex-col gap-2 pb-40 pt-28 px-4"
