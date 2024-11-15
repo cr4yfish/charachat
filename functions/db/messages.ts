@@ -33,7 +33,7 @@ export const addMessage = async (message: Message) => {
         .insert([{
             ...message,
             chat: message.chat.id,
-            user: message.user.user.id,
+            user: message.user.user,
             character: message.character.id,
         }]);
 
