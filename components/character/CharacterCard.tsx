@@ -1,5 +1,3 @@
-"use server";
-
 import { Image } from "@nextui-org/image";
 import { Card, CardBody } from "@nextui-org/card";
 import { Character } from "@/types/db";
@@ -11,7 +9,7 @@ type Props = {
     hasLink: boolean
 }
 
-export default async function CharacterCard(props: Props) {
+export default function CharacterCard(props: Props) {
 
     return (
         <>
