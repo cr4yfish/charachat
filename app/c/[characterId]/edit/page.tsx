@@ -4,7 +4,7 @@ export default async function CharacterView({ params: { characterId } } : { para
     
     return (
         <>
-        
+        <h1>Editing {characterId}</h1>
         </>
     )
 }

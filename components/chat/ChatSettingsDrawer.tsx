@@ -30,7 +30,7 @@ export default function ChatSettingsDrawer(props: Props) {
             <DrawerContent>
 
                 <DrawerHeader>
-                    <DrawerTitle>Settings</DrawerTitle>
+                    <DrawerTitle>Settings for {props.chat.character.name} Chat</DrawerTitle>
                     <DrawerDescription>Configure your chat</DrawerDescription>
                 </DrawerHeader>
 
