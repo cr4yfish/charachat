@@ -14,6 +14,8 @@ import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CharacterCard from "@/components/character/CharacterCard";
 import CharacterDetailsAccordion from "@/components/character/CharacterDetailsAccordion";
+import Icon from "@/components/utils/Icon";
+import { getSession } from "@/functions/db/auth";
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 
@@ -23,17 +25,35 @@ export default async function CharacterView({ params: { characterId } }: { param
         character = await getCharacter(characterId);
     } catch (error) {
         console.error(error);
-        redirect("/error");
+        return <p>Character not found</p>;
     }
 
     const userChats = await getChats(characterId);
     
+    const { session } = await getSession();
+
+    if(session?.user.id == null) {
+        redirect("/auth");
+    }
+
     return (
         <>
         <div className="flex flex-col gap-4 pb-20">
 
             <div className="flex flex-col gap-2">
-                <h2 className="prose dark:prose-invert font-bold text-4xl">{character.name}</h2>
+                <div className="flex flex-row items-center gap-2">
+                    <Link href="/"><Button variant="light" isIconOnly><Icon filled>arrow_back</Icon></Button></Link>
+                    <div className="flex items-center justify-between w-full">
+                        <h2 className="prose dark:prose-invert font-bold text-2xl">{character.name}</h2>
+                        {character.owner.user == session.user.id &&
+                            <Link href={`/c/${character.id}/edit`}>
+                                <Button isIconOnly variant="light" size="lg"><Icon filled>settings</Icon></Button>
+                            </Link>
+                        }   
+                    </div>
+      
+                </div>
+          
                 <CharacterCard hasLink={false} character={character} />
 
                 <CharacterDetailsAccordion character={character} />
