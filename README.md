@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Highly work in progress character chat app.
 
-## Getting Started
+Lets you create a character or use a pre-made one and chat with them. The character will respond to you based on their personality and remember things you've said to them. This lets you have a dynamic and personal conversation with a character.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
+- [ ] Create a character 
+    - [ ] Basic bio
+    - [ ] Personality, traits, quirks
+    - [ ] Long Background story
+- [ ] Use a pre-made character
+- [ ] Character data features (stuff the AI knows)
+    - [ ] Character data
+    - [ ] User data
+    - [ ] Static Background information
+    - [ ] Aquiring new information on its own
+- [ ] Character Chat features
+    - [ ] Basic text chat
+    - [ ] Emojis
+    - [ ] AI Images
+    - [ ] Gifs
+    - [ ] Editing & deleting messages
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
+- Next.js
+- Tailwind CSS
+- TypeScript
+- Supabase
+- Vercel AI SDK
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Target AIs
+- OpenAI
+- Mistral
+- Gemini
+- Stable diffusion
