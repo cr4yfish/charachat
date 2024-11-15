@@ -14,7 +14,7 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
             *,
             characters (
                 *,
-                profiles!characters_owner_fkey1 (*)
+                profiles!characters_owner_fkey (*)
             )
         `)
         .eq("id", chatId)
@@ -26,7 +26,10 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
 
     return {
         ...data,
-        character: data.characters
+        character: {
+            ...data.characters,
+            owner: data.characters.profiles
+        }
     };
 })
 
