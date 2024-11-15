@@ -30,12 +30,16 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
     };
 })
 
-export const getChats = cache(async (): Promise<Chat[]> => {
-    const { data, error } = await createClient().from("chats").select(`
-        *,
-        profiles!chats_owner_fkey1 (*),
-        profiles!chats_owner_fkey2 (*)
-    `);
+export const getChats = cache(async (characterId: string): Promise<Chat[]> => {
+    const { data, error } = await createClient()
+        .from("chats")
+        .select(`
+            *,
+            characters (
+                *
+            )
+        `)
+        .eq("character", characterId);
     
     if (error) {
         throw error;
@@ -43,7 +47,8 @@ export const getChats = cache(async (): Promise<Chat[]> => {
 
     return data.map((db: any) => {
         return {
-            ...db
+            ...db,
+            character: db.characters
         }
     });
 })
