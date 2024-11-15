@@ -13,7 +13,15 @@ export const getCurrentUser = cache(async (): Promise<Profile> => {
 
     const profile = await getProfile(user.id);
 
-    profile.user = user;
-
     return profile;
+})
+
+export const getSession = cache(async () => {
+    const { data: session, error } = await createClient().auth.getSession();
+
+    if(error) {
+        throw error;
+    }
+
+    return session;
 })

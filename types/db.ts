@@ -1,6 +1,3 @@
-
-import { User } from "@supabase/supabase-js";
-
 export type Character = {
     id: string;
     created_at?: string;
@@ -27,7 +24,7 @@ export type Chat = {
 }
 
 export type Profile = {
-    user: User;
+    user: string;
     created_at?: string;
     username: string;
     first_name: string;

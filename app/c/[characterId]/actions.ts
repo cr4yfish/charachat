@@ -14,7 +14,7 @@ export const startChat = async(formData: FormData) => {
 
     const chat = await createChat({
         chatId: uuidv4(),
-        userId: profile.user.id,
+        userId: profile.user,
         characterId: characterId,
         title: "New Chat",
         description: "This is a new chat"
