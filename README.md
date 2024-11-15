@@ -8,8 +8,8 @@ Lets you create a character or use a pre-made one and chat with them. The charac
     - [x] Basic bio
     - [ ] Personality, traits, quirks
     - [x] Long Background story
-- [ ] Use a pre-made character
-- [ ] Character data features (stuff the AI knows)
+- [x] Use a pre-made character
+- [x] Character data features (stuff the AI knows)
     - [x] Character data
     - [x] User data
     - [x] Static Background information
