@@ -17,6 +17,7 @@ export const getMessages = cache(async ({ chatId, from, limit } : getMessagesPro
         .from("messages")
         .select("*")
         .eq("chat", chatId)
+        .order("created_at", { ascending: false })
         .range(from, from + limit - 1);
 
     if (error) {

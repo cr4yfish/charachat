@@ -5,17 +5,17 @@ Lets you create a character or use a pre-made one and chat with them. The charac
 
 ## Features
 - [ ] Create a character 
-    - [ ] Basic bio
+    - [x] Basic bio
     - [ ] Personality, traits, quirks
-    - [ ] Long Background story
+    - [x] Long Background story
 - [ ] Use a pre-made character
 - [ ] Character data features (stuff the AI knows)
-    - [ ] Character data
-    - [ ] User data
+    - [x] Character data
+    - [x] User data
     - [ ] Static Background information
-    - [ ] Aquiring new information on its own
+    - [x] Aquiring new information on its own
 - [ ] Character Chat features
-    - [ ] Basic text chat
+    - [x] Basic text chat
     - [ ] Emojis
     - [ ] AI Images
     - [ ] Gifs

@@ -19,7 +19,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="font-[family-name:var(--font-geist-sans)] flex flex-col gap-4   ">
+    <div className="font-[family-name:var(--font-geist-sans)] flex flex-col gap-4">
       <Link href={"/c/new"}><Button>New Character</Button></Link>
       <div className="flex flex-wrap gap-4">
         {characters.map((character) => (

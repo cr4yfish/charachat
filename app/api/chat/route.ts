@@ -1,8 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
+import { z } from "zod";
+
+
 import { Chat, Message, Profile } from '@/types/db';
 import { openai } from '@ai-sdk/openai';
 import { convertToCoreMessages, streamText } from 'ai';
 import { addMessage } from '@/functions/db/messages';
+import { updateChat } from '@/functions/db/chat';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -18,15 +22,18 @@ export async function POST(req: Request) {
         chat: chat,
         character: chat.character,
         user: profile,
-        from_ai: true,
+        from_ai: false,
         content: messages[messages.length - 1].content,
         is_edited: false,
         is_deleted: false,
     }
 
-    const res = await addMessage(message);
-    console.log(res);
+    if(message.content !== "") {
+        const res = await addMessage(message);
+        console.log(res);
+    }
 
+  
     const result = await streamText({
         model: openai('gpt-4o-mini'),
         system: `
@@ -39,10 +46,40 @@ export async function POST(req: Request) {
 
             Actively memorize important keywords and facts in the following conversation and use them.
 
-            This is all the knowledge you have until now:
+            This is background information about you:
             ${chat.character.book}
+
+
+            This is all the knowledge you memorized during the conversation up until now:
+            ${chat.dynamic_book}
+
         `,
         messages: convertToCoreMessages(messages),
+        tools: {
+
+            // server side tool
+            addNewMemory: {
+                description: "Add a new memory to the character's knowledge.",
+                parameters: z.object({ memory: z.string() }),
+                execute: async ({ memory }: { memory: string }) => {
+
+                    console.log("Adding memory to chat", chat.id, memory);
+                    try {
+                        const res = await updateChat({
+                            ...chat,
+                            dynamic_book: `${chat.dynamic_book}\n${memory}`.trimEnd(),
+                        })
+                        
+                        console.log(res)
+                        return memory;
+                    } catch (error) {
+                        console.error(error);
+                        const err = error as Error;
+                        return err.message;
+                    }
+                }
+            }
+        }
     });
 
     return result.toDataStreamResponse();

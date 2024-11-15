@@ -78,3 +78,24 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
 
     return data;
 }
+
+export const updateChat = async (chat: Chat): Promise<Chat> => {
+
+    const { data, error } = await createClient()
+        .from("chats")
+        .update({
+            dynamic_book: chat.dynamic_book,
+            title: chat.title,
+            description: chat.description,
+            last_message_at: chat.last_message_at
+        })
+        .eq("id", chat.id)
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+
+}

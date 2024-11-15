@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/system";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -66,13 +67,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-black">
+    <html lang="en" className="bg-black dark h-screen overflow-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen px-4 py-6 antialiased dark bg-neutral-900/75`}
+        className={`${geistSans.variable} ${geistMono.variable} h-screen overflow-hidden antialiased bg-neutral-900/75`}
       >
-        <NextUIProvider>
-          {children}
-        </NextUIProvider>
+        <ThemeProvider
+          attribute={"class"}
+          defaultTheme={"system"}
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextUIProvider>
+            {children}
+          </NextUIProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

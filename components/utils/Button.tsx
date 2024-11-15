@@ -38,7 +38,7 @@ const Button = React.forwardRef(({
 
     return (
         <NextUIButton
-            className={` font-black ${color == "primary" && "text-fuchsia-950"} ${className}`}
+            className={` font-black ${className}`}
             onClick={onClick}
             type={type}
             variant={variant}
