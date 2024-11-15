@@ -30,7 +30,7 @@ export default async function CharacterView({ params: { characterId } }: { param
     
     return (
         <>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 pb-20">
 
             <div className="flex flex-col gap-2">
                 <h2 className="prose dark:prose-invert font-bold text-4xl">{character.name}</h2>
