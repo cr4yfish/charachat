@@ -7,6 +7,7 @@ import { Character } from "@/types/db";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import Icon from "@/components/utils/Icon";
 
 export default async function Home() {
 
@@ -22,8 +23,7 @@ export default async function Home() {
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex flex-col gap-4 px-4 py-6">
       <h1 className="text-4xl font-bold">Charai</h1>
-      <Link href={"/c/new"}><Button color="primary" variant="shadow">New Character</Button></Link>
-
+      
       <div className="flex flex-col gap-2">
         <h2 className="dark:prose-invert text-xl font-bold">Popular</h2>
         <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
@@ -47,6 +47,7 @@ export default async function Home() {
         </ScrollShadow>
       </div>
 
+      <Link href={"/c/new"}><Button startContent={<Icon filled>add</Icon>} fullWidth size="lg" color="primary" variant="shadow">New Character</Button></Link>
 
     </div>
   );
