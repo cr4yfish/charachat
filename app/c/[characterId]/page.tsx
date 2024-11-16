@@ -7,15 +7,13 @@ import { redirect } from "next/navigation";
 import { startChat } from "./actions";
 import { getChats } from "@/functions/db/chat";
 
-import {
-    Card, CardHeader, CardTitle, CardDescription
-} from "@/components/ui/card";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CharacterCard from "@/components/character/CharacterCard";
 import CharacterDetailsAccordion from "@/components/character/CharacterDetailsAccordion";
 import Icon from "@/components/utils/Icon";
 import { getSession } from "@/functions/db/auth";
+import ChatCard from "@/components/chat/ChatCard";
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 
@@ -66,17 +64,10 @@ export default async function CharacterView({ params: { characterId } }: { param
             
             <div className="flex flex-col gap-2">
                 <h2 className="prose dark:prose-invert font-bold text-xl">Your Chats with {character.name}</h2>
-                <ScrollArea className=" h-full max-h-[50vh]">
+                <ScrollArea className="h-fit">
                     <div className="flex flex-col gap-2 h-fit">
                         {userChats.map((chat) => (
-                            <Link key={chat.id} href={`/chat/${chat.id}`}>
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>{chat.title}</CardTitle>
-                                        <CardDescription>{chat.character.name}</CardDescription>
-                                    </CardHeader>
-                                </Card>
-                            </Link>
+                            <ChatCard key={chat.id} chat={chat} />
                         ))}
                     </div>
                 </ScrollArea>
