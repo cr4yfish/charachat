@@ -1,6 +1,6 @@
-import { streamText } from "ai";
+
 import { Character, Profile, Story } from "@/types/db";
-import { getLanguageModel } from "@/functions/ai/llm";
+import { author } from "@/functions/ai/author";
 
 type RequestBody = {
     story: Story, character: Character, profile: Profile, apikey: string, messages: string[] 
@@ -13,8 +13,9 @@ export async function POST(req: Request) {
     // Generate the first_message field in a Story
     // based on Title, Description and story
 
-    const result = await streamText({
-        system: `
+    const result = await author({
+        profile: profile,
+        systemText: `
             You are a helpful and experienced Author who helps users write Stories.
             Generate a first message for a given character in a story-chat based on based on all the information in the prompt.
             The message has to be between 50 and 200 characters long.
@@ -37,7 +38,6 @@ export async function POST(req: Request) {
             Character Background information: ${character.book}
 
         `,
-        model: getLanguageModel(profile.default_llm),
     })
 
 
