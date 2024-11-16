@@ -31,11 +31,34 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
 })
 
 export const getCharacters = cache(async (): Promise<Character[]> => {
-    const { data, error } = await createClient().from("characters").select(`
-        *,
-        profiles!characters_owner_fkey (*) 
-    `);
-    
+    const { data, error } = await createClient()
+        .from("characters")
+        .select(`
+            *,
+            profiles!characters_owner_fkey (*) 
+        `)
+        
+    if (error) {
+        throw error;
+    }
+
+    return data.map((db: any) => {
+        return {
+            ...db,
+            owner: db.profiles
+        }
+    });
+})
+
+export const getUserCharacters = cache(async (userId: string): Promise<Character[]> => {
+    const { data, error } = await createClient()
+        .from("characters")
+        .select(`
+            *,
+            profiles!characters_owner_fkey (*)
+        `)
+        .eq("owner", userId);
+
     if (error) {
         throw error;
     }
