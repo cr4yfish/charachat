@@ -84,15 +84,13 @@ export default function Messagebubble(props: Props) {
                     <Card 
                         id={props.message.id}
                         className={`
-                            ${props.message.role == "user" ? "bg-blue-100 dark:bg-slate-500/15" : "bg-gray-100 dark:bg-blue-500/10"}
-                            ${props.message.role == "user" ? "ml-auto" : "mr-auto"}
-                            w-fit
-                            max-w-3/4
+                            rounded-2xl w-fit max-w-3/4
+                            ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-900/5" : "mr-auto rounded-bl dark:bg-zinc-900"}
                         `}
                     >
                         { props.message.role !== "user" &&
                             <CardHeader className=" py-0 pb-1 pt-3">
-                                <CardTitle className=" text-blue-500 ">
+                                <CardTitle className=" text-primary ">
                                     {props.chat.character.name}
                                 </CardTitle>
                             </CardHeader>
