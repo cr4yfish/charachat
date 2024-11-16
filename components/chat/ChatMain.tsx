@@ -94,28 +94,23 @@ export default function ChatMain(props : Props) {
     }, [props.initMessages])
 
     useEffect(() => {
-        const handleKeyboard = () => {
-            setTimeout(() => {
-                console.log("Adjusting height");
-                const keyboardHeight = initialScreenHeight - window.innerHeight;
-                document.body.style.height = `${initialScreenHeight - keyboardHeight}px`;
-            }, 300);
 
-        }
-
-        const handleBlur = () => {
-            document.body.style.height = `${initialScreenHeight}px`;
+        const handleBlur = (e: FocusEvent) => {
+            // if user tapped on send-btn, focus input again
+            if(e.relatedTarget && (e.relatedTarget as HTMLElement).id === "send-btn") {
+                if(inputRef.current) {
+                    inputRef.current.focus();
+                }
+            }
         }
 
         // add event listener to focus
         if(inputRef.current) {
-            inputRef.current.addEventListener("focus", handleKeyboard);
             inputRef.current.addEventListener("blur", handleBlur);
         }
 
         return () => {
             if(inputRef.current) {
-                inputRef.current.removeEventListener("focus", handleKeyboard);
                 inputRef.current.removeEventListener("blur", handleBlur);
             }
         }
@@ -200,7 +195,6 @@ export default function ChatMain(props : Props) {
     const handleSubmitAdapter = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         handleSubmit(e);
-        inputRef.current?.focus();
     }
 
     return (
@@ -260,7 +254,7 @@ export default function ChatMain(props : Props) {
                     innerWrapper: "flex items-center justify-center",
                 }}
                 endContent={
-                    <Button className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
+                    <Button id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
                         <Icon filled>send</Icon>
                     </Button>
                 } 
