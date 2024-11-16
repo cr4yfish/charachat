@@ -30,6 +30,8 @@ export async function POST(req: Request) {
 
     if(message.content !== "") {
         await addMessage(message);
+        chat.last_message_at = new Date().toISOString();
+        await updateChat(chat);
     }
 
   

@@ -14,14 +14,16 @@ import { addMessage, getMessages } from "@/functions/db/messages";
 import Messagebubble from "./Messagebubble";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@nextui-org/spinner";
+import { updateChat } from "@/functions/db/chat";
 
+const _INTRO_MESSAGE = "Introduce yourself";
 
 export default function ChatMain({ chat, initMessages, user } : { chat: Chat, initMessages: Message[], user: Profile }) {
     const [cursor, setCursor] = useState(initMessages.length);
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     
-    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append } = useChat({
         initialMessages: initMessages.map((m) => {
             return {
                 id: m.id,
@@ -59,6 +61,8 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
             // tool calls dont have a content
             if(newMessage.content !== "") {
                 await addMessage(newMessage);
+                chat.last_message_at = new Date().toISOString();
+                await updateChat(chat);
             }
 
         }
@@ -68,6 +72,16 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
 
     useEffect(() => {
         scrollToBottom();
+
+        if(messages.length == 0) {
+            // chat is empty -> is new chat
+            // send initial message
+            append({
+                content: _INTRO_MESSAGE,
+                role: 'user'
+            });
+        }
+
     }, []);
 
     const loadMoreMessages = async () => {
@@ -125,6 +139,7 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
                 className="flex flex-col gap-2 pb-40 pt-28 px-4"
             >
                 {messages.map((message, index) => (
+                    (message.content !== _INTRO_MESSAGE) &&
                     <Messagebubble key={message.id} message={message} index={index} chat={chat} addToolResult={addToolResult} />
                 ))}
             </InfiniteScroll>
