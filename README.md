@@ -1,4 +1,4 @@
-# Chara.ai
+# Charachat
 
 Highly work in progress character chat app.
 
