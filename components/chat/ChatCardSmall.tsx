@@ -25,7 +25,15 @@ export default function ChatCardSmall(props: Props) {
     useEffect(() => {
         const getLatestMessage = async () => {
             setIsLoadingLatestMessage(true);
-            const res = await getLatestChatMessage(props.chat.id);
+
+            const key = sessionStorage.getItem("key");
+
+            if(!key) {
+                console.error("No key found in session storage");
+                return;
+            }
+
+            const res = await getLatestChatMessage(props.chat.id, key);
             if(res !== null) {
                 setLatestMessage(res);
             }

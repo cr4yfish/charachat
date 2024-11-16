@@ -5,14 +5,16 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Message } from "@/types/db";
+import { decryptMessage, encryptMessage, generateKey } from "@/lib/crypto";
 
 type getMessagesProps = {
     chatId: string;
     from: number;
     limit: number;
+    key: Buffer;
 }
 
-export const getMessages = cache(async ({ chatId, from, limit } : getMessagesProps): Promise<Message[]> => {
+export const getMessages = cache(async ({ chatId, from, limit, key } : getMessagesProps): Promise<Message[]> => {
     const { data, error } = await createClient()
         .from("messages")
         .select("*")
@@ -24,10 +26,15 @@ export const getMessages = cache(async ({ chatId, from, limit } : getMessagesPro
         throw error;
     }
 
-    return data;
+    const decryptedData = data.map((message: Message) => ({
+        ...message,
+        content: decryptMessage(message.content, key),
+    }));
+
+    return decryptedData;
 })
 
-export const getLatestChatMessage = cache(async (chatId: string): Promise<Message | null> => {
+export const getLatestChatMessage = cache(async (chatId: string, key: string): Promise<Message | null> => {    
     const { data, error } = await createClient()
         .from("messages")
         .select("*")
@@ -39,14 +46,22 @@ export const getLatestChatMessage = cache(async (chatId: string): Promise<Messag
         throw error;
     }
 
-    return data[0] || null;
+    const decryptedMessage = data[0] ? {
+        ...data[0],
+        content: decryptMessage(data[0].content, Buffer.from(key, "hex")),
+    } : null;
+
+    return decryptedMessage;
 })
 
-export const addMessage = async (message: Message) => {
+export const addMessage = async (message: Message, key: string) => {
+    const encryptedContent = encryptMessage(message.content, Buffer.from(key, "hex"));
+
     const { data, error } = await createClient()
         .from("messages")
         .insert([{
             ...message,
+            content: encryptedContent,
             chat: message.chat.id,
             user: message.user.user,
             character: message.character.id,

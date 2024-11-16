@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { z } from "zod";
-
+import { cookies } from 'next/headers';
 
 import { Chat, Message, Profile } from '@/types/db';
 import { openai } from '@ai-sdk/openai';
@@ -15,6 +15,7 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
     const { messages, profile: initProfile, chat: initChat } = await req.json();
+    const cookiesStore = cookies();
 
     const profile: Profile = initProfile as Profile;
     const chat: Chat = initChat as Chat;
@@ -31,7 +32,13 @@ export async function POST(req: Request) {
     }
 
     if(message.content !== "" && message.content !== _INTRO_MESSAGE) {
-        await addMessage(message);
+        const key = cookiesStore.get("key")?.value;
+
+        if(!key) {
+            throw new Error("No key cookie");
+        }
+
+        await addMessage(message, key);
         chat.last_message_at = new Date().toISOString();
         await updateChat(chat);
     }

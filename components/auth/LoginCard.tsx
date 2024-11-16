@@ -8,6 +8,7 @@ import { FormEvent, useState } from "react";
 import { login, LoginResponse } from "@/functions/db/auth";
 
 import { loginSchema } from "@/lib/schemas";
+import { generateKey } from "@/lib/crypto";
 
 export default function LoginCard() {
     const [email, setEmail] = useState("");
@@ -26,6 +27,11 @@ export default function LoginCard() {
         setLoginResponse(result);
 
         if(result.success) {
+
+            const keyBuffer = generateKey(password, email);
+
+            sessionStorage.setItem("key", keyBuffer.toString("hex"));
+
             window.location.href = "/";
         }
     }

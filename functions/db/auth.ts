@@ -1,6 +1,7 @@
 "use server";
 
 import { ZodError } from "zod";
+import { cookies } from "next/headers";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { cache } from "react";
@@ -10,6 +11,7 @@ import { Profile } from "@/types/db";
 import { loginSchema } from "@/lib/schemas";
 import { AuthError } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
+import { generateKey } from "@/lib/crypto";
 
 export const checkIsLoggedIn = async () => {
     const { data: { user }, error } = await createClient().auth.getUser();
@@ -78,6 +80,11 @@ export const login = async (email: string, password: string): Promise<LoginRespo
             databaseError: error
         }
     }
+
+    // set cookie with key
+    const keyBuffer = generateKey(password, email);
+
+    cookies().set("key", keyBuffer.toString("hex"), { secure: true });
 
     return {
         success: true

@@ -69,7 +69,15 @@ export default function ChatMain(props : Props) {
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content
             if(newMessage.content !== "") {
-                await addMessage(newMessage);
+                
+                const key = sessionStorage.getItem("key");
+
+                if(!key) {
+                    console.error("No key found in session storage");
+                    return;
+                }
+
+                await addMessage(newMessage, key);
                 props.chat.last_message_at = new Date().toISOString();
                 await updateChat(props.chat);
             }
@@ -94,7 +102,6 @@ export default function ChatMain(props : Props) {
     }, [props.initMessages])
 
     useEffect(() => {
-        console.log("Messages length changed");
         if(isLoading && messages.length > 0) {
             scrollToBottom();
         }
@@ -140,6 +147,13 @@ export default function ChatMain(props : Props) {
                 }
             ])
 
+            const key = sessionStorage.getItem("key");
+
+            if(!key) {
+                console.error("No key found in session storage");
+                return;
+            }
+
             await addMessage({
                 id: uuidv4(),
                 chat: props.chat,
@@ -149,7 +163,7 @@ export default function ChatMain(props : Props) {
                 content: props.chat.story.first_message.replace("{{ user }}", props.user.first_name),
                 is_edited: false,
                 is_deleted: false,
-            });
+            }, key);
             
 
         }
@@ -158,11 +172,20 @@ export default function ChatMain(props : Props) {
 
     const loadMoreMessages = async () => {
         setIsMessagesLoading(true);
+        
+        const key = sessionStorage.getItem("key");
+
+        if(!key) {
+            console.error("No key found in session storage");
+            return;
+        }
+
         const newMessages = await getMessages({
             chatId: props.chat.id,
             from: cursor,
-            limit: 10
-        })
+            limit: 10,
+            key: Buffer.from(key, "hex")
+        });
 
         if(newMessages.length === 0) {
             setCanLoadMore(false);
