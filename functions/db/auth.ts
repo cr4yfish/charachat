@@ -10,6 +10,18 @@ import { Profile } from "@/types/db";
 import { loginSchema } from "@/lib/schemas";
 import { AuthError } from "@supabase/supabase-js";
 
+export const checkIsLoggedIn = async () => {
+    const { data: { user }, error } = await createClient().auth.getUser();
+
+    if(user == null || error) {
+        return false;
+    } else if(user.id) {
+        return true;
+    }
+
+    return false;
+}
+
 export const getCurrentUser = cache(async (): Promise<Profile> => {
     const { data: { user } } = await createClient().auth.getUser();
 

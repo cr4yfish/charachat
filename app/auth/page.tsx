@@ -4,8 +4,16 @@ import Link from "next/link"
 
 import LoginCard from "@/components/auth/LoginCard"
 import { Button } from "@/components/utils/Button"
+import { checkIsLoggedIn } from "@/functions/db/auth"
+import { redirect } from "next/navigation"
 
 export default async function Login() {
+
+    const isLoggedIn = await checkIsLoggedIn()
+
+    if(isLoggedIn) {
+        redirect("/")
+    }
 
     return (
         <>
