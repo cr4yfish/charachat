@@ -27,6 +27,21 @@ export const getMessages = cache(async ({ chatId, from, limit } : getMessagesPro
     return data;
 })
 
+export const getLatestChatMessage = cache(async (chatId: string): Promise<Message | null> => {
+    const { data, error } = await createClient()
+        .from("messages")
+        .select("*")
+        .eq("chat", chatId)
+        .order("created_at", { ascending: false })
+        .range(0, 0);
+
+    if (error) {
+        throw error;
+    }
+
+    return data[0] || null;
+})
+
 export const addMessage = async (message: Message) => {
     const { data, error } = await createClient()
         .from("messages")
