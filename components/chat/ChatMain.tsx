@@ -30,6 +30,7 @@ export default function ChatMain(props : Props) {
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const setupExecuted = useRef(false);
+    const [initialScreenHeight, setInitialScreenHeight] = useState(0);
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append } = useChat({
         initialMessages: props.initMessages.map((m) => {
@@ -80,6 +81,9 @@ export default function ChatMain(props : Props) {
 
     useEffect(() => {
         scrollToBottom();
+        if(window) {
+            setInitialScreenHeight(window.innerHeight);
+        }
     }, []);
 
     useEffect(() => {
@@ -88,6 +92,34 @@ export default function ChatMain(props : Props) {
             setup();
         }
     }, [props.initMessages])
+
+    useEffect(() => {
+        const handleKeyboard = () => {
+            setTimeout(() => {
+                console.log("Adjusting height");
+                const keyboardHeight = initialScreenHeight - window.innerHeight;
+                document.body.style.height = `${initialScreenHeight - keyboardHeight}px`;
+            }, 300);
+
+        }
+
+        const handleBlur = () => {
+            document.body.style.height = `${initialScreenHeight}px`;
+        }
+
+        // add event listener to focus
+        if(inputRef.current) {
+            inputRef.current.addEventListener("focus", handleKeyboard);
+            inputRef.current.addEventListener("blur", handleBlur);
+        }
+
+        return () => {
+            if(inputRef.current) {
+                inputRef.current.removeEventListener("focus", handleKeyboard);
+                inputRef.current.removeEventListener("blur", handleBlur);
+            }
+        }
+    }, [inputRef.current, initialScreenHeight])
 
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0)) return;
