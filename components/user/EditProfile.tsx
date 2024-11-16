@@ -139,21 +139,6 @@ export default function EditProfile(props: Props) {
             <p className="text-sm dark:text-slate-400">All API Keys are stored encrypted and are only decrypted when viewed or used.</p>
             <Card>
                 <CardHeader>
-                    <CardDescription>Configure your Groq LLMs</CardDescription>
-                    <CardTitle>Groq</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                    <Input label="Base URL" description="Your API Link" 
-                        value={profile.groq_base_url} onValueChange={(value) => handleUpdateValue("groq_base_url", value)} 
-                    />
-                    <Input label="API Key" description="You API Key" type="text" 
-                        value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
-                    />
-                </CardContent>
-            </Card>
-            
-            <Card>
-                <CardHeader>
                     <CardDescription>Configure your Ollama LLMs</CardDescription>
                     <CardTitle>Ollama</CardTitle>
                 </CardHeader>
@@ -173,17 +158,20 @@ export default function EditProfile(props: Props) {
                     <CardTitle>API Keys</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
-                    <Input label="Openai API Key" description="You API Key" type="text" 
+                    <Input label="Openai API Key" type="text" 
                         value={profile.openai_encrypted_api_key} onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
                     />
-                    <Input label="Gemini API Key" description="You API Key" type="text" 
+                    <Input label="Gemini API Key" type="text" 
                         value={profile.gemini_encrypted_api_key} onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
                     />
-                    <Input label="Mistral API Key" description="You API Key" type="text"
+                    <Input label="Mistral API Key" type="text"
                         value={profile.mistral_encrypted_api_key} onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
                     />
                     <Input label="Anthropic API Key" type="text"
                         value={profile.anthropic_encrypted_api_key} onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
+                    />
+                    <Input label="API Key" type="text" 
+                        value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
                 </CardContent>
             </Card>
