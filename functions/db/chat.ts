@@ -117,7 +117,8 @@ export const updateChat = async (chat: Chat): Promise<Chat> => {
             dynamic_book: chat.dynamic_book,
             title: chat.title,
             description: chat.description,
-            last_message_at: chat.last_message_at
+            last_message_at: chat.last_message_at,
+            llm: chat.llm
         })
         .eq("id", chat.id)
         .single();

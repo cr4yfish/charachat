@@ -3,12 +3,13 @@ import { z } from "zod";
 import { cookies } from 'next/headers';
 
 import { Chat, Message, Profile } from '@/types/db';
-import { openai } from '@ai-sdk/openai';
 import { convertToCoreMessages, streamText } from 'ai';
 import { addMessage } from '@/functions/db/messages';
 import { updateChat } from '@/functions/db/chat';
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
+import { getLanguageModel, getProfileAPIKey } from '@/functions/ai/llm';
+import { decryptMessage } from '@/lib/crypto';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -30,22 +31,32 @@ export async function POST(req: Request) {
         is_edited: false,
         is_deleted: false,
     }
+    const key = cookiesStore.get("key")?.value;
+
+    if(!key) {
+        throw new Error("No key cookie");
+    }
 
     if(message.content !== "" && message.content !== _INTRO_MESSAGE) {
-        const key = cookiesStore.get("key")?.value;
-
-        if(!key) {
-            throw new Error("No key cookie");
-        }
-
         await addMessage(message, key);
         chat.last_message_at = new Date().toISOString();
         await updateChat(chat);
     }
 
-  
+    const encryptedAPIKey = getProfileAPIKey(chat.llm || profile.default_llm, profile);
+    if(!encryptedAPIKey) {
+        throw new Error("No API key found");
+    }
+
+    const decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
+    
+    console.log("Using:", chat.llm || profile.default_llm, decryptedAPIKey);
+
     const result = await streamText({
-        model: openai('gpt-4o-mini'),
+        model: getLanguageModel({
+            modelId: chat.llm || profile.default_llm,
+            apiKey: decryptedAPIKey,
+        }),
         system: `
             You are ${chat.character.name}, ${chat.character.description}, ${chat.character.bio}.
             Your are chatting with ${profile.first_name} ${profile.last_name} aka ${profile.username} with bio: ${profile.bio}.

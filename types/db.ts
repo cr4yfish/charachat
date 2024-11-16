@@ -22,6 +22,7 @@ export type Chat = {
     last_message_at?: string;
     dynamic_book?: string;
     story?: Story;
+    llm: string;
 }
 
 export type Profile = {
@@ -33,6 +34,16 @@ export type Profile = {
     bio?: string;
     avatar_link?: string;
     tokens: number;
+    default_llm: string;
+    ollama_base_url?: string;
+    ollama_encrypted_api_key?: string;
+    groq_base_url?: string;
+    groq_encrypted_api_key?: string;
+    openai_encrypted_api_key?: string;
+    gemini_encrypted_api_key?: string;
+    mistral_base_url?: string;
+    mistral_encrypted_api_key?: string;
+    anthropic_encrypted_api_key?: string
 }
 
 export type Story = {

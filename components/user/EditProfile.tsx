@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Spacer } from "@nextui-org/spacer";
 import { Input } from "@nextui-org/input";
 
 import { Button } from "@/components/utils/Button";
@@ -9,6 +10,8 @@ import { Profile } from "@/types/db";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { updateProfile } from "@/functions/db/profiles";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { decryptMessage, encryptMessage } from "@/lib/crypto";
 
 type Props = {
     profile: Profile
@@ -20,11 +23,57 @@ export default function EditProfile(props: Props) {
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    useEffect(() => {
+        // decrypt API Keys
+        const key = sessionStorage.getItem('key');
+
+        if(!key) {
+            return;
+        }
+
+        const keyBuffer = Buffer.from(key, 'hex');
+
+        const profileToEdit: Profile = {
+            ...props.profile,
+            groq_encrypted_api_key: props.profile.groq_encrypted_api_key && decryptMessage(props.profile.groq_encrypted_api_key, keyBuffer),
+            ollama_encrypted_api_key: props.profile.ollama_encrypted_api_key && decryptMessage(props.profile.ollama_encrypted_api_key, keyBuffer),
+            openai_encrypted_api_key: props.profile.openai_encrypted_api_key && decryptMessage(props.profile.openai_encrypted_api_key, keyBuffer),
+            gemini_encrypted_api_key: props.profile.gemini_encrypted_api_key && decryptMessage(props.profile.gemini_encrypted_api_key, keyBuffer),
+            mistral_encrypted_api_key: props.profile.mistral_encrypted_api_key && decryptMessage(props.profile.mistral_encrypted_api_key, keyBuffer),
+            anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer)
+        }
+
+        console.log(profileToEdit)
+
+        setProfile(profileToEdit);
+
+    }, [props.profile])
+
     const handleUpdate = async () => {
         setIsSaving(true);
 
+        // Encrypt API Keys
+        const key = sessionStorage.getItem('key');
+
+        if(!key) {
+            console.error("No key found in session storage");
+            return;
+        }
+
+        const keyBuffer = Buffer.from(key, 'hex');
+
+        const profileToSave: Profile = {
+            ...profile,
+            groq_encrypted_api_key: profile.groq_encrypted_api_key && encryptMessage(profile.groq_encrypted_api_key, keyBuffer),
+            ollama_encrypted_api_key: profile.ollama_encrypted_api_key && encryptMessage(profile.ollama_encrypted_api_key, keyBuffer),
+            openai_encrypted_api_key: profile.openai_encrypted_api_key && encryptMessage(profile.openai_encrypted_api_key, keyBuffer),
+            gemini_encrypted_api_key: profile.gemini_encrypted_api_key && encryptMessage(profile.gemini_encrypted_api_key, keyBuffer),
+            mistral_encrypted_api_key: profile.mistral_encrypted_api_key && encryptMessage(profile.mistral_encrypted_api_key, keyBuffer),
+            anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer)
+        }
+
         try {
-            await updateProfile(profile);
+            await updateProfile(profileToSave);
         } catch (error) {
             console.error(error);
         }
@@ -44,6 +93,10 @@ export default function EditProfile(props: Props) {
         setIsDeleting(false);
     }
 
+    const handleUpdateValue = (key: string, value: string) => {
+        setProfile({...profile, [key]: value});
+    }
+
     return (
         <>
         <div className="flex flex-col gap-2">
@@ -52,27 +105,27 @@ export default function EditProfile(props: Props) {
                 description="This will be public information and used as a display name on your Characters and Stories. This IS NOT used by the AI."
                 isRequired 
                 value={profile.username}
-                onValueChange={(value) => setProfile({...profile, username: value})} 
+                onValueChange={(value) => handleUpdateValue('username', value)} 
             />
             <Input 
                 label="First Name"
                 description="This will be used by the AI to address you. No one else will see this."
                 isRequired 
                 value={profile.first_name} 
-                onValueChange={(value) => setProfile({...profile, first_name: value})} 
+                onValueChange={(value) => handleUpdateValue('first_name', value)} 
             />
             <Input 
                 label="Last Name" 
                 description="(Optional) Also only visible to the AI."
                 value={profile.last_name} 
-                onValueChange={(value) => setProfile({...profile, last_name: value})} 
+                onValueChange={(value) => handleUpdateValue('last_name', value)} 
             />
             <TextareaWithCounter 
                 label="Bio"
                 isRequired
                 description="Tell us about yourself. This will be given to the AI to improve responses." 
                 value={profile.bio} 
-                onValueChange={(value) => setProfile({...profile, bio: value})} 
+                onValueChange={(value) => handleUpdateValue('bio', value)} 
                 maxLength={250} 
             />
             <Input 
@@ -80,8 +133,62 @@ export default function EditProfile(props: Props) {
                 description="Provide a direct link to an image (e.g. Upload to Imgur and then post the link here)." 
                 placeholder="https://i.imgur.com/Utr8AgMb.jpg"
                 value={profile.avatar_link}
-                onValueChange={(value) => setProfile({...profile, avatar_link: value})}
+                onValueChange={(value) => handleUpdateValue('avatar_link', value)}
             />
+
+            <p className="text-sm dark:text-slate-400">All API Keys are stored encrypted and are only decrypted when viewed or used.</p>
+            <Card>
+                <CardHeader>
+                    <CardDescription>Configure your Groq LLMs</CardDescription>
+                    <CardTitle>Groq</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                    <Input label="Base URL" description="Your API Link" 
+                        value={profile.groq_base_url} onValueChange={(value) => handleUpdateValue("groq_base_url", value)} 
+                    />
+                    <Input label="API Key" description="You API Key" type="text" 
+                        value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
+                    />
+                </CardContent>
+            </Card>
+            
+            <Card>
+                <CardHeader>
+                    <CardDescription>Configure your Ollama LLMs</CardDescription>
+                    <CardTitle>Ollama</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                    <Input label="Base URL" description="Your API Link" 
+                        value={profile.ollama_base_url} onValueChange={(value) => handleUpdateValue("ollama_base_url", value)}
+                    />
+                    <Input label="API Key" description="You API Key" type="text" 
+                        value={profile.ollama_encrypted_api_key} onValueChange={(value) => handleUpdateValue("ollama_encrypted_api_key", value)}
+                    />
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardDescription>Configure hosted LLMs</CardDescription>
+                    <CardTitle>API Keys</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                    <Input label="Openai API Key" description="You API Key" type="text" 
+                        value={profile.openai_encrypted_api_key} onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
+                    />
+                    <Input label="Gemini API Key" description="You API Key" type="text" 
+                        value={profile.gemini_encrypted_api_key} onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
+                    />
+                    <Input label="Mistral API Key" description="You API Key" type="text"
+                        value={profile.mistral_encrypted_api_key} onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
+                    />
+                    <Input label="Anthropic API Key" type="text"
+                        value={profile.anthropic_encrypted_api_key} onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
+                    />
+                </CardContent>
+            </Card>
+
+            <Spacer y={2} />
 
             <Button
                 size="lg" color="primary"

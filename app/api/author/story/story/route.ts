@@ -1,6 +1,6 @@
 import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
 import { Character, Profile, Story } from "@/types/db";
+import { getLanguageModel } from "@/functions/ai/llm";
 
 type RequestBody = {
     story: Story, character: Character, profile: Profile, apikey: string, messages: string[] 
@@ -8,7 +8,7 @@ type RequestBody = {
 
 export async function POST(req: Request) {
 
-    const { story, character } = (await req.json()) as RequestBody;
+    const { story, character, profile } = (await req.json()) as RequestBody;
 
 
 
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             Character Background information: ${character.book}
 
         `,
-        model: openai('gpt-4o-mini')
+        model: getLanguageModel(profile.default_llm),
     })
 
 

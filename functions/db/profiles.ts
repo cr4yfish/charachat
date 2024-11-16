@@ -40,7 +40,7 @@ export const addTokens = async (userId: string, tokens: number) => {
         .from("profiles")
         .upsert({
             user: userId,
-            tokens: tokens
+            tokens: tokens ?? 0
         });
 
     if (error) {

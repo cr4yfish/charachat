@@ -67,7 +67,13 @@ export default function ChatMain(props : Props) {
                 is_deleted: false,
             }
 
-            await updateTokens(props.user.user, (props.user.tokens + usage.totalTokens));
+            console.log("Used tokens:", usage)
+            try {
+                // add tokens to user
+                await updateTokens(props.user.user, (props.user.tokens + usage.totalTokens));
+            } catch (error) {
+                console.error("Error adding tokens", error);
+            }
 
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content

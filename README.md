@@ -13,6 +13,8 @@ All Messages are stored encrypted in the database and decrypted on the client si
     <img src="https://i.imgur.com/8FpYG8J.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/nLIC7uQ.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/G8fG5wr.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/7NLoqB1.png" style="height: 500px; width: auto;" >
+    
 </div>
 
 ## Features
@@ -26,14 +28,12 @@ All Messages are stored encrypted in the database and decrypted on the client si
 ### AI Features
 - [x] Agent Structure
 - [x] Memory Agent
-- [ ] LLM Switching
+- [x] LLM Switching
     - [x] OpenAI gpt4-o
-    - [ ] Mistral
-        - [ ] Provider
-        - [ ] Self Hosted
-    - [ ] Ollama Self Hosted
-    - [ ] Gemini
-    - [ ] Claude
+    - [x] Mistral
+    - [x] Ollama Self Hosted
+    - [x] Gemini
+    - [x] Claude
 
 ### AI Data Access in Chats
 - [x] Character data
