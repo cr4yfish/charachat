@@ -197,6 +197,12 @@ export default function ChatMain(props : Props) {
         scrollArea?.scrollTo(0, scrollArea.scrollHeight);
     }
 
+    const handleSubmitAdapter = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        handleSubmit(e);
+        inputRef.current?.focus();
+    }
+
     return (
         <>
         <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll " >
@@ -236,8 +242,8 @@ export default function ChatMain(props : Props) {
  
 
         <form 
-            onSubmit={handleSubmit} 
-            className="h-[5rem] w-full relative bg-content flex items-center justify-center px-4 py-6"
+            onSubmit={handleSubmitAdapter} 
+            className="h-[5rem] w-full bg-content flex items-center justify-center px-4 py-6"
         >
             <Textarea 
                 placeholder="Send a message" 
