@@ -3,13 +3,11 @@ export default function Layout({ children } : { children: React.ReactNode | Reac
 
     return (
         <>
-        <div className="flex flex-col h-screen ">
             
-            <div className="h-fit flex flex-col gap-2 pb-20">
-                {children}
-            </div>
-           
+        <div className="h-fit flex flex-col gap-2 pb-20 px-4 py-6">
+            {children}
         </div>
+           
         </>
     )
 }

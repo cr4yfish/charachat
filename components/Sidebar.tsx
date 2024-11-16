@@ -53,12 +53,40 @@ export default function Sidebar(props: Props) {
               <div className="flex flex-col gap-4">
                 <Separator orientation={"horizontal"} />
                 <div className="flex flex-col gap-3">
+
                   <ConditionalLink active={props.profile !== undefined} href={`/user/${props.profile?.user}/chats`}>
-                    <Button isDisabled={props.profile === undefined} fullWidth size="lg" variant="ghost" startContent={<Icon >chat</Icon>}>Your chats</Button>
+                    <Button 
+                      isDisabled={props.profile === undefined} 
+                      fullWidth size="lg" 
+                      variant="ghost" 
+                      startContent={<Icon >chat</Icon>}
+                    >
+                      Your chats
+                    </Button>
                   </ConditionalLink>
+
                   <ConditionalLink active={props.profile !== undefined} href={`/user/${props.profile?.user}/characters`}>
-                    <Button isDisabled={props.profile === undefined} fullWidth size="lg" variant="ghost" startContent={<Icon >people</Icon>}>Your Characters</Button>
+                    <Button 
+                      isDisabled={props.profile === undefined} 
+                      fullWidth size="lg" 
+                      variant="ghost" 
+                      startContent={<Icon >people</Icon>}
+                    >
+                      Your Characters
+                    </Button>
                   </ConditionalLink>
+
+                  <ConditionalLink active={props.profile !== undefined} href={`/user/${props.profile?.user}/stories`}>
+                    <Button 
+                      isDisabled={props.profile === undefined} 
+                      fullWidth size="lg" 
+                      variant="ghost" 
+                      startContent={<Icon >book</Icon>}
+                    >
+                      Your Stories
+                    </Button>
+                  </ConditionalLink>
+
                 </div>
         
               </div>

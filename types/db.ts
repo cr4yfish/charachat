@@ -21,6 +21,7 @@ export type Chat = {
     character: Character;
     last_message_at?: string;
     dynamic_book?: string;
+    story?: Story;
 }
 
 export type Profile = {
@@ -38,10 +39,12 @@ export type Story = {
     created_at?: string;
     creator: Profile;
     character: Character;
-    name: string;
+    title: string;
     description: string;
-    image: string;
+    image?: string;
+    image_link: string;
     story: string;
+    first_message: string;
 }
 
 export type Message = {

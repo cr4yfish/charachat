@@ -71,4 +71,4 @@ export const truncateText = (text: string, maxLength: number) => {
 };
 
 
-export const _INTRO_MESSAGE = "Introduce yourself";
+export const _INTRO_MESSAGE = "Introduce yourself and if there is a story: Recap the story in your message.";

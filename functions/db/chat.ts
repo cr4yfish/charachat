@@ -6,17 +6,35 @@ import { cache } from "react";
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
 
+const chatMatcher = `
+    *,
+    characters (
+        *,
+        profiles!characters_owner_fkey (*)
+    ),
+    stories (
+        *,
+        characters (
+            *,
+            profiles!characters_owner_fkey (*)
+        )
+    ),
+    profiles (*)
+`
+
+const chatFormatter = (db: any): Chat => {
+    return {
+        ...db,
+        character: db.characters,
+        story: db.stories,
+        user: db.profiles
+    }
+}
 
 export const getChat = cache(async (chatId: string): Promise<Chat> => {
     const { data, error } = await createClient()
         .from("chats")
-        .select(`
-            *,
-            characters (
-                *,
-                profiles!characters_owner_fkey (*)
-            )
-        `)
+        .select(chatMatcher)
         .eq("id", chatId)
         .single();
 
@@ -24,24 +42,13 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
         throw error;
     }
 
-    return {
-        ...data,
-        character: {
-            ...data.characters,
-            owner: data.characters.profiles
-        }
-    };
+    return chatFormatter(data);
 })
 
 export const getCharacterChats = cache(async (characterId: string): Promise<Chat[]> => {
     const { data, error } = await createClient()
         .from("chats")
-        .select(`
-            *,
-            characters (
-                *
-            )
-        `)
+        .select(chatMatcher)
         .eq("character", characterId)
         .order("last_message_at", { ascending: false })
     
@@ -50,22 +57,14 @@ export const getCharacterChats = cache(async (characterId: string): Promise<Chat
     }
 
     return data.map((db: any) => {
-        return {
-            ...db,
-            character: db.characters
-        }
+        return chatFormatter(db)
     });
 })
 
 export const getChats = cache(async (): Promise<Chat[]> => {
     const { data, error } = await createClient()
         .from("chats")
-        .select(`
-            *,
-            characters (
-                *
-            )
-        `)
+        .select(chatMatcher)
         .order("last_message_at", { ascending: false })
     
     if (error) {
@@ -73,10 +72,7 @@ export const getChats = cache(async (): Promise<Chat[]> => {
     }
 
     return data.map((db: any) => {
-        return {
-            ...db,
-            character: db.characters
-        }
+        return chatFormatter(db)
     });
 })
 
@@ -87,9 +83,10 @@ type CreateChatProps = {
     characterId: string;
     title: string;
     description: string;
+    storyId?: string;
 }
 
-export const createChat = async ({ chatId, userId, characterId, title, description } : CreateChatProps): Promise<Chat> => {
+export const createChat = async ({ chatId, userId, characterId, title, description, storyId } : CreateChatProps): Promise<Chat> => {
     const { data, error } = await createClient()
     .from("chats")
     .insert([{
@@ -97,17 +94,18 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
         user: userId,
         character: characterId,
         title: title,
-        description: description
+        description: description,
+        story: storyId
     }])
     .eq("id", chatId)
-    .select("*")
+    .select(chatMatcher)
     .single();
 
     if (error) {
         throw error;
     }
 
-    return data;
+    return chatFormatter(data)
 }
 
 export const updateChat = async (chat: Chat): Promise<Chat> => {
@@ -127,7 +125,7 @@ export const updateChat = async (chat: Chat): Promise<Chat> => {
         throw error;
     }
 
-    return data;
+    return data
 
 }
 

@@ -19,13 +19,20 @@ import { updateChat } from "@/functions/db/chat";
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 
-export default function ChatMain({ chat, initMessages, user } : { chat: Chat, initMessages: Message[], user: Profile }) {
-    const [cursor, setCursor] = useState(initMessages.length);
+type Props = {
+    chat: Chat;
+    initMessages: Message[];
+    user: Profile;
+}
+
+export default function ChatMain(props : Props) {
+    const [cursor, setCursor] = useState(props.initMessages.length);
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    
+    const setupExecuted = useRef(false);
+
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append } = useChat({
-        initialMessages: initMessages.map((m) => {
+        initialMessages: props.initMessages.map((m) => {
             return {
                 id: m.id,
                 createdAt: m.created_at,
@@ -38,8 +45,8 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
         maxSteps: 5,
         keepLastMessageOnError: true,
         body: {
-            profile: user,
-            chat: chat
+            profile: props.user,
+            chat: props.chat
         },
         onFinish: async (message) => {
             scrollToBottom();
@@ -49,9 +56,9 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
             // add message to db
             const newMessage: Message = {
                 id: uuidv4(),
-                chat: chat,
-                character: chat.character,
-                user: user,
+                chat: props.chat,
+                character: props.chat.character,
+                user: props.user,
                 from_ai: true,
                 content: message.content,
                 is_edited: false,
@@ -62,8 +69,8 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
             // tool calls dont have a content
             if(newMessage.content !== "") {
                 await addMessage(newMessage);
-                chat.last_message_at = new Date().toISOString();
-                await updateChat(chat);
+                props.chat.last_message_at = new Date().toISOString();
+                await updateChat(props.chat);
             }
 
         }
@@ -76,20 +83,53 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
     }, []);
 
     useEffect(() => {
-        if(messages.length == 0) {
-            // chat is empty -> is new chat
-            // send initial message
-            append({
-                content: _INTRO_MESSAGE,
-                role: 'user'
-            });
+        console.log(props.chat)
+        if((props.initMessages.length == 0) && !setupExecuted.current) {
+            setupExecuted.current = true;
+            setup();
         }
-    }, [messages, append])
+    }, [props.initMessages])
+
+    const setup = async () => {
+        if((props.initMessages.length > 0) || (messages.length > 0)) return;
+
+        console.log("First time setup");
+
+        // Works for both, normal chats and story chats
+        append({ content: _INTRO_MESSAGE, role: "user", createdAt: new Date() });
+
+        // if this is a story chat, add the first message from the story
+        if(props.chat.story) {
+            setMessages([
+                {
+                    id: uuidv4(),
+                    content: props.chat.story.first_message.replace("{{ user }}", props.user.first_name),
+                    role: "assistant",
+                    createdAt: new Date()
+                }
+            ])
+
+            const res = await addMessage({
+                id: uuidv4(),
+                chat: props.chat,
+                character: props.chat.character,
+                user: props.user,
+                from_ai: true,
+                content: props.chat.story.first_message.replace("{{ user }}", props.user.first_name),
+                is_edited: false,
+                is_deleted: false,
+            });
+            
+            console.log("Added message to db",res);
+
+        }
+
+    }
 
     const loadMoreMessages = async () => {
         setIsLoading(true);
         const newMessages = await getMessages({
-            chatId: chat.id,
+            chatId: props.chat.id,
             from: cursor,
             limit: 10
         })
@@ -105,7 +145,12 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
 
         setCursor(cursor + newMessages.length);
 
-        const revMessages = newMessages.reverse();
+        // remove duplicates
+        const noDupes = newMessages.filter((m) => {
+            return !messages.some((msg) => msg.content === m.content)
+        })
+
+        const revMessages = noDupes.reverse();
         const mappedMessages = revMessages.map((m) => {
             return {
                 id: m.id,
@@ -154,7 +199,7 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
                                     }
                                 </div>
                             )}
-                            <Messagebubble key={message.id} message={message} index={index} chat={chat} addToolResult={addToolResult} />
+                            <Messagebubble key={message.id} message={message} index={index} chat={props.chat} addToolResult={addToolResult} />
                         </div>
                     )
                 ))}

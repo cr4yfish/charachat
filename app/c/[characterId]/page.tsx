@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/utils/Button";
 import { getCharacter } from "@/functions/db/character";
-import { Character } from "@/types/db";
+import { Character, Story } from "@/types/db";
 import { redirect } from "next/navigation";
 import { startChat } from "./actions";
 import { getCharacterChats } from "@/functions/db/chat";
@@ -14,6 +14,8 @@ import Icon from "@/components/utils/Icon";
 import { getSession } from "@/functions/db/auth";
 import ChatList from "@/components/chat/ChatList";
 import BackLink from "@/components/utils/BackLink";
+import { getCharacterStories } from "@/functions/db/stories";
+import StoryCardSmall from "@/components/story/StoryCard";
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 
@@ -21,11 +23,13 @@ export default async function CharacterView({ params: { characterId } }: { param
 
     try {
         character = await getCharacter(characterId);
+        
     } catch (error) {
         console.error(error);
         return <p>Character not found</p>;
     }
 
+    const stories = await getCharacterStories(characterId);
     const userChats = await getCharacterChats(characterId);
     
     const { session } = await getSession();
@@ -36,7 +40,15 @@ export default async function CharacterView({ params: { characterId } }: { param
 
     return (
         <>
-        <div className="flex flex-col gap-4 pb-20">
+
+        <div className="z-20 absolute bottom-0 left-0 w-full flex items-center justify-center pb-5 px-4">
+            <form className="w-full">
+                <input type="hidden" name="characterId" value={characterId} />
+                <Button size="lg" fullWidth color="primary" variant="shadow" type="submit" formAction={startChat} >Start Chat</Button>
+            </form>
+        </div>
+
+        <div className="flex flex-col gap-4 pb-20 px-4 py-6">
 
             <div className="flex flex-col gap-2">
                 <div className="flex flex-row items-center gap-2">
@@ -52,16 +64,26 @@ export default async function CharacterView({ params: { characterId } }: { param
       
                 </div>
           
-                <CharacterCard hasLink={false} character={character} />
+                <CharacterCard fullWidth hasLink={false} character={character} />
 
                 <CharacterDetailsAccordion character={character} />
-
-                <form>
-                    <input type="hidden" name="characterId" value={characterId} />
-                    <Button fullWidth color="primary" variant="shadow" type="submit" formAction={startChat} >Start Chat</Button>
-                </form>
             </div>
-            
+                        
+            <div className="flex flex-col gap-2">
+                <h2 className="prose dark:prose-invert font-bold text-xl">Stories with {character.name}</h2>
+                <div className="flex flex-col gap-2">
+                    <Link href={`/c/${characterId}/story/new`}><Button variant="flat" color="secondary" fullWidth>Create Story</Button></Link>
+                </div>
+                <div className="flex flex-col gap-2">
+                    {stories.map((story: Story) => (
+                        <StoryCardSmall key={story.id} story={story} hasLink fullWidth />
+                    ))}
+
+                    {stories.length == 0 && <p>No stories found</p>}
+                
+                </div>
+            </div>
+
             <ChatList initChats={userChats} character={character} />
             
         </div>

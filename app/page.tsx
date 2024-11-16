@@ -8,10 +8,14 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { getCurrentUser } from "@/functions/db/auth";
 
 import Sidebar from "@/components/Sidebar";
+import { getStories } from "@/functions/db/stories";
+import StoryCard from "@/components/story/StoryCard";
+import StoryCardSmall from "@/components/story/StoryCardSmall";
 
 export default async function Home() {
 
   let characters: Character[] = [];
+  const stories = await getStories();
 
   let profile: Profile | undefined = undefined;
 
@@ -61,6 +65,17 @@ export default async function Home() {
           <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
             {characters.map((character) => (
               <CharacterCard hasLink key={character.id} character={character} />
+            ))}
+          </div>
+        </ScrollShadow>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h2 className="dark:prose-invert text-xl font-bold">Stories</h2>
+        <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
+          <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
+            {stories.map((story) => (
+              <StoryCard key={story.id} story={story} hasLink />
             ))}
           </div>
         </ScrollShadow>
