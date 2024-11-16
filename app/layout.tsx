@@ -17,10 +17,10 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-const APP_NAME = "AI Chat";
-const APP_DEFAULT_TITLE = "AI Chat";
-const APP_TITLE_TEMPLATE = "%s - AI Chat";
-const APP_DESCRIPTION = "AI Chat";
+const APP_NAME = "Charachat - Chat with your favorite characters";
+const APP_DEFAULT_TITLE = "Charachat - Chat with your favorite characters";
+const APP_TITLE_TEMPLATE = "%s - Charachat - Chat with your favorite characters";
+const APP_DESCRIPTION = "Charachat - Chat with your favorite characters";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,

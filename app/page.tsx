@@ -41,7 +41,7 @@ export default async function Home() {
     <div className="font-[family-name:var(--font-geist-sans)] flex flex-col gap-4 px-4 py-6">
 
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Charai</h1>
+        <h1 className="text-4xl font-bold">Charachat</h1>
         <Sidebar profile={profile} />
       </div>
       
