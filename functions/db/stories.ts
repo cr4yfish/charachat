@@ -34,6 +34,7 @@ export const getStory = cache(async (storyId: string): Promise<Story> => {
         .single();
 
     if (error) {
+        console.error("Error fetching single story", error);
         throw error;
     }
 

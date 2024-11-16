@@ -39,6 +39,7 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
         .single();
 
     if (error) {
+        console.error("Error fetching single chat", error);
         throw error;
     }
 
@@ -102,6 +103,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
     .single();
 
     if (error) {
+        console.log("Error creating chat", error);
         throw error;
     }
 
@@ -122,6 +124,7 @@ export const updateChat = async (chat: Chat): Promise<Chat> => {
         .single();
 
     if (error) {
+        console.error("Error updating chat", error);
         throw error;
     }
 

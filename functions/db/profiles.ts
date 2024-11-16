@@ -14,6 +14,7 @@ export const getProfile = cache(async (userId: string) => {
         .single();
 
     if (error) {
+        console.error("Error fetching single profile", error);
         throw error;
     }
 

@@ -17,6 +17,7 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
         .single();
 
     if (error) {
+        console.error("Error fetching single character", error);
         throw error;
     }
 
