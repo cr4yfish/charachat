@@ -5,9 +5,10 @@ import { Textarea } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import InfiniteScroll from "react-infinite-scroller";
 
+
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
-
+import { useToast } from "@/hooks/use-toast";
 import { Chat, Message, Profile } from "@/types/db";
 import { useRef, useState, useEffect } from "react";
 import { addMessage, getMessages } from "@/functions/db/messages";
@@ -32,8 +33,9 @@ export default function ChatMain(props : Props) {
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const setupExecuted = useRef(false);
     const [initialScreenHeight, setInitialScreenHeight] = useState(0);
+    const { toast } = useToast();
 
-    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
         initialMessages: props.initMessages.map((m) => {
             return {
                 id: m.id,
@@ -90,6 +92,14 @@ export default function ChatMain(props : Props) {
                 await updateChat(props.chat);
             }
 
+        },
+        onError: async (err) => {
+            console.error("Error in chat", err.message, error);
+            toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive"
+            });
         }
     });
 
@@ -249,7 +259,7 @@ export default function ChatMain(props : Props) {
                 loader={isMessagesLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
-                className="flex flex-col gap-2 pb-5 pt-28 px-4 h-fit"
+                className="flex flex-col gap-2 pb-5 pt-28 px-4 h-fit min-h-full"
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
