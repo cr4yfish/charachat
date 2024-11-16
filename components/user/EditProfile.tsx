@@ -170,7 +170,7 @@ export default function EditProfile(props: Props) {
                     <Input label="Anthropic API Key" type="text"
                         value={profile.anthropic_encrypted_api_key} onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
                     />
-                    <Input label="API Key" type="text" 
+                    <Input label="Groq API Key" type="text" 
                         value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
                 </CardContent>
