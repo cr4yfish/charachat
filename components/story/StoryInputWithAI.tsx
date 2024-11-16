@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat, Message as AIMessage } from "ai/react";
+import { useChat } from "ai/react";
 
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { Button } from "../utils/Button";
