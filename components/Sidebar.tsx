@@ -97,21 +97,21 @@ export default function Sidebar(props: Props) {
                 <div className="flex flex-col gap-2">
                     {props.profile &&
                     <>
-                      <Button 
-                          color="warning" variant="flat" 
-                          size="lg" 
-                          isDisabled
+                      <Link href={`/user/${props.profile.user}/edit`} className="w-full">
+                        <Button 
+                          color="warning" variant="flat" size="lg" fullWidth
                           startContent={<Icon filled>edit</Icon>}
-                      >
-                          Edit Profile
-                      </Button>
+                        >
+                            Edit Profile
+                        </Button>
+                      </Link>
 
                       <Button 
-                          color="danger" variant="flat" 
-                          size="lg" 
-                          startContent={<Icon filled>logout</Icon>}
-                          onClick={handleLogout}
-                          isLoading={isLoggingOut}
+                        color="danger" variant="flat" 
+                        size="lg" fullWidth
+                        startContent={<Icon filled>logout</Icon>}
+                        onClick={handleLogout}
+                        isLoading={isLoggingOut}
                       >
                           Log out
                       </Button>

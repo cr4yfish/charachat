@@ -4,6 +4,7 @@
 import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase"
+import { Profile } from "@/types/db";
 
 
 export const getProfile = cache(async (userId: string) => {
@@ -20,6 +21,19 @@ export const getProfile = cache(async (userId: string) => {
 
     return data;
 })
+
+export const updateProfile = async (profile: Profile) => {
+    const { data, error } = await createClient()
+        .from("profiles")
+        .upsert(profile);
+
+    if (error) {
+        console.error("Error updating profile", error);
+        throw error;
+    }
+
+    return data;
+}
 
 export const addTokens = async (userId: string, tokens: number) => {
     const { data, error } = await createClient()
