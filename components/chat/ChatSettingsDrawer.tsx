@@ -28,7 +28,7 @@ export default function ChatSettingsDrawer(props: Props) {
     const handleDelete = async () => {
         setIsDeleting(true)
         try {
-            const res = await deleteChat(chat.id)
+            await deleteChat(chat.id)
             window.location.href = "/";
         } catch (e) {
             console.error(e)
