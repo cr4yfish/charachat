@@ -8,6 +8,8 @@ import { convertToCoreMessages, streamText } from 'ai';
 import { addMessage } from '@/functions/db/messages';
 import { updateChat } from '@/functions/db/chat';
 
+import { _INTRO_MESSAGE } from "@/lib/utils";
+
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
@@ -28,7 +30,7 @@ export async function POST(req: Request) {
         is_deleted: false,
     }
 
-    if(message.content !== "") {
+    if(message.content !== "" && message.content !== _INTRO_MESSAGE) {
         await addMessage(message);
         chat.last_message_at = new Date().toISOString();
         await updateChat(chat);
