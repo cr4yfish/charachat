@@ -28,11 +28,11 @@ type Props = {
 export default function ChatMain(props : Props) {
     const [cursor, setCursor] = useState(props.initMessages.length);
     const [canLoadMore, setCanLoadMore] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const setupExecuted = useRef(false);
     const [initialScreenHeight, setInitialScreenHeight] = useState(0);
 
-    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading } = useChat({
         initialMessages: props.initMessages.map((m) => {
             return {
                 id: m.id,
@@ -150,7 +150,7 @@ export default function ChatMain(props : Props) {
     }
 
     const loadMoreMessages = async () => {
-        setIsLoading(true);
+        setIsMessagesLoading(true);
         const newMessages = await getMessages({
             chatId: props.chat.id,
             from: cursor,
@@ -184,7 +184,7 @@ export default function ChatMain(props : Props) {
         })
 
         setMessages(mappedMessages.concat(messages))
-        setIsLoading(false);
+        setIsMessagesLoading(false);
     }
 
     const scrollToBottom = () => {
@@ -208,7 +208,7 @@ export default function ChatMain(props : Props) {
                 loadMore={async () => await loadMoreMessages()}
                 hasMore={canLoadMore}
                 threshold={50}
-                loader={isLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
+                loader={isMessagesLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
                 className="flex flex-col gap-2 pb-40 pt-28 px-4 h-fit"
@@ -247,6 +247,7 @@ export default function ChatMain(props : Props) {
                 ref={inputRef}
                 name="prompt"
                 onChange={handleInputChange}
+                isDisabled={isLoading}
                 minRows={1}
                 maxRows={15}
                 classNames={{
