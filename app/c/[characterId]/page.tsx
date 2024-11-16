@@ -5,7 +5,7 @@ import { getCharacter } from "@/functions/db/character";
 import { Character } from "@/types/db";
 import { redirect } from "next/navigation";
 import { startChat } from "./actions";
-import { getCharacterChats, getChats } from "@/functions/db/chat";
+import { getCharacterChats } from "@/functions/db/chat";
 
 import Link from "next/link";
 import CharacterCard from "@/components/character/CharacterCard";

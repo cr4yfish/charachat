@@ -1,18 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react"
 
 import { Chat, Message } from "@/types/db";
-import { Button } from "../utils/Button";
-import Icon from "../utils/Icon";
-import BlurModal from "../utils/BlurModal";
 import { useEffect, useState } from "react";
-import TextareaWithCounter from "../utils/TextareaWithCounter";
-import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
-import { Input } from "@nextui-org/input";
 import { getLatestChatMessage } from "@/functions/db/messages";
 import { Skeleton } from "../ui/skeleton";
 import { formatLastMessageTime, truncateText } from "@/lib/utils";
@@ -24,16 +17,10 @@ type Props = {
 }
 
 export default function ChatCardSmall(props: Props) {
-    const [chat, setChat] = useState(props.chat);
 
     const [latestMessage, setLatestMessage] = useState<Message>();
     const [isLoadingLatestMessage, setIsLoadingLatestMessage] = useState(true);
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-
+    
     const getLatestMessage = async () => {
         setIsLoadingLatestMessage(true);
         const res = await getLatestChatMessage(props.chat.id);
@@ -41,27 +28,6 @@ export default function ChatCardSmall(props: Props) {
             setLatestMessage(res);
         }
         setIsLoadingLatestMessage(false);
-    }
-
-    const handleDeleteChat = async () => {
-        setIsDeleting(true);
-        try {
-            await deleteChat(props.chat.id);
-            if(props.setChats) props.setChats((prev) => prev.filter((chat) => chat.id !== props.chat.id));
-        } catch (error) {
-            console.error(error);
-        }
-        setIsDeleting(false);
-    }
-
-    const handleEditChat = async () => {
-        setIsSaving(true);
-
-        await updateChat(chat);
-        if(props.setChats) props.setChats((prev) => prev.map((c) => c.id === chat.id ? chat : c));
-
-        setIsModalOpen(false);
-        setIsSaving(false);
     }
 
     useEffect(() => {

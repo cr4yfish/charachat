@@ -5,11 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "./Button";
 import Icon from "./Icon";
 
-type Props = {
 
-}
-
-export default function BackLink(props: Props) {
+export default function BackLink() {
     const router = useRouter();
 
     return (

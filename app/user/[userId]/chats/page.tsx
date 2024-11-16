@@ -5,9 +5,8 @@ import BackLink from "@/components/utils/BackLink";
 import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
 import { getChats } from "@/functions/db/chat";
-import Link from "next/link";
 
-export default async function UserChats({ params: { userId } } : { params: { userId: string } }) {
+export default async function UserChats({ params: {  } } : { params: { userId: string } }) {
 
     const chats = await getChats();
 
