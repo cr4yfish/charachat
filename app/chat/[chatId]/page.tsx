@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import ChatMain from "@/components/chat/ChatMain";
 import ChatSettingsDrawer from "@/components/chat/ChatSettingsDrawer";
 import BackLink from "@/components/utils/BackLink";
@@ -12,6 +13,7 @@ import { Chat as ChatType, Message } from "@/types/db";
 
 
 export default async function Chat({ params: { chatId } } : { params: { chatId: string } }) {
+    const cookieStore = cookies();
 
     let chat: ChatType | null = null;
 
@@ -27,11 +29,22 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
 
     let initMessages: Message[] = [];
 
+    const keyCookie = cookieStore.get("key");
+    const key = keyCookie?.value;
+
+    if (!key) {
+        console.error("No key cookie");
+        return <>No key!</>
+    }
+
+    const keyBuffer = Buffer.from(key, "hex");
+
     try {
         initMessages = await getMessages({
             chatId: chat.id,
             from: 0,
-            limit: 10
+            limit: 10,
+            key: keyBuffer
         })
         initMessages = initMessages.reverse();
     } catch (error) {
