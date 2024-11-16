@@ -5,7 +5,6 @@ import { motion } from "motion/react"
 
 import { Chat, Message } from "@/types/db";
 import { useEffect, useState } from "react";
-import { deleteChat, updateChat } from "@/functions/db/chat";
 import { getLatestChatMessage } from "@/functions/db/messages";
 import { Skeleton } from "../ui/skeleton";
 import { formatLastMessageTime, truncateText } from "@/lib/utils";
@@ -20,7 +19,7 @@ export default function ChatCardSmall(props: Props) {
 
     const [latestMessage, setLatestMessage] = useState<Message>();
     const [isLoadingLatestMessage, setIsLoadingLatestMessage] = useState(true);
-    
+
     const getLatestMessage = async () => {
         setIsLoadingLatestMessage(true);
         const res = await getLatestChatMessage(props.chat.id);
