@@ -14,7 +14,7 @@ import { addMessage, getMessages } from "@/functions/db/messages";
 import Messagebubble from "./Messagebubble";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@nextui-org/spinner";
-import { isSameDay } from "@/lib/utils";
+import { isSameDay, isToday, isYesterday } from "@/lib/utils";
 import { updateChat } from "@/functions/db/chat";
 
 const _INTRO_MESSAGE = "Introduce yourself";
@@ -146,7 +146,12 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
                         <div key={message.id + "_wrapper"}>
                             {((index == 0) || !isSameDay(new Date(message.createdAt!), new Date(messages[index - 1]?.createdAt ?? ""))) && (
                                 <div className="text-center text-sm dark:text-slate-400 my-2">
-                                    {new Date(message.createdAt!).toLocaleDateString()}
+                                    { isToday(new Date(message.createdAt!)) 
+                                        ? "Today" :
+                                        isYesterday(new Date(message.createdAt!)) 
+                                        ? "Yesterday" :
+                                        new Date(message.createdAt!).toLocaleDateString()
+                                    }
                                 </div>
                             )}
                             <Messagebubble key={message.id} message={message} index={index} chat={chat} addToolResult={addToolResult} />

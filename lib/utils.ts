@@ -22,3 +22,17 @@ export const framerListAnimationProps = {
 export function isSameDay(date1: Date, date2: Date): boolean {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 }
+
+export function getDayBefore(date: Date): Date {
+  const yesterday = new Date(date);
+  yesterday.setDate(date.getDate() - 1);
+  return yesterday;
+}
+
+export function isToday(date: Date): boolean {
+  return isSameDay(date, new Date());
+}
+
+export function isYesterday(date: Date): boolean {
+  return isSameDay(date, getDayBefore(new Date()));
+}
