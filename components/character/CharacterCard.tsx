@@ -6,7 +6,8 @@ import ConditionalLink from "../utils/ConditionalLink";
 
 type Props = {
     character: Character,
-    hasLink: boolean
+    hasLink: boolean,
+    fullWidth?: boolean
 }
 
 export default function CharacterCard(props: Props) {
@@ -14,7 +15,7 @@ export default function CharacterCard(props: Props) {
     return (
         <>
         <ConditionalLink active={props.hasLink} href={`/c/${props.character.id}`}>
-            <Card isPressable={props.hasLink} className="w-[300px] h-full">
+            <Card isPressable={props.hasLink} className={`h-full w-[300px] ${props.fullWidth && "w-full"} `}>
                 <CardBody className="flex flex-row gap-4">
                     <div>
                         <Image height={100} width={100} src={props.character.image_link} alt={props.character.name} />
