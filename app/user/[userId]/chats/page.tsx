@@ -25,7 +25,7 @@ export default async function UserChats({ params: {  } } : { params: { userId: s
 
             <div className="flex flex-col gap-2">
                 {chats.map((chat) => (
-                    <ChatCardSmall key={chat.id} chat={chat} />
+                    <ChatCardSmall hasLink key={chat.id} chat={chat} />
                 ))}
             </div>
         </div>

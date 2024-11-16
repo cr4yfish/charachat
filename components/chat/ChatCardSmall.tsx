@@ -37,7 +37,7 @@ export default function ChatCardSmall(props: Props) {
     return (
         <>
         <ConditionalLink active={props.hasLink !== undefined} href={`/chat/${props.chat.id}`}>
-            <Card>
+            <Card isPressable={props.hasLink} className="w-full">
                 <CardBody className="flex flex-row gap-2 items-center justify-start">
 
                     <Avatar src={props.chat.character.image_link} size="md" />
