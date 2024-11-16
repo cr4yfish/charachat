@@ -33,8 +33,6 @@ export default function StartStoryButton(props: Props) {
                 storyId: props.story.id
             });
 
-            console.log(res);
-
             if(res.id) {
                 window.location.href = `/chat/${res.id}`;
             }

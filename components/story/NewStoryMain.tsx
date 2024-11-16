@@ -69,8 +69,7 @@ export default function NewStoryMain(props: Props) {
 
             if(titleResult.success && descriptionResult.success && storyResult.success && firstMessageResult.success && imageLinkResult.success) {
                 // Submit the Story
-                console.log(story);
-                const res = await createStory({
+                await createStory({
                     storyId: story.id,
                     userId: props.profile.user,
                     characterId: story.character.id,

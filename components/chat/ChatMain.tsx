@@ -83,7 +83,6 @@ export default function ChatMain(props : Props) {
     }, []);
 
     useEffect(() => {
-        console.log(props.chat)
         if((props.initMessages.length == 0) && !setupExecuted.current) {
             setupExecuted.current = true;
             setup();
@@ -92,8 +91,6 @@ export default function ChatMain(props : Props) {
 
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0)) return;
-
-        console.log("First time setup");
 
         // Works for both, normal chats and story chats
         append({ content: _INTRO_MESSAGE, role: "user", createdAt: new Date() });
@@ -109,7 +106,7 @@ export default function ChatMain(props : Props) {
                 }
             ])
 
-            const res = await addMessage({
+            await addMessage({
                 id: uuidv4(),
                 chat: props.chat,
                 character: props.chat.character,
@@ -120,7 +117,6 @@ export default function ChatMain(props : Props) {
                 is_deleted: false,
             });
             
-            console.log("Added message to db",res);
 
         }
 
