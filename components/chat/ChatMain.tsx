@@ -94,6 +94,13 @@ export default function ChatMain(props : Props) {
     }, [props.initMessages])
 
     useEffect(() => {
+        console.log("Messages length changed");
+        if(isLoading && messages.length > 0) {
+            scrollToBottom();
+        }
+    }, [messages, isLoading])
+
+    useEffect(() => {
 
         const handleBlur = (e: FocusEvent) => {
             // if user tapped on send-btn, focus input again
