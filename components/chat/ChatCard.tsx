@@ -16,7 +16,7 @@ import { Input } from "@nextui-org/input";
 
 type Props = {
     chat: Chat;
-    setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
+    setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
 export default function ChatCard(props: Props) {
@@ -31,7 +31,7 @@ export default function ChatCard(props: Props) {
         setIsDeleting(true);
         try {
             await deleteChat(props.chat.id);
-            props.setChats((prev) => prev.filter((chat) => chat.id !== props.chat.id));
+            if(props.setChats) props.setChats((prev) => prev.filter((chat) => chat.id !== props.chat.id));
         } catch (error) {
             console.error(error);
         }
@@ -42,7 +42,7 @@ export default function ChatCard(props: Props) {
         setIsSaving(true);
 
         await updateChat(chat);
-        props.setChats((prev) => prev.map((c) => c.id === chat.id ? chat : c));
+        if(props.setChats) props.setChats((prev) => prev.map((c) => c.id === chat.id ? chat : c));
 
         setIsModalOpen(false);
         setIsSaving(false);
