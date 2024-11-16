@@ -18,8 +18,13 @@ export default async function Home() {
   try {
     profile = await getCurrentUser();
   } catch (error) {
-    console.error(error);
-    redirect("/error");
+    const err = error as Error;
+
+    // If the user is not found, we don't want to log the error
+    // because anon users are allowed here
+    if(err.message !== "No user found") {
+      console.error(err);
+    }
   }
 
   try {

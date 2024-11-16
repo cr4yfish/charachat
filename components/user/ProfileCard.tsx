@@ -6,7 +6,7 @@ import { Profile } from "@/types/db";
 
 
 type Props = {
-    profile: Profile
+    profile?: Profile
 }
 
 export default function ProfileCard(props: Props) {
@@ -14,10 +14,10 @@ export default function ProfileCard(props: Props) {
     return (
         <>
         <User   
-            name={props.profile.first_name + " " + props.profile.last_name}
-            description={<>@{props.profile.username}</>}
+            name={props.profile ? (props.profile.first_name + " " + props.profile.last_name) : "Anon user"}
+            description={props.profile ? `@${props.profile.user}` : "Not logged in"}
             avatarProps={{
-                src: props.profile.avatar_link,
+                src: props.profile?.avatar_link,
             }}
             />
         </>
