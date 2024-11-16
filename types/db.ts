@@ -30,6 +30,7 @@ export type Profile = {
     first_name: string;
     last_name: string;
     bio?: string;
+    avatar_link?: string;
 }
 
 export type Story = {
