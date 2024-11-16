@@ -14,6 +14,7 @@ import { addMessage, getMessages } from "@/functions/db/messages";
 import Messagebubble from "./Messagebubble";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@nextui-org/spinner";
+import { isSameDay } from "@/lib/utils";
 import { updateChat } from "@/functions/db/chat";
 
 const _INTRO_MESSAGE = "Introduce yourself";
@@ -72,7 +73,9 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
 
     useEffect(() => {
         scrollToBottom();
+    }, []);
 
+    useEffect(() => {
         if(messages.length == 0) {
             // chat is empty -> is new chat
             // send initial message
@@ -81,8 +84,7 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
                 role: 'user'
             });
         }
-
-    }, []);
+    }, [messages, append])
 
     const loadMoreMessages = async () => {
         setIsLoading(true);
@@ -140,7 +142,16 @@ export default function ChatMain({ chat, initMessages, user } : { chat: Chat, in
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
-                    <Messagebubble key={message.id} message={message} index={index} chat={chat} addToolResult={addToolResult} />
+                    (
+                        <div key={message.id + "_wrapper"}>
+                            {((index == 0) || !isSameDay(new Date(message.createdAt!), new Date(messages[index - 1]?.createdAt ?? ""))) && (
+                                <div className="text-center text-sm dark:text-slate-400 my-2">
+                                    {new Date(message.createdAt!).toLocaleDateString()}
+                                </div>
+                            )}
+                            <Messagebubble key={message.id} message={message} index={index} chat={chat} addToolResult={addToolResult} />
+                        </div>
+                    )
                 ))}
             </InfiniteScroll>
         </ScrollArea>
