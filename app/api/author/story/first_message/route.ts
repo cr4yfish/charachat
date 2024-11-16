@@ -8,7 +8,7 @@ type RequestBody = {
 
 export async function POST(req: Request) {
 
-    const { story, character, profile, apikey, messages } = (await req.json()) as RequestBody;
+    const { story, character } = (await req.json()) as RequestBody;
 
     // Generate the first_message field in a Story
     // based on Title, Description and story

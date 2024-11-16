@@ -10,7 +10,6 @@ import { getCurrentUser } from "@/functions/db/auth";
 import Sidebar from "@/components/Sidebar";
 import { getStories } from "@/functions/db/stories";
 import StoryCard from "@/components/story/StoryCard";
-import StoryCardSmall from "@/components/story/StoryCardSmall";
 
 export default async function Home() {
 

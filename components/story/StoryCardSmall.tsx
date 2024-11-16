@@ -5,8 +5,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react"
 
 import { Story } from "@/types/db";
-import { formatLastMessageTime, truncateText } from "@/lib/utils";
-import { Avatar } from "@nextui-org/avatar";
+import { truncateText } from "@/lib/utils";
 
 type Props = {
     story: Story

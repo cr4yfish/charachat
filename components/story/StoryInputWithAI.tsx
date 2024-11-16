@@ -30,7 +30,7 @@ type Props = {
 
 export default function StoryInputWithAI(props: Props) {
     const [localValue, setLocalValue] = useState(props.initValue || "");
-    const { messages, handleSubmit, append, setInput, isLoading, setMessages, reload } = useChat({
+    const { messages, isLoading, reload } = useChat({
         api: props.api,
         initialMessages: [{
             id: "0",

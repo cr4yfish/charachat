@@ -4,7 +4,6 @@ import { Spacer } from "@nextui-org/spacer"
 
 import CharacterCard from "@/components/character/CharacterCard";
 import BackLink from "@/components/utils/BackLink";
-import { getCharacter } from "@/functions/db/character";
 import { getStory } from "@/functions/db/stories";
 import Image from "next/image";
 import { Button } from "@/components/utils/Button";

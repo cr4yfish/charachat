@@ -2,7 +2,6 @@
 
 import { v4 as uuid } from "uuid";
 import { Input } from "@nextui-org/input";
-import { useRouter } from "next/navigation";
 
 import { Character, Profile, Story } from "@/types/db";
 import { Button } from "@/components/utils/Button";
@@ -23,7 +22,6 @@ type Props = {
 }
 
 export default function NewStoryMain(props: Props) {
-    const router = useRouter();
     const [story, setStory] = useState<Story>({
         id: props.story?.id || uuid(),
         creator: props.profile,
@@ -99,7 +97,7 @@ export default function NewStoryMain(props: Props) {
         setIsDeleting(true);
         // Delete the Story
         try {
-            const res = await deleteStory(story.id);
+            await deleteStory(story.id);
             window.location.href = `/c/${story.character.id}`;
         } catch (e) {
             console.error(e);

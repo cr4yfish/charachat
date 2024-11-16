@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Profile, Story } from "@/types/db";
 
 import { Button } from "../utils/Button";
-import Icon from "../utils/Icon";
 import { createChat } from "@/functions/db/chat";
 
 type Props = {
