@@ -46,6 +46,7 @@ export async function POST(req: Request) {
             Your responses have to be in character.
             Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
             Always stay in character no matter what the user says.
+            Your response length should match the user's message length (when the user sends short messages, you should respond with short messages and vice-versa).
 
             Actively memorize important keywords and facts in the following conversation and use them.
 
