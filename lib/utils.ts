@@ -36,3 +36,39 @@ export function isToday(date: Date): boolean {
 export function isYesterday(date: Date): boolean {
   return isSameDay(date, getDayBefore(new Date()));
 }
+
+export function isThisWeek(date: Date): boolean {
+  const today = new Date();
+  const day = date.getDay();
+  return isSameDay(date, today) || (date > getDayBefore(today) && day >= today.getDay());
+}
+
+/**
+ * Returns either:
+ * - {time} if the message was sent today
+ * - {Weekday abbreviation} if the message was sent this week
+ * - {local date string} if the message was sent before this week
+ * @param date 
+ */
+export function formatLastMessageTime(date: Date): string {
+  if(isToday(date)) {
+    return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+  }
+
+  if(isThisWeek(date)) {
+    return date.toLocaleDateString([], {weekday: 'short'});
+  }
+
+  return date.toLocaleDateString();
+  
+}
+
+export const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) {
+      return text;
+  }
+  return text.substring(0, maxLength) + '...';
+};
+
+
+export const _INTRO_MESSAGE = "Introduce yourself";
