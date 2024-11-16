@@ -36,7 +36,7 @@ export default function LoginCard() {
 
     return (
         <>
-        <form onSubmit={handleSubmit} className="w-full">
+        <form onSubmit={handleSubmit} className="w-full max-w-md">
             <Card>
                 <CardHeader className="text-2xl font-bold">Login</CardHeader>
                 <CardBody className="flex flex-col gap-2">
