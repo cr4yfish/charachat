@@ -167,7 +167,7 @@ export default function ChatMain(props : Props) {
 
     return (
         <>
-        <ScrollArea id="scroller" className="h-screen" >
+        <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll " >
             <InfiniteScroll 
                 isReverse
                 id="infinitescroll"
@@ -179,7 +179,7 @@ export default function ChatMain(props : Props) {
                 loader={isLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
-                className="flex flex-col gap-2 pb-40 pt-28 px-4"
+                className="flex flex-col gap-2 pb-40 pt-28 px-4 h-fit"
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
@@ -203,30 +203,31 @@ export default function ChatMain(props : Props) {
         </ScrollArea>
  
 
-        <div className="absolute bottom-0 left-0 pb-8 pt-2 px-8 bg-content1/50 backdrop-blur-3xl w-full flex items-center justify-center">
-            <form className="w-full" onSubmit={handleSubmit}>
-                <Textarea 
-                    placeholder="Send a message" 
-                    size="lg" 
-                    radius="full" 
-                    value={input}
-                    ref={inputRef}
-                    name="prompt"
-                    onChange={handleInputChange}
-                    minRows={1}
-                    maxRows={15}
-                    classNames={{
-                        inputWrapper: "pr-1 bg-content1/75",
-                        innerWrapper: "flex items-center justify-center",
-                    }}
-                    endContent={
-                        <Button className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
-                            <Icon filled>send</Icon>
-                        </Button>
-                    } 
-                />
-            </form>
-        </div>
+        <form 
+            onSubmit={handleSubmit} 
+            className="h-[5rem] w-full relative bg-content flex items-center justify-center px-4 py-6"
+        >
+            <Textarea 
+                placeholder="Send a message" 
+                size="lg" 
+                radius="full" 
+                value={input}
+                ref={inputRef}
+                name="prompt"
+                onChange={handleInputChange}
+                minRows={1}
+                maxRows={15}
+                classNames={{
+                    inputWrapper: "pr-1 bg-content2",
+                    innerWrapper: "flex items-center justify-center",
+                }}
+                endContent={
+                    <Button className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
+                        <Icon filled>send</Icon>
+                    </Button>
+                } 
+            />
+        </form>
         </>
     )
 }
