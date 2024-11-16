@@ -284,6 +284,13 @@ export default function ChatMain(props : Props) {
         </ScrollArea>
  
 
+        {messages.length <= 1 && (
+            <div className="flex-1 flex items-center justify-center h-full overflow-y-hidden">
+                <p className="text-slate-400 text-center">Pretty empty here</p>
+                <div className="h-screen"></div>
+            </div>   
+        )}
+        
         <form 
             onSubmit={handleSubmitAdapter} 
             className="h-[5rem] w-full bg-content flex items-center justify-center px-4 py-6"
