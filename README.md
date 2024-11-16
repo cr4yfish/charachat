@@ -47,7 +47,7 @@ All Messages are stored encrypted in the database and decrypted on the client si
 
 ### Chat Features
 - [x] Basic text chat
-- [ ] Emojis
+- [x] Emojis
 - [ ] Images
     - [ ] From AI
     - [ ] From User
