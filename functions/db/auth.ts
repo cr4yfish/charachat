@@ -9,6 +9,7 @@ import { Profile } from "@/types/db";
 
 import { loginSchema } from "@/lib/schemas";
 import { AuthError } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 export const checkIsLoggedIn = async () => {
     const { data: { user }, error } = await createClient().auth.getUser();
@@ -85,4 +86,5 @@ export const login = async (email: string, password: string): Promise<LoginRespo
 
 export const logout = async () => {
     await createClient().auth.signOut();
+    revalidatePath("/");
 }
