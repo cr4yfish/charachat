@@ -280,6 +280,7 @@ export default function ChatMain(props : Props) {
                     )
                 ))}
             </InfiniteScroll>
+            <div className="h-screen"></div>
         </ScrollArea>
  
 
