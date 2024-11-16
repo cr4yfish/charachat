@@ -42,7 +42,8 @@ export const getChats = cache(async (characterId: string): Promise<Chat[]> => {
                 *
             )
         `)
-        .eq("character", characterId);
+        .eq("character", characterId)
+        .order("last_message_at", { ascending: false })
     
     if (error) {
         throw error;
@@ -105,4 +106,15 @@ export const updateChat = async (chat: Chat): Promise<Chat> => {
 
     return data;
 
+}
+
+export const deleteChat = async (chatId: string): Promise<void> => {
+    const { error } = await createClient()
+        .from("chats")
+        .delete()
+        .eq("id", chatId);
+
+    if (error) {
+        throw error;
+    }
 }

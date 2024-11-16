@@ -8,12 +8,11 @@ import { startChat } from "./actions";
 import { getChats } from "@/functions/db/chat";
 
 import Link from "next/link";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import CharacterCard from "@/components/character/CharacterCard";
 import CharacterDetailsAccordion from "@/components/character/CharacterDetailsAccordion";
 import Icon from "@/components/utils/Icon";
 import { getSession } from "@/functions/db/auth";
-import ChatCard from "@/components/chat/ChatCard";
+import ChatList from "@/components/chat/ChatList";
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 
@@ -62,19 +61,7 @@ export default async function CharacterView({ params: { characterId } }: { param
                 </form>
             </div>
             
-            <div className="flex flex-col gap-2">
-                <h2 className="prose dark:prose-invert font-bold text-xl">Your Chats with {character.name}</h2>
-                <ScrollArea className="h-fit">
-                    <div className="flex flex-col gap-2 h-fit">
-                        {userChats.map((chat) => (
-                            <ChatCard key={chat.id} chat={chat} />
-                        ))}
-                    </div>
-                </ScrollArea>
-                {userChats.length == 0 && (
-                    <p className="dark:prose-invert dark:text-slate-400">You have no chats with this character.</p>   
-                )}
-            </div>
+            <ChatList initChats={userChats} character={character} />
             
         </div>
         </>
