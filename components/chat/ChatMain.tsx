@@ -18,6 +18,7 @@ import { isSameDay, isToday, isYesterday } from "@/lib/utils";
 import { updateChat } from "@/functions/db/chat";
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
+import { addTokens as updateTokens } from "@/functions/db/profiles";
 
 type Props = {
     chat: Chat;
@@ -49,7 +50,7 @@ export default function ChatMain(props : Props) {
             profile: props.user,
             chat: props.chat
         },
-        onFinish: async (message) => {
+        onFinish: async (message, { usage }) => {
             scrollToBottom();
             if (inputRef.current) {
                 inputRef.current.focus();
@@ -65,6 +66,8 @@ export default function ChatMain(props : Props) {
                 is_edited: false,
                 is_deleted: false,
             }
+
+            await updateTokens(props.user.user, (props.user.tokens + usage.totalTokens));
 
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content

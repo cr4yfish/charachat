@@ -32,6 +32,7 @@ export type Profile = {
     last_name: string;
     bio?: string;
     avatar_link?: string;
+    tokens: number;
 }
 
 export type Story = {

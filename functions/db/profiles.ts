@@ -20,3 +20,19 @@ export const getProfile = cache(async (userId: string) => {
 
     return data;
 })
+
+export const addTokens = async (userId: string, tokens: number) => {
+    const { data, error } = await createClient()
+        .from("profiles")
+        .upsert({
+            user: userId,
+            tokens: tokens
+        });
+
+    if (error) {
+        console.error("Error adding tokens", error);
+        throw error;
+    }
+
+    return data;
+}
