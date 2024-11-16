@@ -82,3 +82,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
         success: true
     }
 }
+
+export const logout = async () => {
+    await createClient().auth.signOut();
+}
