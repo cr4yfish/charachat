@@ -103,7 +103,6 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
     .single();
 
     if (error) {
-        console.log("Error creating chat", error);
         throw error;
     }
 
