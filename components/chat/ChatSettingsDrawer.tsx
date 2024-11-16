@@ -1,22 +1,16 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
 import { useState } from "react";
 import { Avatar } from "@nextui-org/avatar";
 
-import {
-    Drawer,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer"
 import { Chat } from "@/types/db";
 import { Button } from "../utils/Button";
 import CharacterCard from "@/components/character/CharacterCard";
-import { updateChat } from "@/functions/db/chat";
+import Icon from "../utils/Icon";
+import SaveDeleteButton from "../utils/SaveDeleteButton";
+import { deleteChat, updateChat } from "@/functions/db/chat";
+import BlurModal from "../utils/BlurModal";
+import { Input } from "@nextui-org/input";
 
 
 type Props = {
@@ -26,78 +20,72 @@ type Props = {
 export default function ChatSettingsDrawer(props: Props) {
 
     const [chat, setChat] = useState<Chat>(props.chat)
-    const [isChanged, setIsChanged] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const handleUpdateChat = async () => {
-        setIsLoading(true)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
+
+    const handleDelete = async () => {
+        setIsDeleting(true)
         try {
-            await updateChat(chat)
-            setIsChanged(false)
-        } catch (error) {
-            console.error(error)
+            const res = await deleteChat(chat.id)
+            window.location.href = "/";
+        } catch (e) {
+            console.error(e)
+            setIsDeleting(false)
         }
-        
-        setIsLoading(false)
     }
 
-    const handleUpdateValue = (key: string, value: string) => {
-        setChat({...chat, [key]: value})
-        setIsChanged(true)
+    const handleUpdateChat = async () => {
+        setIsSaving(true)
+
+        try {
+            await updateChat(chat)
+        } catch (e) {
+            console.error(e)
+        }
+        setIsSaving(false)
+        
     }
 
     return (
-        <>
-        <Drawer>
-            <DrawerTrigger asChild>
-                <Button isIconOnly variant="light" className="justify-start">
-                    <Avatar src={chat.character.image_link} />
-                </Button>
-            </DrawerTrigger>
-            <DrawerContent>
+        <>             
+         <Button onClick={() => setIsModalOpen(true)} isIconOnly variant="light" className="justify-start">
+            <Avatar src={chat.character.image_link} />
+        </Button>
 
-                <DrawerHeader>
-                    <DrawerTitle>Settings for {props.chat.character.name} Chat</DrawerTitle>
-                    <DrawerDescription>Configure your chat</DrawerDescription>
-                </DrawerHeader>
-
-                <div className="flex flex-col px-4 gap-4">
-                    <CharacterCard hasLink={false} character={props.chat.character} />
+        <BlurModal 
+            isOpen={isModalOpen}
+            updateOpen={setIsModalOpen}
+            settings={{
+                size: "full"
+            }}
+            header={<>Chat Settings</>}
+            body={
+                <>
+                <div className="flex flex-col gap-2">
+                    <CharacterCard fullWidth hasLink={false} character={props.chat.character} />
+                    <Input label="Chat Title" value={chat.title} onValueChange={(value) => setChat({...chat, title: value})} />
+                    <Input label="Chat Description" value={chat.description} onValueChange={(value) => setChat({...chat, description: value})} />
+                    
                     <div className="flex flex-col gap-2">
-                        <Input 
-                            label="Chat Name" 
-                            placeholder="Enter a name for your chat" 
-                            value={chat.title} 
-                            onValueChange={(value) => handleUpdateValue("title", value)}
-                            isDisabled={isLoading}
-                            minLength={4} maxLength={50} 
-                        />
-                        <Input 
-                            label="Chat Description" 
-                            placeholder="Enter a description for your chat" 
-                            value={chat.description} 
-                            onValueChange={(value) => handleUpdateValue("description", value)}
-                            isDisabled={isLoading}
-                            minLength={4} maxLength={128} 
-                        />
-                        <Button 
-                            onClick={handleUpdateChat} 
-                            isDisabled={!isChanged}
-                            isLoading={isLoading}
-                            variant="flat" color="primary"
-                        >
-                            Update chat
-                        </Button>
+                        <Button isLoading={isSaving} onClick={handleUpdateChat} size="lg" color="primary" variant="flat" startContent={<Icon filled>save</Icon>}>Save</Button>
+                        <SaveDeleteButton 
+                            onDelete={handleDelete}
+                            isLoading={isDeleting}
+                            isDisabled={isSaving}
+                        /> 
                     </div>
-               
-                </div>
-                
-                <DrawerFooter></DrawerFooter>
-
-            </DrawerContent>
-            
-        </Drawer>
         
+                </div>
+                </>
+            }
+            footer={
+                <>
+
+                </>
+            }
+        />
         </>
     )
 }
