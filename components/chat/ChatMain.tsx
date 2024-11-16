@@ -67,7 +67,6 @@ export default function ChatMain(props : Props) {
                 is_deleted: false,
             }
 
-            console.log("Used tokens:", usage)
             try {
                 // add tokens to user
                 await updateTokens(props.user.user, (props.user.tokens + usage.totalTokens));
