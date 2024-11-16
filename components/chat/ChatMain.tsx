@@ -188,7 +188,7 @@ export default function ChatMain(props : Props) {
     }
 
     const scrollToBottom = () => {
-        const scrollArea = document.querySelector("#scroller > div");
+        const scrollArea = document.querySelector("#scroller");
         scrollArea?.scrollTo(0, scrollArea.scrollHeight);
     }
 
