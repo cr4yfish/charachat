@@ -20,16 +20,15 @@ export default function ChatCardSmall(props: Props) {
     const [latestMessage, setLatestMessage] = useState<Message>();
     const [isLoadingLatestMessage, setIsLoadingLatestMessage] = useState(true);
 
-    const getLatestMessage = async () => {
-        setIsLoadingLatestMessage(true);
-        const res = await getLatestChatMessage(props.chat.id);
-        if(res !== null) {
-            setLatestMessage(res);
-        }
-        setIsLoadingLatestMessage(false);
-    }
-
     useEffect(() => {
+        const getLatestMessage = async () => {
+            setIsLoadingLatestMessage(true);
+            const res = await getLatestChatMessage(props.chat.id);
+            if(res !== null) {
+                setLatestMessage(res);
+            }
+            setIsLoadingLatestMessage(false);
+        }
         getLatestMessage();
     }, [props.chat])
 
