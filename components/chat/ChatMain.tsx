@@ -17,7 +17,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { isSameDay, isToday, isYesterday } from "@/lib/utils";
 import { updateChat } from "@/functions/db/chat";
 
-const _INTRO_MESSAGE = "Introduce yourself";
+import { _INTRO_MESSAGE } from "@/lib/utils";
 
 export default function ChatMain({ chat, initMessages, user } : { chat: Chat, initMessages: Message[], user: Profile }) {
     const [cursor, setCursor] = useState(initMessages.length);
