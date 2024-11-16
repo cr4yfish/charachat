@@ -104,7 +104,7 @@ export default function Messagebubble(props: Props) {
                         </CardContent>
                         <CardFooter className=" py-1 pb-3">
                             <p className=" text-xs text-gray-500 dark:text-slate-400 ">
-                                {new Date((props.message.createdAt ?? "") as string).toLocaleTimeString()}
+                                {new Date((props.message.createdAt ?? "") as string).toLocaleTimeString("de-DE", { timeStyle: "short" })}
                             </p>
                         </CardFooter>
                     </Card>
