@@ -1,19 +1,17 @@
 "use server";
 
-import Link from "next/link";
-
 import { Input } from "@nextui-org/input";
 import { Button } from "@/components/utils/Button";
 import { saveCharacter } from "./actions";
-import Icon from "@/components/utils/Icon";
 import TextareaWithCounter from "@/components/utils/TextareaWithCounter";
+import BackLink from "@/components/utils/BackLink";
 
 export default async function NewCharacter() {
 
     return (
         <>
         <div className="flex items-center gap-2">
-            <Link href="/"><Button variant="light" isIconOnly><Icon filled>arrow_back</Icon></Button></Link>
+            <BackLink />
             <h2 className="font-bold text-2xl">Create a new Character</h2>
         </div>
         

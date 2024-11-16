@@ -5,7 +5,7 @@ import { getCharacter } from "@/functions/db/character";
 import { Character } from "@/types/db";
 import { redirect } from "next/navigation";
 import { startChat } from "./actions";
-import { getChats } from "@/functions/db/chat";
+import { getCharacterChats, getChats } from "@/functions/db/chat";
 
 import Link from "next/link";
 import CharacterCard from "@/components/character/CharacterCard";
@@ -13,6 +13,7 @@ import CharacterDetailsAccordion from "@/components/character/CharacterDetailsAc
 import Icon from "@/components/utils/Icon";
 import { getSession } from "@/functions/db/auth";
 import ChatList from "@/components/chat/ChatList";
+import BackLink from "@/components/utils/BackLink";
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 
@@ -25,7 +26,7 @@ export default async function CharacterView({ params: { characterId } }: { param
         return <p>Character not found</p>;
     }
 
-    const userChats = await getChats(characterId);
+    const userChats = await getCharacterChats(characterId);
     
     const { session } = await getSession();
 
@@ -39,7 +40,7 @@ export default async function CharacterView({ params: { characterId } }: { param
 
             <div className="flex flex-col gap-2">
                 <div className="flex flex-row items-center gap-2">
-                    <Link href="/"><Button variant="light" isIconOnly><Icon filled>arrow_back</Icon></Button></Link>
+                    <BackLink />
                     <div className="flex items-center justify-between w-full">
                         <h2 className="prose dark:prose-invert font-bold text-2xl">{character.name}</h2>
                         {character.owner.user == session.user.id &&

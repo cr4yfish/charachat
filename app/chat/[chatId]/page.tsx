@@ -2,15 +2,13 @@
 
 import ChatMain from "@/components/chat/ChatMain";
 import ChatSettingsDrawer from "@/components/chat/ChatSettingsDrawer";
-import { Button } from "@/components/utils/Button";
-import Icon from "@/components/utils/Icon";
+import BackLink from "@/components/utils/BackLink";
 
 import { getCurrentUser } from "@/functions/db/auth";
 import { getChat } from "@/functions/db/chat"
 import { getMessages } from "@/functions/db/messages";
 
 import { Chat as ChatType, Message } from "@/types/db";
-import Link from "next/link";
 
 
 export default async function Chat({ params: { chatId } } : { params: { chatId: string } }) {
@@ -49,11 +47,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
     return (
         <>
         <div className="absolute top-0 left-0 z-50 p-6 bg-content1/50 backdrop-blur-xl rounded-b-xl w-full flex flex-row items-center justify-evenly">
-            <Link href={`/c/${chat.character.id}`}>
-                <Button isIconOnly variant="light" className="justify-start">
-                    <Icon>arrow_back</Icon>
-                </Button>
-            </Link>
+            <BackLink />
             <span className="text-medium w-full text-center font-bold">{chat.character.name}</span>
             <ChatSettingsDrawer chat={chat} />
         </div>
