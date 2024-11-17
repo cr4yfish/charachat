@@ -34,7 +34,8 @@ type Props = {
         toolCallId: string;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         result: any;
-    }) => void
+    }) => void,
+    showName: boolean,
 }
 
 export default function Messagebubble(props: Props) {
@@ -81,7 +82,7 @@ export default function Messagebubble(props: Props) {
                     
                     className=" select-none"
                 >
-                    {props.message.role == "assistant" && 
+                    {props.message.role == "assistant" &&  props.showName &&
                         <div className="pl-3 pb-1">
                             <span className=" text-sm">{props.chat.character.name}</span>
                         </div>
