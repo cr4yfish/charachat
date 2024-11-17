@@ -1,21 +1,45 @@
 "use client";
 
+
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 import { Avatar } from "@nextui-org/avatar";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import Link from "next/link";
-import { Story } from "@/types/db";
+import { Profile, Story } from "@/types/db";
 import StoryCard from "../story/StoryCard";
 import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
 
 import { Character } from "@/types/db";
+import { createChat } from "@/functions/db/chat";
 
 type Props = {
     character: Character,
-    stories: Story[]
+    stories: Story[],
+    profile: Profile
 }
 
 export default function CharacterPage(props: Props) {
+    const router = useRouter();
+
+    const handleStartChat = async () => {
+        const characterId = props.character.id;
+    
+        const chat = await createChat({
+            chatId: uuidv4(),
+            userId: props.profile.user,
+            characterId: characterId,
+            title: "New Chat",
+            description: "This is a new chat"
+        });
+    
+        if(!chat) {
+            throw new Error("Failed to create chat");
+        }
+
+        router.replace(`/chat/${chat.id}`);
+    }
 
     return (
         <>
@@ -33,7 +57,29 @@ export default function CharacterPage(props: Props) {
                     <div className="prose dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400">
                         <p>{props.character.description}</p>
                     </div>
+                
                 </div>
+
+                <div className="w-full flex items-center justify-between gap-2">
+                    <Button 
+                        onClick={handleStartChat} 
+                        size="lg" fullWidth color="primary" 
+                        variant="shadow"
+                    >
+                        Start Chat
+                    </Button>
+                    { props.profile.user == props.character.owner.user &&
+                        <Link href={`/c/${props.character.id}/edit`}>
+                            <Button
+                                color="warning"
+                                size="lg" variant="flat"                        
+                            >
+                                Edit
+                            </Button>
+                        </Link>
+                    }
+                </div>
+
 
                 <div className="flex flex-col w-full">
                     <Tabs variant="underlined"
