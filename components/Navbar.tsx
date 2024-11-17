@@ -30,7 +30,7 @@ export default function Navbar(props: Props) {
             
         </div>
 
-        <Spacer y={8} />
+        <Spacer y={12} />
         </>
     )
 }
