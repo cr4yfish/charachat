@@ -108,9 +108,32 @@ export default function ChatMain(props : Props) {
 
     useEffect(() => {
         scrollToBottom();
+
+        const handleResize = () => {
+            const currentHeight = window.innerHeight;
+            if (initialScreenHeight && currentHeight < initialScreenHeight) {
+                // Keyboard is open
+                toast({
+                    title: "Keyboard is open",
+                    description: `Current height: ${currentHeight}, Initial height: ${initialScreenHeight}`,
+                })
+                const scrollArea = document.getElementById("scroller")?.querySelector("div");
+                if (scrollArea) {
+                    // scroll down an appropriate amount to compensate for the keyboard
+                    scrollArea.scrollTo(0, scrollArea.scrollHeight - (initialScreenHeight - currentHeight));
+                }
+            }
+        };
+
         if(window) {
             setInitialScreenHeight(window.innerHeight);
+            window.addEventListener("resize", handleResize);
         }
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+
     }, []);
 
     useEffect(() => {
@@ -127,7 +150,6 @@ export default function ChatMain(props : Props) {
     }, [messages, isLoading])
 
     useEffect(() => {
-
         const handleBlur = (e: FocusEvent) => {
             // if user tapped on send-btn, focus input again
             if(e.relatedTarget && (e.relatedTarget as HTMLElement).id === "send-btn") {
