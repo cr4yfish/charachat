@@ -7,7 +7,8 @@ Lets you create a character or use a pre-made one and chat with them. The charac
 All Messages are stored encrypted in the database and decrypted on the client side - which means no one exepct you (and the AI) can read your messages.
 
 <div style="width: 100%; display: flex; justify-content: center; gap: 1rem;">
-    <img src="https://i.imgur.com/9m04AHE.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/9Xze8SQ.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/ePtkQTI.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/Kb57kgu.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/7lJHLG9.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/8FpYG8J.png" style="height: 500px; width: auto;" >
