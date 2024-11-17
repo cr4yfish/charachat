@@ -80,7 +80,7 @@ const ContextMenuItem = React.forwardRef<
   <ContextMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm text-md outline-none focus:bg-neutral-100 focus:text-neutral-900 backdrop-blur data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-neutral-800 dark:focus:text-neutral-50 dark:bg-zinc-800/75 justify-between px-4 py-3 first-of-type:rounded-t-xl last-of-type:rounded-b-xl border-b border-zinc-700 last-of-type:border-b-0 dark:hover:bg-zinc-700/80",
+      "relative flex cursor-default select-none items-center rounded-sm text-md outline-none focus:bg-neutral-100 focus:text-neutral-900 backdrop-blur data-[disabled]:pointer-events-none dark:data-[disabled]:text-zinc-500 dark:focus:bg-neutral-800 dark:focus:text-neutral-50 dark:bg-zinc-800/80 justify-between px-4 py-3 first-of-type:rounded-t-xl last-of-type:rounded-b-xl border-b border-zinc-700 last-of-type:border-b-0 dark:hover:bg-zinc-700/80",
       inset && "pl-8",
       className
     )}
@@ -96,7 +96,7 @@ const ContextMenuCheckboxItem = React.forwardRef<
   <ContextMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-neutral-100 focus:text-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-neutral-800 dark:focus:text-neutral-50",
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-neutral-100 focus:text-neutral-900 data-[disabled]:pointer-events-none dark:focus:bg-neutral-800 dark:focus:text-neutral-50",
       className
     )}
     checked={checked}
@@ -120,7 +120,7 @@ const ContextMenuRadioItem = React.forwardRef<
   <ContextMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-neutral-100 focus:text-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-neutral-800 dark:focus:text-neutral-50",
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-neutral-100 focus:text-neutral-900 data-[disabled]:pointer-events-none dark:focus:bg-neutral-800 dark:focus:text-neutral-50",
       className
     )}
     {...props}
