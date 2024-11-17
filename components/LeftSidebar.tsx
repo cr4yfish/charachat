@@ -18,6 +18,7 @@ import ProfileCard from "./user/ProfileCard";
 import { getCurrentUser } from "@/functions/db/auth";
 import { Chat, Profile } from "@/types/db";
 import ConditionalLink from "./utils/ConditionalLink";
+import LoginButton from "./auth/LoginButton";
 
 type SidebarLinkProps = {
   link: string;
@@ -58,6 +59,8 @@ export async function LeftSidebar() {
     console.error("Error in LeftSidebar", e);
   }
 
+  const isLoggedIn = profile !== undefined;
+
   return (
     <Sidebar>
       <SidebarHeader />
@@ -70,10 +73,10 @@ export async function LeftSidebar() {
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
 
-            <SidebarLink radius="full" link="/" isLoggedIn={true} icon="add" label="New Character" />
-            <SidebarLink variant="flat" link={`/user/${profile?.user}/chats`} isLoggedIn={true} icon="chat" label="Chats" />
-            <SidebarLink variant="flat" link={`/user/${profile?.user}/characters`} isLoggedIn={true} icon="people" label="Characters" />
-            <SidebarLink variant="flat" link={`/user/${profile?.user}/stories`} isLoggedIn={true} icon="book" label="Stories" />
+            <SidebarLink radius="full" link="/" isLoggedIn={isLoggedIn} icon="add" label="New Character" />
+            <SidebarLink variant="flat" link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Chats" />
+            <SidebarLink variant="flat" link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Characters" />
+            <SidebarLink variant="flat" link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Stories" />
           </SidebarGroupContent>
         </SidebarGroup>
 
@@ -96,7 +99,9 @@ export async function LeftSidebar() {
         </SidebarGroup>
 
       </SidebarContent>
-      <SidebarFooter className="w-full flex items-start px-4 py-6">
+      <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
+        <SidebarLink variant="flat" link={`/user/${profile?.user}/edit`} isLoggedIn={isLoggedIn} icon="edit" label="Edit Profile" />
+        <LoginButton isLoggedIn={isLoggedIn} />
         <ProfileCard profile={profile} />
       </SidebarFooter>
     </Sidebar>

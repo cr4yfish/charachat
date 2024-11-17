@@ -5,14 +5,8 @@ import { usePathname } from "next/navigation";
 
 import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
-import { Profile } from "@/types/db";
-import Sidebar from "./Sidebar";
 
-type Props = {
-    profile?: Profile
-}
-
-export default function Navbar(props: Props) {
+export default function Navbar() {
     const pathname = usePathname();
 
     // Dont render in a chat page
@@ -25,8 +19,6 @@ export default function Navbar(props: Props) {
                 <SidebarTrigger><></></SidebarTrigger>
                 <Link href={"/"}><span className="font-bold">charachat</span></Link>
             </div>
-
-            <Sidebar profile={props.profile} />
             
         </div>
 
