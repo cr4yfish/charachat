@@ -1,9 +1,10 @@
 "use server";
 
+import { Switch } from "@nextui-org/switch";
 import { Input } from "@nextui-org/input";
-import { Button } from "@/components/utils/Button";
 import { saveCharacter } from "./actions";
 import TextareaWithCounter from "@/components/utils/TextareaWithCounter";
+import { ServerActionButton } from "@/components/utils/ServerActionButton";
 
 export default async function NewCharacter() {
 
@@ -55,7 +56,16 @@ export default async function NewCharacter() {
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
                 maxLength={1000} 
             />
-            <Button formAction={saveCharacter} type="submit" color="primary" variant="shadow" size="lg" >Create</Button>
+            <Switch isDisabled>Private</Switch>
+            <ServerActionButton 
+                formAction={saveCharacter} 
+                type="submit" 
+                color="primary" 
+                variant="shadow" 
+                size="lg" 
+            >
+                Create
+            </ServerActionButton>
         </form>
         </>
     )
