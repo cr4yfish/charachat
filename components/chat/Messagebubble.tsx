@@ -109,13 +109,13 @@ export default function Messagebubble(props: Props) {
                 >
                     {props.message.role == "assistant" &&  props.showName &&
                         <div className="pl-3 pb-1">
-                            <span className=" text-sm">{props.chat.character.name}</span>
+                            <span className=" text-sm select-none">{props.chat.character.name}</span>
                         </div>
                     }
                     <Card 
                         id={props.message.id}
                         className={`
-                            relative rounded-3xl w-fit max-w-3/4 border-none
+                            relative rounded-3xl w-fit max-w-3/4 border-none select-none
                             ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-800/50" : "mr-auto rounded-bl dark:bg-zinc-900"}
                             
                             `}
