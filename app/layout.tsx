@@ -79,10 +79,10 @@ export default function RootLayout({
           <NextUIProvider>
             <SidebarProvider>
               <LeftSidebar />
-              <NextTopLoader />
-              <NavbarServerWrapper />
-              <Toaster />
               <main className="h-full w-full flex flex-col">
+                <NextTopLoader />
+                <NavbarServerWrapper />
+                <Toaster />
                 {children}
               </main>
               <svg viewBox="0 0 200 200" className=" fill-stone-700 absolute bottom-[75vh] scale-[300%] blur-3xl -z-10" xmlns="http://www.w3.org/2000/svg">
