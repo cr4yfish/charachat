@@ -72,7 +72,7 @@ export default function ChatMain(props : Props) {
 
             try {
                 // add tokens to user
-                await updateTokens(props.user.user, (props.user.tokens + usage.totalTokens));
+                await updateTokens(props.user.user, (props.user.tokens + (usage.totalTokens || 0)));
             } catch (error) {
                 console.error("Error adding tokens", error);
             }
@@ -282,14 +282,12 @@ export default function ChatMain(props : Props) {
                     )
                 ))}
             </InfiniteScroll>
-            {messages.length < 4 && <div className="h-screen"></div>}
         </ScrollArea>
  
 
-        {messages.length <= 1 && (
+        {messages.length == 0 && (
             <div className="flex-1 flex items-center justify-center h-full overflow-y-hidden">
                 <p className="text-slate-400 text-center">Pretty empty here</p>
-                <div className="h-screen"></div>
             </div>   
         )}
         
