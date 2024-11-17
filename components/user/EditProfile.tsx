@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Spacer } from "@nextui-org/spacer";
 import { Input } from "@nextui-org/input";
+import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/utils/Button";
 import Icon from "../utils/Icon";
@@ -19,63 +20,77 @@ type Props = {
 
 export default function EditProfile(props: Props) {
     const [profile, setProfile] = useState<Profile>(props.profile);
-
+    const {toast} = useToast();
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         // decrypt API Keys
-        const key = sessionStorage.getItem('key');
+        try {
+            const key = sessionStorage.getItem('key');
 
-        if(!key) {
-            return;
+            if(!key) { throw new Error("No key found in session storage");  }
+
+            const keyBuffer = Buffer.from(key, 'hex');
+
+            const profileToEdit: Profile = {
+                ...props.profile,
+                groq_encrypted_api_key: props.profile.groq_encrypted_api_key && decryptMessage(props.profile.groq_encrypted_api_key, keyBuffer),
+                ollama_encrypted_api_key: props.profile.ollama_encrypted_api_key && decryptMessage(props.profile.ollama_encrypted_api_key, keyBuffer),
+                openai_encrypted_api_key: props.profile.openai_encrypted_api_key && decryptMessage(props.profile.openai_encrypted_api_key, keyBuffer),
+                gemini_encrypted_api_key: props.profile.gemini_encrypted_api_key && decryptMessage(props.profile.gemini_encrypted_api_key, keyBuffer),
+                mistral_encrypted_api_key: props.profile.mistral_encrypted_api_key && decryptMessage(props.profile.mistral_encrypted_api_key, keyBuffer),
+                anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer)
+            }
+
+            setProfile(profileToEdit);
+        } catch (error) {
+            const err = error as Error;
+            console.error(err);
+            toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive"
+            })
         }
 
-        const keyBuffer = Buffer.from(key, 'hex');
-
-        const profileToEdit: Profile = {
-            ...props.profile,
-            groq_encrypted_api_key: props.profile.groq_encrypted_api_key && decryptMessage(props.profile.groq_encrypted_api_key, keyBuffer),
-            ollama_encrypted_api_key: props.profile.ollama_encrypted_api_key && decryptMessage(props.profile.ollama_encrypted_api_key, keyBuffer),
-            openai_encrypted_api_key: props.profile.openai_encrypted_api_key && decryptMessage(props.profile.openai_encrypted_api_key, keyBuffer),
-            gemini_encrypted_api_key: props.profile.gemini_encrypted_api_key && decryptMessage(props.profile.gemini_encrypted_api_key, keyBuffer),
-            mistral_encrypted_api_key: props.profile.mistral_encrypted_api_key && decryptMessage(props.profile.mistral_encrypted_api_key, keyBuffer),
-            anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer)
-        }
-
-        console.log(profileToEdit)
-
-        setProfile(profileToEdit);
-
-    }, [props.profile])
+    }, [props.profile, toast])
 
     const handleUpdate = async () => {
         setIsSaving(true);
-
-        // Encrypt API Keys
-        const key = sessionStorage.getItem('key');
-
-        if(!key) {
-            console.error("No key found in session storage");
-            return;
-        }
-
-        const keyBuffer = Buffer.from(key, 'hex');
-
-        const profileToSave: Profile = {
-            ...profile,
-            groq_encrypted_api_key: profile.groq_encrypted_api_key && encryptMessage(profile.groq_encrypted_api_key, keyBuffer),
-            ollama_encrypted_api_key: profile.ollama_encrypted_api_key && encryptMessage(profile.ollama_encrypted_api_key, keyBuffer),
-            openai_encrypted_api_key: profile.openai_encrypted_api_key && encryptMessage(profile.openai_encrypted_api_key, keyBuffer),
-            gemini_encrypted_api_key: profile.gemini_encrypted_api_key && encryptMessage(profile.gemini_encrypted_api_key, keyBuffer),
-            mistral_encrypted_api_key: profile.mistral_encrypted_api_key && encryptMessage(profile.mistral_encrypted_api_key, keyBuffer),
-            anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer)
-        }
-
         try {
+            // Encrypt API Keys
+            const key = sessionStorage.getItem('key');
+
+            if(!key) {
+                throw new Error("No key found in session storage");
+            }
+
+            const keyBuffer = Buffer.from(key, 'hex');
+
+            const profileToSave: Profile = {
+                ...profile,
+                groq_encrypted_api_key: profile.groq_encrypted_api_key && encryptMessage(profile.groq_encrypted_api_key, keyBuffer),
+                ollama_encrypted_api_key: profile.ollama_encrypted_api_key && encryptMessage(profile.ollama_encrypted_api_key, keyBuffer),
+                openai_encrypted_api_key: profile.openai_encrypted_api_key && encryptMessage(profile.openai_encrypted_api_key, keyBuffer),
+                gemini_encrypted_api_key: profile.gemini_encrypted_api_key && encryptMessage(profile.gemini_encrypted_api_key, keyBuffer),
+                mistral_encrypted_api_key: profile.mistral_encrypted_api_key && encryptMessage(profile.mistral_encrypted_api_key, keyBuffer),
+                anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer)
+            }
+
             await updateProfile(profileToSave);
+            toast({
+                title: "Success",
+                description: "Profile updated successfully",
+            })
         } catch (error) {
             console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive"
+            })
         }
 
         setIsSaving(false);
