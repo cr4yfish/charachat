@@ -28,10 +28,10 @@ All Messages are stored encrypted in the database and decrypted on the client si
 ### AI Features
 - [x] Agent Structure
 - [x] Memory Agent
-- [x] LLM Switching
-    - [x] OpenAI gpt4-o
+- [x] LLMs
+    - [x] OpenAI
     - [x] Mistral
-    - [x] Ollama Self Hosted
+    - [x] Ollama
     - [x] Gemini
     - [x] Claude
 
@@ -56,8 +56,10 @@ All Messages are stored encrypted in the database and decrypted on the client si
 - [x] Message Encryption
 
 ## Tech Stack
-- Next.js
+- Shadcn UI
+- NextUI
 - Tailwind CSS
+- Next.js
 - TypeScript
 - Supabase
 - Vercel AI SDK
