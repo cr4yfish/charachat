@@ -301,7 +301,7 @@ export default function ChatMain(props : Props) {
         
         <form 
             onSubmit={handleSubmitAdapter} 
-            className="relative h-[5rem] w-full bg-content flex items-end justify-center"
+            className="relative h-[5rem] w-full flex items-end justify-center px-4 pb-2"
         >
             <Textarea 
                 placeholder="Send a message" 
