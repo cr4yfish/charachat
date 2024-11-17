@@ -15,7 +15,7 @@ export default function CharacterCard(props: Props) {
     return (
         <>
         <ConditionalLink active={props.hasLink} href={`/c/${props.character.id}`}>
-            <Card isPressable={props.hasLink} className={`h-[150px] w-[300px] ${props.fullWidth && "w-full"} `}>
+            <Card isPressable={props.hasLink} className={`h-[150px] w-[300px] dark:bg-zinc-800 ${props.fullWidth && "w-full"} `}>
                 <CardBody className="flex flex-row gap-4">
                     
                     <div className="flex items-center justify-center">
@@ -31,11 +31,11 @@ export default function CharacterCard(props: Props) {
                                     <h3 className="font-bold">{props.character.name}</h3>
                                     
                                 </div>
-                                <p className=" text-sm dark:text-slate-400">By @{props.character.owner.username}</p>
+                                <p className=" text-sm dark:text-zinc-400">By @{props.character.owner.username}</p>
                             </div>
                             <p className="text-sm">{props.character.description}</p> 
                         </div>
-                        <div className="flex flex-row items-center gap-2 text-xs dark:text-slate-400">
+                        <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
                             <span className="flex items-center gap-1">
                                 <Icon downscale filled>chat_bubble</Icon>
                                 30.0m
