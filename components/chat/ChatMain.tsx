@@ -110,7 +110,7 @@ export default function ChatMain(props : Props) {
         scrollToBottom();
 
         if(window) {
-            setInitialScreenHeight(window.innerHeight);
+            setInitialScreenHeight(window.visualViewport?.height || window.innerHeight);
         }
     }, []);
 
