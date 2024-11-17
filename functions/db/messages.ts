@@ -5,13 +5,13 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Message } from "@/types/db";
-import { decryptMessage, encryptMessage, generateKey } from "@/lib/crypto";
+import { decryptMessage, encryptMessage } from "@/lib/crypto";
 
 type getMessagesProps = {
     chatId: string;
     from: number;
     limit: number;
-    key: Buffer;
+    key: string;
 }
 
 export const getMessages = cache(async ({ chatId, from, limit, key } : getMessagesProps): Promise<Message[]> => {
@@ -28,7 +28,7 @@ export const getMessages = cache(async ({ chatId, from, limit, key } : getMessag
 
     const decryptedData = data.map((message: Message) => ({
         ...message,
-        content: decryptMessage(message.content, key),
+        content: decryptMessage(message.content, Buffer.from(key, "hex")),
     }));
 
     return decryptedData;

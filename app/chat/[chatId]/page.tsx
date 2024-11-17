@@ -38,14 +38,12 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
         return <>No key!</>
     }
 
-    const keyBuffer = Buffer.from(key, "hex");
-
     try {
         initMessages = await getMessages({
             chatId: chat.id,
             from: 0,
             limit: 10,
-            key: keyBuffer
+            key: key
         })
         initMessages = initMessages.reverse();
     } catch (error) {

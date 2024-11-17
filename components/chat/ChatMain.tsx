@@ -203,7 +203,7 @@ export default function ChatMain(props : Props) {
             chatId: props.chat.id,
             from: cursor,
             limit: 10,
-            key: Buffer.from(key, "hex")
+            key: key
         });
 
         if(newMessages.length === 0) {
@@ -237,7 +237,9 @@ export default function ChatMain(props : Props) {
     }
 
     const scrollToBottom = () => {
-        const scrollArea = document.querySelector("#scroller");
+        console.log("Scrolling");
+        const scrollArea = document.getElementById("scroller")
+        console.log("ScrollArea", scrollArea);
         scrollArea?.scrollTo(0, scrollArea.scrollHeight);
     }
 
@@ -293,7 +295,7 @@ export default function ChatMain(props : Props) {
         
         <form 
             onSubmit={handleSubmitAdapter} 
-            className="h-[5rem] w-full bg-content flex items-end justify-center px-4 py-6"
+            className="h-fit w-full bg-content flex items-end justify-center px-4 py-3"
         >
             <Textarea 
                 placeholder="Send a message" 
