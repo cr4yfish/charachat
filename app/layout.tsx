@@ -80,7 +80,9 @@ export default function RootLayout({
             <SidebarProvider>
               <LeftSidebar />
               <main className="relative h-full w-full flex flex-col">
-                <NextTopLoader />
+                <NextTopLoader
+                  showSpinner={false}
+                />
                 <NavbarServerWrapper />
                 <Toaster />
                 {children}
