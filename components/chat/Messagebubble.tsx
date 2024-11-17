@@ -1,9 +1,12 @@
+"use client";
 
 import { Message as AIMessage } from "ai/react";
 import { Spinner } from "@nextui-org/spinner";
 import { motion } from "motion/react";
 import Markdown from "react-markdown";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 import { framerListAnimationProps } from "@/lib/utils";
 
@@ -24,6 +27,8 @@ import {
 
 import { Chat } from "@/types/db";
 import { ToolInvocation } from "ai";
+import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
+import Icon from "../utils/Icon";
   
 
 type Props = {
@@ -39,7 +44,9 @@ type Props = {
 }
 
 export default function Messagebubble(props: Props) {
-    
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
+    const { toast } = useToast();
+
     if(props.message.toolInvocations !== undefined) {
         return (
             <>
@@ -69,10 +76,34 @@ export default function Messagebubble(props: Props) {
         )
     }
 
+    useEffect(() => {
+        console.log("is open", isContextMenuOpen)
+        if(isContextMenuOpen) {
+            console.log("context menu is open")
+            
+            const ele = document.getElementById("blurrer");
+
+            ele && ele.setAttribute("style", "opacity: 1")
+        } else {
+            const ele = document.getElementById("blurrer");
+
+            ele && ele.setAttribute("style", "opacity: 0")
+        }
+    }, [isContextMenuOpen])
+
+
+    const handleCopyToClipboard = () => {
+        navigator.clipboard.writeText(props.message.content).then(() => {
+            toast({
+                title: "Copied to clipboard",
+            })
+        })
+    }
+
     return (
         <>
 
-         <ContextMenu>
+         <ContextMenu onOpenChange={setIsContextMenuOpen} >
 
             <ContextMenuTrigger>
                 <motion.div
@@ -80,7 +111,7 @@ export default function Messagebubble(props: Props) {
                     custom={props.index}
                     whileTap={{ scale: 0.95, transition: { duration: .6 } }}
                     
-                    className=" select-none"
+                    className={`select-none relative ${isContextMenuOpen && "z-50"}`}
                 >
                     {props.message.role == "assistant" &&  props.showName &&
                         <div className="pl-3 pb-1">
@@ -90,9 +121,10 @@ export default function Messagebubble(props: Props) {
                     <Card 
                         id={props.message.id}
                         className={`
-                            rounded-3xl w-fit max-w-3/4 border-none
+                            relative rounded-3xl w-fit max-w-3/4 border-none
                             ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-800/50" : "mr-auto rounded-bl dark:bg-zinc-900"}
-                        `}
+                            
+                            `}
                     >
                         { props.message.role !== "user" &&
                             <CardHeader className=" py-0 pb-1 pt-3">
@@ -115,9 +147,37 @@ export default function Messagebubble(props: Props) {
                 </motion.div>
             </ContextMenuTrigger>
 
-             <ContextMenuContent className="w-64">
-                <ContextMenuItem inset>
-                    back
+             <ContextMenuContent className="w-64 flex flex-col">
+                <ContextMenuItem disabled >
+                    Reply
+                    <Icon>reply</Icon>
+                </ContextMenuItem>
+                <ContextMenuSeparator />
+                <ContextMenuItem onClick={handleCopyToClipboard} >
+                    Copy
+                    <Icon>content_copy</Icon>
+                </ContextMenuItem>
+                { props.message.role == "user" &&
+                    <ContextMenuItem disabled >
+                    Edit
+                    <Icon>edit</Icon>
+                </ContextMenuItem>
+                }
+                { props.message.role == "assistant" &&
+                <ContextMenuItem disabled >
+                    Report
+                    <Icon>report</Icon>
+                </ContextMenuItem>}
+
+                { props.message.role == "assistant" &&
+                <ContextMenuItem disabled className="dark:text-blue-400" >
+                    Regenerate
+                    <Icon>refresh</Icon>
+                </ContextMenuItem>
+                }
+                <ContextMenuItem disabled className="dark:text-red-400" >
+                    Delete
+                    <Icon>delete</Icon>
                 </ContextMenuItem>
             </ContextMenuContent>
             
