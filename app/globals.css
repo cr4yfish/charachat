@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow-x: hidden !important;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
