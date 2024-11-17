@@ -105,7 +105,7 @@ export default function Messagebubble(props: Props) {
                     custom={props.index}
                     whileTap={{ scale: 0.95, transition: { duration: .6 } }}
                     
-                    className={`select-none relative ${isContextMenuOpen && "z-50"}`}
+                    className={`!select-none relative ${isContextMenuOpen && "z-50"}`}
                 >
                     {props.message.role == "assistant" &&  props.showName &&
                         <div className="pl-3 pb-1">
@@ -115,7 +115,7 @@ export default function Messagebubble(props: Props) {
                     <Card 
                         id={props.message.id}
                         className={`
-                            relative rounded-3xl w-fit max-w-3/4 border-none select-none
+                            relative rounded-3xl w-fit max-w-3/4 border-none !select-none
                             ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-800/50" : "mr-auto rounded-bl dark:bg-zinc-900"}
                             
                             `}
