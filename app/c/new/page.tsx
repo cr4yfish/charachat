@@ -4,14 +4,12 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@/components/utils/Button";
 import { saveCharacter } from "./actions";
 import TextareaWithCounter from "@/components/utils/TextareaWithCounter";
-import BackLink from "@/components/utils/BackLink";
 
 export default async function NewCharacter() {
 
     return (
         <>
         <div className="flex items-center gap-2">
-            <BackLink />
             <h2 className="font-bold text-2xl">Create a new Character</h2>
         </div>
         

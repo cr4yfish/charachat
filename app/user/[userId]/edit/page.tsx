@@ -1,7 +1,6 @@
 "use server";
 
 import EditProfile from "@/components/user/EditProfile";
-import BackLink from "@/components/utils/BackLink";
 import { getCurrentUser } from "@/functions/db/auth";
 import { Profile } from "@/types/db";
 import { redirect } from "next/navigation";
@@ -21,7 +20,6 @@ export default async function EditUserPage() {
     return (
         <div className="flex flex-col px-4 py-6 gap-4">
             <div className="flex flex-row items-center gap-2">
-                <BackLink />
                 <h1 className=" font-bold text-4xl">Edit User</h1>
             </div>
          
