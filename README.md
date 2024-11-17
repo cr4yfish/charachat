@@ -56,6 +56,13 @@ All Messages are stored encrypted in the database and decrypted on the client si
 - [ ] Editing & deleting messages
 - [x] Message Encryption
 
+
+## Quick Start
+1. Open the webapp
+2. Create a new account
+3. Go to your profile settings and add one or more API keys
+4. When creating a new Chat, make sure to only use LLMs for which you have an API key
+
 ## Tech Stack
 - Shadcn UI
 - NextUI
