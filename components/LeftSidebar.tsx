@@ -17,7 +17,34 @@ import ChatCardSmall from "./chat/ChatCardSmall";
 import ProfileCard from "./user/ProfileCard";
 import { getCurrentUser } from "@/functions/db/auth";
 import { Chat, Profile } from "@/types/db";
+import ConditionalLink from "./utils/ConditionalLink";
+
+type SidebarLinkProps = {
+  link: string;
+  isLoggedIn: boolean;
+  icon: string;
+  label: string;
+  radius?: "none" | "full" | "sm" | "md" | "lg";
+  variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost"
+}
+
+function SidebarLink(props: SidebarLinkProps): React.ReactNode {
+
+  return (
+    <ConditionalLink active={props.isLoggedIn} href={props.link} >
+      <Button 
+        size="lg" 
+        fullWidth
+        variant={props.variant || "solid"}
+        startContent={<Icon>{props.icon}</Icon>}
+        radius={props.radius || "md"}
+      >
+        {props.label}
+      </Button>
+    </ConditionalLink>
+  )
   
+}
 
 export async function LeftSidebar() {
 
@@ -42,33 +69,11 @@ export async function LeftSidebar() {
         
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
-            <Button 
-              size="lg" 
-              fullWidth
-              startContent={<Icon>add</Icon>}
-              radius="full"
-            >
-              New Character
-            </Button>
 
-            <Button 
-              size="lg" 
-              variant="flat"
-              fullWidth
-              startContent={<Icon filled>chat</Icon>}
-            >
-              Chats
-            </Button>
-
-            <Button 
-              size="lg" 
-              variant="flat"
-              fullWidth
-              startContent={<Icon filled>people</Icon>}
-            >
-              Characters
-            </Button>
-
+            <SidebarLink radius="full" link="/" isLoggedIn={true} icon="add" label="New Character" />
+            <SidebarLink variant="flat" link={`/user/${profile?.user}/chats`} isLoggedIn={true} icon="chat" label="Chats" />
+            <SidebarLink variant="flat" link={`/user/${profile?.user}/characters`} isLoggedIn={true} icon="people" label="Characters" />
+            <SidebarLink variant="flat" link={`/user/${profile?.user}/stories`} isLoggedIn={true} icon="book" label="Stories" />
           </SidebarGroupContent>
         </SidebarGroup>
 
@@ -80,6 +85,12 @@ export async function LeftSidebar() {
               {chats.slice(0,5).map((chat) => (
                 <ChatCardSmall hasLink key={chat.id} chat={chat} />
               ))}
+            
+              {chats.length == 0 && (
+                <div className=" w-full flex items-center justify-center pt-5">
+                  <p className="text-sm dark:text-zinc-400">No chats yet</p>
+                </div>
+              )}
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
