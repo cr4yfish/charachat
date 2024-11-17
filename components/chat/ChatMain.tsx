@@ -131,13 +131,22 @@ export default function ChatMain(props : Props) {
         const handleResize = () => {
             console.log("Resizing");
             const currentHeight = window.visualViewport?.height;
+            const width = window.innerWidth;
+
+            if(width > 768) {
+                console.log("Probably not a mobile device");
+                return;
+            }
+            
+            toast({
+                title: "Keyboard is open",
+                description: `Current height: ${currentHeight}, Initial height: ${initialScreenHeight}`,
+            })
+
             console.log(initialScreenHeight, currentHeight)
             if (initialScreenHeight && currentHeight && (currentHeight < initialScreenHeight)) {
                 // Keyboard is open
-                toast({
-                    title: "Keyboard is open",
-                    description: `Current height: ${currentHeight}, Initial height: ${initialScreenHeight}`,
-                })
+     
                 const scrollArea = document.getElementById("scroller")?.querySelector("div");
                 if (scrollArea) {
                     // scroll down an appropriate amount to compensate for the keyboard
