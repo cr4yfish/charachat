@@ -48,17 +48,12 @@ export default function Messagebubble(props: Props) {
     const { toast } = useToast();
 
     useEffect(() => {
-        console.log("is open", isContextMenuOpen)
         if(isContextMenuOpen) {
-            console.log("context menu is open")
-            
             const ele = document.getElementById("blurrer");
-
-            ele && ele.setAttribute("style", "opacity: 1")
+            if(ele) { ele.setAttribute("style", "opacity: 1") }
         } else {
             const ele = document.getElementById("blurrer");
-
-            ele && ele.setAttribute("style", "opacity: 0")
+            if(ele) { ele.setAttribute("style", "opacity: 0")  }
         }
     }, [isContextMenuOpen])
 
