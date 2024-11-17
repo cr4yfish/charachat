@@ -9,7 +9,7 @@ import React from "react";
 export default function Searchbar() {
 
     const [search, setSearch] = React.useState<string>("");
-    const [results, setResults] = React.useState<any[]>([]);
+    const [results, setResults] = React.useState<{id: number, name: string}[]>([]);
 
 
     const handleSearch = () => {
