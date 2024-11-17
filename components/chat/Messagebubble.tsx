@@ -47,6 +47,21 @@ export default function Messagebubble(props: Props) {
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const { toast } = useToast();
 
+    useEffect(() => {
+        console.log("is open", isContextMenuOpen)
+        if(isContextMenuOpen) {
+            console.log("context menu is open")
+            
+            const ele = document.getElementById("blurrer");
+
+            ele && ele.setAttribute("style", "opacity: 1")
+        } else {
+            const ele = document.getElementById("blurrer");
+
+            ele && ele.setAttribute("style", "opacity: 0")
+        }
+    }, [isContextMenuOpen])
+
     if(props.message.toolInvocations !== undefined) {
         return (
             <>
@@ -75,22 +90,6 @@ export default function Messagebubble(props: Props) {
             </>
         )
     }
-
-    useEffect(() => {
-        console.log("is open", isContextMenuOpen)
-        if(isContextMenuOpen) {
-            console.log("context menu is open")
-            
-            const ele = document.getElementById("blurrer");
-
-            ele && ele.setAttribute("style", "opacity: 1")
-        } else {
-            const ele = document.getElementById("blurrer");
-
-            ele && ele.setAttribute("style", "opacity: 0")
-        }
-    }, [isContextMenuOpen])
-
 
     const handleCopyToClipboard = () => {
         navigator.clipboard.writeText(props.message.content).then(() => {
