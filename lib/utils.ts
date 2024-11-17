@@ -16,7 +16,7 @@ export const framerListAnimationProps = {
       delay: i * 0.05,
     },
   }),
-  hidden: { opacity: 0, y: -10 },
+  hidden: { opacity: 0, y: 30 },
 }}
 
 export function isSameDay(date1: Date, date2: Date): boolean {
