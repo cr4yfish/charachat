@@ -9,7 +9,7 @@ import { Profile } from "@/types/db";
 import Sidebar from "./Sidebar";
 
 type Props = {
-    profile: Profile
+    profile?: Profile
 }
 
 export default function Navbar(props: Props) {

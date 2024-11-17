@@ -16,12 +16,20 @@ import { getChats } from "@/functions/db/chat";
 import ChatCardSmall from "./chat/ChatCardSmall";
 import ProfileCard from "./user/ProfileCard";
 import { getCurrentUser } from "@/functions/db/auth";
+import { Chat, Profile } from "@/types/db";
   
 
 export async function LeftSidebar() {
 
-  const chats = await getChats();
-  const profile = await getCurrentUser();
+  let chats: Chat[] = [];
+  let profile: Profile | undefined = undefined;
+
+  try {
+    chats = await getChats();
+    profile = await getCurrentUser();
+  } catch (e) {
+    console.error("Error in LeftSidebar", e);
+  }
 
   return (
     <Sidebar>
