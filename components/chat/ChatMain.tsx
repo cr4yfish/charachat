@@ -4,6 +4,7 @@ import { useChat, Message as AIMessage } from "ai/react";
 import { Textarea } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import InfiniteScroll from "react-infinite-scroller";
+import { Spacer } from "@nextui-org/spacer";
 
 
 import { Button } from "../utils/Button";
@@ -259,12 +260,13 @@ export default function ChatMain(props : Props) {
                 loader={isMessagesLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
-                className="flex flex-col gap-2 pb-5 pt-28 px-4 h-fit min-h-full"
+                className="flex flex-col gap-1 pb-5 pt-28 px-4 h-fit min-h-full"
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
                     (
                         <div key={message.id + "_wrapper"}>
+                            {(index !== 0) && (messages[index - 1].role !== message.role) && <Spacer y={6} />}
                             {((index == 0) || !isSameDay(new Date(message.createdAt!), new Date(messages[index - 1]?.createdAt ?? ""))) && (
                                 <div className="text-center text-sm dark:text-slate-400 my-2">
                                     { isToday(new Date(message.createdAt!)) 
@@ -280,7 +282,7 @@ export default function ChatMain(props : Props) {
                     )
                 ))}
             </InfiniteScroll>
-            <div className="h-screen"></div>
+            {messages.length < 4 && <div className="h-screen"></div>}
         </ScrollArea>
  
 
