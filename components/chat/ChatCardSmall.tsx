@@ -15,6 +15,7 @@ type Props = {
     chat: Chat;
     setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
     hasLink?: boolean;
+    loadLatestMessage?: boolean;
 }
 
 export default function ChatCardSmall(props: Props) {
@@ -45,20 +46,23 @@ export default function ChatCardSmall(props: Props) {
     return (
         <>
         <ConditionalLink active={props.hasLink !== undefined} href={`/chat/${props.chat.id}`}>
-            <Card isPressable={props.hasLink} className="w-full">
+            <Card 
+                isPressable={props.hasLink} shadow="none"
+                className="w-full bg-transparent"
+            >
                 <CardBody className="flex flex-row gap-2 items-center justify-start">
 
                     <Avatar src={props.chat.character.image_link} size="md" />
 
                     <div className="flex flex-col w-full">
                         <div className="flex flex-row items-center justify-between w-full">
-                            <h3 className="font-bold text-lg">{props.chat.character.name}</h3>
+                            <h3 className="text-md">{props.chat.character.name}</h3>
                             {props.chat.last_message_at && 
                                 <span className="text-xs dark:text-slate-400">{formatLastMessageTime(new Date(props.chat.last_message_at))}</span>
                             }
                         </div>
                         
-                        {isLoadingLatestMessage && 
+                        {isLoadingLatestMessage && props.loadLatestMessage &&
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -67,7 +71,7 @@ export default function ChatCardSmall(props: Props) {
                                 <Skeleton className="w-full h-5" />
                             </motion.div>
                         }
-                        {!isLoadingLatestMessage && latestMessage?.content && 
+                        {!isLoadingLatestMessage && latestMessage?.content && props.loadLatestMessage && 
                             <motion.p 
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

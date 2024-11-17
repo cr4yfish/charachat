@@ -2,9 +2,13 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/system";
-import { ThemeProvider } from "@/components/theme-provider";
 
+import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { LeftSidebar } from "@/components/LeftSidebar";
+import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster"
+import NavbarServerWrapper from "@/components/NavbarServerWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -80,7 +84,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextUIProvider>
-            {children}
+            <SidebarProvider>
+              <LeftSidebar />
+              <NextTopLoader />
+              <NavbarServerWrapper />
+              {children}
+            </SidebarProvider>
             <Toaster />
           </NextUIProvider>
         </ThemeProvider>

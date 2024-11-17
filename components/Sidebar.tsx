@@ -38,7 +38,7 @@ export default function Sidebar(props: Props) {
         <>
         <Sheet>
           <SheetTrigger>
-            <Avatar size="md" src={props.profile?.avatar_link} />
+            <Avatar size="sm" src={props.profile?.avatar_link} />
           </SheetTrigger>
           <SheetContent>
             <SheetHeader>
