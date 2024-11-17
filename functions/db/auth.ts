@@ -171,5 +171,8 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
 
 export const logout = async () => {
     await createClient().auth.signOut();
+
+    cookies().set("key", "", { secure: true });
+
     revalidatePath("/");
 }
