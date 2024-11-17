@@ -31,15 +31,17 @@ export default async function CharacterView({ params: { characterId } }: { param
 
     return (
         <>
+        <div className="relative w-full h-full min-h-full">
+            <div className="z-20 absolute bottom-0 left-0 w-full flex items-center justify-center pb-5 px-4">
+                <form className="w-full">
+                    <input type="hidden" name="characterId" value={characterId} />
+                    <Button size="lg" fullWidth color="primary" variant="shadow" type="submit" formAction={startChat} >Start Chat</Button>
+                </form>
+            </div>
 
-        <div className="z-20 absolute bottom-0 left-0 w-full flex items-center justify-center pb-5 px-4">
-            <form className="w-full">
-                <input type="hidden" name="characterId" value={characterId} />
-                <Button size="lg" fullWidth color="primary" variant="shadow" type="submit" formAction={startChat} >Start Chat</Button>
-            </form>
+            <CharacterPage character={character} stories={stories} />   
         </div>
-
-        <CharacterPage character={character} stories={stories} />
+        
         </>
     )
 
