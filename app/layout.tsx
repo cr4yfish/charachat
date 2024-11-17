@@ -81,9 +81,9 @@ export default function RootLayout({
               <LeftSidebar />
               <NextTopLoader />
               <NavbarServerWrapper />
+              <Toaster />
               {children}
             </SidebarProvider>
-            <Toaster />
           </NextUIProvider>
         </ThemeProvider>
       </body>
