@@ -33,7 +33,6 @@ export default function ChatMain(props : Props) {
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const setupExecuted = useRef(false);
-    const [initialScreenHeight, setInitialScreenHeight] = useState(0);
     const { toast } = useToast();
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
@@ -108,10 +107,6 @@ export default function ChatMain(props : Props) {
 
     useEffect(() => {
         scrollToBottom();
-
-        if(window) {
-            setInitialScreenHeight(window.visualViewport?.height || window.innerHeight);
-        }
     }, []);
 
     useEffect(() => {
@@ -128,33 +123,6 @@ export default function ChatMain(props : Props) {
     }, [messages, isLoading])
 
     useEffect(() => {
-        const handleResize = () => {
-            console.log("Resizing");
-            const currentHeight = window.visualViewport?.height;
-            const width = window.innerWidth;
-
-            if(width > 768) {
-                console.log("Probably not a mobile device");
-                return;
-            }
-            
-            toast({
-                title: "Keyboard is open",
-                description: `Current height: ${currentHeight}, Initial height: ${initialScreenHeight}`,
-            })
-
-            console.log(initialScreenHeight, currentHeight)
-            if (initialScreenHeight && currentHeight && (currentHeight < initialScreenHeight)) {
-                // Keyboard is open
-     
-                const scrollArea = document.getElementById("scroller")?.querySelector("div");
-                if (scrollArea) {
-                    // scroll down an appropriate amount to compensate for the keyboard
-                    scrollArea.scrollTo(0, scrollArea.scrollHeight - (initialScreenHeight - currentHeight));
-                }
-            }
-        };
-
         const handleBlur = (e: FocusEvent) => {
             // if user tapped on send-btn, focus input again
             if(e.relatedTarget && (e.relatedTarget as HTMLElement).id === "send-btn") {
@@ -167,16 +135,14 @@ export default function ChatMain(props : Props) {
         // add event listener to focus
         if(inputRef.current) {
             inputRef.current.addEventListener("blur", handleBlur);
-            inputRef.current.addEventListener("focus", handleResize);
         }
 
         return () => {
             if(inputRef.current) {
-                inputRef.current.removeEventListener("blur", handleBlur);
-                inputRef.current.removeEventListener("focus", handleResize);
+                inputRef.current.removeEventListener("blur", handleBlur);;
             }
         }
-    }, [inputRef.current, initialScreenHeight])
+    }, [inputRef.current])
 
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0)) return;
