@@ -4,7 +4,7 @@ import { Avatar } from "@nextui-org/avatar";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import Link from "next/link";
 import { Story } from "@/types/db";
-import StoryCardSmall from "@/components/story/StoryCard";
+import StoryCard from "../story/StoryCard";
 import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
 
@@ -25,7 +25,7 @@ export default function CharacterPage(props: Props) {
 
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2 items-center justify-center">
-                        <Avatar src={props.character.image_link} className="w-20 h-20 text-large"/>
+                        <Avatar src={props.character.image_link} className="w-30 h-30 text-large"/>
                         <h1 className="text-xl font-bold">{props.character.name}</h1>
                         <p className="text-sm dark:text-neutral-400">By @{props.character.owner.username}</p>
                     </div>
@@ -38,7 +38,7 @@ export default function CharacterPage(props: Props) {
                 <div className="flex flex-col w-full">
                     <Tabs variant="underlined"
                         classNames={{
-                            cursor: "dark:bg-slate-400",
+                            cursor: "dark:bg-zinc-400",
                         }}
                     >
                         <Tab key="about" title="About">
@@ -62,7 +62,7 @@ export default function CharacterPage(props: Props) {
                             
                             <div className="flex flex-col gap-2">
                                 {props.stories.map((story: Story) => (
-                                    <StoryCardSmall key={story.id} story={story} hasLink fullWidth />
+                                    <StoryCard key={story.id} story={story} hasLink fullWidth />
                                 ))}
 
                                 {props.stories.length == 0 && <p className="text-sm dark:text-neutral-400">No stories found. Want to make the first?</p>}
