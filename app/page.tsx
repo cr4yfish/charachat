@@ -8,6 +8,7 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 import { getStories } from "@/functions/db/stories";
 import StoryCard from "@/components/story/StoryCard";
+import Searchbar from "@/components/Searchbar";
 
 export default async function Home() {
 
@@ -23,7 +24,9 @@ export default async function Home() {
 
   return (
     <div className="w-full font-[family-name:var(--font-geist-sans)] flex flex-col gap-4 px-4 py-6">
-      
+
+      <Searchbar />
+
       <div className="flex flex-col gap-2">
         <h2 className="dark:prose-invert text-xl font-bold">Popular</h2>
         <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
