@@ -108,6 +108,10 @@ export default function ChatMain(props : Props) {
 
     useEffect(() => {
         scrollToBottom();
+
+        if(window) {
+            setInitialScreenHeight(window.innerHeight);
+        }
     }, []);
 
     useEffect(() => {
