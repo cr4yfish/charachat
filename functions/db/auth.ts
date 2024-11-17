@@ -1,6 +1,5 @@
 "use server";
 
-import { ZodError } from "zod";
 import { cookies } from "next/headers";
 
 import { createClient } from "@/utils/supabase/supabase";
@@ -8,8 +7,7 @@ import { cache } from "react";
 import { getProfile } from "./profiles";
 import { Profile } from "@/types/db";
 
-import { loginSchema } from "@/lib/schemas";
-import { AuthError } from "@supabase/supabase-js";
+import { loginSchema, signUpSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
 import { generateKey } from "@/lib/crypto";
 
@@ -48,14 +46,13 @@ export const getSession = cache(async () => {
 })
 
 export type LoginResponse = {
-    validationError?: ZodError<{email: string, password: string}>,
-    databaseError?: AuthError,
-    success?: boolean
+    validationError: boolean,
+    databaseError: string | false,
+    success: boolean
 }
 
 export const login = async (email: string, password: string): Promise<LoginResponse> => {
-    // type-casting here for convenience
-    // in practice, you should validate your inputs
+
     const data = {
         email: email,
         password: password
@@ -68,7 +65,9 @@ export const login = async (email: string, password: string): Promise<LoginRespo
         console.error(validateResult.error)
         
         return {
-            validationError: validateResult.error
+            validationError: !validateResult.success,
+            databaseError: false,
+            success: false,
         }
     }
 
@@ -77,7 +76,9 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     if (error) {
         console.error(error)
         return {
-            databaseError: error
+            databaseError: error.message,
+            validationError: false,
+            success: false,
         }
     }
 
@@ -87,7 +88,84 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     cookies().set("key", keyBuffer.toString("hex"), { secure: true });
 
     return {
-        success: true
+        success: true,
+        databaseError: false,
+        validationError: false,
+    }
+}
+
+type SignUpProps = {
+    username: string,
+    firstName: string,
+    lastName: string,
+    avatarLink: string,
+    email: string,
+    password: string
+}
+
+export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
+
+    const data = {
+        username: props.username,
+        firstName: props.firstName,
+        lastName: props.lastName,
+        avatarLink: props.avatarLink,
+        email: props.email,
+        password: props.password
+    }
+
+    console.log(data)
+
+    // validate the data
+    const validateResult = signUpSchema.safeParse(data)
+
+    if (!validateResult.success) {
+        console.error(validateResult.error)
+        
+        return {
+            validationError: !validateResult.success,
+            success: false,
+            databaseError: false,
+        }
+    }
+
+    const { data: { user }, error } = await createClient().auth.signUp(data)
+
+    if (error || !user?.id) {
+        console.error(error)
+        return {
+            validationError: false,
+            success: false,
+            databaseError: error?.message || "No user id"
+        }
+    }
+
+    const { error: profilesError } = await createClient().from("profiles").insert({
+        user: user.id,
+        username: props.username,
+        first_name: props.firstName,
+        last_name: props.lastName,
+        avatar_link: props.avatarLink
+    })
+
+    if(profilesError) {
+        console.error(profilesError)
+        return {
+            validationError: false,
+            success: false,
+            databaseError: profilesError.message
+        }
+    }
+
+    // set cookie with key
+    const keyBuffer = generateKey(data.password, data.email);
+
+    cookies().set("key", keyBuffer.toString("hex"), { secure: true });
+
+    return {
+        success: true,
+        validationError: false,
+        databaseError: false,
     }
 }
 

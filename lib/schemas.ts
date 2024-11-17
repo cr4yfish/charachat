@@ -5,6 +5,25 @@ export const loginSchema = z.object({
     password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
 });
 
+export const signUpSchema = z.object({
+    username: z.string()
+        .min(5, { message: "Username must be at least 5 characters long" })
+        .max(50, { message: "Username must be at most 50 characters long" }),
+    firstName: z.string()
+        .min(2, { message: "First Name must be at least 2 characters long" })
+        .max(50, { message: "First Name must be at most 50 characters long" }),
+    lastName: z.string()
+        .min(2, { message: "Last Name must be at least 2 characters long" })
+        .max(50, { message: "Last Name must be at most 50 characters long" })
+        .optional()
+        ,
+    avatarLink: z.string()
+        .min(5, { message: "Avatar Link must be at least 5 characters long" })
+        .url({ message: "Invalid URL" }),
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+});
+
 export const storySchema = z.object({
     title: z.string()
         .min(5, { message: "Title must be at least 5 characters long" })

@@ -3,18 +3,30 @@
 import { useRouter } from "next/navigation";
 import { logout } from "@/functions/db/auth";
 import { useState } from "react";
-import Link from "next/link";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import LoginCard from "./LoginCard";
+  
 type Props = {
     isLoggedIn: boolean;
+    showLogout?: boolean;
+    isSmall?: boolean;
 }
 
 export default function LoginButton(props: Props) {
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState(props.isLoggedIn ?? false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleLogout = async () => {
         setIsLoggingOut(true);
@@ -25,7 +37,7 @@ export default function LoginButton(props: Props) {
 
     return (
         <>
-            {isLoggedIn &&
+            {isLoggedIn && props.showLogout &&
                 <Button 
                     color="danger" variant="flat" 
                     size="lg" fullWidth
@@ -37,19 +49,29 @@ export default function LoginButton(props: Props) {
                 </Button>
             }
 
-            {!isLoggedIn && 
-                <Link href="/auth">
-                    <Button 
-                        color="primary" 
-                        variant="shadow" 
-                        size="lg" 
-                        startContent={<Icon filled>login</Icon>}
-                        fullWidth
-                    >
-                        Log in
-                    </Button>
-                </Link>
-            }
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen} >
+                {!isLoggedIn && 
+                    <DialogTrigger asChild>
+                        <Button 
+                            color="primary" 
+                            size={props.isSmall ? "md" : "lg"} 
+                            fullWidth={!props.isSmall}
+                        >
+                            Log in
+                        </Button>
+                    </DialogTrigger>
+                }
+            <DialogContent className="dark:bg-transparent dark:border-none">
+                <DialogHeader>
+                <DialogTitle></DialogTitle>
+                    <DialogDescription>
+                        
+                    </DialogDescription>
+                </DialogHeader>
+                <LoginCard callback={() => {setDialogOpen(false); setIsLoggedIn(true)}} />
+            </DialogContent>
+            </Dialog>
+
         </>
     )
 }

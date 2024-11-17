@@ -5,8 +5,14 @@ import { usePathname } from "next/navigation";
 
 import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
+import LoginButton from "./auth/LoginButton";
+import { Profile } from "@/types/db";
 
-export default function Navbar() {
+type Props = {
+    profile?: Profile;
+}
+
+export default function Navbar(props: Props) {
     const pathname = usePathname();
 
     // Dont render in a chat page
@@ -19,6 +25,9 @@ export default function Navbar() {
                 <SidebarTrigger><></></SidebarTrigger>
                 <Link href={"/"}><span className="font-bold">charachat</span></Link>
             </div>
+
+            <LoginButton isLoggedIn={props.profile !== undefined} isSmall />
+            
             
         </div>
 

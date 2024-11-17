@@ -2,7 +2,7 @@
 
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
-
+import { Spacer } from "@nextui-org/spacer";
 import {
     Sidebar,
     SidebarContent,
@@ -36,6 +36,7 @@ function SidebarLink(props: SidebarLinkProps): React.ReactNode {
       <Button 
         size="lg" 
         fullWidth
+        isDisabled={!props.isLoggedIn}
         variant={props.variant || "solid"}
         startContent={<Icon>{props.icon}</Icon>}
         radius={props.radius || "md"}
@@ -100,8 +101,9 @@ export async function LeftSidebar() {
 
       </SidebarContent>
       <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
-        <SidebarLink variant="flat" link={`/user/${profile?.user}/edit`} isLoggedIn={isLoggedIn} icon="edit" label="Edit Profile" />
-        <LoginButton isLoggedIn={isLoggedIn} />
+        {isLoggedIn && <SidebarLink variant="flat" link={`/user/${profile?.user}/edit`} isLoggedIn={isLoggedIn} icon="edit" label="Edit Profile" />}
+        <LoginButton isLoggedIn={isLoggedIn} showLogout />
+        <Spacer y={2} />
         <ProfileCard profile={profile} />
       </SidebarFooter>
     </Sidebar>
