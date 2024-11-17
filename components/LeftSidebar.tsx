@@ -1,8 +1,5 @@
 "use server";
 
-import { Button } from "./utils/Button";
-import Icon from "./utils/Icon";
-import { Spacer } from "@nextui-org/spacer";
 import {
     Sidebar,
     SidebarContent,
@@ -17,42 +14,13 @@ import ChatCardSmall from "./chat/ChatCardSmall";
 import ProfileCard from "./user/ProfileCard";
 import { getCurrentUser } from "@/functions/db/auth";
 import { Chat, Profile } from "@/types/db";
-import ConditionalLink from "./utils/ConditionalLink";
-import LoginButton from "./auth/LoginButton";
 
-type SidebarLinkProps = {
-  link: string;
-  isLoggedIn: boolean;
-  icon: string;
-  label: string;
-  radius?: "none" | "full" | "sm" | "md" | "lg";
-  variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost"
-}
+import SidebarLink from "./SidebarLink";
 
-function SidebarLink(props: SidebarLinkProps): React.ReactNode {
-
-  return (
-    <ConditionalLink active={props.isLoggedIn} href={props.link} >
-      <Button 
-        size="lg" 
-        fullWidth
-        isDisabled={!props.isLoggedIn}
-        variant={props.variant || "solid"}
-        startContent={<Icon>{props.icon}</Icon>}
-        radius={props.radius || "md"}
-      >
-        {props.label}
-      </Button>
-    </ConditionalLink>
-  )
-  
-}
 
 export async function LeftSidebar() {
-
   let chats: Chat[] = [];
   let profile: Profile | undefined = undefined;
-
   try {
     chats = await getChats();
     profile = await getCurrentUser();
@@ -73,11 +41,10 @@ export async function LeftSidebar() {
         
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
-
-            <SidebarLink radius="full" link="/" isLoggedIn={isLoggedIn} icon="add" label="New Character" />
-            <SidebarLink variant="flat" link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Chats" />
-            <SidebarLink variant="flat" link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Characters" />
-            <SidebarLink variant="flat" link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Stories" />
+            <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" />
+            <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
+            <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
+            <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
           </SidebarGroupContent>
         </SidebarGroup>
 
@@ -101,9 +68,6 @@ export async function LeftSidebar() {
 
       </SidebarContent>
       <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
-        {isLoggedIn && <SidebarLink variant="flat" link={`/user/${profile?.user}/edit`} isLoggedIn={isLoggedIn} icon="edit" label="Edit Profile" />}
-        <LoginButton isLoggedIn={isLoggedIn} showLogout />
-        <Spacer y={2} />
         <ProfileCard profile={profile} />
       </SidebarFooter>
     </Sidebar>
