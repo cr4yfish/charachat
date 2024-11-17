@@ -20,7 +20,7 @@ export default function Navbar(props: Props) {
 
     return (
         <>
-        <div className="absolute top-0 left-0 w-full flex flex-row items-center justify-between px-4 pt-3">
+        <div className="absolute top-0 left-0 w-full flex flex-row items-center justify-between px-4 pt-3 pb-2 backdrop-blur z-50">
             <div className="flex items-center gap-2">
                 <SidebarTrigger><></></SidebarTrigger>
                 <Link href={"/"}><span className="font-bold">charachat</span></Link>
