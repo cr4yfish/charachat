@@ -4,10 +4,18 @@ import NewStoryMain from "@/components/story/NewStoryMain";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getCharacter } from "@/functions/db/character";
 import { getStory } from "@/functions/db/stories";
+import { Profile } from "@/types/db";
+import { redirect } from "next/navigation";
 
 export default async function EditStory({ params: { characterId, storyId } }: { params: { characterId: string, storyId: string } }) {
 
-    const profile = await getCurrentUser();
+    let profile: Profile | undefined = undefined;
+    try {
+        profile = await getCurrentUser();
+    } catch (e) {
+        console.error(e);
+        redirect("/");
+    }
     const character = await getCharacter(characterId);
     const story = await getStory(storyId);
 

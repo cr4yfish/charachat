@@ -13,10 +13,15 @@ export default async function CharacterView({ params: { characterId } }: { param
 
     try {
         character = await getCharacter(characterId);
-        profile = await getCurrentUser();    
     } catch (error) {
         console.error(error);
         return <p>Character not found</p>;
+    }
+
+    try {
+        profile = await getCurrentUser();  
+    } catch (error) {
+        console.error(error);
     }
 
     const stories = await getCharacterStories(characterId);

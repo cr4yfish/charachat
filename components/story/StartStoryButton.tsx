@@ -6,18 +6,29 @@ import { useState } from "react";
 
 import { Profile, Story } from "@/types/db";
 
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "../utils/Button";
 import { createChat } from "@/functions/db/chat";
 
 type Props = {
     story: Story;
-    profile: Profile
+    profile?: Profile
 }
 
 export default function StartStoryButton(props: Props) {
     const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast();
 
     const handleStartStory = async () => {
+        if(!props.profile) {
+            toast({
+                title: "Error",
+                description: "You must be logged in to start a story",
+                variant: "destructive",
+            })
+            return;
+        };
+
         setIsLoading(true);
         // Start story
         try {

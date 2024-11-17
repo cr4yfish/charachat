@@ -3,10 +3,19 @@
 import NewStoryMain from "@/components/story/NewStoryMain";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getCharacter } from "@/functions/db/character";
+import { Profile } from "@/types/db";
+import { redirect } from "next/navigation";
 
 export default async function NewStory({ params: { characterId } }: { params: { characterId: string } }) {
 
-    const profile = await getCurrentUser();
+    let profile: Profile | undefined = undefined;
+    
+    try {
+        profile = await getCurrentUser();
+    } catch (e) {
+        console.error(e);
+        redirect("/");
+    }
     const character = await getCharacter(characterId);
 
     return (

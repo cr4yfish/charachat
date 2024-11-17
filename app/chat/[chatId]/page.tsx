@@ -9,7 +9,8 @@ import { getCurrentUser } from "@/functions/db/auth";
 import { getChat } from "@/functions/db/chat"
 import { getMessages } from "@/functions/db/messages";
 
-import { Chat as ChatType, Message } from "@/types/db";
+import { Chat as ChatType, Message, Profile } from "@/types/db";
+import { redirect } from "next/navigation";
 
 
 export default async function Chat({ params: { chatId } } : { params: { chatId: string } }) {
@@ -51,10 +52,13 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
         console.error(error);
     }
 
-    const profile = await getCurrentUser();
-
-    if(!profile.user) {
-        return <p>Not logged in</p>
+    let profile: Profile | undefined = undefined;
+    
+    try {
+        profile = await getCurrentUser();
+    } catch (e) {
+        console.error(e);
+        redirect("/");
     }
 
     return (

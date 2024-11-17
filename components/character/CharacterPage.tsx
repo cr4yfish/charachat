@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Profile, Story } from "@/types/db";
 import StoryCard from "../story/StoryCard";
 import { Button } from "@/components/utils/Button";
+import { useToast } from "@/hooks/use-toast";
 import Icon from "@/components/utils/Icon";
 
 import { Character } from "@/types/db";
@@ -17,13 +18,24 @@ import { createChat } from "@/functions/db/chat";
 type Props = {
     character: Character,
     stories: Story[],
-    profile: Profile
+    profile?: Profile
 }
 
 export default function CharacterPage(props: Props) {
     const router = useRouter();
+    const { toast } = useToast();
 
     const handleStartChat = async () => {
+        if(!props.profile) {
+            console.error("No profile found");
+            toast({
+                title: "Error",
+                description: "You need to be logged in to start a chat",
+                variant: "destructive"
+            })
+            return;
+        }
+
         const characterId = props.character.id;
     
         const chat = await createChat({
@@ -68,7 +80,7 @@ export default function CharacterPage(props: Props) {
                     >
                         Start Chat
                     </Button>
-                    { props.profile.user == props.character.owner.user &&
+                    { props.profile?.user == props.character.owner.user &&
                         <Link href={`/c/${props.character.id}/edit`}>
                             <Button
                                 color="warning"
@@ -100,7 +112,7 @@ export default function CharacterPage(props: Props) {
                             <div className="flex flex-row items-center justify-between ">
                                 <h2 className="font-bold text-xl">Stories with {props.character.name}</h2>
                                 <Link href={`/c/${props.character.id}/story/new`}>
-                                    <Button variant="light" color="warning" isIconOnly>
+                                    <Button variant="light" color="warning" isIconOnly isDisabled={props.profile === undefined}>
                                         <Icon>add</Icon>
                                     </Button>
                                 </Link>

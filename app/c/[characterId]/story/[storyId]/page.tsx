@@ -7,11 +7,19 @@ import { Button } from "@/components/utils/Button";
 import { getCurrentUser } from "@/functions/db/auth";
 import Link from "next/link";
 import StartStoryButton from "@/components/story/StartStoryButton";
+import { Profile } from "@/types/db";
 
 
 export default async function Story({ params: { storyId, characterId } }: { params: { storyId: string, characterId: string } }) {
 
-    const profile = await getCurrentUser();
+    let profile: Profile | undefined = undefined;
+
+    try {
+        profile = await getCurrentUser();
+    } catch (error) {
+        console.error(error);
+    }
+
     const story = await getStory(storyId);
 
     return (
@@ -30,7 +38,7 @@ export default async function Story({ params: { storyId, characterId } }: { para
 
                 <div className="relative w-full flex gap-2 items-center justify-center py-4">
                     <StartStoryButton story={story} profile={profile} />
-                    {profile.user == story.creator.user && 
+                    {profile?.user == story.creator.user && 
                         <Link href={`/c/${characterId}/story/${storyId}/edit`}><Button fullWidth size="lg" color="warning" variant="flat">Edit</Button></Link> 
                     }
                 </div>

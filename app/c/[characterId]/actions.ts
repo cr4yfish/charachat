@@ -5,11 +5,20 @@ import { v4 as uuidv4 } from "uuid";
 import { getCurrentUser } from "@/functions/db/auth";
 import { createChat } from "@/functions/db/chat";
 import { redirect } from "next/navigation";
+import { Profile } from "@/types/db";
 
 
 export const startChat = async(formData: FormData) => {
 
-    const profile = await getCurrentUser();
+    let profile: Profile | undefined = undefined;
+
+    try {
+        profile = await getCurrentUser();
+    } catch (e) {
+        console.error(e);
+        redirect("/");
+    }
+
     const characterId = formData.get("characterId") as string;
 
     const chat = await createChat({
