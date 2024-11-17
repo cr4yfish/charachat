@@ -36,13 +36,13 @@ export default function Searchbar() {
             onValueChange={setSearch}
         />
 
-        <div>
+        {false && <div>
             {results.map((result) => (
                 <div key={result.id}>
                     <p>{result.name}</p>
                 </div>
             ))}
-        </div>
+        </div>}
         </>
     )
 }
