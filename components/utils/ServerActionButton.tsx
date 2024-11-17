@@ -4,7 +4,7 @@
 import { Button } from "@/components/utils/Button";
 import React from "react";
 
-export const ServerActionButton = React.forwardRef<
+const ServerActionButton = React.forwardRef<
     React.ElementRef<typeof Button>, 
     React.ComponentPropsWithoutRef<typeof Button>
 >(({ className, children, ...props }, ref) => {
@@ -23,3 +23,7 @@ export const ServerActionButton = React.forwardRef<
         </Button>
     )
 })
+
+ServerActionButton.displayName = Button.displayName;
+
+export {ServerActionButton};
