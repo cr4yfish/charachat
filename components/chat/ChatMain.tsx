@@ -237,15 +237,14 @@ export default function ChatMain(props : Props) {
     }
 
     const scrollToBottom = () => {
-        console.log("Scrolling");
-        const scrollArea = document.getElementById("scroller")
-        console.log("ScrollArea", scrollArea);
+        const scrollArea = document.getElementById("scroller")?.querySelector("div")
         scrollArea?.scrollTo(0, scrollArea.scrollHeight);
     }
 
     const handleSubmitAdapter = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         handleSubmit(e);
+        scrollToBottom();
     }
 
     return (
@@ -305,7 +304,6 @@ export default function ChatMain(props : Props) {
                 ref={inputRef}
                 name="prompt"
                 onChange={handleInputChange}
-                isDisabled={isLoading}
                 minRows={1}
                 maxRows={15}
                 classNames={{
