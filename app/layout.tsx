@@ -79,7 +79,7 @@ export default function RootLayout({
           <NextUIProvider>
             <SidebarProvider>
               <LeftSidebar />
-              <main className="h-full w-full flex flex-col">
+              <main className="relative h-full w-full flex flex-col">
                 <NextTopLoader />
                 <NavbarServerWrapper />
                 <Toaster />
