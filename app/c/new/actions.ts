@@ -21,7 +21,8 @@ export const saveCharacter = async (formData: FormData): Promise<void> => {
         intro: formData.get("intro") as string,
         book: formData.get("book") as string,
         id: uuidV4(),
-        owner: user.id
+        owner: user.id,
+        llm: "gpt-4o-mini"
     }
 
     const { data, error } = await createClient()
