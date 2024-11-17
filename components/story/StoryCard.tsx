@@ -13,7 +13,7 @@ type Props = {
     fullWidth?: boolean;
 }
 
-export default function StoryCardSmall(props: Props) {
+export default function StoryCard(props: Props) {
 
     return (
         <>
@@ -22,14 +22,14 @@ export default function StoryCardSmall(props: Props) {
                 <CardBody className="flex flex-row gap-4 ">
 
                     <div className="flex items-center justify-center">
-                        <div className="relative h-[100%] w-[100px] overflow-hidden rounded-2xl">
+                        <div className="relative h-[100%] w-[70px] overflow-hidden rounded-2xl">
                             <Image className="relative" objectFit="cover" layout="fill" src={props.story.image_link ?? ""} alt={props.story.title} />
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-1 justify-between">
                         <div className="flex flex-col">
-                            <h3 className="font-bold">{props.story.title}</h3>
+                            <h3 className="font-medium text-md">{props.story.title}</h3>
                             
                         </div>
                         

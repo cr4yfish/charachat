@@ -1,6 +1,6 @@
 "use client";
 
-import { Image } from "@nextui-org/image";
+import Image from "next/image";
 import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react"
 
@@ -19,9 +19,13 @@ export default function StoryCardSmall(props: Props) {
         <Card>
             <CardBody className="flex flex-row gap-2 items-center justify-start">
 
-                <div>
-                    <Image height={50} width={50} src={props.story.image_link} alt={props.story.title} />
+
+                <div className="flex items-center justify-center">
+                    <div className="relative h-[100%] w-[50px] overflow-hidden rounded-2xl">
+                        <Image className="relative" objectFit="cover" layout="fill" src={props.story.image_link ?? ""} alt={props.story.title} />
+                    </div>
                 </div>
+
 
                 <div className="flex flex-col w-full">
                     <div className="flex flex-row items-center justify-between w-full">
