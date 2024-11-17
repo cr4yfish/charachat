@@ -3,11 +3,20 @@
 import EditProfile from "@/components/user/EditProfile";
 import BackLink from "@/components/utils/BackLink";
 import { getCurrentUser } from "@/functions/db/auth";
+import { Profile } from "@/types/db";
+import { redirect } from "next/navigation";
 
 
 export default async function EditUserPage() {
 
-    const profile = await getCurrentUser();
+    let profile: Profile | undefined = undefined
+    try {
+        profile = await getCurrentUser();
+    } catch (error) {
+        console.error(error);
+        redirect("/auth");
+    }
+
 
     return (
         <div className="flex flex-col px-4 py-6 gap-4">
