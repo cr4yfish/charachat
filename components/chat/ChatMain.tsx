@@ -129,8 +129,10 @@ export default function ChatMain(props : Props) {
 
     useEffect(() => {
         const handleResize = () => {
-            const currentHeight = window.innerHeight;
-            if (initialScreenHeight && currentHeight < initialScreenHeight) {
+            console.log("Resizing");
+            const currentHeight = window.visualViewport?.height;
+            console.log(initialScreenHeight, currentHeight)
+            if (initialScreenHeight && currentHeight && (currentHeight < initialScreenHeight)) {
                 // Keyboard is open
                 toast({
                     title: "Keyboard is open",
