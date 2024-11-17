@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/system";
-
+import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { LeftSidebar } from "@/components/LeftSidebar";
@@ -10,16 +9,10 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster"
 import NavbarServerWrapper from "@/components/NavbarServerWrapper";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const montserrat = Montserrat({
+  subsets: ["latin"],
+})
+
 
 const APP_NAME = "Charachat - Chat with your favorite characters";
 const APP_DEFAULT_TITLE = "Charachat - Chat with your favorite characters";
@@ -75,7 +68,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-black dark h-screen overflow-x-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen overflow-x-hidden overflow-y-auto antialiased bg-neutral-900/75`}
+        className={`${montserrat.className} h-screen overflow-x-hidden overflow-y-auto antialiased bg-neutral-900/75`}
       >
         <ThemeProvider
           attribute={"class"}
