@@ -23,7 +23,7 @@ export const checkIsLoggedIn = async () => {
     return false;
 }
 
-export const getCurrentUser = cache(async (): Promise<Profile> => {
+export const getCurrentUser = async (): Promise<Profile> => {
     const { data: { user } } = await createClient().auth.getUser();
 
     if(!user) {
@@ -33,7 +33,7 @@ export const getCurrentUser = cache(async (): Promise<Profile> => {
     const profile = await getProfile(user.id);
 
     return profile;
-})
+}
 
 export const getSession = cache(async () => {
     const { data: session, error } = await createClient().auth.getSession();
