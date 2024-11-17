@@ -17,6 +17,12 @@ export default function Searchbar() {
         setResults([{id: 1, name: "John Doe"}]);
     }
 
+    React.useEffect(() => {
+        setTimeout(() => {
+            handleSearch();
+        }, 500);
+    }, [results])
+
     return (
         <>
         <Input 
