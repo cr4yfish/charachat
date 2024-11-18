@@ -10,7 +10,9 @@ import ConditionalLink from "../utils/ConditionalLink";
 type Props = {
     character: Character,
     hasLink: boolean,
-    fullWidth?: boolean
+    fullWidth?: boolean,
+    isSmall?: boolean,
+    noBg?: boolean
 }
 
 export default function CharacterCard(props: Props) {
@@ -23,7 +25,14 @@ export default function CharacterCard(props: Props) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
             >
-                <Card isPressable={props.hasLink} className={`h-[150px] w-[300px] dark:bg-zinc-800 ${props.fullWidth && "w-full"} `}>
+                <Card 
+                    isPressable={props.hasLink} 
+                    className={`
+                        h-[150px] w-[300px] dark:bg-zinc-800 
+                        ${props.fullWidth && "w-full"} 
+                        ${props.isSmall && "h-full"}
+                        ${props.noBg && "dark:bg-transparent border-none shadow-none"} 
+                    `}>
                     <CardBody className="flex flex-row gap-4">
                         
                         <div className="flex items-center justify-center">
@@ -43,6 +52,7 @@ export default function CharacterCard(props: Props) {
                                 </div>
                                 <p className="text-sm">{props.character.description}</p> 
                             </div>
+                            {!props.isSmall &&
                             <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
                                 <span className="flex items-center gap-1">
                                     <Icon downscale filled>chat_bubble</Icon>
@@ -52,7 +62,7 @@ export default function CharacterCard(props: Props) {
                                     <Icon downscale filled>account_circle</Icon>
                                     {props.character.owner.username}
                                 </span>
-                            </div>
+                            </div>}
                         </div>
                     </CardBody>
                 </Card>

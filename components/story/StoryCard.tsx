@@ -11,6 +11,7 @@ type Props = {
     story: Story;
     hasLink: boolean;
     fullWidth?: boolean;
+    noBg?: boolean
 }
 
 export default function StoryCard(props: Props) {
@@ -23,7 +24,13 @@ export default function StoryCard(props: Props) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
             >
-                <Card isPressable={props.hasLink} className={`h-full w-[300px] dark:bg-zinc-800 ${props.fullWidth && "w-full"}`}>
+                <Card 
+                    isPressable={props.hasLink} 
+                    className={`
+                        h-full w-[300px] dark:bg-zinc-800 
+                        ${props.fullWidth && "w-full"}
+                        ${props.noBg && "dark:bg-transparent border-none shadow-none"} 
+                    `}>
                     <CardBody className="flex flex-row gap-4 ">
 
                         <div className="flex items-center justify-center">
