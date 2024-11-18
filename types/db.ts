@@ -1,15 +1,23 @@
+export type Category = {
+    id: string;
+    created_at?: string;
+    title: string;
+    description?: string;
+}
+
 export type Character = {
     id: string;
     created_at?: string;
     owner: Profile;
     name: string;
     description: string;
-    avatar: string;
+    avatar?: string;
     avatarUrl?: string;
     image_link?: string;
     bio: string;
     intro: string;
     book: string;
+    category?: Category;
 }
 
 export type Chat = {
