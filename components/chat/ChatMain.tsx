@@ -56,17 +56,28 @@ export default function ChatMain(props : Props) {
         keepLastMessageOnError: true,
         body: {
             profile: props.user,
-            chat: props.chat
+            chat: chat
         },
         onFinish: async (message, { usage }) => {
             scrollToBottom();
             if (inputRef.current) {
                 inputRef.current.focus();
             }
+
+            if(!chat) {
+                console.error("No chat found");
+                toast({
+                    title: "Error",
+                    description: "No chat found. Cant save AI message.",
+                    variant: "destructive"
+                })
+                return;
+            }
+
             // add message to db
             const newMessage: Message = {
                 id: uuidv4(),
-                chat: props.chat,
+                chat: chat,
                 character: props.chat.character,
                 user: props.user,
                 from_ai: true,
@@ -149,6 +160,8 @@ export default function ChatMain(props : Props) {
 
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0) || !chat || (chat.llm.length < 1)) return;
+
+        console.log("Running setup with:", chat)
 
         setIsSetupLoading(true);
 

@@ -15,9 +15,6 @@ export const getProfileAPIKey = (modelId: string, profile: Profile): string | un
         case "gemini-1.5-flash":
             return profile.gemini_encrypted_api_key;
 
-        case "open-mistral-nemo":
-            return profile.mistral_encrypted_api_key;
-
         case "claude-3-5-sonnet-latest":
         case "claude-3-5-haiku-latest":
             return profile.anthropic_encrypted_api_key;
@@ -29,7 +26,15 @@ export const getProfileAPIKey = (modelId: string, profile: Profile): string | un
 
 export const LLMsWithAPIKeys = (profile: Profile) => {
     return LLMs.filter((llm) => {
-        if(getProfileAPIKey(llm.key, profile) || llm.key === "llama-3_2-3b-instruct-uncensored") {
+        if(
+            getProfileAPIKey(llm.key, profile) || 
+
+            // The unrestricted model is managed by the server
+            (llm.key === "llama-3_2-3b-instruct-uncensored") ||
+
+            // Mistral is free
+            (llm.key == "open-mistral-nemo")
+        ) {
             return llm;
         }
     })

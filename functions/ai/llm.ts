@@ -56,7 +56,6 @@ async function getGemini(modelId: string, apiKey?: string): Promise<LanguageMode
 
 async function getMistral(modelId: string, apiKey?: string, baseURL?: string): Promise<LanguageModelV1> {
     const mistral = createMistral({
-        baseURL: baseURL || 'https://api.mistral.com',
         apiKey: apiKey || process.env.MISTRAL_API_KEY
     });
 
@@ -79,11 +78,11 @@ async function getUnrestricted(): Promise<LanguageModelV1> {
     })
     return vertex("projects/charachat/locations/us-central1/endpoints/1827049675782356992", {
         safetySettings: [
-            { category: 'HARM_CATEGORY_UNSPECIFIED', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+            { category: 'HARM_CATEGORY_UNSPECIFIED', threshold: 'BLOCK_ONLY_HIGH' },
+            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
+            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
+            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
+            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
         ]
     });
 }
