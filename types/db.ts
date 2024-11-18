@@ -89,3 +89,8 @@ export type Tag = {
     name: string;
     description: string;
 }
+
+export type User_Tier = {
+    user: Profile;
+    tier: number;
+}

@@ -65,3 +65,18 @@ export const getTokens = async (userId: string): Promise<number> => {
 
     return data.tokens;
 }
+
+export const getUserTier = cache(async (userId: string) => {
+    const { data, error } = await createClient()
+        .from("user_tier")
+        .select("tier")
+        .eq("user", userId)
+        .single();
+
+    if (error) {
+        console.error("Error fetching user tier", error);
+        throw error;
+    }
+
+    return data.tier;   
+})

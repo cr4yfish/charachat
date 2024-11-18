@@ -10,7 +10,7 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
 import BlurModal from "../utils/BlurModal";
 import { Input } from "@nextui-org/input";
-import { LLMs } from "@/functions/ai/llm";
+import { LLMs } from "@/lib/ai";
 import {
     Sheet,
     SheetContent,
