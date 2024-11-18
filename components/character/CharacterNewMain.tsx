@@ -119,6 +119,8 @@ export default function CharacterNewMain() {
             <TextareaWithCounter 
                 name="book" 
                 label="Character Book"
+                value={newCharacter.book}
+                onValueChange={(value) => updateValue("book", value)}
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
                 maxLength={1000} 
             />
