@@ -1,6 +1,6 @@
 "use client";
 
-
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@nextui-org/avatar";
@@ -24,6 +24,7 @@ type Props = {
 export default function CharacterPage(props: Props) {
     const router = useRouter();
     const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleStartChat = async () => {
         if(!props.profile) {
@@ -35,6 +36,7 @@ export default function CharacterPage(props: Props) {
             })
             return;
         }
+        setIsLoading(true);
 
         const characterId = props.character.id;
     
@@ -76,14 +78,14 @@ export default function CharacterPage(props: Props) {
                     <Button 
                         onClick={handleStartChat} 
                         size="lg" fullWidth color="primary" 
-                        variant="shadow"
+                        variant="shadow" isLoading={isLoading}
                     >
                         Start Chat
                     </Button>
                     { props.profile?.user == props.character.owner.user &&
                         <Link href={`/c/${props.character.id}/edit`}>
                             <Button
-                                color="warning"
+                                color="warning" isDisabled={isLoading}
                                 size="lg" variant="flat"                        
                             >
                                 Edit
