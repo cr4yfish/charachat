@@ -51,8 +51,6 @@ export async function POST(req: Request) {
 
     const decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
     
-    console.log("Using:", chat.llm || profile.default_llm, decryptedAPIKey);
-
     const result = await streamText({
         model: getLanguageModel({
             modelId: chat.llm || profile.default_llm,

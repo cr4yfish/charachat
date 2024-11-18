@@ -26,7 +26,8 @@ export const startChat = async(formData: FormData) => {
         userId: profile.user,
         characterId: characterId,
         title: "New Chat",
-        description: "This is a new chat"
+        description: "This is a new chat",
+        llm: "gpt-4o-mini"
     });
 
     if(!chat) {

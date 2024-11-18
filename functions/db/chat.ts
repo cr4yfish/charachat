@@ -85,9 +85,10 @@ type CreateChatProps = {
     title: string;
     description: string;
     storyId?: string;
+    llm?: string;
 }
 
-export const createChat = async ({ chatId, userId, characterId, title, description, storyId } : CreateChatProps): Promise<Chat> => {
+export const createChat = async ({ chatId, userId, characterId, title, description, storyId, llm } : CreateChatProps): Promise<Chat> => {
     const { data, error } = await createClient()
     .from("chats")
     .insert([{
@@ -96,7 +97,8 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
         character: characterId,
         title: title,
         description: description,
-        story: storyId
+        story: storyId,
+        llm: llm || "gpt-4o-mini",
     }])
     .eq("id", chatId)
     .select(chatMatcher)
