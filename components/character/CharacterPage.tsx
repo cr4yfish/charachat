@@ -57,45 +57,61 @@ export default function CharacterPage(props: Props) {
 
     return (
         <>
-        <div className="flex flex-col items-center gap-4 pb-20 px-4 py-6">
+        <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6">
 
             <div className="flex flex-row max-md:flex-col gap-6 items-center justify-center w-full">
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col justify-center gap-4 max-md:w-full">
                     <div className="flex flex-col gap-2 items-center justify-center">
-                        <Avatar src={props.character.image_link} className="w-30 h-30 text-large"/>
+                        <Avatar src={props.character.image_link} className="w-32 h-32 text-large"/>
                         <h1 className="text-xl font-bold">{props.character.name}</h1>
                         <p className="text-sm dark:text-neutral-400">By @{props.character.owner.username}</p>
                     </div>
-                    
+
+                    <div className="w-full flex items-center max-md:justify-center gap-2">
+                        <Button 
+                            onClick={handleStartChat} 
+                            size="lg" color="primary" 
+                            isLoading={isLoading}
+                            radius="full"
+                        >
+                            Start Chat
+                        </Button>
+                        { props.profile?.user == props.character.owner.user &&
+                            <Link href={`/c/${props.character.id}/edit`}>
+                                <Button
+                                    color="warning" isDisabled={isLoading}
+                                    size="lg" variant="flat" radius="full"                        
+                                >
+                                    Edit
+                                </Button>
+                            </Link>
+                        }
+                    </div>
+
+                    <div className="flex flex-col gap-2 text-sm dark:text-zinc-200">
+                        
+                        <div className="flex items-center gap-2">
+                            <Icon downscale filled>chat_bubble</Icon>
+                            <span>30m Chats</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Icon downscale filled>favorite</Icon>
+                            <span>123k Likes</span>
+                        </div>
+                    </div>
+
                     <div className="prose dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400">
                         <p>{props.character.description}</p>
                     </div>
                 
                 </div>
 
-                <div className="w-full flex items-center justify-between gap-2">
-                    <Button 
-                        onClick={handleStartChat} 
-                        size="lg" fullWidth color="primary" 
-                        variant="shadow" isLoading={isLoading}
-                    >
-                        Start Chat
-                    </Button>
-                    { props.profile?.user == props.character.owner.user &&
-                        <Link href={`/c/${props.character.id}/edit`}>
-                            <Button
-                                color="warning" isDisabled={isLoading}
-                                size="lg" variant="flat"                        
-                            >
-                                Edit
-                            </Button>
-                        </Link>
-                    }
-                </div>
 
 
-                <div className="flex flex-col w-full">
+
+                <div className="flex flex-col max-md:w-full">
                     <Tabs variant="underlined"
                         classNames={{
                             cursor: "dark:bg-zinc-400",
