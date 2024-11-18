@@ -119,7 +119,7 @@ export default function Searchbar() {
             { hasResults &&
             <motion.div 
                 className="
-                    z-40 w-full h-fit bg-zinc-800/80 backdrop-blur-xl px-4 py-3
+                    z-40 w-full h-fit bg-zinc-800/80 backdrop-blur-xl px-4 py-3 border border-zinc-600
                     rounded-lg absolute top-[130%] left-0 flex flex-col gap-2 max-h-[50svh] overflow-y-auto
                 "
                 initial={{ opacity: 0, y: 10 }}
