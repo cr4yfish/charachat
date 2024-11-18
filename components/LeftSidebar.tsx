@@ -17,6 +17,7 @@ import { Chat, Profile } from "@/types/db";
 
 import SidebarLink from "./SidebarLink";
 import LoginButton from "./auth/LoginButton";
+import Logo from "./Logo";
 
 
 export async function LeftSidebar() {
@@ -41,7 +42,7 @@ export async function LeftSidebar() {
       <SidebarContent>
 
         <SidebarGroup>
-          <h1 className="font-black text-lg">Charachat</h1>  
+          <Logo /> 
         </SidebarGroup>
         
         <SidebarGroup>
