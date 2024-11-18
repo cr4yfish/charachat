@@ -45,7 +45,7 @@ export async function POST(req: Request) {
 
     const encryptedAPIKey = getProfileAPIKey(chat.llm || profile.default_llm, profile);
     if(!encryptedAPIKey) {
-        return new Response("No API key found", { status: 400 });
+        return new Response(`No Api key found for AI: ${chat.llm}`, { status: 400 });
         
     }
 
