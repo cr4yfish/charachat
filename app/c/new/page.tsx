@@ -41,7 +41,13 @@ export default async function NewCharacter() {
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
                 maxLength={280} 
             />
-            <Input name="image_link" isRequired label="Image Link" placeholder="https://i.imgur.com/XgbZdeAb.jpg" description="Direct link to an image" />
+            <Input 
+                name="image_link" 
+                isRequired 
+                label="Image Link" 
+                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
+                description="Direct link to an image" 
+            />
             <TextareaWithCounter 
                 name="intro" 
                 label="Character Intro"
