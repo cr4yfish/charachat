@@ -96,7 +96,7 @@ export const getUserCharacters = cache(async (userId: string): Promise<Character
     }
 
     return data.map((db: any) => {
-        return characterFormatter(data);
+        return characterFormatter(db);
     });
 })
 
