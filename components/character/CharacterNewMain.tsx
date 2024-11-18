@@ -54,7 +54,7 @@ export default function CharacterNewMain() {
         setIsLoading(false);
     }
 
-    const updateValue = (name: string, value: string) => {
+    const updateValue = (name: string, value: string | boolean) => {
         setNewCharacter({
             ...newCharacter,
             [name]: value
@@ -127,7 +127,7 @@ export default function CharacterNewMain() {
             <CategoryAutocomplete 
                 setCategory={(category) => updateValue("category", category.id)}
             />
-            <Switch isDisabled>Private</Switch>
+            <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
             <Button
                 type="submit" 
                 isLoading={isLoading || isDone}

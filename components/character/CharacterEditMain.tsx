@@ -10,6 +10,7 @@ import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { deleteCharacter, updateCharacter } from "@/functions/db/character";
 import CategoryAutocomplete from "./CategoryAutocomplete";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
+import { Switch } from "@nextui-org/switch";
 
 type Props = {
     character: Character
@@ -122,6 +123,7 @@ export default function CharacterEditMain(props: Props) {
                 setCategory={(category) => setCharacter({ ...character, category })}
                 defaultCategory={character.category}
             />
+            <Switch isSelected={character.is_private} onValueChange={(newValue) => setCharacter({...character, is_private: newValue})} >Private</Switch>
             <Button 
                 onClick={handleUpdateCharacter} 
                 type="submit" color="primary" 
