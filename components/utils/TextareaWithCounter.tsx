@@ -38,7 +38,7 @@ export default function TextareaWithCounter(props: Props) {
             maxLength={props.maxLength}
             minRows={props.minRows}
             maxRows={props.maxRows}
-            value={props.value}
+            value={props.value ?? ""}
             onValueChange={(value) => {
                 //setValue(value);
                 if(props.onValueChange) props.onValueChange(value);
