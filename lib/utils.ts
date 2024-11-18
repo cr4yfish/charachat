@@ -63,7 +63,9 @@ export function formatLastMessageTime(date: Date): string {
   
 }
 
-export const truncateText = (text: string, maxLength: number) => {
+export const truncateText = (text: string, maxLength=40) => {
+  if(!text) return '';
+
   if (text.length <= maxLength) {
       return text;
   }
