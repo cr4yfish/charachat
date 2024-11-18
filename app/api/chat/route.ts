@@ -106,8 +106,6 @@ export async function POST(req: Request, res: Response) {
             maxTokens: 128,
             temperature: 0.7,
         });
-
-        console.log("Got result");
     
         return result.toDataStreamResponse();
 

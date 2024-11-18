@@ -69,8 +69,7 @@ async function getUnrestricted(): Promise<LanguageModelV1> {
     const creds = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS!);
     const project = process.env.GOOGLE_VERTEX_PROJECT!;
     const location = process.env.GOOGLE_VERTEX_LOCATION!;
-    const endpoint = process.env.GOOGLE_VERTEX_ENDPOINT_ID!;
-    console.log(creds, typeof creds, project, location, endpoint)
+    
     const vertex = createVertex({
         project: project,
         location: location,
