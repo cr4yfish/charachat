@@ -21,6 +21,7 @@ import { updateChat } from "@/functions/db/chat";
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { addTokens as updateTokens } from "@/functions/db/profiles";
+import { Avatar } from "@nextui-org/avatar";
 
 type Props = {
     chat: Chat;
@@ -293,11 +294,21 @@ export default function ChatMain(props : Props) {
                 <p className="text-slate-400 text-center">Pretty empty here</p>
             </div>   
         )}
+
         
         <form 
             onSubmit={handleSubmitAdapter} 
-            className="relative h-[5rem] w-full flex items-end justify-center px-4 pb-2"
+            className="relative h-[5rem] w-full flex flex-col items-start justify-end px-4 pb-2 gap-2"
         >
+            
+            {isLoading &&
+                <div className="px-4 py-2 rounded-lg bg-zinc-800/25 backdrop-blur-xl text-xs flex flex-row gap-2 items-center h-fit">
+                    <Spinner size="sm" />
+                    <Avatar src={props.chat.character.image_link} className="w-[20px] h-[20px]" />
+                    <span>{props.chat.character.name} is writing</span>
+                </div>
+            }
+
             <Textarea 
                 placeholder="Send a message" 
                 size="lg" 
