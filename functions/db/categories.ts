@@ -18,3 +18,16 @@ export const searchCategories = cache(async (search: string): Promise<Category[]
 
     return data;
 })
+
+export const getCategories = cache(async (): Promise<Category[]> => {
+    const { data, error } = await createClient()
+        .from("categories")
+        .select("*");
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+
+})

@@ -9,11 +9,14 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { getStories } from "@/functions/db/stories";
 import StoryCard from "@/components/story/StoryCard";
 import Searchbar from "@/components/Searchbar";
+import CategoryScroller from "@/components/CategoryScroller";
+import { getCategories } from "@/functions/db/categories";
 
 export default async function Home() {
 
   let characters: Character[] = [];
   const stories = await getStories();
+  const categories = await getCategories();
 
   try {
     characters = await getCharacters();
@@ -59,6 +62,9 @@ export default async function Home() {
           </div>
         </ScrollShadow>
       </div>
+
+      <CategoryScroller categories={categories} />
+
 
     </div>
   );

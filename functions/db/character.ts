@@ -55,6 +55,21 @@ export const getCharacters = cache(async (): Promise<Character[]> => {
     });
 })
 
+export const getCharactersByCategory = cache(async (categoryId: string): Promise<Character[]> => {
+    const { data, error } = await createClient()
+        .from("characters")
+        .select(characterMatcher)
+        .eq("category", categoryId);
+
+    if (error) {
+        throw error;
+    }
+
+    return data.map((db: any) => {
+        return characterFormatter(db);
+    });
+})
+
 export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from("characters")
