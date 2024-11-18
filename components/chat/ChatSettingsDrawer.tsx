@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Avatar } from "@nextui-org/avatar";
 
-import { Chat } from "@/types/db";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import SaveDeleteButton from "../utils/SaveDeleteButton";

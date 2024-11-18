@@ -4,11 +4,9 @@ import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react"
 import { usePathname } from "next/navigation";
 
-import { Chat, Message } from "@/types/db";
+import { Chat } from "@/types/db";
 import { useEffect, useState } from "react";
-import { getLatestChatMessage } from "@/functions/db/messages";
-import { Skeleton } from "../ui/skeleton";
-import { formatLastMessageTime, truncateText } from "@/lib/utils";
+import { formatLastMessageTime } from "@/lib/utils";
 import { Avatar } from "@nextui-org/avatar";
 import ConditionalLink from "../utils/ConditionalLink";
 
