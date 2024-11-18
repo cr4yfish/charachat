@@ -2,7 +2,6 @@ import { Profile } from "@/types/db";
 
 export const getProfileAPIKey = (modelId: string, profile: Profile): string | undefined => {
     switch(modelId) {
-
         case 'llama3-groq-70b-8192-tool-use-preview':
             return profile.groq_encrypted_api_key;
 
@@ -24,8 +23,16 @@ export const getProfileAPIKey = (modelId: string, profile: Profile): string | un
             return profile.anthropic_encrypted_api_key;
 
         default:
-            return profile.openai_encrypted_api_key;
+            return undefined;
     }
+}
+
+export const LLMsWithAPIKeys = (profile: Profile) => {
+    return LLMs.filter((llm) => {
+        if(getProfileAPIKey(llm.key, profile) || llm.key === "llama-3_2-3b-instruct-uncensored") {
+            return llm;
+        }
+    })
 }
 
 export const LLMs = [
@@ -36,10 +43,6 @@ export const LLMs = [
     {
         "key": "ollama",
         "name": "Ollama",
-    },
-    {
-        "key": "anthropic",
-        "name": "Anthropic",
     },
     {
         "key": "gpt-4o-mini",

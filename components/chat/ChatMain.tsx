@@ -22,6 +22,10 @@ import { updateChat } from "@/functions/db/chat";
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { addTokens as updateTokens } from "@/functions/db/profiles";
 import { Avatar } from "@nextui-org/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { LLMsWithAPIKeys } from "@/lib/ai";
+import { useSharedChat } from "@/context/SharedChatSettings";
+import ConditionalLink from "../utils/ConditionalLink";
 
 type Props = {
     chat: Chat;
@@ -30,9 +34,11 @@ type Props = {
 }
 
 export default function ChatMain(props : Props) {
+    const { chat, setChat } = useSharedChat();
     const [cursor, setCursor] = useState(props.initMessages.length);
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
+    const [isSetupLoading, setIsSetupLoading] = useState(false);
     const setupExecuted = useRef(false);
     const { toast } = useToast();
 
@@ -111,9 +117,13 @@ export default function ChatMain(props : Props) {
     }, []);
 
     useEffect(() => {
+        setChat(props.chat);
+    }, [props.chat])
+
+    useEffect(() => {
         if((props.initMessages.length == 0) && !setupExecuted.current) {
-            setupExecuted.current = true;
-            setup();
+            //setupExecuted.current = true;
+            //setup();
         }
     }, [props.initMessages])
 
@@ -148,6 +158,8 @@ export default function ChatMain(props : Props) {
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0)) return;
 
+        setIsSetupLoading(true);
+
         // Works for both, normal chats and story chats
         append({ content: _INTRO_MESSAGE, role: "user", createdAt: new Date() });
 
@@ -180,7 +192,7 @@ export default function ChatMain(props : Props) {
                 is_deleted: false,
             }, key);
             
-
+            setIsSetupLoading(false);
         }
 
     }
@@ -288,6 +300,54 @@ export default function ChatMain(props : Props) {
             </InfiniteScroll>
         </ScrollArea>
  
+        {messages.length == 0 && props.initMessages.length == 0 && (
+            <div className="flex flex-col gap-4 items-start justify-center h-full w-full px-8 overflow-y-hidden">
+                <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
+                    <h1>Select an AI to get started</h1>
+                    <p>Only ones for which you have a key are displayed. The unrestricted Model is only available to testers right now.</p>
+                </div>
+                
+                <Select 
+                    onValueChange={(value) =>  chat && setChat({...chat, llm: value})}
+                    defaultValue={props.chat.llm}
+                >
+                    <SelectTrigger className="w-[200px]">
+                        <SelectValue placeholder="Select an AI" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {LLMsWithAPIKeys(props.user).map((llm) => (
+                            <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <div className="flex flex-wrap items-center gap-4">
+                    <Button
+                        radius="full"
+                        color="primary"
+                        size="lg"
+                        isLoading={isSetupLoading}
+                        onClick={setup}
+                        isDisabled={chat?.llm.length == 0}
+                    >
+                        Start Chat
+                    </Button>       
+                    <div className="w-fit">
+                        <ConditionalLink active={!isSetupLoading} href={`/user/${props.user.user}/edit`} >
+                            <Button
+                                radius="full"
+                                color="secondary"
+                                size="lg"
+                                variant="flat"
+                                isDisabled={isSetupLoading}
+                            >
+                                Add API Keys
+                            </Button>
+                        </ConditionalLink>
+                    </div>
+                </div>
+
+            </div>   
+        )}
 
         {messages.length == 0 && (
             <div className="flex-1 flex items-center justify-center h-full overflow-y-hidden">

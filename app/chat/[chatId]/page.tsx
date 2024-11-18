@@ -14,6 +14,7 @@ import { redirect } from "next/navigation";
 import LoginButton from "@/components/auth/LoginButton";
 import Link from "next/link";
 import { Button } from "@/components/utils/Button";
+import { SharedChatProvider } from "@/context/SharedChatSettings";
 
 
 export default async function Chat({ params: { chatId } } : { params: { chatId: string } }) {
@@ -99,17 +100,19 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
 
     return (
         <>
-        <div className="absolute top-0 left-0 z-50 p-6 bg-content1/50 backdrop-blur-xl rounded-b-xl w-full flex flex-row items-center justify-evenly">
-            <BackLink />
-            <span className="text-medium w-full text-center font-bold">{chat.character.name}</span>
-            <ChatSettingsDrawer chat={chat} />
-        </div>
+        <SharedChatProvider>
+            <div className="absolute top-0 left-0 z-50 p-6 bg-content1/50 backdrop-blur-xl rounded-b-xl w-full flex flex-row items-center justify-evenly">
+                <BackLink />
+                <span className="text-medium w-full text-center font-bold">{chat.character.name}</span>
+                <ChatSettingsDrawer chat={chat} />
+            </div>
 
-        <ChatMain
-            chat={chat}
-            initMessages={initMessages}
-            user={profile}
-        />
+            <ChatMain
+                chat={chat}
+                initMessages={initMessages}
+                user={profile}
+            />
+        </SharedChatProvider>
        
         </>
     )
