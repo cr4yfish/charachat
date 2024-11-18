@@ -59,9 +59,9 @@ export async function LeftSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">Recent Chats</SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               {chats.slice(0,5).map((chat) => (
-                <ChatCardSmall hasLink key={chat.id} chat={chat} />
+                <ChatCardSmall hasLink key={chat.id} chat={chat} loadLatestMessage />
               ))}
             
               {chats?.length == 0 && (
