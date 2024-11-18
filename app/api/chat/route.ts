@@ -1,7 +1,6 @@
 "use server";
 
 import { v4 as uuidv4 } from 'uuid';
-import { z } from "zod";
 import { cookies } from 'next/headers';
 
 import { Chat, Message, Profile } from '@/types/db';
@@ -15,7 +14,7 @@ import { decryptMessage } from '@/lib/crypto';
 import { getProfileAPIKey } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
     const { messages, profile: initProfile, chat: initChat } = await req.json();
     const cookiesStore = cookies();
 
