@@ -51,6 +51,27 @@ export const getCharacters = cache(async (): Promise<Character[]> => {
     });
 })
 
+export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
+    const { data, error } = await createClient()
+        .from("characters")
+        .select(`
+            *,
+            profiles!characters_owner_fkey (*)
+        `)
+        .or(`name.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
+
+    if (error) {
+        throw error;
+    }
+
+    return data.map((db: any) => {
+        return {
+            ...db,
+            owner: db.profiles
+        }
+    });
+})
+
 export const getUserCharacters = cache(async (userId: string): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from("characters")

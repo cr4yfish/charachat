@@ -41,6 +41,21 @@ export const getStory = cache(async (storyId: string): Promise<Story> => {
     return storyReturnFormat(data);
 })
 
+export const searchStories = cache(async (search: string): Promise<Story[]> => {
+    const { data, error } = await createClient()
+        .from("stories")
+        .select(storyMatcher)
+        .or(`title.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
+
+    if (error) {
+        throw error;
+    }
+
+    return data.map((db: any) => {
+        return storyReturnFormat(db);
+    });
+})
+
 export const getCharacterStories = cache(async (characterId: string): Promise<Story[]> => {
     const { data, error } = await createClient()
         .from("stories")
