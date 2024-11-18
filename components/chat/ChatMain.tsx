@@ -156,7 +156,7 @@ export default function ChatMain(props : Props) {
     }, [inputRef.current])
 
     const setup = async () => {
-        if((props.initMessages.length > 0) || (messages.length > 0)) return;
+        if((props.initMessages.length > 0) || (messages.length > 0) || !chat || (chat.llm.length < 1)) return;
 
         setIsSetupLoading(true);
 
