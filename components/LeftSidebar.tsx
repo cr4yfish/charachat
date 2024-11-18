@@ -26,6 +26,8 @@ export async function LeftSidebar() {
     chats = await getChats();
     profile = await getCurrentUser();
   } catch (e) {
+    const err = e as Error;
+    if(err.message == "No user found") return; // This is not an issue
     console.error("Error in LeftSidebar", e);
   }
 

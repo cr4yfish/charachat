@@ -17,6 +17,8 @@ export default async function Story({ params: { storyId, characterId } }: { para
     try {
         profile = await getCurrentUser();
     } catch (error) {
+        const err = error as Error;
+        if(err.message == "No user found") return; // This is not an issue
         console.error(error);
     }
 

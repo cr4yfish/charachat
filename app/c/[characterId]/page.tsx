@@ -21,6 +21,8 @@ export default async function CharacterView({ params: { characterId } }: { param
     try {
         profile = await getCurrentUser();  
     } catch (error) {
+        const err = error as Error;
+        if(err.message == "No user found") return; // This is not an issue
         console.error(error);
     }
 
