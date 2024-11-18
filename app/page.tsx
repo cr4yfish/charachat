@@ -26,46 +26,48 @@ export default async function Home() {
   }
 
   return (
-    <div className="w-full font-[family-name:var(--font-geist-sans)] flex flex-col gap-4 px-4 py-6">
+    <div className="max-h-full w-full overflow-y-auto pb-20">
+      <div className="flex flex-col gap-4 px-4 py-6 h-fit">
 
-      <Searchbar />
+        <Searchbar />
 
-      <div className="flex flex-col gap-2">
-        <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
-        <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
-          <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-            {characters.map((character) => (
-              <CharacterCard hasLink key={character.id} character={character} />
-            ))}
-          </div>
-        </ScrollShadow>
+        <div className="flex flex-col gap-2 w-full relative">
+          <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
+          <ScrollShadow orientation={"horizontal"} className="overflow-x-auto w-full">
+            <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
+              {characters.map((character) => (
+                <CharacterCard hasLink key={character.id} character={character} />
+              ))}
+            </div>
+          </ScrollShadow>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
+          <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
+            <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
+              {stories.map((story) => (
+                <StoryCard key={story.id} story={story} hasLink />
+              ))}
+            </div>
+          </ScrollShadow>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h2 className="dark:prose-invert text-xl font-bold">New Characters</h2>
+          <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
+            <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
+              {characters.map((character) => (
+                <CharacterCard hasLink key={character.id} character={character} />
+              ))}
+            </div>
+          </ScrollShadow>
+        </div>
+
+        <CategoryScroller categories={categories} />
+
+
       </div>
-
-      <div className="flex flex-col gap-2">
-        <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
-        <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
-          <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-            {stories.map((story) => (
-              <StoryCard key={story.id} story={story} hasLink />
-            ))}
-          </div>
-        </ScrollShadow>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h2 className="dark:prose-invert text-xl font-bold">New Characters</h2>
-        <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
-          <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-            {characters.map((character) => (
-              <CharacterCard hasLink key={character.id} character={character} />
-            ))}
-          </div>
-        </ScrollShadow>
-      </div>
-
-      <CategoryScroller categories={categories} />
-
-
     </div>
   );
 }

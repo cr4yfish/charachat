@@ -67,9 +67,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-black dark h-screen w-screen overflow-x-hidden">
+    <html lang="en" className="bg-black dark h-screen w-screen overflow-hidden">
       <body
-        className={`${montserrat.className} h-screen w-screen overflow-x-hidden overflow-y-auto antialiased bg-neutral-900/75`}
+        className={`${montserrat.className} h-screen w-screen overflow-hidden antialiased bg-neutral-900/75`}
       >
         <ThemeProvider
           attribute={"class"}
@@ -80,7 +80,7 @@ export default function RootLayout({
           <NextUIProvider>
             <SidebarProvider>
               <LeftSidebar />
-              <main className="relative min-h-svh w-screen flex flex-col">
+              <main className="relative h-svh overflow-y-hidden overflow-x-hidden w-full ">
                 <NextTopLoader
                   showSpinner={false}
                 />

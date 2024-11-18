@@ -257,7 +257,7 @@ export default function ChatMain(props : Props) {
 
     return (
         <>
-        <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll " >
+        <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll w-full " >
             <InfiniteScroll 
                 isReverse
                 id="infinitescroll"
@@ -269,7 +269,7 @@ export default function ChatMain(props : Props) {
                 loader={isMessagesLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
-                className="flex flex-col gap-2 pb-5 pt-28 px-4 h-fit min-h-full"
+                className="flex flex-col gap-2 pb-5 pt-28 px-4 h-fit min-h-full w-full"
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
