@@ -45,6 +45,7 @@ export const getCharacters = cache(async (): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from("characters")
         .select(characterMatcher)
+        .order("created_at", { ascending: false });
         
     if (error) {
         throw error;
