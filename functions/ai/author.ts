@@ -3,7 +3,8 @@ import { streamText } from "ai";
 import { Profile } from "@/types/db";
 import { cookies } from "next/headers";
 
-import { getProfileAPIKey, getLanguageModel } from "./llm";
+import { getLanguageModel } from "./llm";
+import { getProfileAPIKey } from "@/lib/ai";
 import { decryptMessage } from "@/lib/crypto";
 
 type AuthorProps = {
@@ -34,7 +35,7 @@ export async function author({ profile, systemText, prompt }: AuthorProps) {
     const result = await streamText({
         system: systemText,
         prompt: prompt,
-        model: getLanguageModel({
+        model: await getLanguageModel({
             modelId: profile.default_llm,
             apiKey: decryptedAPIKey,
         }),
