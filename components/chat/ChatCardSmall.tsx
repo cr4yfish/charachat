@@ -42,7 +42,10 @@ export default function ChatCardSmall(props: Props) {
             }
             setIsLoadingLatestMessage(false);
         }
-        getLatestMessage();
+        if(props.loadLatestMessage) {
+            // this is stupid
+            //getLatestMessage(); 
+        }
     }, [props.chat])
 
     useEffect(() => {

@@ -61,7 +61,7 @@ export async function LeftSidebar() {
           <SidebarGroupContent>
             <div className="flex flex-col gap-1">
               {chats.slice(0,5).map((chat) => (
-                <ChatCardSmall hasLink key={chat.id} chat={chat} loadLatestMessage />
+                <ChatCardSmall hasLink key={chat.id} chat={chat} />
               ))}
             
               {chats?.length == 0 && (
