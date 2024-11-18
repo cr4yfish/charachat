@@ -31,7 +31,7 @@ export default async function Story({ params: { storyId, characterId } }: { para
         <div className="flex flex-col gap-2 relative px-4 py-6 pb-32">
 
             <div className="absolute -z-10 left-0 -top-12 w-full h-[66vh]">
-                <Image src={story.image_link} layout="fill" objectFit="cover" alt={story.title} />
+                <Image src={story.image_link} layout="fill" className="object-cover" alt={story.title} />
             </div>
             
             <div className="flex flex-col gap-2 pt-[45vh]">
