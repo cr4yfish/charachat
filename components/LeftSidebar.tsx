@@ -16,6 +16,7 @@ import { getCurrentUser } from "@/functions/db/auth";
 import { Chat, Profile } from "@/types/db";
 
 import SidebarLink from "./SidebarLink";
+import LoginButton from "./auth/LoginButton";
 
 
 export async function LeftSidebar() {
@@ -41,7 +42,7 @@ export async function LeftSidebar() {
         
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
-            <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" />
+            <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
             <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
             <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
             <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
@@ -49,6 +50,7 @@ export async function LeftSidebar() {
         </SidebarGroup>
 
 
+        {profile !== undefined && 
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">Recent Chats</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -65,10 +67,15 @@ export async function LeftSidebar() {
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
+        }
 
       </SidebarContent>
       <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
-        <ProfileCard profile={profile} />
+        <LoginButton 
+            isLoggedIn={profile !== undefined} 
+            showLogout 
+        />
+        {profile !== undefined && <ProfileCard profile={profile} />}
       </SidebarFooter>
     </Sidebar>
     )

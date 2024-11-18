@@ -3,7 +3,6 @@
 import {User} from "@nextui-org/user";
 
 import { Profile } from "@/types/db";
-import LoginButton from "../auth/LoginButton";
 import Link from "next/link";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -16,10 +15,6 @@ export default function ProfileCard(props: Props) {
 
     return (
         <>
-        <LoginButton 
-            isLoggedIn={props.profile !== undefined} 
-            showLogout 
-        />
         <div className="flex flex-row items-center justify-between w-full">
             
             <User   
