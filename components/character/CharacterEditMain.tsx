@@ -2,23 +2,29 @@
 
 import { Input } from "@nextui-org/input";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/utils/Button";
 import { Character } from "@/types/db";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
-import { updateCharacter } from "@/functions/db/character";
+import { deleteCharacter, updateCharacter } from "@/functions/db/character";
+import CategoryAutocomplete from "./CategoryAutocomplete";
+import SaveDeleteButton from "../utils/SaveDeleteButton";
 
 type Props = {
     character: Character
 }
 
 export default function CharacterEditMain(props: Props) {
+    const router = useRouter();
     const [character, setCharacter] = useState<Character>(props.character);
     const [isLoading, setIsLoading] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const { toast } = useToast()
 
     const handleUpdateCharacter = async () => {
+        if(isDeleting) return;
+        
         setIsLoading(true);
         try {
             await updateCharacter(character);
@@ -34,6 +40,20 @@ export default function CharacterEditMain(props: Props) {
         }
  
         setIsLoading(false);
+    }
+
+    const handleDeleteCharacter = async () => {
+        try {
+            await deleteCharacter(character.id);
+            router.replace("/");
+        } catch {
+            toast({
+                title: "Could not delete character",
+                description: "Some error occured while deleting the character",
+                variant: "destructive"
+            });
+            setIsDeleting(false);
+        }
     }
 
     return (
@@ -98,14 +118,22 @@ export default function CharacterEditMain(props: Props) {
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
                 maxLength={1000} 
             />
+            <CategoryAutocomplete
+                setCategory={(category) => setCharacter({ ...character, category })}
+                defaultCategory={character.category}
+            />
             <Button 
                 onClick={handleUpdateCharacter} 
                 type="submit" color="primary" 
-                variant="shadow" size="lg" 
+                variant="shadow" size="lg" isDisabled={isDeleting}
                 isLoading={isLoading}
             >
                 Save
             </Button>
+            <SaveDeleteButton 
+                isLoading={isDeleting}
+                onDelete={handleDeleteCharacter}
+            />
         </form>
         </>
     )
