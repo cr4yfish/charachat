@@ -82,7 +82,6 @@ export default function Searchbar() {
         }
 
         searchTimeout.current = setTimeout(() => {
-            console.log("Searching for", search)
             if(search.length == 0) {
                 // reset results
                 setCharacters([]);
