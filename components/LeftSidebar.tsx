@@ -27,8 +27,10 @@ export async function LeftSidebar() {
     profile = await getCurrentUser();
   } catch (e) {
     const err = e as Error;
-    if(err.message == "No user found") return; // This is not an issue
-    console.error("Error in LeftSidebar", e);
+    // Anons are allowed here, not an error
+    if(err.message !== "No user found") {
+      console.error("Error in LeftSidebar", e);
+    };
   }
 
   const isLoggedIn = profile !== undefined;

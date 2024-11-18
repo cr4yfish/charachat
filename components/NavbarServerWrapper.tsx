@@ -12,8 +12,10 @@ export default async function NavbarServerWrapper() {
         profile = await getCurrentUser();
     } catch (e) {
         const err = e as Error;
-        if(err.message == "No user found") return; // This is not an issue
-        console.error("Error in NavbarServerWrapper", e);
+        // Anons are allowed here, not an error
+        if(err.message !== "No user found") {
+            console.error("Error in LeftSidebar", e);
+        };
     }
 
     return (

@@ -22,8 +22,10 @@ export default async function CharacterView({ params: { characterId } }: { param
         profile = await getCurrentUser();  
     } catch (error) {
         const err = error as Error;
-        if(err.message == "No user found") return; // This is not an issue
-        console.error(error);
+        // Anons are allowed here, not an error
+        if(err.message !== "No user found") {
+            console.error("Error in LeftSidebar", error);
+        };
     }
 
     const stories = await getCharacterStories(characterId);
