@@ -75,7 +75,6 @@ export default function LoginCard(props: Props) {
             }
 
             if(success) {
-                console.log("Logged in successfully");
                 const keyBuffer = generateKey(password, email);
 
                 sessionStorage.setItem("key", keyBuffer.toString("hex"));
@@ -87,7 +86,6 @@ export default function LoginCard(props: Props) {
                         title: "Success",
                         description: "Logged in successfully",
                     })
-                    console.log("Refreshing")
                     router.refresh();
                 }
 

@@ -114,8 +114,6 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
         password: props.password
     }
 
-    console.log(data)
-
     // validate the data
     const validateResult = signUpSchema.safeParse(data)
 
