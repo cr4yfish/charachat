@@ -34,12 +34,11 @@ type Props = {
 }
 
 export default function ChatMain(props : Props) {
-    const { chat, setChat } = useSharedChat();
+    const { chat, setChat, syncDb } = useSharedChat();
     const [cursor, setCursor] = useState(props.initMessages.length);
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const [isSetupLoading, setIsSetupLoading] = useState(false);
-    const setupExecuted = useRef(false);
     const { toast } = useToast();
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
@@ -121,13 +120,6 @@ export default function ChatMain(props : Props) {
     }, [props.chat])
 
     useEffect(() => {
-        if((props.initMessages.length == 0) && !setupExecuted.current) {
-            //setupExecuted.current = true;
-            //setup();
-        }
-    }, [props.initMessages])
-
-    useEffect(() => {
         if(isLoading && messages.length > 0) {
             scrollToBottom();
         }
@@ -160,6 +152,8 @@ export default function ChatMain(props : Props) {
 
         setIsSetupLoading(true);
 
+        syncDb(chat);
+        
         // Works for both, normal chats and story chats
         append({ content: _INTRO_MESSAGE, role: "user", createdAt: new Date() });
 

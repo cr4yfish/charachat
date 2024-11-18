@@ -3,21 +3,37 @@
 import React from "react";
 import { Chat } from "@/types/db";
 import { createContext, useContext, useState, ReactNode } from "react";
+import { useToast } from "@/hooks/use-toast";
 
-
+import { updateChat } from "@/functions/db/chat";
 
 interface SharedChatContextProps {
     chat: Chat | null;
     setChat: (chat: Chat) => void;
+    syncDb: (chat: Chat) => void;
 }
 
 const SharedChatContext = createContext<SharedChatContextProps | null>(null);
 
 export const SharedChatProvider = ({ children } : { children: ReactNode }) => {
     const [chat, setChat] = useState<Chat | null>(null);
+    const {toast} = useToast();
+
+    const syncDb = async (chat: Chat) => {
+        try {
+            await updateChat(chat);
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "Error updating chat",
+                description: "An error occurred while updating the chat",
+                variant: "destructive"
+            })
+        }
+    }
 
     return (
-        <SharedChatContext.Provider value={{ chat, setChat }}>
+        <SharedChatContext.Provider value={{ chat, setChat, syncDb }}>
             {children}
         </SharedChatContext.Provider>
     );
