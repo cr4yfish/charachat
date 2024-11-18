@@ -18,13 +18,14 @@ export default async function EditUserPage() {
 
 
     return (
-        <div className="flex flex-col px-4 py-6 gap-4">
-            <div className="flex flex-row items-center gap-2">
-                <h1 className=" font-bold text-4xl">Edit User</h1>
+        <div className="max-h-full w-full overflow-y-auto">
+            <div className="h-fit w-full relative flex flex-col px-4 py-6 gap-4 pb-20">
+                <div className="flex flex-row items-center gap-2">
+                    <h1 className=" font-bold text-4xl">Edit User</h1>
+                </div>
+            
+                <EditProfile profile={profile} />
             </div>
-         
-            <EditProfile profile={profile} />
-
         </div>
     );
 }
