@@ -50,3 +50,18 @@ export const addTokens = async (userId: string, tokens: number) => {
 
     return data;
 }
+
+export const getTokens = async (userId: string): Promise<number> => {
+    const { data, error } = await createClient()
+        .from("profiles")
+        .select("tokens")
+        .eq("user", userId)
+        .single();
+
+    if (error) {
+        console.error("Error fetching tokens", error);
+        throw error;
+    }
+
+    return data.tokens;
+}
