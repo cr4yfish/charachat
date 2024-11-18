@@ -27,7 +27,7 @@ export const startChat = async(formData: FormData) => {
         characterId: characterId,
         title: "New Chat",
         description: "This is a new chat",
-        llm: "gpt-4o-mini"
+        llm: ""
     });
 
     if(!chat) {

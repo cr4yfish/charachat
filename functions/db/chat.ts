@@ -98,7 +98,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
         title: title,
         description: description,
         story: storyId,
-        llm: llm || "gpt-4o-mini",
+        llm: llm ?? "",
     }])
     .eq("id", chatId)
     .select(chatMatcher)
