@@ -5,7 +5,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react";
 import { Story } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
-import Icon from "../utils/Icon";
+import { truncateText } from "@/lib/utils";
 
 type Props = {
     story: Story;
@@ -27,9 +27,9 @@ export default function StoryCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-full w-[300px] dark:bg-zinc-800 
+                        h-full w-[300px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         ${props.fullWidth && "w-full"}
-                        ${props.noBg && "dark:bg-transparent border-none shadow-none"} 
+                        ${props.noBg && "dark:bg-transparent"} 
                     `}>
                     <CardBody className="flex flex-row gap-4 ">
 
@@ -40,22 +40,8 @@ export default function StoryCard(props: Props) {
                         </div>
 
                         <div className="flex flex-col gap-1 justify-between">
-                            <div className="flex flex-col">
-                                <h3 className="font-medium text-md">{props.story.title}</h3>
-                                
-                            </div>
-                            
-                            <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
-                                <span className="flex items-center gap-1">
-                                    <Icon downscale filled>chat_bubble</Icon>
-                                    30.0m
-                                </span>
-                                <span className="flex items-center gap-1">
-                                    <Icon downscale filled>account_circle</Icon>
-                                    {props.story.creator.username}
-                                </span>
-                            </div>
-                            
+                            <h3 className="text-sm">{truncateText(props.story.title,50)}</h3>
+                            <span className="text-xs dark:text-zinc-400">with {truncateText(props.story.character.name,40)}</span>
                         </div>
 
                     </CardBody>

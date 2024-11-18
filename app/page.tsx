@@ -28,19 +28,7 @@ export default async function Home() {
       <Searchbar />
 
       <div className="flex flex-col gap-2">
-        <h2 className="dark:prose-invert text-xl font-bold">Popular</h2>
-        <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
-          <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-            {characters.map((character) => (
-              <CharacterCard hasLink key={character.id} character={character} />
-            ))}
-          </div>
-        </ScrollShadow>
-      </div>
-
-
-      <div className="flex flex-col gap-2">
-        <h2 className="dark:prose-invert text-xl font-bold">New</h2>
+        <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
         <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
           <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
             {characters.map((character) => (
@@ -51,11 +39,22 @@ export default async function Home() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <h2 className="dark:prose-invert text-xl font-bold">Stories</h2>
+        <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
         <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
           <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
             {stories.map((story) => (
               <StoryCard key={story.id} story={story} hasLink />
+            ))}
+          </div>
+        </ScrollShadow>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h2 className="dark:prose-invert text-xl font-bold">New Characters</h2>
+        <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
+          <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
+            {characters.map((character) => (
+              <CharacterCard hasLink key={character.id} character={character} />
             ))}
           </div>
         </ScrollShadow>

@@ -6,6 +6,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { Character } from "@/types/db";
 import Icon from "../utils/Icon";
 import ConditionalLink from "../utils/ConditionalLink";
+import { truncateText } from "@/lib/utils";
 
 type Props = {
     character: Character,
@@ -28,10 +29,10 @@ export default function CharacterCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-[150px] w-[300px] dark:bg-zinc-800 
+                        h-[150px] w-[300px dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         ${props.fullWidth && "w-full"} 
                         ${props.isSmall && "h-full"}
-                        ${props.noBg && "dark:bg-transparent border-none shadow-none"} 
+                        ${props.noBg && "dark:bg-transparent"} 
                     `}>
                     <CardBody className="flex flex-row gap-4">
                         
@@ -45,12 +46,12 @@ export default function CharacterCard(props: Props) {
                             <div className="flex flex-col gap-1">
                                 <div className="flex flex-col">
                                     <div className="flex flex-col">
-                                        <h3 className="font-bold">{props.character.name}</h3>
+                                        <h3 className="font-medium">{truncateText(props.character.name,40)}</h3>
                                         
                                     </div>
-                                    <p className=" text-sm dark:text-zinc-400">By @{props.character.owner.username}</p>
+                                    <p className=" text-sm dark:text-zinc-400">By @{props.character.owner?.username}</p>
                                 </div>
-                                <p className="text-sm">{props.character.description}</p> 
+                                <p className="text-xs">{truncateText(props.character.description,40)}</p> 
                             </div>
                             {!props.isSmall &&
                             <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
@@ -60,7 +61,7 @@ export default function CharacterCard(props: Props) {
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <Icon downscale filled>account_circle</Icon>
-                                    {props.character.owner.username}
+                                    {props.character.owner?.username}
                                 </span>
                             </div>}
                         </div>
