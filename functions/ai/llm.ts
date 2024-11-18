@@ -8,7 +8,6 @@ import { createAnthropic  } from '@ai-sdk/anthropic';
 import { createVertex } from '@ai-sdk/google-vertex';
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
-import { Profile } from '@/types/db';
 
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
