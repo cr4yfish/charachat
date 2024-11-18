@@ -13,7 +13,8 @@ type SidebarLinkProps = {
     icon: string;
     label: string;
     radius?: "none" | "full" | "sm" | "md" | "lg";
-    variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost"
+    variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost",
+    enableAnon?: boolean;
   }
   
 
@@ -25,14 +26,14 @@ export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
 
     useEffect(() => {
       setIsActive(pathname === props.link);
-    }, [props.link])
+    }, [props.link, pathname])
 
     return (
-      <ConditionalLink active={props.isLoggedIn} href={props.link} >
+      <ConditionalLink active={props.isLoggedIn || (props.enableAnon ?? false)} href={props.link} >
         <Button 
           size="lg" 
           fullWidth
-          isDisabled={!props.isLoggedIn || isLoading}
+          isDisabled={!(props.isLoggedIn || props.enableAnon) || isLoading}
           color={isActive ? "primary" : "default"}
           onClick={() => {
             setIsLoading(true)
