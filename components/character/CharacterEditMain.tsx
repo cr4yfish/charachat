@@ -71,7 +71,15 @@ export default function CharacterEditMain(props: Props) {
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
                 maxLength={280} 
             />
-            <Input name="image_link" isRequired label="Image Link" placeholder="https://i.imgur.com/XgbZdeAb.jpg" description="Direct link to an image" />
+            <Input 
+                name="image_link" 
+                isRequired 
+                label="Image Link" 
+                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
+                description="Direct link to an image" 
+                value={character.image_link}
+                onValueChange={(value) => setCharacter({ ...character, image_link: value })}
+            />
             <TextareaWithCounter 
                 name="intro" 
                 label="Character Intro"
