@@ -27,13 +27,9 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useSharedChat } from "@/context/SharedChatSettings";
-  
 
-type Props = {
-    chat: Chat
-}
 
-export default function ChatSettingsDrawer(props: Props) {
+export default function ChatSettingsDrawer() {
 
     const { chat, setChat } = useSharedChat()
 

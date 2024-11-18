@@ -16,37 +16,11 @@ type Props = {
     chat: Chat;
     setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
     hasLink?: boolean;
-    loadLatestMessage?: boolean;
 }
 
 export default function ChatCardSmall(props: Props) {
     const pathname = usePathname();
-    const [latestMessage, setLatestMessage] = useState<Message>();
-    const [isLoadingLatestMessage, setIsLoadingLatestMessage] = useState(true);
     const [isActive, setIsActive] = useState(false);
-
-    useEffect(() => {
-        const getLatestMessage = async () => {
-            setIsLoadingLatestMessage(true);
-
-            const key = sessionStorage.getItem("key");
-
-            if(!key) {
-                console.error("No key found in session storage");
-                return;
-            }
-
-            const res = await getLatestChatMessage(props.chat.id, key);
-            if(res !== null) {
-                setLatestMessage(res);
-            }
-            setIsLoadingLatestMessage(false);
-        }
-        if(props.loadLatestMessage) {
-            // this is stupid
-            //getLatestMessage(); 
-        }
-    }, [props.chat])
 
     useEffect(() => {
         if(pathname && props.chat.id) {
@@ -84,16 +58,7 @@ export default function ChatCardSmall(props: Props) {
                             }
                         </div>
                         
-                        {isLoadingLatestMessage && props.loadLatestMessage &&
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3 }}
-                            >
-                                <Skeleton className="w-full h-5" />
-                            </motion.div>
-                        }
-                        {!isLoadingLatestMessage && latestMessage?.content && props.loadLatestMessage && 
+                        {false && 
                             <motion.p 
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -103,7 +68,7 @@ export default function ChatCardSmall(props: Props) {
                                     ${isActive && "dark:text-blue-200"}    
                                 `}
                             >
-                                {truncateText(latestMessage.content, 20)}
+                                Latest message placeholder
                             </motion.p>
                         }
                     </div>
