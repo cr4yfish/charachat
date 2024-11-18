@@ -28,7 +28,7 @@ export default async function UserStories({ params: {  } } : { params: { userId:
                 {stories.map((story) => (
                     <StoryCard fullWidth hasLink key={story.id} story={story} />
                 ))}
-                {stories.length == 0 && (
+                {stories?.length == 0 && (
                     <div className="text-center text-lg font-bold text-slate-400">
                         You have no stories yet.
                     </div>

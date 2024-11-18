@@ -137,7 +137,7 @@ export default function Searchbar() {
                                     title={character.name}
                                     description={character.description}
                                     imageLink={character.image_link ?? ""}
-                                    owner={character.owner.username}
+                                    owner={character.owner?.username}
                                 />
                             ))}
                         </div>

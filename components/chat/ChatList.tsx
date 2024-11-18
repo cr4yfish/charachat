@@ -41,7 +41,7 @@ export default function ChatList(props: Props) {
                     ))}
                 </div>
             </ScrollArea>
-            {chats.length == 0 && (
+            {chats?.length == 0 && (
                 <p className="dark:prose-invert dark:text-slate-400">You have no chats with this character.</p>   
             )}
         </div>

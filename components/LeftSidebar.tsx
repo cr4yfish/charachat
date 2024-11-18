@@ -64,7 +64,7 @@ export async function LeftSidebar() {
                 <ChatCardSmall hasLink key={chat.id} chat={chat} />
               ))}
             
-              {chats.length == 0 && (
+              {chats?.length == 0 && (
                 <div className=" w-full flex items-center justify-center pt-5">
                   <p className="text-sm dark:text-zinc-400">No chats yet</p>
                 </div>
