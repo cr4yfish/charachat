@@ -43,13 +43,13 @@ export default function CharacterCard(props: Props) {
                         </div>
 
                         <div className="flex flex-col justify-between">
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-2">
                                 <div className="flex flex-col">
                                     <div className="flex flex-col">
                                         <h3 className="font-medium">{truncateText(props.character.name,40)}</h3>
                                         
                                     </div>
-                                    <p className=" text-sm dark:text-zinc-400">By @{props.character.owner?.username}</p>
+                                    <p className=" text-xs dark:text-zinc-400">By @{props.character.owner?.username}</p>
                                 </div>
                                 <p className="text-xs">{truncateText(props.character.description,40)}</p> 
                             </div>
