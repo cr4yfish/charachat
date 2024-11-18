@@ -311,7 +311,7 @@ export default function ChatMain(props : Props) {
             <div className="flex flex-col gap-4 items-start justify-center h-full w-full px-8 overflow-y-hidden">
                 <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
                     <h1>Select an AI to get started</h1>
-                    <p>Only ones for which you have a key are displayed. The unrestricted Model is only available to testers right now.</p>
+                    <p>Only ones for which you have a key are displayed. The unrestricted Model is only available to testers right now. <b>Mistral Nemo is free but messages are sent to Mistral for training.</b></p>
                 </div>
                 
                 <Select 
