@@ -103,77 +103,78 @@ export default function Searchbar() {
 
     return (
         <>
-        <div className="relative flex flex-col gap-4 h-fit overflow-visible">
-            <Input 
-                placeholder="Search Characters and Stories" 
-                radius="lg"
-                startContent={loading ? <Spinner size="sm" color="default" /> : <Icon>search</Icon>}
-                size="lg"
-                isClearable
-                value={search}
-                onValueChange={setSearch}
-            />
-            
-            <AnimatePresence>
-            { hasResults &&
-            <motion.div 
-                className="
-                    z-40 w-full h-fit bg-zinc-800/80 backdrop-blur-xl px-4 py-3 border border-zinc-600
-                    rounded-lg absolute top-[130%] left-0 flex flex-col gap-2 max-h-[50svh] overflow-y-auto
-                "
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-            >
-                <div className="h-full w-full">
-                    {characters.length > 0 &&
-                    <div className="flex flex-col gap-2 overflow-x-hidden w-full h-full">
-                        <span className="text-md font-bold">Characters</span>
-                        <div className="flex flex-col relative overflow-x-auto">
-                            {characters.map((character) => (
-                                <SearchResult 
-                                    key={character.id} 
-                                    link={`/c/${character.id}`}
-                                    title={character.name}
-                                    description={character.description}
-                                    imageLink={character.image_link ?? ""}
-                                    owner={character.owner?.username}
-                                />
-                            ))}
+        <div className="flex justify-end relative h-fit w-full overflow-visible">
+            <div className="relative w-full max-w-lg flex flex-col gap-4 ">
+                <Input 
+                    placeholder="Search Characters and Stories" 
+                    radius="lg"
+                    startContent={loading ? <Spinner size="sm" color="default" /> : <Icon>search</Icon>}
+                    size="lg"
+                    isClearable
+                    value={search}
+                    onValueChange={setSearch}
+                />
+                
+                <AnimatePresence>
+                { hasResults &&
+                <motion.div 
+                    className="
+                        z-40 w-full h-fit bg-zinc-800/80 backdrop-blur-xl px-4 py-3 border border-zinc-600
+                        rounded-lg absolute top-[130%] left-0 flex flex-col gap-2 max-h-[50svh] overflow-y-auto
+                    "
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                >
+                    <div className="h-full w-full">
+                        {characters.length > 0 &&
+                        <div className="flex flex-col gap-2 overflow-x-hidden w-full h-full">
+                            <span className="text-md font-bold">Characters</span>
+                            <div className="flex flex-col relative overflow-x-auto">
+                                {characters.map((character) => (
+                                    <SearchResult 
+                                        key={character.id} 
+                                        link={`/c/${character.id}`}
+                                        title={character.name}
+                                        description={character.description}
+                                        imageLink={character.image_link ?? ""}
+                                        owner={character.owner?.username}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                    }
-                    
-                    {stories.length > 0 &&
-                    <div className="flex flex-col gap-2 overflow-x-hidden w-full h-full">
-                        <span className="text-md font-bold">Stories</span>
-                        <div className="flex flex-col relative overflow-x-auto">
-                            {stories.map((story) => (
-                                <SearchResult 
-                                    key={story.id} 
-                                    link={`/c/${story.character.id}/story/${story.id}`}
-                                    title={story.title}
-                                    description={story.description}
-                                    imageLink={story.image_link ?? ""}
-                                    owner={story.creator.username}
-                                />
-                            ))}
+                        }
+                        
+                        {stories.length > 0 &&
+                        <div className="flex flex-col gap-2 overflow-x-hidden w-full h-full">
+                            <span className="text-md font-bold">Stories</span>
+                            <div className="flex flex-col relative overflow-x-auto">
+                                {stories.map((story) => (
+                                    <SearchResult 
+                                        key={story.id} 
+                                        link={`/c/${story.character.id}/story/${story.id}`}
+                                        title={story.title}
+                                        description={story.description}
+                                        imageLink={story.image_link ?? ""}
+                                        owner={story.creator.username}
+                                    />
+                                ))}
+                            </div>
                         </div>
+                        }
                     </div>
-                    }
-                </div>
 
-                {(characters.length == 0 && characters.length == 0) && 
-                <div className="flex flex-col items-center justify-center w-full h-fit">
-                    <span className="text-sm dark:text-zinc-400">No search results</span>
-                </div>
+                    {(characters.length == 0 && characters.length == 0) && 
+                    <div className="flex flex-col items-center justify-center w-full h-fit">
+                        <span className="text-sm dark:text-zinc-400">No search results</span>
+                    </div>
+                    }
+                </motion.div>
                 }
-            </motion.div>
-            }
-            </AnimatePresence>
-         
+                </AnimatePresence>
+            
+            </div>
         </div>
-
         </>
     )
 }
