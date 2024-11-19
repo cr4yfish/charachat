@@ -22,7 +22,10 @@ export default async function UserCharacters({ params: { userId } } : { params: 
                 </div>
                 
                 <Link href={"/c/new"}>
-                    <Button isIconOnly variant="light" color="warning"><Icon>add</Icon></Button>
+                    <Button variant="light" color="warning">
+                        <Icon>add</Icon>
+                        <span className=" max-md:hidden ">Add Character</span>
+                    </Button>
                 </Link>
                 
             </div>

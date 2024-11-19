@@ -128,16 +128,18 @@ export default function CharacterNewMain() {
                 setCategory={(category) => updateValue("category", category.id)}
             />
             <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
-            <Button
-                type="submit" 
-                isLoading={isLoading || isDone}
-                isDisabled={isDone}
-                color={isDone ? "success" : "primary"}
-                variant="shadow" 
-                size="lg" 
-            >
-                {isDone ? "Redirecting" : "Save Character"}
-            </Button>
+            <div className=" max-w-xs max-md:max-w-full ">
+                <Button
+                    type="submit" 
+                    isLoading={isLoading || isDone}
+                    isDisabled={isDone}
+                    fullWidth
+                    color={isDone ? "success" : "primary"}
+                    size="lg" 
+                >
+                    {isDone ? "Redirecting" : "Save Character"}
+                </Button>
+            </div>
         </form>
         </>
     )

@@ -11,6 +11,7 @@ import { deleteCharacter, updateCharacter } from "@/functions/db/character";
 import CategoryAutocomplete from "./CategoryAutocomplete";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { Switch } from "@nextui-org/switch";
+import Icon from "../utils/Icon";
 
 type Props = {
     character: Character
@@ -30,7 +31,8 @@ export default function CharacterEditMain(props: Props) {
         try {
             await updateCharacter(character);
             toast({
-                title: "Saved Character"
+                title: "Saved Character",
+                variant: "success"
             });
         } catch {
             toast({
@@ -124,18 +126,27 @@ export default function CharacterEditMain(props: Props) {
                 defaultCategory={character.category}
             />
             <Switch isSelected={character.is_private} onValueChange={(newValue) => setCharacter({...character, is_private: newValue})} >Private</Switch>
-            <Button 
-                onClick={handleUpdateCharacter} 
-                type="submit" color="primary" 
-                variant="shadow" size="lg" isDisabled={isDeleting}
-                isLoading={isLoading}
-            >
-                Save
-            </Button>
-            <SaveDeleteButton 
-                isLoading={isDeleting}
-                onDelete={handleDeleteCharacter}
-            />
+            <div className="flex flex-row max-w-xs w-full items-center gap-4 flex-wrap max-md:flex-col max-md:max-w-lg">
+                <div className="w-md max-md:w-full">
+                    <Button 
+                        onClick={handleUpdateCharacter} 
+                        type="submit" color="primary" 
+                        fullWidth
+                        startContent={<Icon filled>save</Icon>}
+                        size="lg" isDisabled={isDeleting}
+                        isLoading={isLoading}
+                    >
+                        Save
+                    </Button>
+                </div>
+                <div className="w-md max-md:w-full">
+                    <SaveDeleteButton 
+                        isLoading={isDeleting}
+                        onDelete={handleDeleteCharacter}
+                    />
+                </div>
+            </div>
+
         </form>
         </>
     )

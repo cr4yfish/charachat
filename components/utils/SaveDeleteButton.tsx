@@ -27,6 +27,7 @@ export default function SaveDeleteButton(props: Props) {
                 isLoading={props.isLoading}
                 isDisabled={props.isDisabled}
                 color="danger"
+                fullWidth
                 startContent={<Icon filled>delete</Icon>}
                 size="lg"
             >
