@@ -20,6 +20,19 @@ type Props = {
     profile: Profile
 }
 
+const KeyInputDescription = ({url, hasFreeTier}: {url: string, hasFreeTier?: boolean}) => (
+    <div className="flex flex-row items-center gap-1">
+        {hasFreeTier && <span className="text-green-500">Free Tier Available</span>}
+        <a
+            href={url}
+            target="_blank"
+            className="text-blue-500 underline"
+        >
+            Get the key here
+        </a>
+    </div>
+)
+
 export default function EditProfile(props: Props) {
     const [profile, setProfile] = useState<Profile>(props.profile);
     const {toast} = useToast();
@@ -154,11 +167,14 @@ export default function EditProfile(props: Props) {
                 onValueChange={(value) => handleUpdateValue('avatar_link', value)}
             />
 
-            <p className="text-sm dark:text-slate-400">All API Keys are stored encrypted and are only decrypted when viewed or used.</p>
+            <div className="prose dark:prose-invert">
+                <h3>Configure AIs</h3>
+                <p className="text-sm dark:text-zinc-400">All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to select any AI for which you provide an API key in chats - in addition to free models.</p>
+            </div>
             <Card>
                 <CardHeader>
-                    <CardDescription>Configure your Ollama LLMs</CardDescription>
-                    <CardTitle>Ollama</CardTitle>
+                    <CardDescription>Configure your Ollama API LLMs</CardDescription>
+                    <CardTitle>Ollama type LLM</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
                     <Input label="Base URL" description="Your API Link" 
@@ -176,19 +192,29 @@ export default function EditProfile(props: Props) {
                     <CardTitle>API Keys</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
-                    <Input label="Openai API Key" type="text" 
+                    <Input 
+                        label="Openai API Key" type="text" 
+                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" />}
                         value={profile.openai_encrypted_api_key} onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
                     />
-                    <Input label="Gemini API Key" type="text" 
+                    <Input 
+                        label="Gemini API Key" type="text" 
+                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
                         value={profile.gemini_encrypted_api_key} onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
                     />
-                    <Input label="Mistral API Key" type="text"
+                    <Input 
+                        label="Mistral API Key" type="text"
+                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
                         value={profile.mistral_encrypted_api_key} onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
                     />
-                    <Input label="Anthropic API Key" type="text"
+                    <Input 
+                        label="Anthropic API Key" type="text"
+                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" />}
                         value={profile.anthropic_encrypted_api_key} onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
                     />
-                    <Input label="Groq API Key" type="text" 
+                    <Input 
+                        label="Groq API Key" type="text" 
+                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
                         value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
                 </CardContent>
@@ -218,22 +244,29 @@ export default function EditProfile(props: Props) {
 
 
             <Spacer y={2} />
+            <div className="flex items-center gap-4 max-w-lg max-md:flex-col max-md:max-w-full">
+                <div className="w-fit max-md:w-full">
+                    <Button
+                        size="lg" color="primary"
+                        fullWidth
+                        startContent={<Icon filled>save</Icon>}
+                        onClick={handleUpdate}
+                        isLoading={isSaving}
+                        isDisabled={isDeleting}
+                    >
+                        Save
+                    </Button>
+                </div>
+                <div className="w-fit max-md:w-full">
+                    <SaveDeleteButton 
+                        onDelete={handleDelete}
+                        isLoading={isDeleting}
+                        isDisabled={isSaving}
+                    />
+                </div>
+            </div>
 
-            <Button
-                size="lg" color="primary"
-                variant="shadow"
-                startContent={<Icon filled>save</Icon>}
-                onClick={handleUpdate}
-                isLoading={isSaving}
-                isDisabled={isDeleting}
-            >
-                Save
-            </Button>
-            <SaveDeleteButton 
-                onDelete={handleDelete}
-                isLoading={isDeleting}
-                isDisabled={isSaving}
-            />
+       
         </div>
         </>
     )
