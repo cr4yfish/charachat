@@ -1,6 +1,6 @@
 import { Profile } from "@/types/db";
 
-export const getProfileAPIKey = (modelId: ModelId, profile: Profile): string | undefined => {
+export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): string | undefined => {
     switch(modelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
             return profile.groq_encrypted_api_key;
