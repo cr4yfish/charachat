@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Spacer } from "@nextui-org/spacer";
 import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { Button } from "@/components/utils/Button";
 import Icon from "../utils/Icon";
@@ -13,6 +14,7 @@ import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
+import { LLMsWithAPIKeys } from "@/lib/ai";
 
 type Props = {
     profile: Profile
@@ -191,6 +193,29 @@ export default function EditProfile(props: Props) {
                     />
                 </CardContent>
             </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardDescription>Select which model to use for writing help (e.g. creating stories)</CardDescription>
+                    <CardTitle>Choose Author Model</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Select 
+                        onValueChange={(value) =>  profile && handleUpdateValue('default_llm', value)}
+                        defaultValue={profile.default_llm}
+                    >
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Select an AI" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {LLMsWithAPIKeys(profile).map((llm) => (
+                                <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </CardContent>
+            </Card>
+
 
             <Spacer y={2} />
 
