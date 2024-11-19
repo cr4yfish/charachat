@@ -3,7 +3,6 @@
 import { cookies } from "next/headers";
 import ChatMain from "@/components/chat/ChatMain";
 import ChatSettingsDrawer from "@/components/chat/ChatSettingsDrawer";
-import BackLink from "@/components/utils/BackLink";
 
 import { getCurrentUser } from "@/functions/db/auth";
 import { getChat } from "@/functions/db/chat"
