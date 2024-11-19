@@ -15,6 +15,7 @@ type SidebarLinkProps = {
     radius?: "none" | "full" | "sm" | "md" | "lg";
     variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost",
     enableAnon?: boolean;
+    openInNewTab?: boolean;
   }
   
 
@@ -29,7 +30,7 @@ export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
     }, [props.link, pathname])
 
     return (
-      <ConditionalLink active={props.isLoggedIn || (props.enableAnon ?? false)} href={props.link} >
+      <ConditionalLink active={props.isLoggedIn || (props.enableAnon ?? false)} href={props.link} target={props.openInNewTab ? "_blank" : undefined} >
         <Button 
           size="lg" 
           fullWidth
