@@ -4,7 +4,7 @@ import { Profile } from "@/types/db";
 import { cookies } from "next/headers";
 
 import { getLanguageModel } from "./llm";
-import { getProfileAPIKey } from "@/lib/ai";
+import { getProfileAPIKey, ModelId } from "@/lib/ai";
 import { decryptMessage } from "@/lib/crypto";
 
 type AuthorProps = {
@@ -25,7 +25,7 @@ export async function author({ profile, systemText, prompt }: AuthorProps) {
         throw new Error("No key cookie");
     }
 
-    const encryptedAPIKey = getProfileAPIKey(profile.default_llm, profile);
+    const encryptedAPIKey = getProfileAPIKey(profile.default_llm as ModelId, profile);
     if(!encryptedAPIKey) {
         throw new Error("No API key found");
     }
