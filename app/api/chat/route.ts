@@ -80,15 +80,13 @@ export async function POST(req: Request) {
                 This is background information about you:
                 ${chat.character.book}
                 
-
-                In case this chat is based on a story, this is the story:
                 ${chat.story 
-                    ? `
+                    && `
+                        This chat is based on a story. These are the details of the story:
                         ${chat.story.title}
                         ${chat.story.description}
                         ${chat.story.story}
                     ` 
-                    : "This chat is not based on a story."
                 }
 
                 This is all the knowledge you memorized during the conversation up until now:
