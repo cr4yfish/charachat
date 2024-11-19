@@ -204,7 +204,7 @@ export default function EditProfile(props: Props) {
                         onValueChange={(value) =>  profile && handleUpdateValue('default_llm', value)}
                         defaultValue={profile.default_llm}
                     >
-                        <SelectTrigger className="w-[200px]">
+                        <SelectTrigger className="w-[250px]">
                             <SelectValue placeholder="Select an AI" />
                         </SelectTrigger>
                         <SelectContent>
