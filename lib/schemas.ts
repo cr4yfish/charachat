@@ -12,11 +12,6 @@ export const signUpSchema = z.object({
     firstName: z.string()
         .min(2, { message: "First Name must be at least 2 characters long" })
         .max(50, { message: "First Name must be at most 50 characters long" }),
-    lastName: z.string()
-        .min(2, { message: "Last Name must be at least 2 characters long" })
-        .max(50, { message: "Last Name must be at most 50 characters long" })
-        .optional()
-        ,
     avatarLink: z.string()
         .min(5, { message: "Avatar Link must be at least 5 characters long" })
         .url({ message: "Invalid URL" }),
