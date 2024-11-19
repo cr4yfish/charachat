@@ -44,7 +44,7 @@ export default function LoginCard(props: Props) {
             if(isSignUp) {
 
                 // validate input
-                const signUpResult = signUpSchema.safeParse({ username, firstName, lastName, avatarLink, email, password });
+                const signUpResult = signUpSchema.safeParse({ username, firstName, avatarLink, email, password });
 
                 if(!signUpResult.success) {
                     throw new Error("Invalid input");
@@ -146,11 +146,10 @@ export default function LoginCard(props: Props) {
                         <Input 
                             name="last_name" 
                             type="text" 
+                            description="Optional. Only visible to you & AI"
                             label="Last Name" 
                             value={lastName} 
                             onValueChange={setLastName} 
-                            errorMessage={ signUpSchema.shape.lastName.safeParse(lastName).error?.issues[0]?.message }
-                            isInvalid={ isSubmit && signUpSchema.shape.lastName.safeParse(lastName).error?.issues[0]?.message ? true : false }
                         />
                         <Input 
                             name="image_link" 
