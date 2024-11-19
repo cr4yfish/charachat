@@ -1,6 +1,6 @@
 import { Profile } from "@/types/db";
 
-export const getProfileAPIKey = (modelId: string, profile: Profile): string | undefined => {
+export const getProfileAPIKey = (modelId: ModelId, profile: Profile): string | undefined => {
     switch(modelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
             return profile.groq_encrypted_api_key;
@@ -29,18 +29,52 @@ export const LLMsWithAPIKeys = (profile: Profile) => {
         if(
             getProfileAPIKey(llm.key, profile) || 
 
-            // The unrestricted model is managed by the server
-            (llm.key === "llama-3_2-3b-instruct-uncensored") ||
+            isFreeModel(llm.key) ||
 
-            // Mistral is free
-            (llm.key == "open-mistral-nemo")
+            // The unrestricted model is managed by the server
+            (llm.key === "llama-3_2-3b-instruct-uncensored") 
+
         ) {
             return llm;
         }
     })
 }
 
-export const LLMs = [
+export type ModelId = 
+    "llama3-groq-70b-8192-tool-use-preview" |
+    "ollama" |
+    "gpt-4o-mini" |
+    "gpt-4o" |
+    "gemini-1.5-flash" |
+    "open-mistral-nemo" |
+    "claude-3-5-sonnet-latest" |
+    "claude-3-5-haiku-latest" |
+    "llama-3_2-3b-instruct-uncensored" |
+    "openai-compatible" |
+    "grok-beta"
+
+
+export const isFreeModel = (modelId: ModelId) => {
+    switch(modelId) {
+        case "open-mistral-nemo":
+        case "grok-beta":
+            return true;
+    }
+}
+
+export const isPaidModel = (modelId: ModelId) => {
+    switch(modelId) {
+        case "llama-3_2-3b-instruct-uncensored":
+            return true;
+    }
+}
+
+type LLMType = {
+    key: ModelId,
+    name: string,
+}
+
+export const LLMs: LLMType[] = [
     {
         "key": "llama3-groq-70b-8192-tool-use-preview",
         "name": "llama3 70b",
@@ -63,7 +97,7 @@ export const LLMs = [
     },
     {
         "key": "open-mistral-nemo",
-        "name": "Open Mistral Nemo",
+        "name": "Nemo (free)",
     },
     {
         "key": "claude-3-5-sonnet-latest",
@@ -78,7 +112,11 @@ export const LLMs = [
         "name": "Llama3.2 Unrestricted"
     },
     {
-        "key": "nemotron-4-340b-instruct",
-        "name": "Nemotron 4 340b"
+        "key": "openai-compatible",
+        "name": "Your openAI model"
+    },
+    {
+        "key": "grok-beta",
+        "name": "Grok (free)"
     }
 ]

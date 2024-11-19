@@ -6,6 +6,7 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOllama } from 'ollama-ai-provider';
 import { createAnthropic  } from '@ai-sdk/anthropic';
 import { createVertex } from '@ai-sdk/google-vertex';
+import { createXai } from "@ai-sdk/xai";
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
 
@@ -87,13 +88,22 @@ async function getUnrestricted(): Promise<LanguageModelV1> {
     });
 }
 
-async function getNVIDIA(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
-    const nvidia = createOpenAI({
+async function getOpenAICompatible(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
+    const openAICompatible = createOpenAI({
         baseURL: baseURL,
         apiKey: apiKey
     })
 
-    return nvidia(modelId);
+    return openAICompatible(modelId);
+}
+
+async function getXai(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
+    const xai = createXai({
+        baseURL: baseURL,
+        apiKey: apiKey || process.env.X_AI_API_KEY
+    })
+
+    return xai(modelId);
 }
 
 type GetLanguageModelProps = {
@@ -130,8 +140,11 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "llama-3_2-3b-instruct-uncensored":
             return getUnrestricted();
 
-        case "nemotron-4-340b-instruct":
-            return getNVIDIA(modelId, baseURL, apiKey);
+        case "openai-compatible":
+            return getOpenAICompatible(modelId, baseURL, apiKey);
+
+        case "grok-beta":
+            return getXai(modelId, baseURL, apiKey);
 
         default:
             return getOpenAI(modelId, apiKey);

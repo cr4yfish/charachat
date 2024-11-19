@@ -11,7 +11,7 @@ import { updateChat } from '@/functions/db/chat';
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { getLanguageModel } from '@/functions/ai/llm';
 import { decryptMessage } from '@/lib/crypto';
-import { getProfileAPIKey } from '@/lib/ai';
+import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
 
 export async function POST(req: Request) {
@@ -44,8 +44,8 @@ export async function POST(req: Request) {
     }
 
     let decryptedAPIKey: string | undefined = undefined;
-    const encryptedAPIKey = getProfileAPIKey(chat.llm || profile.default_llm, profile);
-    if(!encryptedAPIKey && (chat.llm !== "llama-3_2-3b-instruct-uncensored") && (chat.llm !== "open-mistral-nemo")) {
+    const encryptedAPIKey = getProfileAPIKey(chat.llm as ModelId, profile);
+    if(!encryptedAPIKey && !isFreeModel(chat.llm as ModelId)) {
         return new Response(`No Api key found for AI: ${chat.llm}`, { status: 400 });
     } else if(encryptedAPIKey) {
         decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
@@ -53,15 +53,10 @@ export async function POST(req: Request) {
     
     try {
 
-        if((chat.llm === "llama-3_2-3b-instruct-uncensored") || (profile.default_llm === "llama-3_2-3b-instruct-uncensored")) {
+        if(isPaidModel(chat.llm as ModelId)) {
             // check if user has access to this model
-
             const tier = await getUserTier(profile.user);
-
-            if(tier !== 1) {
-                return new Response("You do not have access to this model", { status: 403 });
-            }
-
+            if(tier !== 1) { return new Response("You do not have access to this model", { status: 403 }); }
         }
         const model = await getLanguageModel({
             modelId: chat.llm || profile.default_llm,
