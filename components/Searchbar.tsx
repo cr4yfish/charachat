@@ -129,7 +129,7 @@ export default function Searchbar() {
                     {characters.length > 0 &&
                     <div className="flex flex-col gap-2 overflow-x-hidden w-full h-full">
                         <span className="text-md font-bold">Characters</span>
-                        <div className="flex flex-row relative overflow-x-auto">
+                        <div className="flex flex-col relative overflow-x-auto">
                             {characters.map((character) => (
                                 <SearchResult 
                                     key={character.id} 
@@ -147,7 +147,7 @@ export default function Searchbar() {
                     {stories.length > 0 &&
                     <div className="flex flex-col gap-2 overflow-x-hidden w-full h-full">
                         <span className="text-md font-bold">Stories</span>
-                        <div className="flex flex-row relative overflow-x-auto">
+                        <div className="flex flex-col relative overflow-x-auto">
                             {stories.map((story) => (
                                 <SearchResult 
                                     key={story.id} 
