@@ -54,7 +54,7 @@ async function getGemini(modelId: string, apiKey?: string): Promise<LanguageMode
     return gemini(modelId);
 }
 
-async function getMistral(modelId: string, apiKey?: string, baseURL?: string): Promise<LanguageModelV1> {
+async function getMistral(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
     const mistral = createMistral({
         apiKey: apiKey || process.env.MISTRAL_API_KEY
     });
@@ -87,6 +87,15 @@ async function getUnrestricted(): Promise<LanguageModelV1> {
     });
 }
 
+async function getNVIDIA(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
+    const nvidia = createOpenAI({
+        baseURL: baseURL,
+        apiKey: apiKey
+    })
+
+    return nvidia(modelId);
+}
+
 type GetLanguageModelProps = {
     modelId: string;
     baseURL?: string;
@@ -112,7 +121,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
             return getGemini(modelId, apiKey);
 
         case "open-mistral-nemo":
-            return getMistral(modelId, apiKey, baseURL);
+            return getMistral(modelId, apiKey);
 
         case "claude-3-5-sonnet-latest":
         case "claude-3-5-haiku-latest":
@@ -120,6 +129,9 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
         case "llama-3_2-3b-instruct-uncensored":
             return getUnrestricted();
+
+        case "nemotron-4-340b-instruct":
+            return getNVIDIA(modelId, baseURL, apiKey);
 
         default:
             return getOpenAI(modelId, apiKey);

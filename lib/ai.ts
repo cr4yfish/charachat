@@ -76,5 +76,9 @@ export const LLMs = [
     {
         "key": "llama-3_2-3b-instruct-uncensored",
         "name": "Llama3.2 Unrestricted"
+    },
+    {
+        "key": "nemotron-4-340b-instruct",
+        "name": "Nemotron 4 340b"
     }
 ]
