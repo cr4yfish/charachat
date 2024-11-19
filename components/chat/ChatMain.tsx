@@ -5,7 +5,7 @@ import { Textarea } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import InfiniteScroll from "react-infinite-scroller";
 import { Spacer } from "@nextui-org/spacer";
-
+import { AnimatePresence, motion } from "motion/react";
 
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -39,6 +39,7 @@ export default function ChatMain(props : Props) {
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const [isSetupLoading, setIsSetupLoading] = useState(false);
+    const [isSetupDone, setIsSetupDone] = useState(false);
     const { toast } = useToast();
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
@@ -197,9 +198,12 @@ export default function ChatMain(props : Props) {
                 is_deleted: false,
             }, key);
             
-            setIsSetupLoading(false);
+            
         }
 
+        setIsSetupLoading(false);
+        setIsSetupDone(true);
+        
     }
 
     const loadMoreMessages = async () => {
@@ -364,42 +368,61 @@ export default function ChatMain(props : Props) {
                 <p className="text-slate-400 text-center">Pretty empty here</p>
             </div>   
         )}
-
         
-        <form 
-            onSubmit={handleSubmitAdapter} 
-            className="relative h-[5rem] w-full flex flex-col items-start justify-end px-4 pb-2 gap-2"
-        >
-            
-            {isLoading &&
-                <div className="px-4 py-2 rounded-lg bg-zinc-800/25 backdrop-blur-xl text-xs flex flex-row gap-2 items-center h-fit">
-                    <Spinner size="sm" />
-                    <Avatar src={props.chat.character.image_link} className="w-[20px] h-[20px]" />
-                    <span>{props.chat.character.name} is writing</span>
-                </div>
-            }
+        <AnimatePresence>
+            {isSetupDone &&
+            <motion.form 
+                key="form"
+                layout
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                onSubmit={handleSubmitAdapter} 
+                className="relative h-[5rem] w-full flex flex-col items-center justify-end px-4 pb-8 gap-2 max-md:pb-2"
+            >
+                
+                <AnimatePresence>
+                { isLoading &&
+                    <motion.div 
+                        className="flex justify-start items-center w-full max-w-lg"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                    >
+                        <div className="px-4 py-2 rounded-lg self-start backdrop-blur-xl text-xs flex flex-row gap-2 items-center h-fit dark:text-zinc-400">
+                            <Spinner size="sm" color="default" />
+                            <Avatar src={props.chat.character.image_link} className="w-[20px] h-[20px]" />
+                            <span>{props.chat.character.name} is writing</span>
+                        </div>
+                    </motion.div>
+                }
+                </AnimatePresence>
 
-            <Textarea 
-                placeholder="Send a message" 
-                size="lg" 
-                radius="full" 
-                value={input}
-                ref={inputRef}
-                name="prompt"
-                onChange={handleInputChange}
-                minRows={1}
-                maxRows={15}
-                classNames={{
-                    inputWrapper: "pr-1 bg-content2",
-                    innerWrapper: "flex items-center justify-center",
-                }}
-                endContent={
-                    <Button id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
-                        <Icon filled>send</Icon>
-                    </Button>
-                } 
-            />
-        </form>
+                <Textarea 
+                    placeholder="Send a message" 
+                    size="lg" 
+                    radius="full" 
+                    value={input}
+                    ref={inputRef}
+                    name="prompt"
+                    onChange={handleInputChange}
+                    minRows={1}
+                    maxRows={15}
+                    classNames={{
+                        inputWrapper: "pr-1 bg-content2",
+                        innerWrapper: "flex items-center justify-center",
+                    }}
+                    className=" max-w-lg max-md:max-w-full "
+                    endContent={
+                        <Button isLoading={isLoading} id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
+                            <Icon filled>send</Icon>
+                        </Button>
+                    } 
+                />
+            </motion.form >
+            }
+        </AnimatePresence>
+
         </>
     )
 }
