@@ -82,7 +82,7 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
     }
 
     return data.map((db: any) => {
-        return characterFormatter(data);
+        return characterFormatter(db);
     });
 })
 
