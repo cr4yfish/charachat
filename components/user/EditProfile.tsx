@@ -82,6 +82,7 @@ export default function EditProfile(props: Props) {
             toast({
                 title: "Success",
                 description: "Profile updated successfully",
+                variant: "success"
             })
         } catch (error) {
             console.error(error);

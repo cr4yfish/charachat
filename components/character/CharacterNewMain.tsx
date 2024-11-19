@@ -36,6 +36,7 @@ export default function CharacterNewMain() {
                 toast({
                     title: "Success",
                     description: "Character was created successfully",
+                    variant: "success"
                 })
                 router.replace(`/c/${res.data.id}`)
             }

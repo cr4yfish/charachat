@@ -85,6 +85,7 @@ export default function LoginCard(props: Props) {
                     toast({
                         title: "Success",
                         description: "Logged in successfully",
+                        variant: "success"
                     })
                     router.refresh();
                 }
