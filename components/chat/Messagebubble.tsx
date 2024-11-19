@@ -34,7 +34,7 @@ import Icon from "../utils/Icon";
 type Props = {
     message: AIMessage,
     index: number,
-    chat: Chat,
+    chat: Chat | null,
     addToolResult: ({ toolCallId, result, }: {
         toolCallId: string;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,8 +108,14 @@ export default function Messagebubble(props: Props) {
                     className={`!select-none relative ${isContextMenuOpen && "z-50"}`}
                 >
                     {props.message.role == "assistant" &&  props.showName &&
-                        <div className="pl-3 pb-1">
-                            <span className=" text-sm select-none">{props.chat.character.name}</span>
+                        <div className="pl-3 pb-1 flex flex-row items-center gap-2">
+                            <span className=" text-sm select-none">{props.chat?.character.name}</span>
+                            {props.chat &&
+                                <div className="flex flex-row items-center gap-1 px-2 py-1 border border-zinc-700 w-fit rounded-full text-xs dark:text-zinc-400">
+                                    <Icon downscale filled>auto_awesome</Icon>
+                                    <div className="w-full">{props.chat.llm}</div>
+                                </div>
+                            }
                         </div>
                     }
                     <Card 

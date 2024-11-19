@@ -10,7 +10,7 @@ import { updateChat } from "@/functions/db/chat";
 interface SharedChatContextProps {
     chat: Chat | null;
     setChat: (chat: Chat) => void;
-    syncDb: (chat: Chat) => void;
+    syncDb: (chat: Chat) => Promise<void>;
 }
 
 const SharedChatContext = createContext<SharedChatContextProps | null>(null);
