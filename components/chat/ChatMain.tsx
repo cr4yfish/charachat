@@ -378,7 +378,7 @@ export default function ChatMain(props : Props) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
                 onSubmit={handleSubmitAdapter} 
-                className="relative h-[5rem] w-full flex flex-col items-center justify-end px-4 pb-8 gap-2 max-md:pb-2"
+                className="absolute bottom-0 h-[5rem] w-full flex flex-col items-center justify-end px-4 pb-8 gap-2 max-md:pb-2"
             >
                 
                 <AnimatePresence>
