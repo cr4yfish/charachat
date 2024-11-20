@@ -9,7 +9,8 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
             return profile.ollama_encrypted_api_key;
             
         case "gpt-4o-mini":
-        case "gpt-4o": 
+        case "gpt-4o":
+        case "o1-preview":
             return profile.openai_encrypted_api_key;
         
         case "gemini-1.5-flash":
@@ -45,6 +46,7 @@ export type ModelId =
     "ollama" |
     "gpt-4o-mini" |
     "gpt-4o" |
+    "o1-preview" |
     "gemini-1.5-flash" |
     "open-mistral-nemo" |
     "claude-3-5-sonnet-latest" |

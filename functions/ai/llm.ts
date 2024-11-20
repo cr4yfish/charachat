@@ -125,6 +125,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
         case "gpt-4o-mini":
         case "gpt-4o":   
+        case "o1-preview":
             return getOpenAI(modelId, apiKey);
         
         case "gemini-1.5-flash":
