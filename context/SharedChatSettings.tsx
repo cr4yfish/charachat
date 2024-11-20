@@ -21,7 +21,6 @@ export const SharedChatProvider = ({ children } : { children: ReactNode }) => {
 
     const syncDb = async (chat: Chat) => {
         try {
-            console.log("Updating chat:", chat)
             await updateChat(chat);
         } catch (error) {
             console.error(error);
