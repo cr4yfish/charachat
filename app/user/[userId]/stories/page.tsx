@@ -2,7 +2,6 @@
 
 import StoryCard from "@/components/story/StoryCard";
 import { getStories } from "@/functions/db/stories";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import InfiniteListLoader from "@/components/InfiniteListLoader";
 
 export default async function UserStories({ params: {  } } : { params: { userId: string } }) {
