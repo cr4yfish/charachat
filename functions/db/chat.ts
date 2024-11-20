@@ -62,11 +62,12 @@ export const getCharacterChats = cache(async (characterId: string): Promise<Chat
     });
 })
 
-export const getChats = cache(async (): Promise<Chat[]> => {
+export const getChats = cache(async (cursor: number, limit: number): Promise<Chat[]> => {
     const { data, error } = await createClient()
         .from("chats")
         .select(chatMatcher)
         .order("last_message_at", { ascending: false })
+        .range(cursor, cursor + limit)
     
     if (error) {
         throw error;

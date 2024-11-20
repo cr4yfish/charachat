@@ -118,7 +118,7 @@ export default function NewStoryMain(props: Props) {
     return (
         <>
 
-        <CharacterCard fullWidth hasLink={false} character={props.character} />
+        <CharacterCard fullWidth hasLink={false} data={props.character} />
                 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <h2 className="text-lg font-bold">Story Details</h2>

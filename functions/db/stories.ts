@@ -71,10 +71,12 @@ export const getCharacterStories = cache(async (characterId: string): Promise<St
     });
 })
 
-export const getStories = cache(async (): Promise<Story[]> => {
+export const getStories = cache(async (cursor: number, limit: number): Promise<Story[]> => {
     const { data, error } = await createClient()
         .from("stories")
         .select(storyMatcher)
+        .order("created_at", { ascending: false })
+        .range(cursor, cursor + limit - 1);
 
     if (error) {
         throw error;

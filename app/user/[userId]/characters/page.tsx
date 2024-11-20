@@ -7,18 +7,18 @@ import Icon from "@/components/utils/Icon";
 
 import { getUserCharacters } from "@/functions/db/character";
 import CharacterCard from "@/components/character/CharacterCard";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import InfiniteListLoader from "@/components/InfiniteListLoader";
 
-export default async function UserCharacters({ params: { userId } } : { params: { userId: string } }) {
+export default async function UserCharacters() {
 
-    const characters = await getUserCharacters(userId);
+    const characters = await getUserCharacters(0, 5);
 
     return (
         <>
         <div className="flex flex-col gap-4 px-4 py-6 h-full w-full pb-20">
             <div className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <h1 className="text-4xl font-bold">Your Characters</h1>
+                    <h1 className="text-2xl font-bold">Your Characters</h1>
                 </div>
                 
                 <Link href={"/c/new"}>
@@ -30,13 +30,14 @@ export default async function UserCharacters({ params: { userId } } : { params: 
                 
             </div>
 
-            <ScrollShadow className="overflow-y-auto max-h-full pb-20">
-                <div className="flex flex-col gap-2 w-full h-fit relative">
-                    {characters.map((character) => (
-                        <CharacterCard fullWidth hasLink key={character.id} character={character} />   
-                    ))}
-                </div>
-            </ScrollShadow>
+            <InfiniteListLoader 
+                initialData={characters}
+                limit={5}
+                loadMore={getUserCharacters}
+                component={CharacterCard}
+                componentProps={{ fullWidth: true, hasLink: true }}
+            />
+
          
         </div>
         </>

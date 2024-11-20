@@ -41,11 +41,12 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
     return characterFormatter(data);
 })
 
-export const getCharacters = cache(async (): Promise<Character[]> => {
+export const getCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from("characters")
         .select(characterMatcher)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(cursor, cursor + limit - 1);
         
     if (error) {
         throw error;
@@ -56,11 +57,13 @@ export const getCharacters = cache(async (): Promise<Character[]> => {
     });
 })
 
-export const getCharactersByCategory = cache(async (categoryId: string): Promise<Character[]> => {
+export const getCharactersByCategory = cache(async (categoryId: string, cursor: number, limit: number): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from("characters")
         .select(characterMatcher)
-        .eq("category", categoryId);
+        .eq("category", categoryId)
+        .order("created_at", { ascending: false })
+        .range(cursor, cursor + limit - 1);
 
     if (error) {
         throw error;
@@ -86,11 +89,19 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
     });
 })
 
-export const getUserCharacters = cache(async (userId: string): Promise<Character[]> => {
+export const getUserCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
+    const { data: { user }} = await createClient().auth.getUser();
+
+    if(!user?.id) {
+        throw new Error("User not found");
+    }
+
     const { data, error } = await createClient()
         .from("characters")
         .select(characterMatcher)
-        .eq("owner", userId);
+        .eq("owner", user.id)
+        .order("created_at", { ascending: false })
+        .range(cursor, cursor + limit - 1);
 
     if (error) {
         throw error;

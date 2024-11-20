@@ -4,22 +4,23 @@ import CharacterCard from "@/components/character/CharacterCard";
 import { getCharacters } from "@/functions/db/character";
 import { Character } from "@/types/db";
 import { redirect } from "next/navigation";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 import { getStories } from "@/functions/db/stories";
 import StoryCard from "@/components/story/StoryCard";
 import Searchbar from "@/components/Searchbar";
 import CategoryScroller from "@/components/CategoryScroller";
 import { getCategories } from "@/functions/db/categories";
+import InfiniteSwiperLoader from "@/components/InfiniteSwiperLoder";
+import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 
 export default async function Home() {
 
   let characters: Character[] = [];
-  const stories = await getStories();
-  const categories = await getCategories();
+  const stories = await getStories(0, 5);
+  const categories = await getCategories(0, 5);
 
   try {
-    characters = await getCharacters();
+    characters = await getCharacters(0, 5);
   } catch (error) {
     console.error(error);
     redirect("/error");
@@ -33,39 +34,46 @@ export default async function Home() {
 
         <div className="flex flex-col gap-2 w-full relative">
           <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
-          <ScrollShadow orientation={"horizontal"} className="overflow-x-auto w-full">
-            <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-              {characters.map((character) => (
-                <CharacterCard hasLink key={character.id} character={character} />
-              ))}
-            </div>
-          </ScrollShadow>
+          <InfiniteSwiperLoader 
+            loadMore={getCharacters} 
+            limit={5} 
+            initialData={characters} 
+            component={CharacterCard}
+            componentProps={{
+              hasLink: true,
+            }}
+          />
         </div>
 
         <div className="flex flex-col gap-2">
           <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
-          <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
-            <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-              {stories.map((story) => (
-                <StoryCard key={story.id} story={story} hasLink />
-              ))}
-            </div>
-          </ScrollShadow>
+          <InfiniteSwiperLoader 
+            loadMore={getStories}
+            limit={5}
+            initialData={stories}
+            component={StoryCard}
+            componentProps={{
+              hasLink: true,
+            }}
+          />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <h2 className="dark:prose-invert text-xl font-bold">New Characters</h2>
-          <ScrollShadow orientation={"horizontal"} className="overflow-x-auto">
-            <div className="w-fit flex flex-row gap-4 pr-10 pb-4">
-              {characters.map((character) => (
-                <CharacterCard hasLink key={character.id} character={character} />
-              ))}
-            </div>
-          </ScrollShadow>
+        <div className="flex flex-col gap-2 w-full relative">
+          <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
+          <InfiniteSwiperLoader 
+            loadMore={getCharacters} 
+            limit={5} 
+            initialData={characters} 
+            component={CharacterCard}
+            componentProps={{
+              hasLink: true,
+            }}
+          />
         </div>
 
-        <CategoryScroller categories={categories} />
-
+        <CurrentCategoryProvider>
+          <CategoryScroller categories={categories} />
+        </CurrentCategoryProvider>
 
       </div>
     </div>

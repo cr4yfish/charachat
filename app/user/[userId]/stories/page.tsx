@@ -3,10 +3,11 @@
 import StoryCard from "@/components/story/StoryCard";
 import { getStories } from "@/functions/db/stories";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import InfiniteListLoader from "@/components/InfiniteListLoader";
 
 export default async function UserStories({ params: {  } } : { params: { userId: string } }) {
 
-    const stories = await getStories();
+    const stories = await getStories(0, 5);
 
     return (
         <>
@@ -19,19 +20,17 @@ export default async function UserStories({ params: {  } } : { params: { userId:
 
             </div>
             
+            <InfiniteListLoader
+                loadMore={getStories}
+                limit={5}
+                initialData={stories}
+                component={StoryCard}
+                componentProps={{
+                    hasLink: true,
+                    fullWidth: true,
+                }}
+            />
 
-            <ScrollShadow className="overflow-y-auto max-h-full pb-20">
-                <div className="flex flex-col gap-2 h-fit relative">
-                    {stories.map((story) => (
-                        <StoryCard fullWidth hasLink key={story.id} story={story} />
-                    ))}
-                    {stories?.length == 0 && (
-                        <div className="text-center text-lg font-bold text-slate-400">
-                            You have no stories yet.
-                        </div>
-                    )}
-                </div>
-            </ScrollShadow>
         </div>
         </>
     )

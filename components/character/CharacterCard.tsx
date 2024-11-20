@@ -9,7 +9,7 @@ import ConditionalLink from "../utils/ConditionalLink";
 import { truncateText } from "@/lib/utils";
 
 type Props = {
-    character: Character,
+    data: Character,
     hasLink: boolean,
     fullWidth?: boolean,
     isSmall?: boolean,
@@ -17,10 +17,14 @@ type Props = {
 }
 
 export default function CharacterCard(props: Props) {
+    
+    if(!props.data?.id) {
+        return null;
+    } 
 
     return (
         <>
-        <ConditionalLink active={props.hasLink} href={`/c/${props.character.id}`}>
+        <ConditionalLink active={props.hasLink} href={`/c/${props.data.id}`}>
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -38,7 +42,7 @@ export default function CharacterCard(props: Props) {
                         
                         <div className="flex items-center justify-center">
                             <div className="relative h-[100%] w-[100px] overflow-hidden rounded-2xl">
-                                <Image className="relative object-cover" layout="fill" src={props.character.image_link ?? ""} alt={props.character.name} />
+                                <Image className="relative object-cover" layout="fill" src={props.data.image_link ?? ""} alt={props.data.name} />
                             </div>
                         </div>
 
@@ -46,12 +50,12 @@ export default function CharacterCard(props: Props) {
                             <div className="flex flex-col gap-2">
                                 <div className="flex flex-col">
                                     <div className="flex flex-col">
-                                        <h3 className="font-medium">{truncateText(props.character.name,40)}</h3>
+                                        <h3 className="font-medium">{truncateText(props.data.name,40)}</h3>
                                         
                                     </div>
-                                    <p className=" text-xs dark:text-zinc-400">By @{props.character.owner?.username}</p>
+                                    <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
                                 </div>
-                                <p className="text-xs">{truncateText(props.character.description,40)}</p> 
+                                <p className="text-xs">{truncateText(props.data.description,40)}</p> 
                             </div>
                             {!props.isSmall &&
                             <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
@@ -61,7 +65,7 @@ export default function CharacterCard(props: Props) {
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <Icon downscale filled>account_circle</Icon>
-                                    {props.character.owner?.username}
+                                    {props.data.owner?.username}
                                 </span>
                             </div>}
                         </div>

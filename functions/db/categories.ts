@@ -19,10 +19,12 @@ export const searchCategories = cache(async (search: string): Promise<Category[]
     return data;
 })
 
-export const getCategories = cache(async (): Promise<Category[]> => {
+export const getCategories = cache(async (cursor: number, limit: number): Promise<Category[]> => {
     const { data, error } = await createClient()
         .from("categories")
-        .select("*");
+        .select("*")
+        .order("created_at", { ascending: true })
+        .range(cursor, cursor + limit - 1);
 
     if (error) {
         throw error;

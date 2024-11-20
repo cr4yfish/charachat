@@ -19,13 +19,14 @@ import SidebarLink from "./SidebarLink";
 import LoginButton from "./auth/LoginButton";
 import Logo from "./Logo";
 import Link from "next/link";
+import InfiniteListLoader from "./InfiniteListLoader";
 
 
 export async function LeftSidebar() {
   let chats: Chat[] = [];
   let profile: Profile | undefined = undefined;
   try {
-    chats = await getChats();
+    chats = await getChats(0, 15);
     profile = await getCurrentUser();
   } catch (e) {
     const err = e as Error;
@@ -61,17 +62,13 @@ export async function LeftSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">Recent Chats</SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="flex flex-col gap-1">
-              {chats.slice(0,5).map((chat) => (
-                <ChatCardSmall hasLink key={chat.id} chat={chat} />
-              ))}
-            
-              {chats?.length == 0 && (
-                <div className=" w-full flex items-center justify-center pt-5">
-                  <p className="text-sm dark:text-zinc-400">No chats yet</p>
-                </div>
-              )}
-            </div>
+            <InfiniteListLoader 
+              initialData={chats}
+              loadMore={getChats}
+              limit={5}
+              component={ChatCardSmall}
+              componentProps={{hasLink: true}}
+            />
           </SidebarGroupContent>
         </SidebarGroup>
         }

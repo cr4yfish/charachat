@@ -1,14 +1,14 @@
 "use server";
 
 import ChatCardSmall from "@/components/chat/ChatCardSmall";
+import InfiniteListLoader from "@/components/InfiniteListLoader";
 import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
 import { getChats } from "@/functions/db/chat";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 export default async function UserChats({ params: {  } } : { params: { userId: string } }) {
 
-    const chats = await getChats();
+    const chats = await getChats(0, 15);
 
     return (
         <>
@@ -20,14 +20,15 @@ export default async function UserChats({ params: {  } } : { params: { userId: s
                 
                 <Button isIconOnly variant="light" color="warning"><Icon>add</Icon></Button>
             </div>
-            
-            <ScrollShadow className="max-h-full overflow-y-auto relative pb-20">
-                <div className="flex flex-col gap-2 h-fit relative">
-                    {chats.map((chat) => (
-                        <ChatCardSmall hasLink key={chat.id} chat={chat} />
-                    ))}
-                </div>
-            </ScrollShadow>
+
+            <InfiniteListLoader 
+                initialData={chats}
+                loadMore={getChats}
+                limit={5}
+                component={ChatCardSmall}
+                componentProps={{ hasLink: true }}
+            />
+      
         </div>
         </>
     )

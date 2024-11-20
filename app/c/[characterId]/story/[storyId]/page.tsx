@@ -38,7 +38,7 @@ export default async function Story({ params: { storyId, characterId } }: { para
 
                 <h1 className="font-bold text-2xl">{story.title}</h1>
                 
-                <CharacterCard fullWidth character={story.character} hasLink />
+                <CharacterCard fullWidth data={story.character} hasLink />
 
                 <div className="relative w-full flex gap-2 items-center justify-center py-4">
                     <StartStoryButton story={story} profile={profile} />

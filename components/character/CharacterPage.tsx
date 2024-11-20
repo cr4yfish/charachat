@@ -107,7 +107,7 @@ export default function CharacterPage(props: Props) {
                         <p>{props.character.description}</p>
                     </div>
 
-                    <CategoryCard category={props.character.category} />
+                    <CategoryCard data={props.character.category} />
                 
                 </div>
 
@@ -141,7 +141,7 @@ export default function CharacterPage(props: Props) {
                             
                             <div className="flex flex-col gap-2">
                                 {props.stories.map((story: Story) => (
-                                    <StoryCard key={story.id} story={story} hasLink fullWidth />
+                                    <StoryCard key={story.id} data={story} hasLink fullWidth />
                                 ))}
 
                                 {props.stories.length == 0 && <p className="text-sm dark:text-neutral-400">No stories found. Want to make the first?</p>}
