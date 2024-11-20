@@ -25,7 +25,7 @@ export default function Spotlight(props: Props) {
                     <CardTitle className="text-4xl font-bold">Spotlight</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <CharacterCard data={props.character} hasLink noBg />
+                    <CharacterCard data={props.character} hasLink noBg fullWidth />
 
                     <Image className=" object-cover -z-10 opacity-25" src={props.character.image_link ?? ""} layout="fill" alt="" />
                 </CardContent>
