@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "ai/react";
-
+import { useToast } from "@/hooks/use-toast";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 type Props = {
     profile: Profile;
-    story: Story;
+    story?: Story;
     character: Character;
     setValue: (desc: string) => void;
     initValue?: string;
@@ -29,6 +29,7 @@ type Props = {
 }
 
 export default function StoryInputWithAI(props: Props) {
+    const { toast } = useToast();
     const [localValue, setLocalValue] = useState(props.initValue || "");
     const { messages, isLoading, reload } = useChat({
         api: props.api,
@@ -46,7 +47,16 @@ export default function StoryInputWithAI(props: Props) {
         },
         onFinish: (message) => {
             props.setValue(message.content);
-        }
+        },
+        onError(error) {
+            console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive"
+            })
+        },
     });
 
 
