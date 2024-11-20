@@ -40,6 +40,7 @@ export default function ChatMain(props : Props) {
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const [isSetupLoading, setIsSetupLoading] = useState(false);
     const [isSetupDone, setIsSetupDone] = useState(false);
+    const [isInputFocused, setIsInputFocused] = useState(false);
     const { toast } = useToast();
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
@@ -150,17 +151,25 @@ export default function ChatMain(props : Props) {
                 if(inputRef.current) {
                     inputRef.current.focus();
                 }
+            } else {
+                setIsInputFocused(false);
             }
+        }
+
+        const handleFocus = () => {
+            setIsInputFocused(true);
         }
 
         // add event listener to focus
         if(inputRef.current) {
             inputRef.current.addEventListener("blur", handleBlur);
+            inputRef.current.addEventListener("focus", handleFocus);
         }
 
         return () => {
             if(inputRef.current) {
-                inputRef.current.removeEventListener("blur", handleBlur);;
+                inputRef.current.removeEventListener("blur", handleBlur);
+                inputRef.current.removeEventListener("focus", handleFocus);
             }
         }
     }, [inputRef.current])
@@ -284,7 +293,7 @@ export default function ChatMain(props : Props) {
                 loader={isMessagesLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
-                className="flex flex-col gap-2 pb-5 pt-28 px-4 h-fit min-h-full w-full"
+                className="flex flex-col gap-2 pb-32 pt-28 px-4 h-fit min-h-full w-full"
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
@@ -403,7 +412,7 @@ export default function ChatMain(props : Props) {
                     </motion.div>
                 }
                 </AnimatePresence>
-
+                
                 <Textarea 
                     placeholder="Send a message" 
                     size="lg" 
@@ -415,10 +424,10 @@ export default function ChatMain(props : Props) {
                     minRows={1}
                     maxRows={15}
                     classNames={{
-                        inputWrapper: "pr-1 bg-content2",
+                        inputWrapper: "pr-1 bg-content2/50 backdrop-blur-xl",
                         innerWrapper: "flex items-center justify-center",
                     }}
-                    className=" max-w-lg max-md:max-w-full "
+                    className={`max-w-xs max-md:max-w-xs transition-all ${isInputFocused && "max-w-lg max-md:max-w-full"} `}
                     endContent={
                         <Button isLoading={isLoading} id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
                             <Icon filled>send</Icon>
