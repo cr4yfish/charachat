@@ -12,6 +12,7 @@ import CategoryScroller from "@/components/CategoryScroller";
 import { getCategories } from "@/functions/db/categories";
 import InfiniteSwiperLoader from "@/components/InfiniteSwiperLoder";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
+import Spotlight from "@/components/Spotlight";
 
 export default async function Home() {
 
@@ -27,10 +28,12 @@ export default async function Home() {
   }
 
   return (
-    <div className="max-h-full w-full overflow-y-auto pb-20">
-      <div className="flex flex-col gap-4 px-4 py-6 h-fit">
+    <div className="flex justify-center max-2xl:block max-h-full w-full overflow-y-auto pb-20">
+      <div className="flex flex-col gap-4 px-4 py-6 h-fit max-w-[1300px]">
 
         <Searchbar />
+
+        <Spotlight character={characters[0]} />
 
         <div className="flex flex-col gap-2 w-full relative">
           <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
