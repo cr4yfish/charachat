@@ -50,7 +50,7 @@ export default function StoryCard(props: Props) {
                             <h3 className="text-sm">{truncateText(props.data.title,50)}</h3>
                             <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)}</span>
                        
-                            {props.data.chats && props.data.likes &&
+                            {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
                             <div className="flex flex-row items-center gap-2">
                                 <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
                                     <Icon downscale>chat_bubble</Icon>

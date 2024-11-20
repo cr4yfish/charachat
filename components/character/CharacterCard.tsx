@@ -59,7 +59,7 @@ export default function CharacterCard(props: Props) {
                                 <p className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</p> 
                             </div>
 
-                           {props.data.chats && props.data.likes &&
+                           {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
                             <div className="flex flex-row items-center gap-2">
                                 <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
                                     <Icon downscale>chat_bubble</Icon>
@@ -70,7 +70,7 @@ export default function CharacterCard(props: Props) {
                                     <span>{props.data.likes}</span>
                                 </div>
                             </div>
-                            }   
+                            } 
                         </div>
                     </CardBody>
                 </Card>
