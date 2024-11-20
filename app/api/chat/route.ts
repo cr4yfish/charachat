@@ -71,7 +71,7 @@ export async function POST(req: Request) {
                 You are ${chat.character.name}, ${chat.character.description}, ${chat.character.bio}.
                 Your are chatting with ${profile.first_name} ${profile.last_name} with bio: ${profile.bio}.
 
-                Your responses have to be in character.
+                Your responses have to be in character. Be as authentic as possible. You respond in short messages, how a human would respond in a chat.
                 Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
                 Always stay in character no matter what the user says.
             
