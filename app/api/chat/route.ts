@@ -93,8 +93,7 @@ export async function POST(req: Request) {
                 ${chat.dynamic_book}
 
             `,
-            messages: convertToCoreMessages(messages),
-            temperature: 0.7,
+            messages: convertToCoreMessages(messages)
         });
     
         return result.toDataStreamResponse();
