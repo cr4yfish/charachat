@@ -32,7 +32,7 @@ const SearchResult = (props: SearchResultProps) => {
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex flex-col">
                         <span className="font-medium">{props.title}</span>
-                        <span className="text-xs dark:text-zinc-400">{truncateText(props.description, 30)}</span>
+                        <span className="text-xs dark:text-zinc-400">{truncateText(props.description, 50)}</span>
                     </div>
                     <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
                     <span className="flex items-center gap-1">
@@ -113,6 +113,9 @@ export default function Searchbar() {
                     isClearable
                     value={search}
                     onValueChange={setSearch}
+                    classNames={{
+                        inputWrapper: "dark:bg-zinc-800/30"
+                    }}
                 />
                 
                 <AnimatePresence>
