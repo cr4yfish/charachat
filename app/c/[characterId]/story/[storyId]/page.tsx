@@ -34,6 +34,10 @@ export default async function Story({ params: { storyId, characterId } }: { para
                 <Image src={story.image_link} layout="fill" className="object-cover" alt={story.title} />
             </div>
             
+            <div className="absolute -z-20 left-0 w-full h-full blur-3xl opacity-50">
+                <Image src={story.image_link} layout="fill" className="object-cover" alt={story.title} />
+            </div>
+
             <div className="flex flex-col gap-2 pt-[45vh]">
 
                 <h1 className="font-bold text-2xl">{story.title}</h1>
