@@ -107,7 +107,7 @@ export default function CategoryScroller(props: Props) {
     return (
         <>
         <div className="flex flex-col gap-2 w-full relative">
-            <h2 className="dark:prose-invert text-xl font-bold">Categories</h2>
+            <h2 className="dark:prose-invert text-lg font-bold">Categories</h2>
         
             <InfiniteSwiperLoader 
                 loadMore={getCategories}
