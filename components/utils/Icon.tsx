@@ -11,7 +11,7 @@ export default function Icon(
                 "material-symbols-rounded prose dark:prose-invert text-tiny" 
                 + (color ? ` text-${color}` : "") 
                 + (filled ? " material-symbols-filled " : "") 
-                + (upscale ? "scale-125" : "") + (downscale ? "scale-75" : "")
+                + (upscale ? " scale-125" : "") + (downscale ? " scale-75" : "")
             }
         >
             {children}
