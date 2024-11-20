@@ -69,8 +69,8 @@ export type Story = {
     image_link: string;
     story: string;
     first_message: string;
-    chats: number;
-    likes: number;
+    chats?: number;
+    likes?: number;
 }
 
 export type Message = {
