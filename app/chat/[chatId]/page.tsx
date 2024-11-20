@@ -50,7 +50,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
 
     if (!chat) {
         return (
-        <div className="px-4 py-6 flex flex-col items-center justify-between h-full">
+        <div className="px-4 py-6 flex flex-col items-center justify-between h-full overflow-y-auto">
             <div className="flex flex-col prose dark:prose-invert prose-h2:mt-3 prose-h2:mb-2">
                 <h1>Error: Didnt find a Chat with this id!</h1>
                 <div className="flex flex-col m-0 mb-2">
