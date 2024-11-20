@@ -21,12 +21,20 @@ export async function generateMetadata(
     { params: { chatId } } : { params: { chatId: string } }
 ) : Promise<Metadata> {
     
-    const chat = await getChat(chatId);
+    try {
+        const chat = await getChat(chatId);
 
-    return {
-        title: `Chat with ${chat.character.name} - Charachat`,
+        return {
+            title: `Chat with ${chat.character.name} - Charachat`,
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return {
+            title: `Chat - Charachat`,
+        }   
     }
-    
+
 }
 
 export default async function Chat({ params: { chatId } } : { params: { chatId: string } }) {
