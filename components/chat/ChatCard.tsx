@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardBody } from "@nextui-org/card";
 
 import { Chat } from "@/types/db";
 import { Button } from "../utils/Button";
@@ -12,15 +12,17 @@ import TextareaWithCounter from "../utils/TextareaWithCounter";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
 import { Input } from "@nextui-org/input";
+import { Avatar } from "@nextui-org/avatar";
+import { Switch } from "@nextui-org/switch";
 
 
 type Props = {
-    chat: Chat;
+    data: Chat;
     setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
 export default function ChatCard(props: Props) {
-    const [chat, setChat] = useState(props.chat);
+    const [chat, setChat] = useState(props.data);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,8 +32,8 @@ export default function ChatCard(props: Props) {
     const handleDeleteChat = async () => {
         setIsDeleting(true);
         try {
-            await deleteChat(props.chat.id);
-            if(props.setChats) props.setChats((prev) => prev.filter((chat) => chat.id !== props.chat.id));
+            await deleteChat(props.data.id);
+            if(props.setChats) props.setChats((prev) => prev.filter((chat) => chat.id !== props.data.id));
         } catch (error) {
             console.error(error);
         }
@@ -51,26 +53,34 @@ export default function ChatCard(props: Props) {
     return (
         <>
        
-        <Card>
-            <CardBody className="flex flex-row gap-2 items-center justify-between">
+        <Card 
+            className={`
+                w-full bg-transparent 
+                hover:bg-zinc-800
+            `}
+        >
+            <CardBody className="flex flex-row gap-2 items-center justify-start w-full">
+                
+                <Avatar src={chat.character.image_link} />
+                
+                <div className="flex flex-row gap-2 items-center justify-between w-full">
+                    <div className="flex flex-col">
+                        <h3 className="font-bold text-lg">{chat.title}</h3>
+                        <p className="dark:text-zinc-400">{chat.description}</p>
+                        <p className="dark:text-zinc-400 text-xs">Last message on {new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>
+                    </div>
 
-                <div className="flex flex-col">
-                    <h3 className="font-bold text-lg">{props.chat.title}</h3>
-                    <p className="dark:text-slate-400">{props.chat.description}</p>
+                    <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsModalOpen(true)} variant="light" color="warning" isIconOnly><Icon>edit</Icon></Button>
+                        <Link key={props.data.id} href={`/chat/${props.data.id}`}>
+                            <Button variant="flat" color="primary" size="lg"><Icon filled>play_circle</Icon>Chat</Button>
+                        </Link>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Button onClick={() => setIsModalOpen(true)} variant="light" color="warning" isIconOnly><Icon>edit</Icon></Button>
-                    <Link key={props.chat.id} href={`/chat/${props.chat.id}`}>
-                        <Button variant="flat" color="primary" size="lg"><Icon filled>play_circle</Icon>Chat</Button>
-                    </Link>
-                </div>
         
             </CardBody>
 
-            <CardFooter>
-                <p className="dark:text-slate-400">Last message on {new Date((props.chat.last_message_at ?? "")).toLocaleDateString()}</p>
-            </CardFooter>
         </Card>
     
         <BlurModal 
@@ -97,25 +107,29 @@ export default function ChatCard(props: Props) {
                         maxLength={80}
                     />
                     <Input type="password" label="Chat password" description="(Optional) Used to encrypt the chat" isDisabled />
+                    <Switch isDisabled>Local only</Switch>
                 </div>
             }
             footer={
-                <>
+                <>  
+                <div>
                     <SaveDeleteButton 
                         onDelete={handleDeleteChat} 
                         isLoading={isDeleting} 
                         isDisabled={isSaving}
                     />
-                    
-                    <Button 
-                        onClick={handleEditChat} 
-                        color="primary" 
-                        size="lg" 
-                        isLoading={isSaving}
-                        startContent={<Icon filled>save</Icon>}
-                    >
-                        Save
-                    </Button>
+                </div>  
+
+                <Button 
+                    onClick={handleEditChat} 
+                    color="primary" 
+                    size="lg" 
+                    fullWidth
+                    isLoading={isSaving}
+                    startContent={<Icon filled>save</Icon>}
+                >
+                    Save
+                </Button>
                 </>
             }
         />
