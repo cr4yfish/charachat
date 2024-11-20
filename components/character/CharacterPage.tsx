@@ -15,6 +15,7 @@ import Icon from "@/components/utils/Icon";
 import { Character } from "@/types/db";
 import { createChat } from "@/functions/db/chat";
 import CategoryCard from "./CategoryCard";
+import Image from "next/image";
 
 type Props = {
     character: Character,
@@ -58,7 +59,11 @@ export default function CharacterPage(props: Props) {
 
     return (
         <>
-        <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6">
+        <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden">
+
+            <div className=" -z-10 absolute top-0 left-0 w-full h-full blur-3xl opacity-75 overflow-hidden">
+                <Image src={props.character.image_link ?? ""} layout="fill" className="object-cover" alt="" />
+            </div>
 
             <div className="flex flex-row max-md:flex-col gap-6 items-center justify-center w-full">
 
