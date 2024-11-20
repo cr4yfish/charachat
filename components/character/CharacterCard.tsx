@@ -55,7 +55,7 @@ export default function CharacterCard(props: Props) {
                                     </div>
                                     <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
                                 </div>
-                                <p className="text-xs">{truncateText(props.data.description,40)}</p> 
+                                <p className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 140 : 40)}</p> 
                             </div>
                         </div>
                     </CardBody>
