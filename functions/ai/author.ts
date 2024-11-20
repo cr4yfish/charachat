@@ -4,8 +4,9 @@ import { Profile } from "@/types/db";
 import { cookies } from "next/headers";
 
 import { getLanguageModel } from "./llm";
-import { getProfileAPIKey, ModelId } from "@/lib/ai";
+import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from "@/lib/ai";
 import { decryptMessage } from "@/lib/crypto";
+import { getUserTier } from "../db/profiles";
 
 type AuthorProps = {
     profile: Profile,
@@ -25,13 +26,20 @@ export async function author({ profile, systemText, prompt }: AuthorProps) {
         throw new Error("No key cookie");
     }
 
+    let decryptedAPIKey: string | undefined = undefined;
     const encryptedAPIKey = getProfileAPIKey(profile.default_llm as ModelId, profile);
-    if(!encryptedAPIKey) {
+    if(!encryptedAPIKey && !isFreeModel(profile.default_llm as ModelId)) {
         throw new Error("No API key found");
+    } else if(encryptedAPIKey) {
+        decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
     }
 
-    const decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
-
+    if(isPaidModel(profile.default_llm as ModelId)) {
+        // check if user has access to this model
+        const tier = await getUserTier(profile.user);
+        if(tier !== 1) { throw new Error("You do not have access to this model"); }
+    }
+  
     const result = await streamText({
         system: systemText,
         prompt: prompt,
