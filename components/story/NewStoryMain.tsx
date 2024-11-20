@@ -91,6 +91,7 @@ export default function NewStoryMain(props: Props) {
             console.error(error);
             setIsSaved(false);
         }
+        setIsSaving(false);
     }
 
     const handleDelete = async () => {
