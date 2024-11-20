@@ -1,11 +1,8 @@
 "use server";
 
 import StoryCard from "@/components/story/StoryCard";
-import { Button } from "@/components/utils/Button";
-import Icon from "@/components/utils/Icon";
 import { getStories } from "@/functions/db/stories";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
-import Link from "next/link";
 
 export default async function UserStories({ params: {  } } : { params: { userId: string } }) {
 
@@ -15,13 +12,11 @@ export default async function UserStories({ params: {  } } : { params: { userId:
         <>
         <div className="flex flex-col gap-4 px-4 py-6 pb-20 h-full w-full">
             <div className="flex flex-row items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col items-start gap-2">
                     <h1 className="text-4xl font-bold">Your Stories</h1>
+                    <p>You can add new ones on Character pages</p>
                 </div>
-                
-                <Link href={"/story/new"}>
-                    <Button isIconOnly variant="light" color="warning"><Icon>add</Icon></Button>
-                </Link>
+
             </div>
             
 
