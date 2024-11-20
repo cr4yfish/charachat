@@ -132,6 +132,12 @@ export default function ChatMain(props : Props) {
     }, [props.chat])
 
     useEffect(() => {
+        if(props.initMessages.length > 0) {
+            setIsSetupDone(true);
+        }
+    }, [props.initMessages])
+
+    useEffect(() => {
         if(isLoading && messages.length > 0) {
             scrollToBottom();
         }
