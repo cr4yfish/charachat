@@ -1,147 +1,75 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
-import { Switch } from "@nextui-org/switch";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-
-import TextareaWithCounter from "../utils/TextareaWithCounter";
-import CategoryAutocomplete from "./CategoryAutocomplete";
-import { useState } from "react";
-import { saveCharacter } from "@/app/c/new/actions";
+import { AnimatePresence, motion } from "motion/react";
 import { Button } from "../utils/Button";
-import { Character } from "@/types/db";
+import { fadeInFromBottom, fadeOutToTop } from "@/lib/animations";
+import { useState } from "react";
+import CharacterNewImport from "./CharacterNewImport";
+import CharacterNew from "./CharacterNew";
+import { Character, Profile } from "@/types/db";
+import Icon from "../utils/Icon";
 
+type Props = {
+    profile: Profile
+}
 
-export default function CharacterNewMain() {
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [isDone, setIsDone] = useState(false);
-    const [newCharacter, setNewCharacter] = useState<Character>({} as Character);
-    const { toast } = useToast();
-    const router = useRouter();
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        setIsLoading(true);
-
-        try {        
-            const res = await saveCharacter(newCharacter);
-
-            if(res.error.length > 1) {
-                throw new Error(res.error)
-            } else if(res.data) {
-                setIsDone(true)
-                toast({
-                    title: "Success",
-                    description: "Character was created successfully",
-                    variant: "success"
-                })
-                router.replace(`/c/${res.data.id}`)
-            }
-
-            
-        } catch(e) {
-            const err = e as Error;
-            console.error(err.message);
-            toast({
-                title: "Error",
-                description: err.message,
-                variant: "destructive"
-            })
-        }
-
-        setIsLoading(false);
-    }
-
-    const updateValue = (name: string, value: string | boolean) => {
-        setNewCharacter({
-            ...newCharacter,
-            [name]: value
-        })
-    }
+export default function CharacterNewMain(props: Props) {
+    
+    // Steps
+    // 0 - Decide
+    // 1 - Import
+    // 2 - Main
+    const [step, setStep] = useState(0);
+    const [initCharacter, setInitCharacter] = useState<Character>({} as Character);
+    
 
     return (
         <>
-        
-        <form className="flex flex-col gap-4 h-full" onSubmit={handleSubmit}>
-            <TextareaWithCounter 
-                name="name" 
-                isRequired
-                label="Character Name"
-                placeholder="Albert Einstein"
-                description="Name of the Character" 
-                maxLength={28}
-                minRows={1}
-                maxRows={1}
-                value={newCharacter.name}
-                onValueChange={(value) => updateValue("name", value)} 
-            />
-            <TextareaWithCounter 
-                name="description" 
-                isRequired
-                label="Character Description"
-                placeholder="Physicist, mathematician, and author"
-                description="Very short description of the Character" 
-                maxLength={50} 
-                value={newCharacter.description}
-                onValueChange={(value) => updateValue("description", value)}
-            />
-            <TextareaWithCounter 
-                name="bio" 
-                isRequired
-                label="Character Bio"
-                placeholder="Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. He was born in 1879 and died in 1955."
-                description="Facts about the character. Who are they? What do they do? Where do they come from?" 
-                maxLength={280} 
-                value={newCharacter.bio}
-                onValueChange={(value) => updateValue("bio", value)}
-            />
-            <Input 
-                name="image_link" 
-                isRequired 
-                label="Image Link" 
-                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                description="Direct link to an image" 
-                value={newCharacter.image_link}
-                onValueChange={(value) => updateValue("image_link", value)}
-            />
-            <TextareaWithCounter 
-                name="intro" 
-                label="Character Intro"
-                isRequired
-                placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
-                description="Introduction of the character. Describe how the character would introduce themselves." 
-                maxLength={280} 
-                value={newCharacter.intro}
-                onValueChange={(value) => updateValue("intro", value)}
-            />
-            <TextareaWithCounter 
-                name="book" 
-                label="Character Book"
-                value={newCharacter.book}
-                onValueChange={(value) => updateValue("book", value)}
-                description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
-                maxLength={1000} 
-            />
-            <CategoryAutocomplete 
-                setCategory={(category) => updateValue("category", category.id)}
-            />
-            <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
-            <div className=" max-w-xs max-md:max-w-full ">
-                <Button
-                    type="submit" 
-                    isLoading={isLoading || isDone}
-                    isDisabled={isDone}
-                    fullWidth
-                    color={isDone ? "success" : "primary"}
-                    size="lg" 
-                >
-                    {isDone ? "Redirecting" : "Save Character"}
-                </Button>
+        <div className="w-full h-full flex flex-col gap-4">
+            <div>
+                {<Button isDisabled={step == 0} onClick={() => setStep(0)} variant="light"><Icon filled>arrow_back</Icon>Back</Button>}
             </div>
-        </form>
+            
+           
+            <AnimatePresence>
+                {step == 0 &&
+                <motion.div layout
+                    {...fadeOutToTop}
+                    className="w-full min-h-full flex flex-col gap-4 items-start max-md:items-center justify-center"
+                >
+                    
+                    <motion.h1 {...fadeInFromBottom} className="text-xl">Would you like to start from scratch or import from a 3rd party?</motion.h1>
+                    <motion.div {...fadeInFromBottom} className="flex items-center max-md:flex-col justify-center gap-4">
+                        <Button 
+                            color="primary" 
+                            onClick={() => setStep(2)}>Start from scratch</Button>
+                        <Button isDisabled color="secondary" onClick={() => setStep(1)}>Import from 3rd party</Button>
+                    </motion.div>
+                
+                </motion.div>
+                }
+
+                {step == 1 && 
+                    <motion.div
+                        
+                        className="w-full min-h-full flex flex-col gap-4 items-start max-md:items-center justify-center"
+                    >
+                        <motion.div {...fadeInFromBottom}><CharacterNewImport character={initCharacter} setCharacter={setInitCharacter} /></motion.div>
+                    </motion.div>
+                }
+
+                 {step == 2 && <CharacterNew initCharacter={initCharacter} profile={props.profile} />}
+
+            </AnimatePresence>
+
+            <AnimatePresence>
+
+            </AnimatePresence>
+
+            <AnimatePresence>
+               
+            </AnimatePresence>
+        </div>
         </>
     )
 }
