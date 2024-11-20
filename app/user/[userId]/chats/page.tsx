@@ -1,6 +1,6 @@
 "use server";
 
-import ChatCardSmall from "@/components/chat/ChatCardSmall";
+import ChatCard from "@/components/chat/ChatCard";
 import InfiniteListLoader from "@/components/InfiniteListLoader";
 import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
@@ -12,8 +12,8 @@ export default async function UserChats({ params: {  } } : { params: { userId: s
 
     return (
         <>
-        <div className="flex flex-col gap-4 px-4 py-6 w-full h-full pb-20">
-            <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col items-center gap-4 px-4 py-6 w-full h-full pb-20">
+            <div className="w-full max-w-xl flex flex-row items-center justify-between">
                 <div className="flex items-center gap-2">
                     <h1 className="text-4xl font-bold">Your chats</h1>
                 </div>
@@ -21,13 +21,15 @@ export default async function UserChats({ params: {  } } : { params: { userId: s
                 <Button isIconOnly variant="light" color="warning"><Icon>add</Icon></Button>
             </div>
 
-            <InfiniteListLoader 
-                initialData={chats}
-                loadMore={getChats}
-                limit={5}
-                component={ChatCardSmall}
-                componentProps={{ hasLink: true }}
-            />
+            <div className="w-full max-w-xl h-full relative">
+                <InfiniteListLoader 
+                    initialData={chats}
+                    loadMore={getChats}
+                    limit={5}
+                    component={ChatCard}
+                    componentProps={{ hasLink: true }}
+                />
+            </div>
       
         </div>
         </>
