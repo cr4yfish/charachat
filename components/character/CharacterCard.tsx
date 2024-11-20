@@ -33,7 +33,7 @@ export default function CharacterCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-[150px] w-[300px dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
+                        h-[150px] w-[300px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"} 
                         ${props.isSmall && "h-full"}
@@ -58,17 +58,6 @@ export default function CharacterCard(props: Props) {
                                 </div>
                                 <p className="text-xs">{truncateText(props.data.description,40)}</p> 
                             </div>
-                            {!props.isSmall &&
-                            <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
-                                <span className="flex items-center gap-1">
-                                    <Icon downscale filled>chat_bubble</Icon>
-                                    30.0m
-                                </span>
-                                <span className="flex items-center gap-1">
-                                    <Icon downscale filled>account_circle</Icon>
-                                    {props.data.owner?.username}
-                                </span>
-                            </div>}
                         </div>
                     </CardBody>
                 </Card>
