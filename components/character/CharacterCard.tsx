@@ -6,6 +6,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { Character } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
 import { truncateText } from "@/lib/utils";
+import Icon from "../utils/Icon";
 
 type Props = {
     data: Character,
@@ -55,8 +56,21 @@ export default function CharacterCard(props: Props) {
                                     </div>
                                     <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
                                 </div>
-                                <p className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 140 : 40)}</p> 
+                                <p className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</p> 
                             </div>
+
+                           {props.data.chats && props.data.likes &&
+                            <div className="flex flex-row items-center gap-2">
+                                <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                    <Icon downscale>chat_bubble</Icon>
+                                    <span>{props.data.chats}</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                    <Icon downscale>favorite</Icon>
+                                    <span>{props.data.likes}</span>
+                                </div>
+                            </div>
+                            }   
                         </div>
                     </CardBody>
                 </Card>

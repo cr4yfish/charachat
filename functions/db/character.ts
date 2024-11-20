@@ -12,6 +12,8 @@ const characterMatcher = `
     categories!characters_category_fkey (*)
 `
 
+const characterTableName = "character_overview"
+
 const characterFormatter = (db: any): Character => {
     const owner = db.profiles;
     const category = db.categories;
@@ -28,7 +30,7 @@ const characterFormatter = (db: any): Character => {
 
 export const getCharacter = cache(async (characterId: string): Promise<Character> => {
     const { data, error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .select(characterMatcher)
         .eq("id", characterId)
         .single();
@@ -43,7 +45,7 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
 
 export const getCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
     const { data, error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
         .range(cursor, cursor + limit - 1);
@@ -57,9 +59,25 @@ export const getCharacters = cache(async (cursor: number, limit: number): Promis
     });
 })
 
+export const getPopularCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
+    const { data, error } = await createClient()
+        .from(characterTableName)
+        .select(characterMatcher)
+        .order("chats", { ascending: false })
+        .range(cursor, cursor + limit - 1);
+        
+    if (error) {
+        throw error;
+    }
+
+    return data.map((db: any) => {
+        return characterFormatter(db);
+    });
+})
+
 export const getCharactersByCategory = cache(async (categoryId: string, cursor: number, limit: number): Promise<Character[]> => {
     const { data, error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .select(characterMatcher)
         .eq("category", categoryId)
         .order("created_at", { ascending: false })
@@ -76,7 +94,7 @@ export const getCharactersByCategory = cache(async (categoryId: string, cursor: 
 
 export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
     const { data, error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .select(characterMatcher)
         .or(`name.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
 
@@ -97,7 +115,7 @@ export const getUserCharacters = cache(async (cursor: number, limit: number): Pr
     }
 
     const { data, error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .select(characterMatcher)
         .eq("owner", user.id)
         .order("created_at", { ascending: false })
@@ -114,7 +132,7 @@ export const getUserCharacters = cache(async (cursor: number, limit: number): Pr
 
 export const updateCharacter = async (character: Character): Promise<void> => {
     const { error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .update({
             ...character,
             owner: character.owner.user,
@@ -129,7 +147,7 @@ export const updateCharacter = async (character: Character): Promise<void> => {
 
 export const deleteCharacter = async (characterId: string): Promise<void> => {
     const { error } = await createClient()
-        .from("characters")
+        .from(characterTableName)
         .delete()
         .eq("id", characterId);
 

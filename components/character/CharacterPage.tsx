@@ -99,12 +99,12 @@ export default function CharacterPage(props: Props) {
                         
                         <div className="flex items-center gap-2">
                             <Icon downscale filled>chat_bubble</Icon>
-                            <span>30m Chats</span>
+                            <span>{props.character.chats} Chats</span>
                         </div>
 
                         <div className="flex items-center gap-2">
                             <Icon downscale filled>favorite</Icon>
-                            <span>123k Likes</span>
+                            <span>{props.character.likes} Likes</span>
                         </div>
                     </div>
 

@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { Story } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
 import { truncateText } from "@/lib/utils";
+import Icon from "../utils/Icon";
 
 type Props = {
     data: Story;
@@ -48,8 +49,20 @@ export default function StoryCard(props: Props) {
                         <div className="flex flex-col gap-1 justify-start">
                             <h3 className="text-sm">{truncateText(props.data.title,50)}</h3>
                             <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)}</span>
+                       
+                            {props.data.chats && props.data.likes &&
+                            <div className="flex flex-row items-center gap-2">
+                                <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                    <Icon downscale>chat_bubble</Icon>
+                                    <span>{props.data.chats}</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                    <Icon downscale>favorite</Icon>
+                                    <span>{props.data.likes}</span>
+                                </div>
+                            </div>
+                            }
                         </div>
-
                     </CardBody>
                 </Card>
             </motion.div>

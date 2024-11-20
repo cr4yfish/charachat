@@ -14,6 +14,7 @@ const storyMatcher = `
     ),
     profiles!stories_creator_fkey (*)
 `
+const storyTableName = "stories_overview"
 
 const storyReturnFormat = (db: any): Story => {
     return {
@@ -28,7 +29,7 @@ const storyReturnFormat = (db: any): Story => {
 
 export const getStory = cache(async (storyId: string): Promise<Story> => {
     const { data, error } = await createClient()
-        .from("stories")
+        .from(storyTableName)
         .select(storyMatcher)
         .eq("id", storyId)
         .single();
@@ -43,7 +44,7 @@ export const getStory = cache(async (storyId: string): Promise<Story> => {
 
 export const searchStories = cache(async (search: string): Promise<Story[]> => {
     const { data, error } = await createClient()
-        .from("stories")
+        .from(storyTableName)
         .select(storyMatcher)
         .or(`title.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
 
@@ -58,7 +59,7 @@ export const searchStories = cache(async (search: string): Promise<Story[]> => {
 
 export const getCharacterStories = cache(async (characterId: string): Promise<Story[]> => {
     const { data, error } = await createClient()
-        .from("stories")
+        .from(storyTableName)
         .select(storyMatcher)
         .eq("character", characterId)
 
@@ -73,7 +74,7 @@ export const getCharacterStories = cache(async (characterId: string): Promise<St
 
 export const getStories = cache(async (cursor: number, limit: number): Promise<Story[]> => {
     const { data, error } = await createClient()
-        .from("stories")
+        .from(storyTableName)
         .select(storyMatcher)
         .order("created_at", { ascending: false })
         .range(cursor, cursor + limit - 1);
@@ -100,7 +101,7 @@ type CreateStoryProps = {
 
 export const createStory = async (params : CreateStoryProps): Promise<Story> => {
     const { data, error } = await createClient()
-    .from("stories")
+    .from(storyTableName)
     .upsert({
         id: params.storyId,
         creator: params.userId,
@@ -125,7 +126,7 @@ export const createStory = async (params : CreateStoryProps): Promise<Story> => 
 export const updateStory = async (story: Story): Promise<Story> => {
 
     const { data, error } = await createClient()
-        .from("stories")
+        .from(storyTableName)
         .update({
             title: story.title,
             description: story.description,
@@ -145,7 +146,7 @@ export const updateStory = async (story: Story): Promise<Story> => {
 
 export const deleteStory = async (storyId: string): Promise<void> => {
     const { error } = await createClient()
-        .from("stories")
+        .from(storyTableName)
         .delete()
         .eq("id", storyId);
 
