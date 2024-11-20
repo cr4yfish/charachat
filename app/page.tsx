@@ -1,7 +1,7 @@
 "use server";
 
 import CharacterCard from "@/components/character/CharacterCard";
-import { getCharacters } from "@/functions/db/character";
+import { getCharacters, getPopularCharacters } from "@/functions/db/character";
 import { Character } from "@/types/db";
 import { redirect } from "next/navigation";
 
@@ -17,11 +17,13 @@ import Spotlight from "@/components/Spotlight";
 export default async function Home() {
 
   let characters: Character[] = [];
+  let popularCharacters: Character[] = [];
   const stories = await getStories(0, 5);
   const categories = await getCategories(0, 5);
 
   try {
     characters = await getCharacters(0, 5);
+    popularCharacters = await getPopularCharacters(0, 5);
   } catch (error) {
     console.error(error);
     redirect("/error");
@@ -38,9 +40,9 @@ export default async function Home() {
         <div className="flex flex-col gap-2 w-full relative">
           <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
           <InfiniteSwiperLoader 
-            loadMore={getCharacters} 
+            loadMore={getPopularCharacters} 
             limit={5} 
-            initialData={characters} 
+            initialData={popularCharacters} 
             component={CharacterCard}
             componentProps={{
               hasLink: true,
