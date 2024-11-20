@@ -34,6 +34,7 @@ export default function CharacterCard(props: Props) {
                     isPressable={props.hasLink} 
                     className={`
                         h-[150px] w-[300px dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
+                        dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"} 
                         ${props.isSmall && "h-full"}
                         ${props.noBg && "dark:bg-transparent"} 
