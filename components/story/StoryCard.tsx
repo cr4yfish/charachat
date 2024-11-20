@@ -31,7 +31,7 @@ export default function StoryCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-full w-[300px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
+                        h-[125px] w-[300px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"}
                         ${props.noBg && "dark:bg-transparent"} 
@@ -42,9 +42,10 @@ export default function StoryCard(props: Props) {
                             <div className="relative h-[100%] w-[70px] overflow-hidden rounded-2xl">
                                 <Image className="relative object-cover" layout="fill" src={props.data.image_link ?? ""} alt={props.data.title} />
                             </div>
+                            
                         </div>
 
-                        <div className="flex flex-col gap-1 justify-between">
+                        <div className="flex flex-col gap-1 justify-start">
                             <h3 className="text-sm">{truncateText(props.data.title,50)}</h3>
                             <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)}</span>
                         </div>
