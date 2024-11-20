@@ -89,7 +89,7 @@ export default function InfiniteSwiperLoader(props: Props) {
             >
                 <div
                 
-                className="w-fit flex flex-row gap-4 pr-10 pb-4"
+                className="w-fit flex flex-row gap-2 pr-10 pb-2"
                 >
                     {items?.map((item, index) => (
                         <props.component key={index} data={item} {...props.componentProps} />
