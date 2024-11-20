@@ -27,7 +27,7 @@ export default function Spotlight(props: Props) {
                 <CardContent>
                     <CharacterCard data={props.character} hasLink noBg fullWidth />
 
-                    <Image className=" object-cover -z-10 opacity-25" src={props.character.image_link ?? ""} layout="fill" alt="" />
+                    <Image className=" object-cover -z-10 opacity-25 blur" src={props.character.image_link ?? ""} layout="fill" alt="" />
                 </CardContent>
                 <CardFooter>
                     
