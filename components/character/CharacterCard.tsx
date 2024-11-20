@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import Image from "next/image"
 import { Card, CardBody } from "@nextui-org/card";
 import { Character } from "@/types/db";
-import Icon from "../utils/Icon";
 import ConditionalLink from "../utils/ConditionalLink";
 import { truncateText } from "@/lib/utils";
 
