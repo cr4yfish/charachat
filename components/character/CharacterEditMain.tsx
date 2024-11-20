@@ -70,7 +70,7 @@ export default function CharacterEditMain(props: Props) {
                 label="Character Name"
                 placeholder="Albert Einstein"
                 description="Name of the Character" 
-                maxLength={28}
+                maxLength={50}
                 minRows={1}
                 maxRows={1} 
             />
@@ -82,7 +82,17 @@ export default function CharacterEditMain(props: Props) {
                 label="Character Description"
                 placeholder="Physicist, mathematician, and author"
                 description="Very short description of the Character" 
-                maxLength={50} 
+                maxLength={150} 
+            />
+            <TextareaWithCounter 
+                name="personality"
+                isRequired
+                value={character.personality}
+                onValueChange={(value) => setCharacter({ ...character, personality: value })}
+                label="Character Personality"
+                placeholder="Curious, imaginative, and open-minded"
+                description="Personality traits of the character"
+                maxLength={150}
             />
             <TextareaWithCounter 
                 name="bio" 
@@ -92,7 +102,7 @@ export default function CharacterEditMain(props: Props) {
                 label="Character Bio"
                 placeholder="Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. He was born in 1879 and died in 1955."
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
-                maxLength={280} 
+                maxLength={300} 
             />
             <Input 
                 name="image_link" 
@@ -111,7 +121,7 @@ export default function CharacterEditMain(props: Props) {
                 onValueChange={(value) => setCharacter({ ...character, intro: value })}
                 placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
                 description="Introduction of the character. Describe how the character would introduce themselves." 
-                maxLength={280} 
+                maxLength={300} 
             />
             <TextareaWithCounter 
                 name="book" 
