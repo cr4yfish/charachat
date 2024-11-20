@@ -35,7 +35,7 @@ export default function ChatList(props: Props) {
                     {chats.map((chat) => (
                         <ChatCard 
                             key={chat.id} 
-                            chat={chat} 
+                            data={chat} 
                             setChats={setChats}
                         />
                     ))}
