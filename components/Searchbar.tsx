@@ -107,7 +107,7 @@ export default function Searchbar() {
             <div className="relative w-full max-w-lg flex flex-col gap-4 ">
                 <Input 
                     placeholder="Search Characters and Stories" 
-                    radius="lg"
+                    radius="full"
                     startContent={loading ? <Spinner size="sm" color="default" /> : <Icon>search</Icon>}
                     size="lg"
                     isClearable
