@@ -19,6 +19,7 @@ export type Character = {
     book: string;
     category?: Category;
     is_private: boolean;
+    personality: string;
 }
 
 export type Chat = {
