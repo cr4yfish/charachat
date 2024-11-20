@@ -18,6 +18,7 @@ import { Chat, Profile } from "@/types/db";
 import SidebarLink from "./SidebarLink";
 import LoginButton from "./auth/LoginButton";
 import Logo from "./Logo";
+import Link from "next/link";
 
 
 export async function LeftSidebar() {
@@ -42,7 +43,7 @@ export async function LeftSidebar() {
       <SidebarContent>
 
         <SidebarGroup>
-          <Logo /> 
+          <Link href={"/"}><Logo /></Link>
         </SidebarGroup>
         
         <SidebarGroup>
