@@ -19,12 +19,12 @@ export default function CategoryCard(props: Props) {
             isPressable={props.isButton}
             onClick={props.onClick}
             className={`
-                max-w-[150px] w-fit px-4 py-2 rounded-full dark:bg-transparent 
+                w-fit max-w-fit px-4 py-2 rounded-full dark:bg-transparent
                 backdrop-blur-xl border-1 dark:border-zinc-600 shadow-none text-sm
                 ${props.isSelected && "dark:bg-zinc-700"}
             `}
             >
-            <CardBody className="p-0">
+            <CardBody className="p-0 w-fit min-w-max h-full flex items-center justify-center">
                 {props.category.title}
             </CardBody>
         </Card>
