@@ -82,7 +82,7 @@ export async function POST(req: Request) {
                 
                 ${chat.story 
                     && `
-                        This chat is based on a story. These are the details of the story:
+                        This chat is based on a story. These are the details of the story (replace {{user}} with the user's name):
                         ${chat.story.title}
                         ${chat.story.description}
                         ${chat.story.story}
