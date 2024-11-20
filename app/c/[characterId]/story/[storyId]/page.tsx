@@ -8,7 +8,7 @@ import { getCurrentUser } from "@/functions/db/auth";
 import Link from "next/link";
 import StartStoryButton from "@/components/story/StartStoryButton";
 import { Profile } from "@/types/db";
-
+import Icon from "@/components/utils/Icon";
 
 export default async function Story({ params: { storyId, characterId } }: { params: { storyId: string, characterId: string } }) {
 
@@ -53,6 +53,19 @@ export default async function Story({ params: { storyId, characterId } }: { para
 
                 <div className="prose dark:prose-invert">
                     <h2 className="text-2xl font-bold">Story Details</h2>
+
+                    <div className="flex flex-row gap-6 text-sm dark:text-zinc-200">
+                        <div className="flex items-center gap-2">
+                            <Icon downscale filled>chat_bubble</Icon>
+                            <span>{story.chats} Chats</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Icon downscale filled>favorite</Icon>
+                            <span>{story.likes} Likes</span>
+                        </div>
+                    </div>
+
                     <h3>Description</h3>
                     <p>{story.description}</p>
 
