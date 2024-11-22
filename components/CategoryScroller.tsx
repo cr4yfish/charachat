@@ -31,7 +31,6 @@ export default function CategoryScroller(props: Props) {
         setIsLoading(true)
 
         try {
-            console.log("Loading chars");
             const res = await getCharactersByCategory(category.id, characters.length, limit);   
             if(characters) {
                 setCharacters([...characters, ...res]);
@@ -40,7 +39,6 @@ export default function CategoryScroller(props: Props) {
             }
 
             if(res.length < limit) {
-                console.log("No more data");
                 setHasMore(false);
             }
 

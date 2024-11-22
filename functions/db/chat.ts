@@ -113,7 +113,6 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
 }
 
 export const updateChat = async (chat: Chat): Promise<Chat> => {
-
     const { data, error } = await createClient()
         .from("chats")
         .update({
