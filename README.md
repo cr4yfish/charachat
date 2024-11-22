@@ -21,6 +21,7 @@ All Messages are stored encrypted in the database and decrypted on the client si
     <img src="https://i.imgur.com/G8fG5wr.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/df4Gefj.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/qtCf0MS.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/3TWwGUL.png" style="height: 500px; width: auto;" >
 </div>
 
 ## Features
