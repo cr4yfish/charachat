@@ -332,7 +332,7 @@ export default function ChatMain(props : Props) {
             </InfiniteScroll>
         </ScrollArea>
  
-        {messages.length == 0 && props.initMessages.length == 0 && (
+        {((messages.length == 0 && props.initMessages.length == 0) || (!chat?.llm)) && (
             <div className="flex flex-col gap-4 items-start justify-center h-full w-full px-8 overflow-y-hidden">
                 <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
                     <h1>Select an AI to get started</h1>
