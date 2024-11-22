@@ -2,6 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
+import { z } from 'zod';
 
 import { Chat, Message, Profile } from '@/types/db';
 import { convertToCoreMessages, streamText } from 'ai';
@@ -15,7 +16,7 @@ import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
 
 export async function POST(req: Request) {
-    const { messages, profile: initProfile, chat: initChat } = await req.json();
+    const { messages, profile: initProfile, chat: initChat, selfDestruct } = await req.json();
     const cookiesStore = cookies();
 
     const profile: Profile = initProfile as Profile;
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
         throw new Error("No key cookie");
     }
 
-    if(message.content !== "" && message.content !== _INTRO_MESSAGE) {
+    if((message.content !== "" && message.content !== _INTRO_MESSAGE) && !selfDestruct) {
         await addMessage(message, key);
         chat.last_message_at = new Date().toISOString();
         await updateChat(chat);
@@ -93,7 +94,30 @@ export async function POST(req: Request) {
                 ${chat.dynamic_book}
 
             `,
-            messages: convertToCoreMessages(messages)
+            messages: convertToCoreMessages(messages),
+            tools: {
+
+                // server side tool
+                addNewMemory: {
+                    description: "Add a new memory to the character's knowledge.",
+                    parameters: z.object({ memory: z.string() }),
+                    execute: async ({ memory }: { memory: string }) => {
+    
+                        try {
+                            await updateChat({
+                                ...chat,
+                                dynamic_book: `${chat.dynamic_book}\n${memory}`.trimEnd(),
+                            })
+                            
+                            return memory;
+                        } catch (error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                }
+            }
         });
     
         return result.toDataStreamResponse();

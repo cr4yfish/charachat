@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import InfiniteScroll from "react-infinite-scroller";
 import { Spacer } from "@nextui-org/spacer";
 import { AnimatePresence, motion } from "motion/react";
+import { Switch } from "@nextui-org/switch";
 
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -41,6 +42,7 @@ export default function ChatMain(props : Props) {
     const [isSetupLoading, setIsSetupLoading] = useState(false);
     const [isSetupDone, setIsSetupDone] = useState(false);
     const [isInputFocused, setIsInputFocused] = useState(false);
+    const [isSelfDestruct, setIsSelfDestruct] = useState(false);
     const { toast } = useToast();
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
@@ -58,7 +60,8 @@ export default function ChatMain(props : Props) {
         keepLastMessageOnError: true,
         body: {
             profile: props.user,
-            chat: chat
+            chat: chat,
+            selfDestruct: isSelfDestruct
         },
         onFinish: async (message, { usage }) => {
             scrollToBottom();
@@ -103,6 +106,11 @@ export default function ChatMain(props : Props) {
 
                 if(!key) {
                     console.error("No key found in session storage");
+                    return;
+                }
+
+                if(isSelfDestruct) {
+                    // done save message or chat
                     return;
                 }
 
@@ -332,7 +340,7 @@ export default function ChatMain(props : Props) {
                     <span>The following models are available for free currently:</span>
                     <ul>
                         <li>Nemo (messages used by Mistral for training)</li>
-                        <li>Grok</li>
+                        <li>Grok (recommended)</li>
                     </ul>
                 </div>
                 
@@ -349,6 +357,13 @@ export default function ChatMain(props : Props) {
                         ))}
                     </SelectContent>
                 </Select>
+                
+                <div className="flex flex-col gap-1 prose dark:prose-invert prose-p:m-0">
+                    <Switch isSelected={isSelfDestruct} onValueChange={setIsSelfDestruct}>Don&apos;t save messages</Switch>
+                    <p className="text-xs max-w-md">If turned on, messages won&apos;t be saved and <b className="text-red-400">will be gone</b> once you leave this page or refresh the browser. <b className="text-green-400">Encryption is turned on regardless of this option.</b></p>
+                </div>
+                
+
                 <div className="flex flex-wrap items-center gap-4">
                     <Button
                         radius="full"
@@ -378,7 +393,7 @@ export default function ChatMain(props : Props) {
             </div>   
         )}
 
-        {messages.length == 0 && (
+        {messages.length == 0 && isSetupDone && (
             <div className="flex-1 flex items-center justify-center h-full overflow-y-hidden">
                 <p className="text-slate-400 text-center">Pretty empty here</p>
             </div>   
