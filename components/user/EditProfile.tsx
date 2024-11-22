@@ -15,6 +15,7 @@ import { updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
 import { LLMsWithAPIKeys } from "@/lib/ai";
+import LoginButton from "../auth/LoginButton";
 
 type Props = {
     profile: Profile
@@ -262,6 +263,12 @@ export default function EditProfile(props: Props) {
                         onDelete={handleDelete}
                         isLoading={isDeleting}
                         isDisabled={isSaving}
+                    />
+                </div>
+                <div className="w-fit max-md:w-full">
+                    <LoginButton 
+                        isLoggedIn={profile !== undefined}
+                        showLogout
                     />
                 </div>
             </div>
