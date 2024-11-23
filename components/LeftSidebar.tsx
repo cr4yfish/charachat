@@ -8,6 +8,7 @@ import {
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
+    SidebarMenu,
   } from "@/components/ui/sidebar"
 import { getChats } from "@/functions/db/chat";
 import ChatCardSmall from "./chat/ChatCardSmall";
@@ -19,6 +20,7 @@ import SidebarLink from "./SidebarLink";
 import Logo from "./Logo";
 import Link from "next/link";
 import InfiniteListLoader from "./InfiniteListLoader";
+import LoginButton from "./auth/LoginButton";
 
 
 export async function LeftSidebar() {
@@ -47,10 +49,12 @@ export async function LeftSidebar() {
           
           <SidebarGroup>
             <SidebarGroupContent className="flex flex-col gap-2">
-              <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
-              <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
-              <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
-              <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
+              <SidebarMenu>
+                <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
+                <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
+                <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
+                <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
+              </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         
@@ -60,7 +64,7 @@ export async function LeftSidebar() {
 
         {profile !== undefined && 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-bold">Recent Chats</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg font-bold">Chats</SidebarGroupLabel>
           <SidebarGroupContent>
             <InfiniteListLoader 
               initialData={chats}
@@ -76,6 +80,7 @@ export async function LeftSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
+        <LoginButton isLoggedIn={profile !== undefined} />        
         {profile !== undefined && <ProfileCard profile={profile} />}
       </SidebarFooter>
 
