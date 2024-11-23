@@ -23,3 +23,20 @@ export async function getFandomPage(url: string) {
     const res = await fetch(url);
     return res.text();
 }
+
+export async function searchAICharacterCards(search: string) {
+    const res = await fetch(`https://aicharactercards.com/wp-admin/admin-ajax.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=handle_dacts_ajax_search&term=${search}&categories=&tags=any`
+    });
+    
+    return res.text();
+}
+
+export async function getAICharacterCard(url: string) {
+    const res = await fetch(url);
+    return res.text();
+}
