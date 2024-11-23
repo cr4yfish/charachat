@@ -7,6 +7,8 @@ import { cache } from "react";
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
 import { decryptMessage } from "@/lib/crypto";
+import { decryptCharacter } from "./character";
+import { getKeyServerSide } from "../serverHelpers";
 
 const chatMatcher = `
     *
@@ -14,7 +16,7 @@ const chatMatcher = `
 
 const tableName = "chats_overview";
 
-const chatFormatter = (db: any): Chat => {
+const chatFormatter = async (db: any): Promise<Chat> => {
     const cookiesStore = cookies();
 
     const key = cookiesStore.get("key")?.value;
@@ -29,7 +31,7 @@ const chatFormatter = (db: any): Chat => {
         decryptedMessage = decryptMessage(db.last_message, Buffer.from(key, "hex"));
     }
 
-    return {
+    const chat = {
         ...db,
         last_message: decryptedMessage,
         character: {
@@ -70,7 +72,14 @@ const chatFormatter = (db: any): Chat => {
             chats: db.story_chats,
             image_link: db.story_image_link,
         }
+    } as Chat;
+
+    if(chat.character.is_private) {
+        const key = await getKeyServerSide();
+        chat.character = await decryptCharacter(chat.character, key);
     }
+
+    return chat;
 }
 
 export const getChat = cache(async (chatId: string): Promise<Chat> => {
@@ -99,9 +108,9 @@ export const getCharacterChats = cache(async (characterId: string): Promise<Chat
         throw error;
     }
 
-    return data.map((db: any) => {
-        return chatFormatter(db)
-    });
+    return Promise.all(data.map(async (db: any) => {
+        return await chatFormatter(db)
+    }))
 })
 
 export const getChats = cache(async (cursor: number, limit: number): Promise<Chat[]> => {
@@ -115,9 +124,9 @@ export const getChats = cache(async (cursor: number, limit: number): Promise<Cha
         throw error;
     }
 
-    return data.map((db: any) => {
-        return chatFormatter(db)
-    });
+    return Promise.all(data.map(async (db: any) => {
+        return await chatFormatter(db)
+    }))
 })
 
 
@@ -151,12 +160,12 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
         throw error;
     }
 
-    return chatFormatter(data)
+    return await chatFormatter(data)
 }
 
 export const updateChat = async (chat: Chat): Promise<Chat> => {
     const { data, error } = await createClient()
-        .from(tableName)
+        .from("chats")
         .update({
             dynamic_book: chat.dynamic_book,
             title: chat.title,
