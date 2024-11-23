@@ -22,15 +22,25 @@ All Messages are stored encrypted in the database and decrypted on the client si
     <img src="https://i.imgur.com/df4Gefj.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/qtCf0MS.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/3TWwGUL.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/ydWPlJi.png" style="height: 500px; width: auto;" >
 </div>
 
 ## Features
 
 ### Characters
 - [x] Basic bio
-- [ ] Personality, traits, quirks
+- [x] Personality
 - [x] Long Background story
 - [x] Share Characters with other
+- [x] Import Characters
+
+### Importers
+- [x] Anime & Manga
+- [x] Fandoms
+- [x] Wikipedia
+- [ ] Imdb
+- [ ] C.ai
+- [ ] Silly Tavern
 
 ### AI Features
 - [x] Agent Structure
