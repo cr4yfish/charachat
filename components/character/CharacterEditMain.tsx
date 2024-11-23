@@ -70,7 +70,7 @@ export default function CharacterEditMain(props: Props) {
                 label="Character Name"
                 placeholder="Albert Einstein"
                 description="Name of the Character" 
-                maxLength={50}
+                maxLength={75}
                 minRows={1}
                 maxRows={1} 
             />
@@ -82,7 +82,7 @@ export default function CharacterEditMain(props: Props) {
                 label="Character Description"
                 placeholder="Physicist, mathematician, and author"
                 description="Very short description of the Character" 
-                maxLength={150} 
+                maxLength={200} 
             />
             <TextareaWithCounter 
                 name="personality"
@@ -102,7 +102,7 @@ export default function CharacterEditMain(props: Props) {
                 label="Character Bio"
                 placeholder="Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. He was born in 1879 and died in 1955."
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
-                maxLength={300} 
+                maxLength={500} 
             />
             <Input 
                 name="image_link" 
@@ -121,7 +121,7 @@ export default function CharacterEditMain(props: Props) {
                 onValueChange={(value) => setCharacter({ ...character, intro: value })}
                 placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
                 description="Introduction of the character. Describe how the character would introduce themselves." 
-                maxLength={300} 
+                maxLength={500} 
             />
             <TextareaWithCounter 
                 name="book" 
@@ -129,7 +129,7 @@ export default function CharacterEditMain(props: Props) {
                 onValueChange={(value) => setCharacter({ ...character, book: value })}
                 label="Character Book"
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
-                maxLength={1000} 
+                maxLength={15100} 
             />
             <CategoryAutocomplete
                 setCategory={(category) => setCharacter({ ...character, category })}
