@@ -6,7 +6,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
-import { checkIsEncrypted, decryptMessage } from "@/lib/crypto";
+import { decryptMessage } from "@/lib/crypto";
 import { decryptCharacter } from "./character";
 import { getKeyServerSide } from "../serverHelpers";
 
@@ -164,7 +164,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
 }
 
 export const updateChat = async (chat: Chat): Promise<void> => {
-    const { data, error } = await createClient()
+    const { error } = await createClient()
         .from("chats")
         .update({
             dynamic_book: chat.dynamic_book,
