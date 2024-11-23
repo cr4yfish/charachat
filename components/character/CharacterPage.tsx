@@ -16,6 +16,7 @@ import { Character } from "@/types/db";
 import { createChat } from "@/functions/db/chat";
 import CategoryCard from "./CategoryCard";
 import Image from "next/image";
+import Markdown from "react-markdown";
 
 type Props = {
     character: Character,
@@ -109,7 +110,7 @@ export default function CharacterPage(props: Props) {
                     </div>
 
                     <div className="prose dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400">
-                        <p>{props.character.description}</p>
+                        <Markdown>{props.character.description}</Markdown>
                     </div>
 
                     <CategoryCard data={props.character.category} />

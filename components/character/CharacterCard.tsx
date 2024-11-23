@@ -7,6 +7,7 @@ import { Character } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
 import { truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
+import Markdown from "react-markdown";
 
 type Props = {
     data: Character,
@@ -56,7 +57,7 @@ export default function CharacterCard(props: Props) {
                                     </div>
                                     <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
                                 </div>
-                                <p className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</p> 
+                                <Markdown className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</Markdown> 
                             </div>
 
                            {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&

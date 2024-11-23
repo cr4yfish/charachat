@@ -12,6 +12,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { Avatar } from "@nextui-org/avatar";
 import { truncateText } from "@/lib/utils";
 import Link from "next/link";
+import Markdown from "react-markdown";
 
 type SearchResultProps = {
     title: string;
@@ -32,7 +33,7 @@ const SearchResult = (props: SearchResultProps) => {
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex flex-col">
                         <span className="font-medium">{props.title}</span>
-                        <span className="text-xs dark:text-zinc-400">{truncateText(props.description, 50)}</span>
+                        <Markdown className="text-xs dark:text-zinc-400">{truncateText(props.description, 50)}</Markdown>
                     </div>
                     <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
                     <span className="flex items-center gap-1">
