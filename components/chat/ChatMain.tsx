@@ -203,6 +203,10 @@ export default function ChatMain(props : Props) {
                 }
             ])
 
+            if(isSelfDestruct) {
+                return;
+            }
+
             const key = sessionStorage.getItem("key");
 
             if(!key) {
