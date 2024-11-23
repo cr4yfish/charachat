@@ -198,15 +198,15 @@ export default function AICharacterCardsImporter(props: Props) {
         <>
         <Card className="w-full">
             <CardHeader>
-                <CardDescription>Import from Fandom</CardDescription>
-                <CardTitle>Search Fandom</CardTitle>
+                <CardDescription>Import from AI Character Cards / SillyTavern</CardDescription>
+                <CardTitle>Search AI Character Cards</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
 
                 <Input 
                     radius="full" size="lg"
                     startContent={isLoading ? <Spinner size="sm" color="default" /> : <Icon filled>search</Icon>} 
-                    placeholder="Search Fandom Page" 
+                    placeholder="Search AI Character Cards" 
                     value={search} onValueChange={setSearch}
                 />          
 
