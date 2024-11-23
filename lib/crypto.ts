@@ -1,5 +1,8 @@
 import crypto from 'crypto';
 
+export const checkIsEncrypted = (message: string): boolean => {
+    return message.startsWith("ENC:");
+}
 
 export const getKeyClientSide = (): string => {
     const key = sessionStorage.getItem('key');
