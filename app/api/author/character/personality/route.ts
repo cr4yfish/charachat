@@ -22,6 +22,7 @@ export async function POST(req: Request) {
         prompt: `
             Character:
             Name: ${character.name}
+            Personality (might be empty, improve on it if not): ${character.personality}
             Description: ${character.description}
             Bio: ${character.bio}
             How the Character would introduce themselves: ${character.intro}

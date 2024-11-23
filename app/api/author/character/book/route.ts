@@ -26,6 +26,7 @@ export async function POST(req: Request) {
             Bio: ${character.bio}
             Character Personality: ${character.personality}
             How the Character would introduce themselves: ${character.intro}
+            Book (might be empty, improve on it if not): ${character.book}
         `
     })
 
