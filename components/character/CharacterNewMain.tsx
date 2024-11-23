@@ -23,6 +23,11 @@ export default function CharacterNewMain(props: Props) {
     const [initCharacter, setInitCharacter] = useState<Character>({} as Character);
     
 
+    const setImportedCharacter = (character: Character) => {
+        setInitCharacter(character);
+        setStep(2);
+    }
+
     return (
         <>
         <div className="w-full h-full flex flex-col gap-4">
@@ -43,7 +48,7 @@ export default function CharacterNewMain(props: Props) {
                         <Button 
                             color="primary" 
                             onClick={() => setStep(2)}>Start from scratch</Button>
-                        <Button isDisabled color="secondary" onClick={() => setStep(1)}>Import from 3rd party</Button>
+                        <Button color="secondary" onClick={() => setStep(1)}>Import from 3rd party</Button>
                     </motion.div>
                 
                 </motion.div>
@@ -54,7 +59,13 @@ export default function CharacterNewMain(props: Props) {
                         
                         className="w-full min-h-full flex flex-col gap-4 items-start max-md:items-center justify-center"
                     >
-                        <motion.div {...fadeInFromBottom}><CharacterNewImport character={initCharacter} setCharacter={setInitCharacter} /></motion.div>
+                        <motion.div {...fadeInFromBottom} className="w-full h-full">
+                            <CharacterNewImport 
+                                profile={props.profile} 
+                                character={initCharacter} 
+                                setCharacter={setImportedCharacter} 
+                            />
+                        </motion.div>
                     </motion.div>
                 }
 
@@ -62,13 +73,6 @@ export default function CharacterNewMain(props: Props) {
 
             </AnimatePresence>
 
-            <AnimatePresence>
-
-            </AnimatePresence>
-
-            <AnimatePresence>
-               
-            </AnimatePresence>
         </div>
         </>
     )
