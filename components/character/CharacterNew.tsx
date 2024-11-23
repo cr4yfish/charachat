@@ -13,6 +13,8 @@ import { Button } from "../utils/Button";
 import { Character, Profile } from "@/types/db";
 import StoryInputWithAI from "../story/StoryInputWithAI";
 import CharacterCard from "./CharacterCard";
+import { getKeyClientSide } from "@/lib/crypto";
+import { encryptCharacter } from "@/functions/db/character";
 
 type Props = {
     initCharacter: Character;
@@ -32,7 +34,17 @@ export default function CharacterNew(props: Props) {
         setIsLoading(true);
 
         try {        
-            const res = await saveCharacter(newCharacter);
+
+            let charToSave = newCharacter;
+
+            if(newCharacter.is_private) {
+                // encrypt shit
+                const key = getKeyClientSide();
+                charToSave = await encryptCharacter(newCharacter, key);
+
+            }
+
+            const res = await saveCharacter(charToSave);
 
             if(res.error.length > 1) {
                 throw new Error(res.error)
@@ -165,7 +177,7 @@ export default function CharacterNew(props: Props) {
 
             <div className="flex flex-col gap-1">
                 <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
-                <p className="text-xs dark:text-zinc-400">When set to Private, only you will be able to see and interact with the Character. Note that it might still appear on the front page, but only you will see it. <b>Private Characters are not encrypted yet.</b></p>
+                <p className="text-xs dark:text-zinc-400">When set to Private, the <b>Character gets encrypted and only you will be able to see and interact with it</b>. Note that it might still appear on the front page, but only you will see it. Please avoid this if possible to contribute to the Project.</p>
             </div>
            
             <div className="flex flex-col gap-1">

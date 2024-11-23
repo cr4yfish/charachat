@@ -96,6 +96,16 @@ export default function CharacterPage(props: Props) {
                         }
                     </div>
 
+                    {props.character.is_private && 
+                        <div className="flex flex-col gap-1 border border-green-500 rounded-lg p-2">
+                            <div className="flex items-center gap-1 text-green-500">
+                                <Icon downscale filled color="green-500">lock</Icon>
+                                <span className="text-sm">Private</span>
+                            </div>
+                            <span className="text-xs dark:text-zinc-400">This Character is only accessible by you and otherwise encrypted.</span>
+                        </div>
+                    }
+
                     <div className="flex flex-col gap-2 text-sm dark:text-zinc-200">
                         
                         <div className="flex items-center gap-2">
@@ -114,7 +124,6 @@ export default function CharacterPage(props: Props) {
                     </div>
 
                     <CategoryCard data={props.character.category} />
-                
                 </div>
 
 

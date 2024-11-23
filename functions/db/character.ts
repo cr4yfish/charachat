@@ -5,6 +5,8 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Character } from "@/types/db";
+import { decryptMessage, encryptMessage } from "@/lib/crypto";
+import { getKeyServerSide } from "../serverHelpers";
 
 const characterMatcher = `
     *,
@@ -14,17 +16,52 @@ const characterMatcher = `
 
 const characterTableName = "character_overview"
 
-const characterFormatter = (db: any): Character => {
+const characterFormatter = async (db: any): Promise<Character> => {
     const owner = db.profiles;
     const category = db.categories;
     
     delete db.profiles;
     delete db.categories;
 
-    return {
+    const char = {
         ...db,
         owner: owner,
         category: category
+    } as Character;
+
+    if(char.is_private) {
+        const key = await getKeyServerSide();
+        return await decryptCharacter(char, key);
+    }
+
+    return char;
+}
+
+export const decryptCharacter = async (character: Character, key: string): Promise<Character> => {
+    const buffer = Buffer.from(key, "hex");
+
+    return {
+        ...character,
+        name: decryptMessage(character.name, buffer),
+        description: decryptMessage(character.description, buffer),
+        intro: decryptMessage(character.intro, buffer),
+        bio: decryptMessage(character.bio, buffer),
+        book: decryptMessage(character.book, buffer),
+        image_link: decryptMessage(character.image_link ?? "", buffer)
+    }
+}
+
+export const encryptCharacter = async (character: Character, key: string): Promise<Character> => {
+    const buffer = Buffer.from(key, "hex");
+
+    return {
+        ...character,
+        name: encryptMessage(character.name, buffer),
+        description: encryptMessage(character.description, buffer),
+        intro: encryptMessage(character.intro, buffer),
+        bio: encryptMessage(character.bio, buffer),
+        book: encryptMessage(character.book, buffer),
+        image_link: encryptMessage(character.image_link ?? "", buffer)
     }
 }
 
@@ -40,7 +77,7 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
         throw error;
     }
 
-    return characterFormatter(data);
+    return await characterFormatter(data);
 })
 
 export const getCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
@@ -54,9 +91,9 @@ export const getCharacters = cache(async (cursor: number, limit: number): Promis
         throw error;
     }
 
-    return data.map((db: any) => {
-        return characterFormatter(db);
-    });
+    return await Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
 })
 
 export const getPopularCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
@@ -70,9 +107,9 @@ export const getPopularCharacters = cache(async (cursor: number, limit: number):
         throw error;
     }
 
-    return data.map((db: any) => {
-        return characterFormatter(db);
-    });
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
 })
 
 export const getCharactersByCategory = cache(async (categoryId: string, cursor: number, limit: number): Promise<Character[]> => {
@@ -87,9 +124,9 @@ export const getCharactersByCategory = cache(async (categoryId: string, cursor: 
         throw error;
     }
 
-    return data.map((db: any) => {
-        return characterFormatter(db);
-    });
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
 })
 
 export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
@@ -102,9 +139,9 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
         throw error;
     }
 
-    return data.map((db: any) => {
-        return characterFormatter(db);
-    });
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
 })
 
 export const getUserCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
@@ -125,9 +162,9 @@ export const getUserCharacters = cache(async (cursor: number, limit: number): Pr
         throw error;
     }
 
-    return data.map((db: any) => {
-        return characterFormatter(db);
-    });
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
 })
 
 export const updateCharacter = async (character: Character): Promise<void> => {

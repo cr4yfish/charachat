@@ -1,5 +1,16 @@
 import crypto from 'crypto';
 
+
+export const getKeyClientSide = (): string => {
+    const key = sessionStorage.getItem('key');
+
+    if(!key) {
+        throw new Error("Key not found in session storage");
+    }
+
+    return key;
+}
+
 export const generateKey = (password: string, salt: string): Buffer => {
     return crypto.pbkdf2Sync(password, salt, 100000, 32, 'sha256');
 };
