@@ -5,7 +5,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Character } from "@/types/db";
-import { decryptMessage, encryptMessage } from "@/lib/crypto";
+import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
 
 const characterMatcher = `
@@ -30,6 +30,15 @@ const characterFormatter = async (db: any): Promise<Character> => {
     } as Character;
 
     if(char.is_private) {
+
+        if(char.is_private && !checkIsEncrypted(char.name)) {
+            // character is private but not encrypted
+            // encrypt it and update, return the unencrypted version
+            // updateCharacter() automatically fixes this issue
+            await updateCharacter(char);
+            return char;
+        }
+
         const key = await getKeyServerSide();
         return await decryptCharacter(char, key);
     }
@@ -168,8 +177,17 @@ export const getUserCharacters = cache(async (cursor: number, limit: number): Pr
 })
 
 export const updateCharacter = async (character: Character): Promise<void> => {
+
+    if(character.is_private && !checkIsEncrypted(character.name)) {
+        const key = await getKeyServerSide();
+        character = await encryptCharacter(character, key);
+    }
+
+    delete character.chats;
+    delete character.likes;
+
     const { error } = await createClient()
-        .from(characterTableName)
+        .from("characters")
         .update({
             ...character,
             owner: character.owner.user,
