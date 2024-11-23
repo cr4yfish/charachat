@@ -13,7 +13,7 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
 import { Input } from "@nextui-org/input";
 import { Avatar } from "@nextui-org/avatar";
-import { Switch } from "@nextui-org/switch";
+import { truncateText } from "@/lib/utils";
 
 
 type Props = {
@@ -55,7 +55,7 @@ export default function ChatCard(props: Props) {
        
         <Card 
             className={`
-                w-full bg-transparent 
+                w-full bg-transparent x
                 hover:bg-zinc-800
             `}
         >
@@ -66,8 +66,12 @@ export default function ChatCard(props: Props) {
                 <div className="flex flex-row gap-2 items-center justify-between w-full">
                     <div className="flex flex-col">
                         <h3 className="font-bold text-lg">{chat.title}</h3>
-                        <p className="dark:text-zinc-400">{chat.description}</p>
-                        <p className="dark:text-zinc-400 text-xs">Last message on {new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>
+                        <div className="w-full max-w-xs max-sm:max-w-xs relative">
+                            <p className={` dark:text-zinc-400 single-line w-full text-xs single-line `} >
+                                {truncateText(props.data.last_message ?? "", 20)}
+                            </p>
+                        </div>
+                        {chat.last_message_at && <p className="dark:text-zinc-400 text-xs">{new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>}
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -107,7 +111,6 @@ export default function ChatCard(props: Props) {
                         maxLength={80}
                     />
                     <Input type="password" label="Chat password" description="(Optional) Used to encrypt the chat" isDisabled />
-                    <Switch isDisabled>Local only</Switch>
                 </div>
             }
             footer={

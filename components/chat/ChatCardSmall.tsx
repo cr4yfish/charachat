@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { Chat } from "@/types/db";
 import { useEffect, useState } from "react";
-import { formatLastMessageTime } from "@/lib/utils";
+import { formatLastMessageTime, truncateText } from "@/lib/utils";
 import { Avatar } from "@nextui-org/avatar";
 import ConditionalLink from "../utils/ConditionalLink";
 
@@ -56,19 +56,19 @@ export default function ChatCardSmall(props: Props) {
                             }
                         </div>
                         
-                        {false && 
-                            <motion.p 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3 }}
-                                className={`
-                                    dark:text-slate-400 single-line text-sm
-                                    ${isActive && "dark:text-blue-200"}    
-                                `}
-                            >
-                                Latest message placeholder
-                            </motion.p>
-                        }
+                        
+                        <motion.p 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className={`
+                                dark:text-zinc-400 single-line text-sm
+                                ${isActive && "dark:text-blue-200"}    
+                            `}
+                        >
+                            {truncateText(props.data.last_message ?? "", 20)}
+                        </motion.p>
+                        
                     </div>
 
                 </CardBody>
