@@ -80,6 +80,8 @@ All Messages are stored encrypted in the database and decrypted on the client si
 4. When creating a new Chat, make sure to only use LLMs for which you have an API key
 
 ## Privacy & Security
+Private Characters are encrypted and only accessible and readable by the owner of the character. They are stored in the database in an encrypted form and only decrypted on demand by the user.
+
 All messages are (kinda) end-to-end encrypted with your AI Model. The Model streams them in plain text to the browser, but since it's inside of an HTTPS connection, they are encrypted.
 Aside from that, they are only visible in plain text while in the browser, decrypted using a key generated with your password.
 Since your password is also stored (of course) encrypted in the database, it's basically impossible for your messages to be read by others.
