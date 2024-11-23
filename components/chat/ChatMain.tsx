@@ -193,7 +193,7 @@ export default function ChatMain(props : Props) {
         append({ content: _INTRO_MESSAGE, role: "user", createdAt: new Date() });
 
         // if this is a story chat, add the first message from the story
-        if(props.chat.story) {
+        if(props.chat.story?.first_message && props.chat.story.first_message.length > 0) {
             setMessages([
                 {
                     id: uuidv4(),
