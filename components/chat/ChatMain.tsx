@@ -197,7 +197,7 @@ export default function ChatMain(props : Props) {
             setMessages([
                 {
                     id: uuidv4(),
-                    content: props.chat.story.first_message.replace("{{ user }}", props.user.first_name),
+                    content: props.chat.story.first_message?.replace("{{ user }}", props.user.first_name),
                     role: "assistant",
                     createdAt: new Date()
                 }
