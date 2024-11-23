@@ -21,7 +21,7 @@ export default async function UserChats({ params: {  } } : { params: { userId: s
                 <Button isIconOnly variant="light" color="warning"><Icon>add</Icon></Button>
             </div>
 
-            <div className="w-full max-w-xl h-full relative">
+            <div className="w-full max-w-xl h-full relative pb-20">
                 <InfiniteListLoader 
                     initialData={chats}
                     loadMore={getChats}
