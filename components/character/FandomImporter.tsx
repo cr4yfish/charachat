@@ -74,7 +74,6 @@ export default function FandomImporter(props: Props) {
         setIsImporting(true);
 
         // get full page
-        console.log("Importing from:",page.link);
         const html = await getFandomPage(page.link);
 
         // parse html to DOM
@@ -124,7 +123,6 @@ export default function FandomImporter(props: Props) {
         
         const results = doc.querySelectorAll(".unified-search__result");
 
-        console.log(results)
         // get text from all p elements
         const pages = Array.from(results).map((ele,) => {
             const pageTitle = ele.querySelector(".unified-search__result__title")?.textContent ?? "";
