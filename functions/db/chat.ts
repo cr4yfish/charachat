@@ -6,7 +6,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
-import { decryptMessage } from "@/lib/crypto";
+import { checkIsEncrypted, decryptMessage } from "@/lib/crypto";
 import { decryptCharacter } from "./character";
 import { getKeyServerSide } from "../serverHelpers";
 
@@ -163,7 +163,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
     return await chatFormatter(data)
 }
 
-export const updateChat = async (chat: Chat): Promise<Chat> => {
+export const updateChat = async (chat: Chat): Promise<void> => {
     const { data, error } = await createClient()
         .from("chats")
         .update({
@@ -174,14 +174,11 @@ export const updateChat = async (chat: Chat): Promise<Chat> => {
             llm: chat.llm
         })
         .eq("id", chat.id)
-        .single();
 
     if (error) {
         console.error("Error updating chat", error);
         throw error;
     }
-
-    return data
 
 }
 
