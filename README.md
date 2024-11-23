@@ -40,7 +40,7 @@ All Messages are stored encrypted in the database and decrypted on the client si
 - [x] Wikipedia
 - [ ] Imdb
 - [ ] C.ai
-- [ ] Silly Tavern
+- [x] Silly Tavern
 
 ### AI Features
 - [x] Agent Structure
