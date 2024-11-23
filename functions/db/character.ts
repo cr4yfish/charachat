@@ -56,7 +56,8 @@ export const decryptCharacter = async (character: Character, key: string): Promi
         intro: decryptMessage(character.intro, buffer),
         bio: decryptMessage(character.bio, buffer),
         book: decryptMessage(character.book, buffer),
-        image_link: decryptMessage(character.image_link ?? "", buffer)
+        image_link: decryptMessage(character.image_link ?? "", buffer),
+        personality: decryptMessage(character.personality, buffer),
     }
 }
 
@@ -70,7 +71,8 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         intro: encryptMessage(character.intro, buffer),
         bio: encryptMessage(character.bio, buffer),
         book: encryptMessage(character.book, buffer),
-        image_link: encryptMessage(character.image_link ?? "", buffer)
+        image_link: encryptMessage(character.image_link ?? "", buffer),
+        personality: encryptMessage(character.personality, buffer),
     }
 }
 
