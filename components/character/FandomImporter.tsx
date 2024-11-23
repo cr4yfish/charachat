@@ -11,14 +11,16 @@ import Markdown from "react-markdown";
 import { Avatar } from "@nextui-org/avatar";
 import { truncateText } from "@/lib/utils";
 import { Character, Profile } from "@/types/db";
-import { searchFandomPages } from "@/functions/serverHelpers";
+import { getFandomPage, searchFandomPages } from "@/functions/serverHelpers";
 
 type FandomPage = {
     title: string;
     description: string;
     thumbnail?: {
         url: string;
-    }
+    },
+    link: string;
+    fandom: string;
 }
 
 type FandomPageProps = {
@@ -43,6 +45,7 @@ function FandomPageCard(props: FandomPageProps) {
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-col">
+                        <span className="text-xs dark:text-zinc-400">{props.fandompage.fandom}</span>
                         <span className="font-bold">{props.fandompage.title}</span>
                     </div>
                    
@@ -71,40 +74,28 @@ export default function FandomImporter(props: Props) {
         setIsImporting(true);
 
         // get full page
-        const res = await fetch("https://en.wikipedia.org/w/rest.php/v1/page/" + page.title, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-            
-        })
+        console.log("Importing from:",page.link);
+        const html = await getFandomPage(page.link);
+
+        // parse html to DOM
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+        const contentContainer = doc.querySelector(".mw-parser-output");
+
+        // get all p elements
+        const paragraphs = contentContainer?.querySelectorAll("p");
 
         let book = "";
-        
-        if(res.status == 200) {
-            const json = await res.json();
-            book = json.source;
-        } else {
-            console.error("Error fetching data");
-        }
 
-        // regex to match {{  }} with whitespace, text and nested {{ }} inside
-        book = book.replace(/{{([^{}]*({{[^{}]*}}[^{}]*)*)}}/g, "");
+        paragraphs?.forEach((p) => {
+            let text = p.textContent || "";
+            text = text.replaceAll("\n","").replaceAll("\t","");
 
-        // regex remove all lines with | at start
-        book = book.replace(/^\|.*$/gm, "");
-
-        // remove {{ }} until no match
-        while(/{{[^{}]*}}/.test(book)) {
-            book = book.replace(/{{[^{}]*}}/g, "");
-        }
-
-        // regex remove all lines with no text
-        book = book.replace(/^\s*$/gm, "");
+            book += text;
+        })
 
         book = book.slice(0,1000);
-
         
         // convert to Character and update upstream
         const character: Character = {
@@ -133,13 +124,14 @@ export default function FandomImporter(props: Props) {
         
         const results = doc.querySelectorAll(".unified-search__result");
 
-
+        console.log(results)
         // get text from all p elements
         const pages = Array.from(results).map((ele,) => {
             const pageTitle = ele.querySelector(".unified-search__result__title")?.textContent ?? "";
             const pageDescription = ele.querySelector(".unified-search__result__content")?.textContent ?? "";
             const pageThumbnail = ele.querySelector(".unified-search__result__title")?.getAttribute("data-thumbnail");
-    
+            const pageLink = ele.querySelector(".unified-search__result__title")?.getAttribute("href");
+
             // remove everything after .jpg in pageThumbnail
             let url = "";
             let format = "";
@@ -156,7 +148,9 @@ export default function FandomImporter(props: Props) {
                 description: pageDescription.replaceAll("\n","").replaceAll("\t",""),
                 thumbnail: {
                     url: url || ""
-                }
+                },
+                link: pageLink || "",
+                fandom: new URL(pageLink || "").hostname
             }
 
             return newPage;
