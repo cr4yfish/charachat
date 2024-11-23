@@ -11,7 +11,7 @@ import Markdown from "react-markdown";
 import { Avatar } from "@nextui-org/avatar";
 import { truncateText } from "@/lib/utils";
 import { Character, Profile } from "@/types/db";
-import { getAICharacterCard, getFandomPage, searchAICharacterCards } from "@/functions/serverHelpers";
+import { getAICharacterCard, searchAICharacterCards } from "@/functions/serverHelpers";
 
 type CharaterPage = {
     title: string;
