@@ -12,6 +12,7 @@ import { saveCharacter } from "@/app/c/new/actions";
 import { Button } from "../utils/Button";
 import { Character, Profile } from "@/types/db";
 import StoryInputWithAI from "../story/StoryInputWithAI";
+import CharacterCard from "./CharacterCard";
 
 type Props = {
     initCharacter: Character;
@@ -161,7 +162,18 @@ export default function CharacterNew(props: Props) {
             <CategoryAutocomplete 
                 setCategory={(category) => updateValue("category", category.id)}
             />
-            <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
+
+            <div className="flex flex-col gap-1">
+                <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
+                <p className="text-xs dark:text-zinc-400">When set to Private, only you will be able to see and interact with the Character. Note that it might still appear on the front page, but only you will see it. <b>Private Characters are not encrypted yet.</b></p>
+            </div>
+           
+            <div className="flex flex-col gap-1">
+                <h3 className="text-lg font-bold">Preview</h3>
+                <CharacterCard fullWidth data={newCharacter} hasLink={false} />
+            </div>
+       
+
             <div className=" max-w-xs max-md:max-w-full ">
                 <Button
                     type="submit" 
