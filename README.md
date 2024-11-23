@@ -4,7 +4,7 @@
 
 [Discord](https://discord.gg/2HqqwcwGCy)
 
-Highly work in progress character chat app.
+[Website](https://charachat.app)
 
 Lets you create a character or use a pre-made one and chat with them. The character will respond to you based on their personality and remember things you've said to them. This lets you have a dynamic and personal conversation with a character.
 
