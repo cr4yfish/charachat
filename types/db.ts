@@ -35,6 +35,7 @@ export type Chat = {
     dynamic_book?: string;
     story?: Story;
     llm: string;
+    last_message?: string;
 }
 
 export type Profile = {
