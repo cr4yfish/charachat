@@ -4,6 +4,7 @@ import { Character, Profile } from "@/types/db";
 import {Tabs, Tab} from "@nextui-org/tabs";
 import AnimeImport from "./AnimeImport";
 import WikipediaImport from "./WikipediaImport";
+import FandomImporter from "./FandomImporter";
 
 
 type Props = {
@@ -30,6 +31,12 @@ export default function CharacterNewImport(props: Props) {
                 </Tab>
                 <Tab title="Wikipedia">
                     <WikipediaImport 
+                        setCharacter={props.setCharacter}
+                        profile={props.profile}
+                    />
+                </Tab>
+                <Tab title="Fandom">
+                    <FandomImporter
                         setCharacter={props.setCharacter}
                         profile={props.profile}
                     />
