@@ -64,7 +64,7 @@ export default async function Home() {
         </div>
 
         <div className="flex flex-col gap-2 w-full relative">
-          <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
+          <h2 className="dark:prose-invert text-lg font-bold">New</h2>
           <InfiniteSwiperLoader 
             loadMore={getCharacters} 
             limit={5} 
