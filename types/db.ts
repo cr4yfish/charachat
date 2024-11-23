@@ -20,8 +20,8 @@ export type Character = {
     category?: Category;
     is_private: boolean;
     personality: string;
-    chats: number;
-    likes: number;
+    chats?: number;
+    likes?: number;
 }
 
 export type Chat = {
