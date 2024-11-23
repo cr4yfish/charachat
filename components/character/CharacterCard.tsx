@@ -34,7 +34,7 @@ export default function CharacterCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-[150px] w-[300px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
+                        h-[150px] w-[310px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"} 
                         ${props.isSmall && "h-full"}
@@ -53,7 +53,6 @@ export default function CharacterCard(props: Props) {
                                 <div className="flex flex-col">
                                     <div className="flex flex-col">
                                         <h3 className="font-medium">{truncateText(props.data.name,40)}</h3>
-                                        
                                     </div>
                                     <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
                                 </div>
@@ -70,6 +69,12 @@ export default function CharacterCard(props: Props) {
                                     <Icon downscale>favorite</Icon>
                                     <span>{props.data.likes}</span>
                                 </div>
+                                {props.data.is_private &&
+                                <div className="flex gap-1 items-center">
+                                    <Icon color="green-500" downscale filled>lock</Icon>
+                                    <span className="text-xs text-green-500">Private</span>
+                                </div>
+                                }
                             </div>
                             } 
                         </div>
