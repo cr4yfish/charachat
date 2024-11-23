@@ -1,39 +1,81 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import { cookies } from "next/headers";
 import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
+import { decryptMessage } from "@/lib/crypto";
 
 const chatMatcher = `
-    *,
-    characters (
-        *,
-        profiles!characters_owner_fkey (*)
-    ),
-    stories (
-        *,
-        characters (
-            *,
-            profiles!characters_owner_fkey (*)
-        )
-    ),
-    profiles (*)
+    *
 `
 
+const tableName = "chats_overview";
+
 const chatFormatter = (db: any): Chat => {
+    const cookiesStore = cookies();
+
+    const key = cookiesStore.get("key")?.value;
+
+    if(!key) {
+        throw new Error("No key");
+    }
+
+    let decryptedMessage = "";
+    
+    if(db.last_message && db.last_message.length > 0) {
+        decryptedMessage = decryptMessage(db.last_message, Buffer.from(key, "hex"));
+    }
+
     return {
         ...db,
-        character: db.characters,
-        story: db.stories,
-        user: db.profiles
+        last_message: decryptedMessage,
+        character: {
+            id: db.character_id,
+            name: db.character_name,
+            image: db.character_image,
+            image_link: db.character_image_link,
+            description: db.character_description,
+            avatar_link: db.character_avatar_link,
+            avatarUrl: db.character_avatar_url,
+            bio: db.character_bio,
+            intro: db.character_intro,
+            book: db.character_book,
+            category: db.character_category,
+            is_private: db.character_is_private,
+            personality: db.character_personality,
+            chats: db.character_chats,
+            likes: db.character_likes,
+            owner: {
+                id: db.character_owner_id,
+                username: db.character_owner_username,
+            }
+        },
+        user: {
+            id: db.profile_id,
+            username: db.profile_username,
+            first_name: db.profile_first_name,
+            last_name: db.profile_last_name,
+            avatar_link: db.profile_avatar_link,
+        },
+        story: {
+            id: db.story_id,
+            title: db.story_title,
+            description: db.story_description,
+            created_at: db.story_created_at,
+            owner: db.story_owner,
+            likes: db.story_likes,
+            chats: db.story_chats,
+            image_link: db.story_image_link,
+        }
     }
 }
 
 export const getChat = cache(async (chatId: string): Promise<Chat> => {
     const { data, error } = await createClient()
-        .from("chats")
+        .from(tableName)
         .select(chatMatcher)
         .eq("id", chatId)
         .single();
@@ -48,7 +90,7 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
 
 export const getCharacterChats = cache(async (characterId: string): Promise<Chat[]> => {
     const { data, error } = await createClient()
-        .from("chats")
+        .from(tableName)
         .select(chatMatcher)
         .eq("character", characterId)
         .order("last_message_at", { ascending: false })
@@ -64,7 +106,7 @@ export const getCharacterChats = cache(async (characterId: string): Promise<Chat
 
 export const getChats = cache(async (cursor: number, limit: number): Promise<Chat[]> => {
     const { data, error } = await createClient()
-        .from("chats")
+        .from(tableName)
         .select(chatMatcher)
         .order("last_message_at", { ascending: false })
         .range(cursor, cursor + limit)
@@ -91,7 +133,7 @@ type CreateChatProps = {
 
 export const createChat = async ({ chatId, userId, characterId, title, description, storyId, llm } : CreateChatProps): Promise<Chat> => {
     const { data, error } = await createClient()
-    .from("chats")
+    .from(tableName)
     .insert([{
         id: chatId,
         user: userId,
@@ -114,7 +156,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
 
 export const updateChat = async (chat: Chat): Promise<Chat> => {
     const { data, error } = await createClient()
-        .from("chats")
+        .from(tableName)
         .update({
             dynamic_book: chat.dynamic_book,
             title: chat.title,
