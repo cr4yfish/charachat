@@ -147,7 +147,7 @@ export const updateCharacter = async (character: Character): Promise<void> => {
 
 export const deleteCharacter = async (characterId: string): Promise<void> => {
     const { error } = await createClient()
-        .from(characterTableName)
+        .from("characters")
         .delete()
         .eq("id", characterId);
 

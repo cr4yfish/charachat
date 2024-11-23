@@ -146,7 +146,7 @@ export const updateStory = async (story: Story): Promise<Story> => {
 
 export const deleteStory = async (storyId: string): Promise<void> => {
     const { error } = await createClient()
-        .from(storyTableName)
+        .from("stories")
         .delete()
         .eq("id", storyId);
 
