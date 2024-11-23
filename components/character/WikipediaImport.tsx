@@ -108,9 +108,6 @@ export default function WikipediaImport(props: Props) {
         book = book.replace(/^\s*$/gm, "");
 
         book = book.slice(0,1000);
-
-        console.log("Rest:",book);
-
         
         // convert to Character and update upstream
         const character: Character = {

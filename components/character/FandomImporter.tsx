@@ -105,8 +105,6 @@ export default function FandomImporter(props: Props) {
 
         book = book.slice(0,1000);
 
-        console.log("Rest:",book);
-
         
         // convert to Character and update upstream
         const character: Character = {
@@ -164,10 +162,7 @@ export default function FandomImporter(props: Props) {
             return newPage;
         });
 
-        console.log("Pages:",pages);
-
         setFandomPages(pages);
-        
         setIsLoading(false);
     }
 
