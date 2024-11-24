@@ -40,7 +40,7 @@ export default function CharacterCard(props: Props) {
                         
                         <div className="flex items-center justify-center">
                             <div className="relative h-[100%] w-[100px] overflow-hidden rounded-2xl">
-                                <Image className="relative object-cover" layout="fill" src={props.data.image_link ?? ""} alt={props.data.name} />
+                                <Image className="relative object-cover" layout="fill" src={props.data?.image_link ?? ""} alt={props.data.name} />
                             </div>
                         </div>
 
