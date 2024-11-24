@@ -75,7 +75,7 @@ export default function CharacterPage(props: Props) {
                         <p className="text-sm dark:text-neutral-400">By @{props.character.owner.username}</p>
                     </div>
 
-                    <div className="w-full flex items-center max-md:justify-center gap-2">
+                    <div className="w-full flex items-center justify-center gap-2">
                         <Button 
                             onClick={handleStartChat} 
                             size="lg" color="primary" 
@@ -106,7 +106,7 @@ export default function CharacterPage(props: Props) {
                         </div>
                     }
 
-                    <div className="flex flex-col gap-2 text-sm dark:text-zinc-200">
+                    <div className="flex flex-row flex-wrap gap-2 text-sm dark:text-zinc-200">
                         
                         <div className="flex items-center gap-2">
                             <Icon downscale filled>chat_bubble</Icon>
