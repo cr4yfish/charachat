@@ -14,6 +14,7 @@ import { getLanguageModel } from '@/functions/ai/llm';
 import { decryptMessage } from '@/lib/crypto';
 import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
+import { generateImage, uploadImageToImgur } from '@/functions/ai/image';
 
 export async function POST(req: Request) {
     const { messages, profile: initProfile, chat: initChat, selfDestruct } = await req.json();
@@ -115,6 +116,26 @@ export async function POST(req: Request) {
                             })
                             
                             return memory;
+                        } catch (error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                },
+                
+                generateImage: {
+                    description: "Generate an image based on the recent chat summary.",
+                    parameters: z.object({ text: z.string() }),
+                    execute: async ({ text }: { text: string }) => {
+
+                        try {
+                            const image = await generateImage({
+                                inputs: text,
+                            })
+                            const link = await uploadImageToImgur(image);
+                            return link;
+
                         } catch (error) {
                             console.error(error);
                             const err = error as Error;

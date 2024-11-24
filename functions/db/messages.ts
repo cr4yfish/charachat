@@ -73,3 +73,14 @@ export const addMessage = async (message: Message, key: string) => {
 
     return data;
 }
+
+export const deleteMessage = async (messageId: string): Promise<void> => {
+    const { error } = await createClient()
+        .from("messages")
+        .delete()
+        .eq("id", messageId);
+
+    if (error) {
+        throw error;
+    }
+}

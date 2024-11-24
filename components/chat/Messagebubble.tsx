@@ -29,6 +29,7 @@ import { Chat } from "@/types/db";
 import { ToolInvocation } from "ai";
 import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
 import Icon from "../utils/Icon";
+import { deleteMessage } from "@/functions/db/messages";
   
 
 type Props = {
@@ -41,11 +42,14 @@ type Props = {
         result: any;
     }) => void,
     showName: boolean,
+    setMessages: (messages: AIMessage[] | ((messages: AIMessage[]) => AIMessage[])) => void
 }
 
 export default function Messagebubble(props: Props) {
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const { toast } = useToast();
+
+    const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
     useEffect(() => {
         if(isContextMenuOpen) {
@@ -65,7 +69,7 @@ export default function Messagebubble(props: Props) {
 
                     if(toolInvocation.toolName == "addNewMemory") {
                         return 'result' in toolInvocation ? (
-                            <Alert key={toolCallId} className="dark:prose-invert dark:text-slate-400">
+                            <Alert key={toolCallId} className="dark:prose-invert dark:text-zinc-400 dark:bg-transparent max-w-lg justify-self-center">
                                 <AlertTitle>Added a new memory</AlertTitle>
                                 <AlertDescription>
                                     {toolInvocation.result}
@@ -75,7 +79,21 @@ export default function Messagebubble(props: Props) {
                             <Alert key={toolCallId} className=" dark:bg-transparent ">
                                 <AlertTitle className="flex items-center gap-2 dark:prose-invert">
                                     <Spinner size="sm" />
-                                    <p className=" dark:text-slate-400 ">Adding a new memory...</p>
+                                    <p className=" dark:text-zinc-400 ">Adding a new memory...</p>
+                                </AlertTitle>
+                            </Alert>
+                        );
+                    }
+
+                    if(toolInvocation.toolName == "generateImage") {
+                        return 'result' in toolInvocation ? (
+                            <div key={toolCallId} className="w-full h-full">
+                            </div>
+                        ) : (
+                            <Alert key={toolCallId} className=" dark:bg-transparent ">
+                                <AlertTitle className="flex items-center gap-2 dark:prose-invert">
+                                    <Spinner size="sm" />
+                                    <p className=" dark:text-zinc-400 ">Generating an image...</p>
                                 </AlertTitle>
                             </Alert>
                         );
@@ -94,6 +112,25 @@ export default function Messagebubble(props: Props) {
         })
     }
 
+    const handleDelete = async () => {
+        setIsDeleteLoading(true);
+        console.log("Deleting message", props.message)
+        try {
+            await deleteMessage(props.message.id);
+
+            props.setMessages((messages) => messages.filter((message) => message.id !== props.message.id));
+
+        } catch (error) {
+            console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Failed to delete message",
+                description: err.message,
+                variant: "destructive",
+            })
+        }
+    }
+
     return (
         <>
 
@@ -102,6 +139,7 @@ export default function Messagebubble(props: Props) {
             <ContextMenuTrigger>
                 <motion.div
                     {...framerListAnimationProps}
+                    exit={{ opacity: 0 }}
                     custom={props.index}
                     whileTap={{ scale: 0.95, transition: { duration: .6 } }}
                     
@@ -133,7 +171,7 @@ export default function Messagebubble(props: Props) {
                                 </CardTitle>
                             </CardHeader>
                         }
-                        <CardContent className={`pt-3 pb-0 ${props.message.role !== "user" && "pt-0"} prose dark:prose-invert `}>                
+                        <CardContent className={`pt-3 pb-0 ${props.message.role !== "user" && "pt-0"} prose dark:prose-invert prose-img:rounded-xl `}>                
                             <Markdown>
                                 {props.message.content}
                             </Markdown>
@@ -157,12 +195,10 @@ export default function Messagebubble(props: Props) {
                     Copy
                     <Icon>content_copy</Icon>
                 </ContextMenuItem>
-                { props.message.role == "user" &&
                     <ContextMenuItem disabled >
                     Edit
                     <Icon>edit</Icon>
                 </ContextMenuItem>
-                }
                 { props.message.role == "assistant" &&
                 <ContextMenuItem disabled >
                     Report
@@ -175,9 +211,9 @@ export default function Messagebubble(props: Props) {
                     <Icon>refresh</Icon>
                 </ContextMenuItem>
                 }
-                <ContextMenuItem disabled className="dark:text-red-400" >
+                <ContextMenuItem onClick={handleDelete} disabled={isDeleteLoading} className="dark:text-red-400" >
                     Delete
-                    <Icon>delete</Icon>
+                    {!isDeleteLoading ? <Icon>delete</Icon> : <Spinner size="sm" color="danger" />}
                 </ContextMenuItem>
             </ContextMenuContent>
             

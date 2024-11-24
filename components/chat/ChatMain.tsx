@@ -325,10 +325,11 @@ export default function ChatMain(props : Props) {
                             <Messagebubble 
                                 key={message.id} 
                                 message={message} 
+                                setMessages={setMessages}
                                 index={index} 
                                 chat={chat} 
                                 addToolResult={addToolResult} 
-                                showName={index == 0 || (messages[index - 1].role !== message.role)}
+                                showName={index == 0 || (messages[index - 1].role !== message.role) || (messages[index-1].toolInvocations?.some((t) => t.state == "result") || false )}
                             />
                         </div>
                     )
