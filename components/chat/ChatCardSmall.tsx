@@ -45,12 +45,7 @@ export default function ChatCardSmall(props: Props) {
                         <div className="flex flex-row items-center justify-between w-full">
                             <h3 className="text-md">{props.data.character.name}</h3>
                             {props.data.last_message_at && 
-                                <span 
-                                    className={`
-                                    text-xs dark:text-slate-400
-                                    ${isActive && "dark:text-blue-200"}    
-                                    `}
-                                >
+                                <span className={`text-xs  ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
                                     {formatLastMessageTime(new Date(props.data.last_message_at))}
                                 </span>
                             }
@@ -61,10 +56,7 @@ export default function ChatCardSmall(props: Props) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className={`
-                                dark:text-zinc-400 single-line text-sm
-                                ${isActive && "dark:text-blue-200"}    
-                            `}
+                            className={`single-line text-sm ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`}
                         >
                             {truncateText(props.data.last_message ?? "", 20)}
                         </motion.p>
