@@ -18,10 +18,6 @@ type Props = {
 }
 
 export default function CharacterCard(props: Props) {
-    
-    if(!props.data?.id) {
-        return null;
-    } 
 
     return (
         <>
