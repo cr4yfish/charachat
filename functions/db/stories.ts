@@ -101,7 +101,7 @@ type CreateStoryProps = {
 
 export const createStory = async (params : CreateStoryProps): Promise<Story> => {
     const { data, error } = await createClient()
-    .from(storyTableName)
+    .from("stories")
     .upsert({
         id: params.storyId,
         creator: params.userId,
@@ -126,7 +126,7 @@ export const createStory = async (params : CreateStoryProps): Promise<Story> => 
 export const updateStory = async (story: Story): Promise<Story> => {
 
     const { data, error } = await createClient()
-        .from(storyTableName)
+        .from("stories")
         .update({
             title: story.title,
             description: story.description,
