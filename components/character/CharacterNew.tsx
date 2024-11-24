@@ -88,7 +88,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Name"
                 placeholder="Albert Einstein"
                 description="Name of the Character" 
-                maxLength={50}
+                maxLength={100}
                 minRows={1}
                 maxRows={1}
                 value={newCharacter.name}
@@ -100,7 +100,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Description"
                 placeholder="Physicist, mathematician, and author"
                 description="Very short description of the Character" 
-                maxLength={150} 
+                maxLength={5000} 
                 initValue={newCharacter.description}
                 setValue={(value) => updateValue("description", value)}
                 character={newCharacter}
@@ -114,7 +114,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Personality"
                 placeholder="Curious, imaginative, and open-minded"
                 description="Personality traits of the character"
-                maxLength={150}
+                maxLength={1000}
                 initValue={newCharacter.personality}
                 setValue={(value) => updateValue("personality", value)}
                 character={newCharacter}
@@ -128,7 +128,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Bio"
                 placeholder="Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. He was born in 1879 and died in 1955."
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
-                maxLength={500} 
+                maxLength={5000} 
                 initValue={newCharacter.bio}
                 profile={props.profile}
                 buttonLabel="Generate Bio"
@@ -153,7 +153,7 @@ export default function CharacterNew(props: Props) {
                 isRequired
                 placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
                 description="Introduction of the character. Describe how the character would introduce themselves." 
-                maxLength={500} 
+                maxLength={5000} 
                 initValue={newCharacter.intro}
                 character={newCharacter}
                 setValue={(value) => updateValue("intro", value)}
@@ -164,7 +164,7 @@ export default function CharacterNew(props: Props) {
                 initValue={newCharacter.book}
                 setValue={(value) => updateValue("book", value)}
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
-                maxLength={1500} 
+                maxLength={8000} 
                 isRequired
                 buttonLabel="Generate Book"
                 api="/api/author/character/book"
