@@ -3,7 +3,6 @@
 import CharacterCard from "@/components/character/CharacterCard";
 import { getCharacters, getPopularCharacters } from "@/functions/db/character";
 import { Character } from "@/types/db";
-import { redirect } from "next/navigation";
 
 import { getStories } from "@/functions/db/stories";
 import StoryCard from "@/components/story/StoryCard";
@@ -13,6 +12,7 @@ import { getCategories } from "@/functions/db/categories";
 import InfiniteSwiperLoader from "@/components/InfiniteSwiperLoder";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 import Spotlight from "@/components/Spotlight";
+import Link from "next/link";
 
 export default async function Home() {
 
@@ -25,8 +25,23 @@ export default async function Home() {
     characters = await getCharacters(0, 5);
     popularCharacters = await getPopularCharacters(0, 5);
   } catch (error) {
-    console.error(error);
-    redirect("/error");
+    const err = error as Error;
+    return (
+      <>
+      <div className="prose dark:prose-invert p-10">
+        <h1>Uh, oh. Something went wrong</h1>
+        <p>And I don&apos;t know what. Try refreshing the page or report this issue.</p>
+        <div className="flex flex-col gap-1a">
+          <Link href={"https://github.com/cr4yfish/charachat/issues/new"} className="dark:text-blue-500">Report this on GitHub</Link>
+          <span>or</span>
+          <Link href={"https://www.reddit.com/r/Charachat/"} className="dark:text-blue-500">Report this on Reddit</Link>
+        </div>
+        
+        <h3>This is the error message:</h3>
+        <pre>{err.message}</pre>
+      </div>
+      </>
+    )
   }
 
   return (
