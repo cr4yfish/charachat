@@ -49,16 +49,22 @@ const characterFormatter = async (db: any): Promise<Character> => {
 export const decryptCharacter = async (character: Character, key: string): Promise<Character> => {
     const buffer = Buffer.from(key, "hex");
 
-    return {
-        ...character,
-        name: decryptMessage(character.name, buffer),
-        description: decryptMessage(character.description, buffer),
-        intro: decryptMessage(character.intro, buffer),
-        bio: decryptMessage(character.bio, buffer),
-        book: decryptMessage(character.book, buffer),
-        image_link: decryptMessage(character.image_link ?? "", buffer),
-        personality: decryptMessage(character.personality, buffer),
+    try {
+        return {
+            ...character,
+            name: decryptMessage(character.name, buffer),
+            description: decryptMessage(character.description, buffer),
+            intro: decryptMessage(character.intro, buffer),
+            bio: decryptMessage(character.bio, buffer),
+            book: decryptMessage(character.book, buffer),
+            image_link: decryptMessage(character.image_link ?? "", buffer),
+            personality: decryptMessage(character.personality, buffer),
+        }
+    } catch (error) {
+        console.error("Error decrypting character", error);
+        return character;
     }
+
 }
 
 export const encryptCharacter = async (character: Character, key: string): Promise<Character> => {
