@@ -30,8 +30,8 @@ export default function CharacterNewImport(props: Props) {
                         profile={props.profile}
                     />  
                 </Tab>
-                <Tab title="Wikipedia">
-                    <WikipediaImport 
+                <Tab title="Silly Tavern">
+                    <AICharacterCardsImporter
                         setCharacter={props.setCharacter}
                         profile={props.profile}
                     />
@@ -42,8 +42,8 @@ export default function CharacterNewImport(props: Props) {
                         profile={props.profile}
                     />
                 </Tab>
-                <Tab title="AI Character Cards">
-                    <AICharacterCardsImporter
+                <Tab title="Wikipedia">
+                    <WikipediaImport 
                         setCharacter={props.setCharacter}
                         profile={props.profile}
                     />
