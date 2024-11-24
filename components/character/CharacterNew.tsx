@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
 import { Switch } from "@nextui-org/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ import StoryInputWithAI from "../story/StoryInputWithAI";
 import CharacterCard from "./CharacterCard";
 import { getKeyClientSide } from "@/lib/crypto";
 import { encryptCharacter } from "@/functions/db/character";
+import ImageInputWithAI from "../ImageInputWithAI";
 
 type Props = {
     initCharacter: Character;
@@ -136,13 +136,9 @@ export default function CharacterNew(props: Props) {
                 character={newCharacter}
                 setValue={(value) => updateValue("bio", value)}
             />
-            <Input 
-                name="image_link"
-                label="Image Link" 
-                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                description="Direct link to an image" 
-                value={newCharacter.image_link}
-                onValueChange={(value) => updateValue("image_link", value)}
+            <ImageInputWithAI
+                character={newCharacter} 
+                setImageLink={(link) => updateValue("image_link", link)} 
             />
             <StoryInputWithAI 
                 name="intro" 

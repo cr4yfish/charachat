@@ -1,8 +1,6 @@
 "use client";
 
 import { v4 as uuid } from "uuid";
-import { Input } from "@nextui-org/input";
-
 import { Character, Profile, Story } from "@/types/db";
 import { Button } from "@/components/utils/Button";
 import { FormEvent, useState } from "react";
@@ -12,6 +10,8 @@ import { storySchema } from "@/lib/schemas";
 import { createStory, deleteStory } from "@/functions/db/stories";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
+import ImageInputWithAI from "../ImageInputWithAI";
+import StoryCard from "./StoryCard";
 
 
 type Props = {
@@ -194,18 +194,18 @@ export default function NewStoryMain(props: Props) {
                 isInvalid={errorMessages?.first_message !== undefined}
                 errorMessage={errorMessages?.first_message}
             />
-            
-            <Input 
-                name="image_link" 
-                isRequired 
-                label="Story Image Link" 
-                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                description="Direct link to an image" 
-                value={story.image_link}
-                onValueChange={(value) => updateValue("image_link", value)}
-                isInvalid={errorMessages?.image_link !== undefined}
-                errorMessage={errorMessages?.image_link}
+
+            <ImageInputWithAI
+                story={story}
+                setImageLink={(value) => updateValue("image_link", value)}
             />
+
+                      
+            <div className="flex flex-col gap-1">
+                <h3 className="text-lg font-bold">Preview</h3>
+                <StoryCard fullWidth data={story} hasLink={false} />
+            </div>
+
             <Button 
                 isLoading={isSaving} 
                 isDisabled={isSaved}

@@ -56,7 +56,8 @@ export type Profile = {
     gemini_encrypted_api_key?: string;
     mistral_base_url?: string;
     mistral_encrypted_api_key?: string;
-    anthropic_encrypted_api_key?: string
+    anthropic_encrypted_api_key?: string;
+    hf_encrypted_api_key?: string;
 }
 
 export type Story = {

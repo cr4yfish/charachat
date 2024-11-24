@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast"
@@ -12,6 +11,8 @@ import CategoryAutocomplete from "./CategoryAutocomplete";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { Switch } from "@nextui-org/switch";
 import Icon from "../utils/Icon";
+import ImageInputWithAI from "../ImageInputWithAI";
+import CharacterCard from "./CharacterCard";
 
 type Props = {
     character: Character
@@ -104,14 +105,9 @@ export default function CharacterEditMain(props: Props) {
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
                 maxLength={5000} 
             />
-            <Input 
-                name="image_link" 
-                isRequired 
-                label="Image Link" 
-                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                description="Direct link to an image" 
-                value={character.image_link}
-                onValueChange={(value) => setCharacter({ ...character, image_link: value })}
+            <ImageInputWithAI
+                character={character}
+                setImageLink={(image_link) => setCharacter({ ...character, image_link })}
             />
             <TextareaWithCounter 
                 name="intro" 
@@ -135,7 +131,18 @@ export default function CharacterEditMain(props: Props) {
                 setCategory={(category) => setCharacter({ ...character, category })}
                 defaultCategory={character.category}
             />
-            <Switch isSelected={character.is_private} onValueChange={(newValue) => setCharacter({...character, is_private: newValue})} >Private</Switch>
+
+            <div className="flex flex-col gap-1">
+                <Switch isSelected={character.is_private} onValueChange={(newValue) => setCharacter({ ...character, is_private: newValue })} >Private</Switch>
+                <p className="text-xs dark:text-zinc-400">When set to Private, the <b>Character gets encrypted and only you will be able to see and interact with it</b>. Note that it might still appear on the front page, but only you will see it. Please avoid this if possible to contribute to the Project.</p>
+            </div>
+                       
+            <div className="flex flex-col gap-1">
+                <h3 className="text-lg font-bold">Preview</h3>
+                <CharacterCard fullWidth data={character} hasLink={false} />
+            </div>
+       
+            
             <div className="flex flex-row max-w-xs w-full items-center gap-4 flex-wrap max-md:flex-col max-md:max-w-lg">
                 <div className="w-md max-md:w-full">
                     <Button 

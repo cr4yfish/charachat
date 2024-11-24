@@ -54,6 +54,9 @@ export type ModelId =
     "grok-beta"
 
 
+export type ImageModelId = 
+    "black-forest-labs/FLUX.1-schnell"
+
 export const isFreeModel = (modelId: ModelId) => {
     switch(modelId) {
         case "open-mistral-nemo":
