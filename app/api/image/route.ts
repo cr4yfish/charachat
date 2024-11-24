@@ -2,16 +2,15 @@ import { generateImage, uploadImageToImgur } from "@/functions/ai/image";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { decryptMessage } from "@/lib/crypto";
-import { Character, ChatContext, Story } from "@/types/db";
+import { Character, Story } from "@/types/db";
 
 type RequestBody = {
     character?: Character | undefined;
     story?: Story | undefined;
-    chatContext?: ChatContext | undefined;
 }
 
 export async function POST(req: Request) {
-    const { character, story, chatContext } = (await req.json()) as RequestBody;
+    const { character, story } = (await req.json()) as RequestBody;
 
     try {
         const profile = await getCurrentUser();
@@ -27,7 +26,7 @@ export async function POST(req: Request) {
         const title = character?.name || story?.title;
         const description = character?.description || story?.description;
 
-        if(!title || !description || !chatContext?.summary) {
+        if(!title || !description) {
             throw new Error("Missing required fields");
         }
 
