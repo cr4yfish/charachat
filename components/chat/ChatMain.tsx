@@ -340,11 +340,11 @@ export default function ChatMain(props : Props) {
             <div className="flex flex-col gap-4 items-start justify-center h-full w-full px-8 overflow-y-hidden">
                 <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
                     <h1>Select an AI to get started</h1>
-                    <p>Only ones for which you have a key are displayed. <b>The custom unrestricted Model is only available to testers right now.</b></p>
+                    <p>Only ones for which you have a key are displayed.</p>
                     <span>The following models are available for free currently:</span>
                     <ul>
                         <li>Nemo (messages used by Mistral for training)</li>
-                        <li>Grok (recommended)</li>
+                        <li>Grok (recommended, unrestricted)</li>
                     </ul>
                 </div>
                 
