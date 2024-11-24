@@ -45,7 +45,7 @@ export default function ChatMain(props : Props) {
     const [isSelfDestruct, setIsSelfDestruct] = useState(false);
     const { toast } = useToast();
 
-    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload } = useChat({
         initialMessages: props.initMessages.map((m) => {
             return {
                 id: m.id,
@@ -310,7 +310,7 @@ export default function ChatMain(props : Props) {
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE) &&
                     (
-                        <div key={message.id + "_wrapper"}>
+                        <div key={message.id + "_wrapper"} className={``}>
                             {(index !== 0) && (messages[index - 1].role !== message.role) && <Spacer y={6} />}
                             {((index == 0) || !isSameDay(new Date(message.createdAt!), new Date(messages[index - 1]?.createdAt ?? ""))) && (
                                 <div className="text-center text-sm dark:text-slate-400 my-2">
@@ -329,7 +329,9 @@ export default function ChatMain(props : Props) {
                                 index={index} 
                                 chat={chat} 
                                 addToolResult={addToolResult} 
+                                isLatestMessage={index == messages.length - 1}
                                 showName={index == 0 || (messages[index - 1].role !== message.role) || (messages[index-1].toolInvocations?.some((t) => t.state == "result") || false )}
+                                reloadMessages={reload}
                             />
                         </div>
                     )

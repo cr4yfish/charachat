@@ -6,6 +6,7 @@ import { cache } from "react";
 import { createClient } from "@/utils/supabase/supabase";
 import { Message } from "@/types/db";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
+import { getKeyServerSide } from "../serverHelpers";
 
 type getMessagesProps = {
     chatId: string;
@@ -79,6 +80,28 @@ export const deleteMessage = async (messageId: string): Promise<void> => {
         .from("messages")
         .delete()
         .eq("id", messageId);
+
+    if (error) {
+        throw error;
+    }
+}
+
+type UpdateMessageProps = {
+    content: string;
+    id: string;
+}
+
+export const updateMessage = async (props: UpdateMessageProps): Promise<void> => {
+
+    const key = await getKeyServerSide();
+    const encryptedContent = encryptMessage(props.content, Buffer.from(key, "hex"));
+
+    const { error } = await createClient()
+        .from("messages")
+        .update({
+            content: encryptedContent,
+        })
+        .eq("id", props.id);
 
     if (error) {
         throw error;
