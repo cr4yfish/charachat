@@ -114,7 +114,6 @@ export default function Messagebubble(props: Props) {
 
     const handleDelete = async () => {
         setIsDeleteLoading(true);
-        console.log("Deleting message", props.message)
         try {
             await deleteMessage(props.message.id);
 
