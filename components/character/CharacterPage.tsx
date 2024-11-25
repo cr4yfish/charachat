@@ -109,7 +109,7 @@ export default function CharacterPage(props: Props) {
                         >
                             Start Chat
                         </Button>
-                        { props.profile?.user == props.character.owner.user ?
+                        {props.profile?.user == props.character.owner.user ?
                             <Link href={`/c/${props.character.id}/edit`}>
                                 <Button
                                     color="warning" isDisabled={isLoading}
@@ -119,17 +119,19 @@ export default function CharacterPage(props: Props) {
                                 </Button>
                             </Link>
                             :
-                            <Button 
-                                color="danger" variant="flat" 
-                                radius="full" size="lg" 
-                                onClick={handleLike}
-                                isLoading={isLiking}
-                                isIconOnly
-                            >
-                                <Icon filled={isLiked} >
-                                    {isLiked ? "favorite" : "heart_plus"}
-                                </Icon>
-                            </Button>
+                            props.profile !== undefined ? 
+                                <Button 
+                                    color="danger" variant="flat" 
+                                    radius="full" size="lg" 
+                                    onClick={handleLike}
+                                    isLoading={isLiking}
+                                    isIconOnly
+                                >
+                                    <Icon filled={isLiked} >
+                                        {isLiked ? "favorite" : "heart_plus"}
+                                    </Icon>
+                                </Button>
+                            : null
                         }
                     </div>
 
