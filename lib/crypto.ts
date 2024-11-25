@@ -46,7 +46,7 @@ export const encryptMessage = (message: string, key: Buffer): string => {
  */
 export const decryptMessage = (encryptedMessage: string, key: Buffer): string => {
     if(!encryptedMessage.startsWith("ENC:")) {
-        throw new Error("Trying to decrypt a message that is not encrypted");
+        return encryptedMessage
     }
     const msgWithoutPrefix = encryptedMessage.slice(4);
     const [ivHex, encrypted] = msgWithoutPrefix.split(':');
