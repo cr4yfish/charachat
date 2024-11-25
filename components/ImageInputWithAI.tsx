@@ -62,7 +62,7 @@ export default function ImageInputWithAI(props: Props) {
                 name="image_link"
                 label="Image Link" 
                 placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                description="Direct link to an image" 
+                description="Direct link to an image. Link needs to end with image extension (e.g. .jpg)!" 
                 value={props.story?.image_link ?? props.character?.image_link ?? ""}
                 onValueChange={handleSetImageLink}
             />
