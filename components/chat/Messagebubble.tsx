@@ -5,7 +5,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { motion } from "motion/react";
 import Markdown from "react-markdown";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 import { framerListAnimationProps } from "@/lib/utils";
@@ -57,6 +57,8 @@ export default function Messagebubble(props: Props) {
     const [isSavingLoading, setIsSavingLoading] = useState(false);
     
     const [isRegenerating, setIsRegenerating] = useState(false);
+
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     /* TODO Fix blurrer
     useEffect(() => {
@@ -184,6 +186,13 @@ export default function Messagebubble(props: Props) {
         setIsRegenerating(false);
     }
 
+    const handleSetEditMode = () => {
+        setIsEditMode(true);
+        setTimeout(() => {
+            textareaRef.current?.focus();
+        }, 500);
+    }
+
     return (
         <>
         <div className={`w-fit ${props.message.role === "user" ? "ml-auto" : "mr-auto"}`}>
@@ -230,6 +239,7 @@ export default function Messagebubble(props: Props) {
                                     </Markdown>
                                     :
                                     <Textarea
+                                        ref={textareaRef}
                                         classNames={{
                                             base: "bg-transparent dark:bg-transparent !focus:bg-transparent",
                                             inputWrapper: "bg-transparent !dark:bg-transparent !focus:bg-transparent group-data-[focus=true]:bg-trasnparent data-[hover=true]:bg-transparent",
@@ -275,7 +285,7 @@ export default function Messagebubble(props: Props) {
                         Copy
                         <Icon>content_copy</Icon>
                     </ContextMenuItem>
-                        <ContextMenuItem onClick={() => setIsEditMode(true)}  className="dark:text-amber-400" >
+                        <ContextMenuItem onClick={handleSetEditMode}  className="dark:text-amber-400" >
                         Edit
                         <Icon>edit</Icon>
                     </ContextMenuItem>
