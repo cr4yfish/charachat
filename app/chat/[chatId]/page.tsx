@@ -29,7 +29,7 @@ export async function generateMetadata(
         }
         
     } catch (error) {
-        console.error(error);
+        console.error("Error getting metadata:",error);
         return {
             title: `Chat - Charachat`,
         }   
@@ -45,7 +45,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
     try {
         chat = await getChat(chatId);
     } catch (error) {
-        console.error(error);
+        console.error("Error getting chat information with chatId:", chatId, "and error:" ,error);
     }
 
     if (!chat) {
