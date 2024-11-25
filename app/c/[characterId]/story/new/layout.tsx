@@ -1,3 +1,9 @@
+import { Metadata } from "next"
+
+
+export const metadata : Metadata = {
+    title: "Create a new Story",
+}
 
 export default function Layout({ children } : { children: React.ReactNode | React.ReactNode[]}) {
 

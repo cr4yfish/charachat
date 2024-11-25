@@ -10,6 +10,30 @@ import StartStoryButton from "@/components/story/StartStoryButton";
 import { Profile } from "@/types/db";
 import Icon from "@/components/utils/Icon";
 
+import { Metadata } from "next";
+
+
+export async function generateMetadata(
+    { params: { storyId } } : { params: { storyId: string } }
+) : Promise<Metadata> {
+    
+    try {
+        const story = await getStory(storyId);
+
+        return {
+            title: `${story.title}`,
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return {
+            title: `Viewing Story`,
+        }   
+    }
+
+}
+
+
 export default async function Story({ params: { storyId, characterId } }: { params: { storyId: string, characterId: string } }) {
 
     let profile: Profile | undefined = undefined;

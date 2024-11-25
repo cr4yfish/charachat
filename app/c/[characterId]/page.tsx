@@ -6,6 +6,29 @@ import { getCurrentUser } from "@/functions/db/auth";
 import { getCharacterStories } from "@/functions/db/stories";
 import CharacterPage from "@/components/character/CharacterPage";
 import DeleteCharacterButton from "@/components/character/DeleteCharacterButton";
+import { Metadata } from "next";
+
+
+export async function generateMetadata(
+    { params: { characterId } } : { params: { characterId: string } }
+) : Promise<Metadata> {
+    
+    try {
+        const character = await getCharacter(characterId);
+
+        return {
+            title: `${character.name}`,
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return {
+            title: `Viewing Characters`,
+        }   
+    }
+
+}
+
 
 export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
 

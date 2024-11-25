@@ -3,6 +3,28 @@
 import { getCharacter } from "@/functions/db/character";
 
 import CharacterEditMain from "@/components/character/CharacterEditMain";
+import { Metadata } from "next";
+
+
+export async function generateMetadata(
+    { params: { characterId } } : { params: { characterId: string } }
+) : Promise<Metadata> {
+    
+    try {
+        const character = await getCharacter(characterId);
+
+        return {
+            title: `Edit ${character.name}`,
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return {
+            title: `Editing Character`,
+        }   
+    }
+
+}
 
 export default async function CharacterView({ params: { characterId } } : { params: { characterId: string } }) {
 

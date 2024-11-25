@@ -5,7 +5,29 @@ import { getCurrentUser } from "@/functions/db/auth";
 import { getCharacter } from "@/functions/db/character";
 import { getStory } from "@/functions/db/stories";
 import { Profile } from "@/types/db";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export async function generateMetadata(
+    { params: { storyId } } : { params: { storyId: string } }
+) : Promise<Metadata> {
+    
+    try {
+        const story = await getStory(storyId);
+
+        return {
+            title: `Editing ${story.title}`,
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return {
+            title: `Editing Story`,
+        }   
+    }
+
+}
+
 
 export default async function EditStory({ params: { characterId, storyId } }: { params: { characterId: string, storyId: string } }) {
 
