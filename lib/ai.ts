@@ -3,6 +3,7 @@ import { Profile } from "@/types/db";
 export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): string | undefined => {
     switch(modelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
+        case "llama-3.2-90b-vision-preview":
             return profile.groq_encrypted_api_key;
 
         case 'ollama':
@@ -42,6 +43,7 @@ export const LLMsWithAPIKeys = (profile: Profile) => {
 
 export type ModelId = 
     "llama3-groq-70b-8192-tool-use-preview" |
+    "llama-3.2-90b-vision-preview" |
     "ollama" |
     "gpt-4o-mini" |
     "gpt-4o" |
@@ -81,6 +83,10 @@ export const LLMs: LLMType[] = [
     {
         "key": "llama3-groq-70b-8192-tool-use-preview",
         "name": "llama3 70b",
+    },
+    {
+        "key": "llama-3.2-90b-vision-preview",
+        "name": "Llama 3.2 90b",
     },
     {
         "key": "ollama",
