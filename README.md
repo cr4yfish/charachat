@@ -12,12 +12,12 @@ All Messages are stored encrypted in the database and decrypted on the client si
 
 <div style="width: 100%; display: flex; justify-content: center; gap: 1rem;">
     <img src="https://i.imgur.com/IGnXd8c.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/7C9pvs8.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/iihuIdu.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/ePtkQTI.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/fSuKMQk.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/cn3o3tA.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/QZl4sRz.png" style="height: 500px; width: auto;" >
-    <img src="https://i.imgur.com/icDlhDi.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/G8fG5wr.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/df4Gefj.png" style="height: 500px; width: auto;" >
     <img src="https://i.imgur.com/qtCf0MS.png" style="height: 500px; width: auto;" >
