@@ -82,6 +82,7 @@
     "react-markdown": "^9.0.1",
     "react-noise": "^0.2.11",
     "react-toastify": "^10.0.6",
+    "replicate": "^0.29.4",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",

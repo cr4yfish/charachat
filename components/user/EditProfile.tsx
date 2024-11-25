@@ -56,7 +56,9 @@ export default function EditProfile(props: Props) {
                 openai_encrypted_api_key: props.profile.openai_encrypted_api_key && decryptMessage(props.profile.openai_encrypted_api_key, keyBuffer),
                 gemini_encrypted_api_key: props.profile.gemini_encrypted_api_key && decryptMessage(props.profile.gemini_encrypted_api_key, keyBuffer),
                 mistral_encrypted_api_key: props.profile.mistral_encrypted_api_key && decryptMessage(props.profile.mistral_encrypted_api_key, keyBuffer),
-                anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer)
+                anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer),
+                hf_encrypted_api_key: props.profile.hf_encrypted_api_key && decryptMessage(props.profile.hf_encrypted_api_key, keyBuffer),
+                replicate_encrypted_api_key: props.profile.replicate_encrypted_api_key && decryptMessage(props.profile.replicate_encrypted_api_key, keyBuffer)
             }
 
             setProfile(profileToEdit);
@@ -91,7 +93,9 @@ export default function EditProfile(props: Props) {
                 openai_encrypted_api_key: profile.openai_encrypted_api_key && encryptMessage(profile.openai_encrypted_api_key, keyBuffer),
                 gemini_encrypted_api_key: profile.gemini_encrypted_api_key && encryptMessage(profile.gemini_encrypted_api_key, keyBuffer),
                 mistral_encrypted_api_key: profile.mistral_encrypted_api_key && encryptMessage(profile.mistral_encrypted_api_key, keyBuffer),
-                anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer)
+                anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer),
+                hf_encrypted_api_key: profile.hf_encrypted_api_key && encryptMessage(profile.hf_encrypted_api_key, keyBuffer),
+                replicate_encrypted_api_key: profile.replicate_encrypted_api_key && encryptMessage(profile.replicate_encrypted_api_key, keyBuffer)
             }
 
             await updateProfile(profileToSave);
@@ -217,6 +221,16 @@ export default function EditProfile(props: Props) {
                         label="Groq API Key" type="text" 
                         description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
                         value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
+                    />
+                    <Input 
+                        label="Huggingface Inference API Key" type="text" 
+                        description={<KeyInputDescription url="https://huggingface.co/settings/tokens/new?tokenType=fineGrained" hasFreeTier />}
+                        value={profile.hf_encrypted_api_key} onValueChange={(value) => handleUpdateValue("hf_encrypted_api_key", value)}
+                    />
+                    <Input 
+                        label="Replicate API Key (much faster than Huggingface)" type="text" 
+                        description={<KeyInputDescription url="https://replicate.com/account/api-tokens" />}
+                        value={profile.replicate_encrypted_api_key} onValueChange={(value) => handleUpdateValue("replicate_encrypted_api_key", value)}
                     />
                 </CardContent>
             </Card>

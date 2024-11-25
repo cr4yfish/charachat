@@ -55,14 +55,14 @@ export default function ChatMain(props : Props) {
             } as AIMessage
         }),
         initialInput: "",
-        maxSteps: 5,
+        maxSteps: 3,
         keepLastMessageOnError: true,
         body: {
             profile: props.user,
             chat: chat,
             selfDestruct: isSelfDestruct
         },
-        onFinish: async (message, { usage }) => {
+        onFinish: async (message, { usage, finishReason }) => {
             scrollToBottom();
             if (inputRef.current) {
                 inputRef.current.focus();
@@ -76,6 +76,30 @@ export default function ChatMain(props : Props) {
                     variant: "destructive"
                 })
                 return;
+            }
+
+            switch(finishReason) {
+                case "content-filter":
+                    toast({
+                        title: "Content Filter",
+                        description: "Your message was blocked by the content filter.",
+                        variant: "destructive"
+                    });
+                    break;
+                case "length":
+                    toast({
+                        title: "Message too long",
+                        description: "Your message was too long.",
+                        variant: "destructive"
+                    });
+                    break;
+                case "error":
+                    toast({
+                        title: "Error",
+                        description: "An error occured while processing your message.",
+                        variant: "destructive"
+                    });
+                    break;
             }
 
             // add message to db
@@ -114,7 +138,19 @@ export default function ChatMain(props : Props) {
                 }
 
                 await addMessage(newMessage, key);
-                
+
+                /* add correct id to message payload
+                const newMessages = messages.map((m) => {
+                    if(m.id === message.id) {
+                        return {
+                            ...m,
+                            id: newMessage.id
+                        }
+                    }
+                    return m;
+                })*/
+
+                //setMessages(newMessages);
             }
 
         },
@@ -326,6 +362,7 @@ export default function ChatMain(props : Props) {
                                 setMessages={setMessages}
                                 index={index} 
                                 chat={chat} 
+                                user={props.user}
                                 addToolResult={addToolResult} 
                                 isLatestMessage={index == messages.length - 1}
                                 showName={index == 0 || (messages[index - 1].role !== message.role) || (messages[index-1].toolInvocations?.some((t) => t.state == "result") || false )}

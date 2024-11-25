@@ -5,10 +5,10 @@ import { Spinner } from "@nextui-org/spinner";
 import { motion } from "motion/react";
 import Markdown from "react-markdown";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
 import { framerListAnimationProps } from "@/lib/utils";
+import { v4 as uuidv4 } from "uuid";
 
 import {
     Card,
@@ -25,18 +25,22 @@ import {
     ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 
-import { Chat } from "@/types/db";
+import { Chat, Message, Profile } from "@/types/db";
 import { ChatRequestOptions, ToolInvocation } from "ai";
 import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
 import Icon from "../utils/Icon";
-import { deleteMessage, updateMessage } from "@/functions/db/messages";
+import { addMessage, deleteMessage, updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
+import { Button } from "../utils/Button";
+import Image from "next/image";
+import { getKeyClientSide } from "@/lib/crypto";
   
 
 type Props = {
     message: AIMessage,
     index: number,
     chat: Chat | null,
+    user: Profile | null,
     addToolResult: ({ toolCallId, result, }: {
         toolCallId: string;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +54,8 @@ type Props = {
 
 export default function Messagebubble(props: Props) {
     const { toast } = useToast();
+
+    const [id, setId] = useState<string | undefined>(undefined);
 
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
@@ -71,6 +77,14 @@ export default function Messagebubble(props: Props) {
         }
     }, [isContextMenuOpen])
     */
+
+    useEffect(() => {
+        if(props.message.id.includes("-")) {
+            setId(props.message.id);
+        } else if(props.message.data) {
+            setId(props.message.data as string);
+        }
+    }, [props.message.id])
 
     if(props.message.toolInvocations !== undefined) {
         return (
@@ -97,8 +111,51 @@ export default function Messagebubble(props: Props) {
                     }
 
                     if(toolInvocation.toolName == "generateImage") {
+
+                        if("result" in toolInvocation) {
+                            // create new message with image
+                            const newMessage: AIMessage = {
+                                id: "image-" + toolCallId,
+                                role: "assistant",
+                                content: `![Generated Image](${toolInvocation.result})`,
+                                createdAt: new Date(),
+                            }
+
+                            const handleAddMessage = async () => {
+                                if(!props.chat || !props.user) return;
+
+                                props.setMessages((messages) => [...messages, newMessage]);
+
+                                const message: Message = {
+                                    id: uuidv4(),
+                                    chat: props.chat,
+                                    character: props.chat.character,
+                                    user: props.user,
+                                    from_ai: true,
+                                    content: newMessage.content,
+                                    is_edited: false,
+                                    is_deleted: false,
+                                }
+
+                                const key = getKeyClientSide();
+                                await addMessage(message ,key);
+                            }
+
+                            return (
+                                <div key={toolCallId} className="w-full h-full">
+                                    <div className="flex flex-col items-center gap-2">
+                                        <Image src={toolInvocation.result} alt="" width={200} height={200} className=" rounded-xl" />
+                                        <div className="flex flex-col gap-2">
+                                            <p className="dark:text-zinc-400 text-xs max-w-xs">{toolInvocation.args.text}</p>
+                                            <Button variant="flat" color="secondary" onClick={handleAddMessage}>Save in chat</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
+
                         return 'result' in toolInvocation ? (
-                            <div key={toolCallId} className="w-full h-full">
+                            <div key={toolCallId + 2} className="w-full h-full">
                             </div>
                         ) : (
                             <Alert key={toolCallId} className=" dark:bg-transparent ">
@@ -108,6 +165,17 @@ export default function Messagebubble(props: Props) {
                                 </AlertTitle>
                             </Alert>
                         );
+                    }
+
+                    if(toolInvocation) {
+                        return (
+                            <Alert key={toolCallId} className=" dark:bg-transparent ">
+                                <AlertTitle className="flex items-center gap-2 dark:prose-invert">
+                                    <Spinner size="sm" />
+                                    <p className=" dark:text-zinc-400 ">Executing tool... {toolInvocation.toolName}</p>
+                                </AlertTitle>
+                            </Alert>
+                        )
                     }
 
                 })}
@@ -126,7 +194,10 @@ export default function Messagebubble(props: Props) {
     const handleDelete = async () => {
         setIsDeleteLoading(true);
         try {
-            await deleteMessage(props.message.id);
+
+            if(!id) {  throw new Error("No id found. Refresh will probably fix this."); }
+
+            await deleteMessage(id);
 
             props.setMessages((messages) => messages.filter((message) => message.id !== props.message.id));
 
@@ -146,9 +217,11 @@ export default function Messagebubble(props: Props) {
         setIsSavingLoading(true);
 
         try {
+            if(!id) {  throw new Error("No id found"); }
+
             await updateMessage({
                 content: props.message.content,
-                id: props.message.id
+                id: id
             });
             
         } catch (error) {
