@@ -108,11 +108,13 @@ export async function POST(req: Request) {
                     description: "Add a new memory to the character's knowledge.",
                     parameters: z.object({ memory: z.string() }),
                     execute: async ({ memory }: { memory: string }) => {
-    
                         try {
                             await updateChat({
                                 ...chat,
-                                dynamic_book: `${chat.dynamic_book}\n${memory}`.trimEnd(),
+                                dynamic_book: `
+                                    ${chat.dynamic_book}
+                                    ${memory}
+                                `.trimEnd(),
                             })
                             
                             return memory;
