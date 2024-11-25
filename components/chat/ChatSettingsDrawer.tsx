@@ -26,6 +26,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useSharedChat } from "@/context/SharedChatSettings";
+import Link from "next/link";
 
 
 export default function ChatSettingsDrawer() {
@@ -95,6 +96,19 @@ export default function ChatSettingsDrawer() {
                     </div>
 
                     <div className="flex flex-col gap-2">
+                        { (chat?.character.owner.user == chat?.user.user) && (
+                            <Link href={`/c/${chat?.character.id}/edit`}>
+                                <Button
+                                    size="lg" fullWidth
+                                    startContent={<Icon filled>edit</Icon>}
+                                    color="warning"
+                                >
+                                    Edit Character
+                                </Button>
+                            </Link>
+                        )
+
+                        }
                         <Button 
                             isLoading={isSaving} 
                             onClick={handleUpdateChat} 
