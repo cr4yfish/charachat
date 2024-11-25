@@ -69,6 +69,7 @@ export const decryptCharacter = async (character: Character, key: string): Promi
             book: decryptMessage(character.book, buffer),
             image_link: decryptMessage(character.image_link ?? "", buffer),
             personality: decryptMessage(character.personality, buffer),
+            image_prompt: decryptMessage(character.image_prompt ?? "", buffer),
         }
     } catch (error) {
         console.error("Error decrypting character", error);
@@ -89,6 +90,7 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         book: encryptMessage(character.book, buffer),
         image_link: encryptMessage(character.image_link ?? "", buffer),
         personality: encryptMessage(character.personality, buffer),
+        image_prompt: encryptMessage(character.image_prompt ?? "", buffer),
     }
 }
 
@@ -203,6 +205,7 @@ export const updateCharacter = async (character: Character): Promise<void> => {
 
     delete character.chats;
     delete character.likes;
+    delete character.is_liked;
 
     const { error } = await createClient()
         .from("characters")

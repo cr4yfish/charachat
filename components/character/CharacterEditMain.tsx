@@ -127,6 +127,23 @@ export default function CharacterEditMain(props: Props) {
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
                 maxLength={8000} 
             />
+            <TextareaWithCounter 
+                name="system_prompt" 
+                value={character.system_prompt}
+                onValueChange={(value) => setCharacter({ ...character, book: value })}
+                label="System Prompt addition"
+                description="Gets injected into the system prompt. Useful to set a chat-style." 
+                maxLength={500} 
+            />
+            <TextareaWithCounter 
+                name="image_prompt" 
+                value={character.image_prompt}
+                onValueChange={(value) => setCharacter({ ...character, image_prompt: value })}
+                label="Image Prompt addition"
+                description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
+                maxLength={100}
+                maxRows={2} 
+            />
             <CategoryAutocomplete
                 setCategory={(category) => setCharacter({ ...character, category })}
                 defaultCategory={character.category}

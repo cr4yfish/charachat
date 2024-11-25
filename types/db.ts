@@ -23,6 +23,8 @@ export type Character = {
     chats?: number;
     likes?: number;
     is_liked?: boolean;
+    system_prompt?: string;
+    image_prompt: string;
 }
 
 export type Chat = {
@@ -59,6 +61,7 @@ export type Profile = {
     mistral_encrypted_api_key?: string;
     anthropic_encrypted_api_key?: string;
     hf_encrypted_api_key?: string;
+    replicate_encrypted_api_key?: string;
 }
 
 export type Story = {

@@ -6,7 +6,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
-import { decryptMessage } from "@/lib/crypto";
+import { decryptMessage, encryptMessage } from "@/lib/crypto";
 import { decryptCharacter } from "./character";
 import { getKeyServerSide } from "../serverHelpers";
 
@@ -31,9 +31,16 @@ const chatFormatter = async (db: any): Promise<Chat> => {
         decryptedMessage = decryptMessage(db.last_message, Buffer.from(key, "hex"));
     }
 
+    let decryptedDynamicBook = "";
+
+    if(db.dynamic_book && db.dynamic_book !== null && db.dynamic_book.length > 1) {
+        decryptedDynamicBook = decryptMessage(db.dynamic_book, Buffer.from(key, "hex"));
+    }
+
     const chat = {
         ...db,
         last_message: decryptedMessage,
+        dynamic_book: decryptedDynamicBook,
         character: {
             id: db.character_id,
             name: db.character_name,
@@ -50,13 +57,15 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             personality: db.character_personality,
             chats: db.character_chats,
             likes: db.character_likes,
+            system_prompt: db.character_system_prompt,
+            image_prompt: db.character_image_prompt,
             owner: {
-                id: db.character_owner_id,
+                user: db.character_owner,
                 username: db.character_owner_username,
             }
         },
         user: {
-            id: db.profile_id,
+            user: db.profile_user,
             username: db.profile_username,
             first_name: db.profile_first_name,
             last_name: db.profile_last_name,
@@ -180,6 +189,23 @@ export const updateChat = async (chat: Chat): Promise<void> => {
         throw error;
     }
 
+}
+
+export const updateDynamicMemory = async (chatId: string, memory: string): Promise<void> => {
+    const key = await getKeyServerSide();
+    const encryptedMemory = encryptMessage(memory, Buffer.from(key, "hex"));
+    
+    const { error } = await createClient()
+        .from("chats")
+        .update({
+            dynamic_book: encryptedMemory
+        })
+        .eq("id", chatId)
+
+    if (error) {
+        console.error("Error updating chat", error);
+        throw error;
+    }
 }
 
 export const deleteChat = async (chatId: string): Promise<void> => {
