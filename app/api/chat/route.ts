@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { z } from 'zod';
 
 import { Chat, Message, Profile } from '@/types/db';
-import { convertToCoreMessages, streamText } from 'ai';
+import { convertToCoreMessages, streamText, tool } from 'ai';
 import { addMessage } from '@/functions/db/messages';
 import { updateChat } from '@/functions/db/chat';
 
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
             tools: {
 
                 // server side tool
-                addNewMemory: {
+                addNewMemory: tool({
                     description: "Add a new memory to the character's knowledge.",
                     parameters: z.object({ memory: z.string() }),
                     execute: async ({ memory }: { memory: string }) => {
@@ -124,9 +124,15 @@ export async function POST(req: Request) {
                             return err.message;
                         }
                     }
-                },
+                }),
+
+                // Auto-call addNewMemory tool
+                rememberUsefulInformation: tool({
+                    description: "Automatically add a new memory of useful information from the last message (e.g. story change, might get relevant later).",
+                    parameters: z.object({}),
+                }),
                 
-                generateImage: {
+                generateImage: tool({
                     description: "Generate an image based on the recent chat summary.",
                     parameters: z.object({ text: z.string() }),
                     execute: async ({ text }: { text: string }) => {
@@ -144,7 +150,7 @@ export async function POST(req: Request) {
                             return err.message;
                         }
                     }
-                }
+                }),
             }
         });
     
