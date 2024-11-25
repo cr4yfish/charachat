@@ -18,7 +18,6 @@ import Messagebubble from "./Messagebubble";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@nextui-org/spinner";
 import { isSameDay, isToday, isYesterday } from "@/lib/utils";
-import { updateChat } from "@/functions/db/chat";
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { addTokens as updateTokens } from "@/functions/db/profiles";
@@ -115,8 +114,7 @@ export default function ChatMain(props : Props) {
                 }
 
                 await addMessage(newMessage, key);
-                props.chat.last_message_at = new Date().toISOString();
-                await updateChat(props.chat);
+                
             }
 
         },
