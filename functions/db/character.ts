@@ -23,10 +23,20 @@ const characterFormatter = async (db: any): Promise<Character> => {
     delete db.profiles;
     delete db.categories;
 
+    let is_liked = false;
+
+    // quickly check if user is logged in
+    const { data } = await createClient().auth.getSession();
+    if(data.session?.user.id !== undefined) {
+        // check like status
+        is_liked = await isCharacterLiked(db.id, data.session.user.id);
+    }
+
     const char = {
         ...db,
         owner: owner,
-        category: category
+        category: category,
+        is_liked: is_liked
     } as Character;
 
     if(char.is_private) {
@@ -213,6 +223,63 @@ export const deleteCharacter = async (characterId: string): Promise<void> => {
         .from("characters")
         .delete()
         .eq("id", characterId);
+
+    if (error) {
+        throw error;
+    }
+}
+
+
+/**
+ * Only works if userId is current userId. Is only a param to make it faster
+ * @param characterId 
+ * @param userId 
+ */
+export const isCharacterLiked = cache(async(characterId: string, userId: string): Promise<boolean> => {
+    const { data, error } = await createClient()
+        .from("character_likes")
+        .select("character")
+        .eq("character", characterId)
+        .eq("user", userId);
+
+    if (error) {
+        throw error;
+    }
+
+    return data.length > 0; 
+})
+
+export const likeCharacter = async(characterId: string): Promise<void> => {
+    const { data } = await createClient().auth.getSession();
+
+    if(data.session?.user.id === undefined) {
+        throw new Error("User not found");
+    }
+
+    const { error } = await createClient()
+        .from("character_likes")
+        .insert({
+            character: characterId,
+            user: data.session.user.id
+        });
+
+    if (error) {
+        throw error;
+    }
+}
+
+export const unlikeCharacter = async(characterId: string): Promise<void> => {
+    const { data } = await createClient().auth.getSession();
+
+    if(data.session?.user.id === undefined) {
+        throw new Error("User not found");
+    }
+
+    const { error } = await createClient()
+        .from("character_likes")
+        .delete()
+        .eq("character", characterId)
+        .eq("user", data.session.user.id);
 
     if (error) {
         throw error;

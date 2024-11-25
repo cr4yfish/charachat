@@ -22,6 +22,7 @@ export type Character = {
     personality: string;
     chats?: number;
     likes?: number;
+    is_liked?: boolean;
 }
 
 export type Chat = {

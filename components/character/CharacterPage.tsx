@@ -17,6 +17,7 @@ import { createChat } from "@/functions/db/chat";
 import CategoryCard from "./CategoryCard";
 import Image from "next/image";
 import Markdown from "react-markdown";
+import { likeCharacter, unlikeCharacter } from "@/functions/db/character";
 
 type Props = {
     character: Character,
@@ -28,6 +29,8 @@ export default function CharacterPage(props: Props) {
     const router = useRouter();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLiking, setIsLiking] = useState<boolean>(false);
+    const [isLiked, setIsLiked] = useState<boolean>(props.character.is_liked ?? false);
 
     const handleStartChat = async () => {
         if(!props.profile) {
@@ -58,6 +61,28 @@ export default function CharacterPage(props: Props) {
         router.replace(`/chat/${chat.id}`);
     }
 
+    const handleLike = async () => {
+        setIsLiking(true);
+
+        try {
+            if(isLiked) {
+                await unlikeCharacter(props.character.id);
+            } else {
+                await likeCharacter(props.character.id);
+            }
+            setIsLiked(!isLiked);
+        } catch (error) {
+            console.error("Failed to like character", error);
+            toast({
+                title: "Error",
+                description: "Failed to like character",
+                variant: "destructive"
+            })
+        } finally {
+            setIsLiking(false);
+        }
+    }
+
     return (
         <>
         <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden">
@@ -84,7 +109,7 @@ export default function CharacterPage(props: Props) {
                         >
                             Start Chat
                         </Button>
-                        { props.profile?.user == props.character.owner.user &&
+                        { props.profile?.user == props.character.owner.user ?
                             <Link href={`/c/${props.character.id}/edit`}>
                                 <Button
                                     color="warning" isDisabled={isLoading}
@@ -93,6 +118,18 @@ export default function CharacterPage(props: Props) {
                                     Edit
                                 </Button>
                             </Link>
+                            :
+                            <Button 
+                                color="danger" variant="flat" 
+                                radius="full" size="lg" 
+                                onClick={handleLike}
+                                isLoading={isLiking}
+                                isIconOnly
+                            >
+                                <Icon filled={isLiked} >
+                                    {isLiked ? "favorite" : "heart_plus"}
+                                </Icon>
+                            </Button>
                         }
                     </div>
 
