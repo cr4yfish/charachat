@@ -55,7 +55,7 @@ export const getLatestChatMessage = cache(async (chatId: string, key: string): P
     return decryptedMessage;
 })
 
-export const addMessage = async (message: Message, key: string) => {
+export const addMessage = async (message: Message, key: string): Promise<Message> => {
     const encryptedContent = encryptMessage(message.content, Buffer.from(key, "hex"));
 
     const { data, error } = await createClient()
@@ -66,7 +66,10 @@ export const addMessage = async (message: Message, key: string) => {
             chat: message.chat.id,
             user: message.user.user,
             character: message.character.id,
-        }]);
+        }])
+        .eq("id", message.id)
+        .select("*")
+        .single();
 
     if (error) {
         throw error;
