@@ -13,8 +13,7 @@ export const signUpSchema = z.object({
         .min(2, { message: "First Name must be at least 2 characters long" })
         .max(50, { message: "First Name must be at most 50 characters long" }),
     avatarLink: z.string()
-        .min(5, { message: "Avatar Link must be at least 5 characters long" })
-        .url({ message: "Invalid URL" }),
+        .optional(),
     email: z.string().email({ message: "Invalid email address" }),
     password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
 });
