@@ -66,10 +66,10 @@ All Messages are stored encrypted in the database and decrypted on the client si
 - [x] Basic text chat
 - [x] Emojis
 - [ ] Images
-    - [ ] From AI
+    - [x] From AI
     - [ ] From User
 - [ ] Gifs
-- [ ] Editing & deleting messages
+- [x] Editing & deleting messages
 - [x] Message Encryption
 
 
