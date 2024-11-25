@@ -204,22 +204,22 @@ export default function EditProfile(props: Props) {
                     />
                     <Input 
                         label="Gemini API Key" type="text" 
-                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
+                        description={<KeyInputDescription url="https://aistudio.google.com/apikey" hasFreeTier />}
                         value={profile.gemini_encrypted_api_key} onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
                     />
                     <Input 
                         label="Mistral API Key" type="text"
-                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
+                        description={<KeyInputDescription url="https://console.mistral.ai/api-keys/" hasFreeTier />}
                         value={profile.mistral_encrypted_api_key} onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
                     />
                     <Input 
                         label="Anthropic API Key" type="text"
-                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" />}
+                        description={<KeyInputDescription url="https://console.anthropic.com/settings/keys" />}
                         value={profile.anthropic_encrypted_api_key} onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
                     />
                     <Input 
                         label="Groq API Key" type="text" 
-                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" hasFreeTier />}
+                        description={<KeyInputDescription url="https://console.groq.com/keys" hasFreeTier />}
                         value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
                     <Input 
