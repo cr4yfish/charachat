@@ -4,6 +4,7 @@ import { Message as AIMessage } from "ai/react";
 import { Spinner } from "@nextui-org/spinner";
 import { motion } from "motion/react";
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -66,6 +67,8 @@ export default function Messagebubble(props: Props) {
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    const [videoLink, setVideoLink] = useState<string | undefined>(undefined);
+    const [isVideoGenerating , setIsVideoGenerating] = useState(false);
     /* TODO Fix blurrer
     useEffect(() => {
         if(isContextMenuOpen) {
@@ -141,13 +144,78 @@ export default function Messagebubble(props: Props) {
                                 await addMessage(message ,key);
                             }
 
+                            const handleGenerateVideo = async () => {
+                                setIsVideoGenerating(true);
+                                try {
+
+                                    const res = await fetch("/api/video", {
+                                        method: "POST",
+                                        body: JSON.stringify({ imageLink: toolInvocation.result, prompt: toolInvocation.args.text }),
+                                    })
+
+                                    if(!res.ok) {
+                                        throw new Error("Failed to generate video");
+                                    }
+
+                                    const { link } = await res.json();
+
+                                    console.log(link);
+                                    setVideoLink(link);
+
+                                } catch (error) {
+                                    console.error(error);
+                                    const err = error as Error;
+                                    toast({
+                                        title: "Failed to generate video",
+                                        description: err.message,
+                                        variant: "destructive",
+                                    })
+                                } finally {
+                                    setIsVideoGenerating(false);
+                                }
+
+                            }
+
+                            const handleSaveVideo = async () => {
+                                const newMessage: AIMessage = {
+                                    id: "video-" + toolCallId,
+                                    role: "assistant",
+                                    content: `<video width="320" height="240" controls>
+                                    <source src=${videoLink} type="video/mp4">
+                                    Your browser does not support the video tag.
+                                  </video>`,
+                                    createdAt: new Date(),
+                                }
+                                    
+                                if(!props.chat || !props.user) return;
+
+                                props.setMessages((messages) => [...messages, newMessage]);
+
+                                const message: Message = {
+                                    id: uuidv4(),
+                                    chat: props.chat,
+                                    character: props.chat.character,
+                                    user: props.user,
+                                    from_ai: true,
+                                    content: newMessage.content,
+                                    is_edited: false,
+                                    is_deleted: false,
+                                }
+
+                                const key = getKeyClientSide();
+                                await addMessage(message ,key);
+                            }
+
                             return (
                                 <div key={toolCallId} className="w-full h-full">
                                     <div className="flex flex-col items-center gap-2">
                                         <Image src={toolInvocation.result} alt="" width={200} height={200} className=" rounded-xl" />
+                                        <video src={videoLink} controls className="rounded-xl" width={200} />
                                         <div className="flex flex-col gap-2">
                                             <p className="dark:text-zinc-400 text-xs max-w-xs">{toolInvocation.args.text}</p>
                                             <Button variant="flat" color="secondary" onClick={handleAddMessage}>Save in chat</Button>
+                                            {!videoLink && <Button isLoading={isVideoGenerating} variant="flat" color="secondary" onClick={handleGenerateVideo}>Generate Video</Button>}
+                                            {videoLink && <Button variant="flat" color="secondary" onClick={handleSaveVideo}>Save Video</Button>}
                                         </div>
                                     </div>
                                 </div>
@@ -307,7 +375,9 @@ export default function Messagebubble(props: Props) {
                             }
                             <CardContent className={`pt-3 pb-0 ${props.message.role !== "user" && "pt-0"} prose dark:prose-invert prose-img:rounded-xl `}>                
                                 {!isEditMode ? 
-                                    <Markdown>
+                                    <Markdown
+                                        rehypePlugins={[rehypeRaw]}
+                                    >
                                         {props.message.content}
                                     </Markdown>
                                     :
