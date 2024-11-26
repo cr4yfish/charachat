@@ -16,14 +16,19 @@ const personaMatcher = `
 const tableName = "personas";
 
 const personaFormatter = async (data: any): Promise<Persona> => {
+    const profile = data.profiles;
+    
+    delete data.profiles;
+
     const persona: Persona = {
         ...data,
-        creator: data.profiles
+        creator: profile
     }
 
     if(persona.is_private) {
 
         if(!checkIsEncrypted(persona.full_name)) {
+            console.log("Persona is private but not encrypted");
             await updatePersona(persona);
             return persona;
         }
@@ -139,23 +144,35 @@ export const searchPersonas = cache(async (search: string) => {
 export const updatePersona = async (persona: Persona) => {
 
     if(persona.is_private && !checkIsEncrypted(persona.full_name)) {
+        console.log("Encrypting persona in update");
         const key = await getKeyServerSide();
         persona = await encryptPersona(persona, key);
     }
 
-    const { data, error } = await createClient()
+    const { error } = await createClient()
         .from(tableName)
-        .upsert(persona);
+        .update({
+            full_name: persona.full_name,
+            bio: persona.bio,
+            avatar_link: persona.avatar_link,
+            is_private: persona.is_private
+        })
+        .eq("id", persona.id);
 
     if (error) {
         console.error("Error updating persona", error);
         throw error;
     }
-
-    return await personaFormatter(data);
 }
 
 export const createPersona = async (persona: Persona): Promise<void> => {
+
+    if(persona.is_private) {
+        // encrypt
+        const key = await getKeyServerSide();
+        persona = await encryptPersona(persona, key);
+    }
+
     const { error } = await createClient()
         .from(tableName)
         .insert({
