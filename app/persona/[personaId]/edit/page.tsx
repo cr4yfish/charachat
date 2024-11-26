@@ -1,20 +1,19 @@
 "use server";
 
-import { getCharacter } from "@/functions/db/character";
-
-import CharacterEditMain from "@/components/character/CharacterEditMain";
+import PersonaEdit from "@/components/persona/PersonaEdit";
+import { getPersona } from "@/functions/db/personas";
 import { Metadata } from "next";
 
 
 export async function generateMetadata(
-    { params: { characterId } } : { params: { characterId: string } }
+    { params: { personaId } } : { params: { personaId: string } }
 ) : Promise<Metadata> {
     
     try {
-        const character = await getCharacter(characterId);
+        const persona = await getPersona(personaId);
 
         return {
-            title: `Edit ${character.name}`,
+            title: `Edit ${persona.full_name}`,
         }
         
     } catch (error) {
@@ -26,17 +25,17 @@ export async function generateMetadata(
 
 }
 
-export default async function CharacterView({ params: { characterId } } : { params: { characterId: string } }) {
+export default async function PersonaEditView({ params: { personaId } } : { params: { personaId: string } }) {
 
-    const character = await getCharacter(characterId);
+    const persona = await getPersona(personaId);
 
     return (
         <>
         <div className="flex items-center gap-2">
-            <h2 className="font-bold text-2xl">Edit {character.name}</h2>
+            <h2 className="font-bold text-2xl">Edit {persona.full_name}</h2>
         </div>
         
-        <CharacterEditMain character={character} />
+        <PersonaEdit editMode persona={persona} />
         </>
     )
 }

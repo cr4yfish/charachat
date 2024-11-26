@@ -6,6 +6,8 @@ import { Persona, Profile } from "@/types/db";
 import Icon from "@/components/utils/Icon";
 
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "../utils/Button";
 
 type Props = {
     persona: Persona,
@@ -13,7 +15,6 @@ type Props = {
 }
 
 export default function PersonaPage(props: Props) {
-
 
     return (
         <>
@@ -31,6 +32,21 @@ export default function PersonaPage(props: Props) {
                         <h1 className="text-xl font-bold">{props.persona.full_name}</h1>
                         <p className="text-sm dark:text-neutral-400">By @{props.persona.creator.username}</p>
                     </div>
+
+
+                    <div className="w-full flex items-center justify-center gap-2">
+                        {props.profile?.user == props.persona.creator.user &&
+                            <Link href={`/persona/${props.persona.id}/edit`}>
+                                <Button
+                                    color="warning"
+                                    size="lg" variant="flat" radius="full"                        
+                                >
+                                    Edit
+                                </Button>
+                            </Link>
+                        }
+                    </div>
+
 
                     {props.persona.is_private && 
                         <div className="flex flex-col gap-1 border border-green-500 rounded-lg p-2">
