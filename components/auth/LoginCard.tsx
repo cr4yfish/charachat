@@ -12,6 +12,7 @@ import { login, LoginResponse, signUp } from "@/functions/db/auth";
 import { loginSchema, signUpSchema } from "@/lib/schemas";
 import { generateKey } from "@/lib/crypto";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
+import ImageInputWithAI from "../ImageInputWithAI";
 
 type Props = {
     shouldRedirect?: boolean;
@@ -155,15 +156,9 @@ export default function LoginCard(props: Props) {
                             value={lastName} 
                             onValueChange={setLastName} 
                         />
-                        <Input 
-                            name="image_link" 
-                            type="text" 
-                            label="Avatar Image Link" 
-                            placeholder="https://example.com/image.jpg"
-                            value={avatarLink} 
-                            onValueChange={setAvatarLink} 
-                            errorMessage={ signUpSchema.shape.avatarLink.safeParse(avatarLink).error?.issues[0]?.message }
-                            isInvalid={ isSubmit && signUpSchema.shape.avatarLink.safeParse(avatarLink).error?.issues[0]?.message ? true : false }
+                        <ImageInputWithAI 
+                            setImageLink={setAvatarLink}
+                            disableAI
                         />
                         <TextareaWithCounter 
                             name="bio"

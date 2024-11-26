@@ -16,6 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
 import { LLMsWithAPIKeys } from "@/lib/ai";
 import LoginButton from "../auth/LoginButton";
+import ImageInputWithAI from "../ImageInputWithAI";
 
 type Props = {
     profile: Profile
@@ -166,12 +167,9 @@ export default function EditProfile(props: Props) {
                 onValueChange={(value) => handleUpdateValue('bio', value)} 
                 maxLength={2000} 
             />
-            <Input 
-                label="Avatar Image" 
-                description="Provide a direct link to an image (e.g. Upload to Imgur and then post the link here)." 
-                placeholder="https://i.imgur.com/Utr8AgMb.jpg"
-                value={profile.avatar_link}
-                onValueChange={(value) => handleUpdateValue('avatar_link', value)}
+            <ImageInputWithAI
+                profile={profile}
+                setImageLink={(value) => handleUpdateValue('avatar_link', value)}
             />
 
             <div className="prose dark:prose-invert">

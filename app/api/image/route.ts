@@ -2,16 +2,17 @@ import { generateImage } from "@/functions/ai/image";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { decryptMessage } from "@/lib/crypto";
-import { Character, Persona, Story } from "@/types/db";
+import { Character, Persona, Profile, Story } from "@/types/db";
 
 type RequestBody = {
     character?: Character | undefined;
     story?: Story | undefined;
     persona?: Persona | undefined;
+    profile?: Profile | undefined;
 }
 
 export async function POST(req: Request) {
-    const { character, story, persona } = (await req.json()) as RequestBody;
+    const { character, story, persona, profile } = (await req.json()) as RequestBody;
 
     try {
         const profile = await getCurrentUser();
@@ -27,8 +28,8 @@ export async function POST(req: Request) {
             replicateToken = decryptMessage(profile.replicate_encrypted_api_key, Buffer.from(key, "hex"));
         }
 
-        const title = character?.name || story?.title || persona?.full_name;
-        const description = character?.description || story?.description || persona?.bio;
+        const title = character?.name || story?.title || persona?.full_name || profile?.username;
+        const description = character?.description || story?.description || persona?.bio || profile.bio;
 
         if(!title || !description) {
             throw new Error("Missing required fields");
