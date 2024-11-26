@@ -9,6 +9,8 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster"
 import NavbarServerWrapper from "@/components/NavbarServerWrapper";
 import Blurrer from "@/components/utils/Blurrer";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -79,6 +81,7 @@ export default function RootLayout({
         >
           <NextUIProvider>
             <SidebarProvider>
+              <SpeedInsights />
               <LeftSidebar />
               <main className="relative h-svh overflow-y-hidden overflow-x-hidden w-full ">
                 <NextTopLoader
