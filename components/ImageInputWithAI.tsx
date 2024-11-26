@@ -34,7 +34,6 @@ export default function ImageInputWithAI(props: Props) {
                     character: props.character,
                     story: props.story,
                     persona: props.persona,
-                    profile: props.profile
                 })
             })
     
