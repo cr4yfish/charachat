@@ -354,7 +354,9 @@ export default function ChatMain(props : Props) {
 
     const handleSubmitAdapter = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        handleSubmit(e);
+        handleSubmit(e, {
+            allowEmptySubmit: true
+        });
         scrollToBottom();
     }
 
