@@ -135,5 +135,17 @@ export const LLMs: LLMType[] = [
     {
         "key": "grok-beta",
         "name": "Grok (free)"
+    },
+    {
+        "key": "command-r-plus",
+        "name": "Command R Plus"
+    },
+    {
+        "key": "command-r",
+        "name": "Command R"
+    },
+    {
+        "key": "c4ai-aya-expanse-32b",
+        "name": "C4AI Aya Expanse 32b"
     }
 ]
