@@ -30,7 +30,7 @@ export default async function Home() {
       <>
       <div className="prose dark:prose-invert p-10">
         <h1>Uh, oh. Something went wrong</h1>
-        <p>And I don&apos;t know what. Try refreshing the page or report this issue.</p>
+        <p>And I don&apos;t know what. Try refreshing the page or Logout and back in. Also please report this issue.</p>
         <div className="flex flex-col gap-1a">
           <Link href={"https://github.com/cr4yfish/charachat/issues/new"} className="dark:text-blue-500">Report this on GitHub</Link>
           <span>or</span>
