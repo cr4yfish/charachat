@@ -1,7 +1,7 @@
 "use server";
 
 import CharacterCard from "@/components/character/CharacterCard";
-import { getCharacters, getCharactersByCategory, getPopularCharacters } from "@/functions/db/character";
+import { getCharacters, getPopularCharacters } from "@/functions/db/character";
 import { Character } from "@/types/db";
 
 import { getStories } from "@/functions/db/stories";
@@ -13,8 +13,6 @@ import InfiniteSwiperLoader from "@/components/InfiniteSwiperLoder";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 import Spotlight from "@/components/Spotlight";
 import Link from "next/link";
-import { getPersonas } from "@/functions/db/personas";
-import PersonaCard from "@/components/persona/PersonaCard";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Button } from "@/components/utils/Button";
@@ -31,7 +29,6 @@ export default async function Home() {
   let popularCharacters: Character[] = [];
   const stories = await getStories(defaultLoad);
   const categories = await getCategories(defaultLoad);
-  const personas = await getPersonas(defaultLoad);
 
   try {
     characters = await getCharacters(defaultLoad);
