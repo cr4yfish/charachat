@@ -95,8 +95,6 @@ export default function CategoryScroller(props: Props) {
             if (!(container.scrollWidth > container.clientWidth)) {
                 if(currentCategory && hasMore) {
                     handleLoadMore(currentCategory);
-                } else {
-                    console.error("Fill container: Current category is not set");
                 }
             }
         }
