@@ -60,7 +60,8 @@ export default function EditProfile(props: Props) {
                 anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer),
                 hf_encrypted_api_key: props.profile.hf_encrypted_api_key && decryptMessage(props.profile.hf_encrypted_api_key, keyBuffer),
                 replicate_encrypted_api_key: props.profile.replicate_encrypted_api_key && decryptMessage(props.profile.replicate_encrypted_api_key, keyBuffer),
-                cohere_encrypted_api_key: props.profile.cohere_encrypted_api_key && decryptMessage(props.profile.cohere_encrypted_api_key, keyBuffer)
+                cohere_encrypted_api_key: props.profile.cohere_encrypted_api_key && decryptMessage(props.profile.cohere_encrypted_api_key, keyBuffer),
+                fal_gpt_encrypted_api_key: props.profile.fal_gpt_encrypted_api_key && decryptMessage(props.profile.fal_gpt_encrypted_api_key, keyBuffer)
             }
 
             setProfile(profileToEdit);
@@ -98,7 +99,8 @@ export default function EditProfile(props: Props) {
                 anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer),
                 hf_encrypted_api_key: profile.hf_encrypted_api_key && encryptMessage(profile.hf_encrypted_api_key, keyBuffer),
                 replicate_encrypted_api_key: profile.replicate_encrypted_api_key && encryptMessage(profile.replicate_encrypted_api_key, keyBuffer),
-                cohere_encrypted_api_key: profile.cohere_encrypted_api_key && encryptMessage(profile.cohere_encrypted_api_key, keyBuffer)
+                cohere_encrypted_api_key: profile.cohere_encrypted_api_key && encryptMessage(profile.cohere_encrypted_api_key, keyBuffer),
+                fal_gpt_encrypted_api_key: profile.fal_gpt_encrypted_api_key && encryptMessage(profile.fal_gpt_encrypted_api_key, keyBuffer)
             }
 
             await updateProfile(profileToSave);
@@ -228,14 +230,19 @@ export default function EditProfile(props: Props) {
                         value={profile.cohere_encrypted_api_key} onValueChange={(value) => handleUpdateValue("cohere_encrypted_api_key", value)}
                     />
                     <Input 
-                        label="Huggingface Inference API Key" type="text" 
+                        label="Huggingface Inference API Key (AI Image)" type="text" 
                         description={<KeyInputDescription url="https://huggingface.co/settings/tokens/new?tokenType=fineGrained" hasFreeTier />}
                         value={profile.hf_encrypted_api_key} onValueChange={(value) => handleUpdateValue("hf_encrypted_api_key", value)}
                     />
                     <Input 
-                        label="Replicate API Key (much faster than Huggingface)" type="text" 
+                        label="Replicate API Key (fast AI Image)" type="text" 
                         description={<KeyInputDescription url="https://replicate.com/account/api-tokens" />}
                         value={profile.replicate_encrypted_api_key} onValueChange={(value) => handleUpdateValue("replicate_encrypted_api_key", value)}
+                    />
+                    <Input 
+                        label="FAL API Key (AI Video)" type="text" 
+                        description={<KeyInputDescription url="https://fal.ai/dashboard/keys" hasFreeTier />}
+                        value={profile.fal_gpt_encrypted_api_key} onValueChange={(value) => handleUpdateValue("fal_gpt_encrypted_api_key", value)}
                     />
                 </CardContent>
             </Card>

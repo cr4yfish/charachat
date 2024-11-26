@@ -65,6 +65,7 @@ export type Profile = {
     hf_encrypted_api_key?: string;
     replicate_encrypted_api_key?: string;
     cohere_encrypted_api_key?: string;
+    fal_gpt_encrypted_api_key?: string;
 }
 
 export type Story = {
