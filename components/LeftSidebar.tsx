@@ -27,7 +27,7 @@ export async function LeftSidebar() {
   let chats: Chat[] = [];
   let profile: Profile | undefined = undefined;
   try {
-    chats = await getChats(0, 15);
+    chats = await getChats({ cursor: 0, limit: 15 });
     profile = await getCurrentUser();
   } catch (e) {
     const err = e as Error;
