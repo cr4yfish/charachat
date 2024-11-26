@@ -25,6 +25,7 @@ export default function PersonaEdit(props: Props) {
         id: props.persona?.id || uuid(),
         creator: props.persona.creator,
         full_name: props.persona?.full_name || "",
+        bio: props.persona?.bio || "",
         avatar_link: props.persona?.avatar_link || "",
         is_private: props.persona?.is_private || false,
     })
