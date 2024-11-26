@@ -36,8 +36,14 @@ const storyReturnFormat = async (db: any): Promise<Story> => {
         return story;
     }
 
-    const key = await getKeyServerSide();
-    return await decryptStory(story, key);
+    try {
+        const key = await getKeyServerSide();
+        return await decryptStory(story, key);
+    } catch (error) {
+        console.error("Error decrypting story", error);
+        return story;
+    }
+   
 }
 
 export const decryptStory = async (story: Story, key: string): Promise<Story> => {

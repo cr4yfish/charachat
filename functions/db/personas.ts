@@ -28,8 +28,14 @@ const personaFormatter = async (data: any): Promise<Persona> => {
             return persona;
         }
 
-        const key = await getKeyServerSide();
-        return await decryptPersona(persona, key);
+        try {
+            const key = await getKeyServerSide();
+            return await decryptPersona(persona, key);
+        } catch (error) {
+            console.error("Error decrypting persona", error);
+            return persona;
+        }
+       
     }
 
     return persona;

@@ -49,8 +49,14 @@ const characterFormatter = async (db: any): Promise<Character> => {
             return char;
         }
 
-        const key = await getKeyServerSide();
-        return await decryptCharacter(char, key);
+        try {
+            const key = await getKeyServerSide();
+            return await decryptCharacter(char, key);
+        } catch (error) {
+            console.error("Error decrypting character", error);
+            return char;
+        }
+      
     }
 
     return char;
