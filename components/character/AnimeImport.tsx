@@ -10,7 +10,7 @@ import { Spinner } from "@nextui-org/spinner";
 import Markdown from "react-markdown";
 import { Avatar } from "@nextui-org/avatar";
 import { truncateText } from "@/lib/utils";
-import { Character, Profile } from "@/types/db";
+import { Character, Persona, Profile } from "@/types/db";
 
 const query = `
     query ($search: String!) {
@@ -100,7 +100,8 @@ function AnimeCharCard(props: AnimeCharCardProps) {
 }
 
 type Props = {
-    setCharacter: (character: Character) => void;
+    setCharacter?: (character: Character) => void;
+    setPersona?: (persona: Persona) => void;
     profile: Profile;
 }
 
@@ -115,16 +116,27 @@ export default function AnimeImport(props: Props) {
     const handleImportCharacter = (char: AnimeChar) => {
         // convert to Character and update upstream
 
-        const character: Character = {
-            id: uuidv4(),
-            name: char.name.full,
-            description: char.description,
-            image_link: char.image.medium,
-            owner: props.profile,
-            book: `${char.media.nodes[0].type}: ${char.media.nodes[0].title.romaji} Description: ${char.media.nodes[0].description}`,
-        } as Character;
+        if(props.setCharacter) {
+            const character: Character = {
+                id: uuidv4(),
+                name: char.name.full,
+                description: char.description,
+                image_link: char.image.medium,
+                owner: props.profile,
+                book: `${char.media.nodes[0].type}: ${char.media.nodes[0].title.romaji} Description: ${char.media.nodes[0].description}`,
+            } as Character;
 
-        props.setCharacter(character);
+            props.setCharacter(character);
+    
+        } else if(props.setPersona) {
+
+            const persona: Persona = {
+
+            } as Persona;
+
+            props.setPersona(persona);
+
+        }
 
     }
 

@@ -2,7 +2,7 @@
 
 import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
-import { Character, Story } from "@/types/db";
+import { Character, Persona, Story } from "@/types/db";
 import { Button } from "./utils/Button";
 import { useState } from "react";
 import Icon from "./utils/Icon";
@@ -11,6 +11,7 @@ import Icon from "./utils/Icon";
 type Props = {
     character?: Character | undefined;
     story?: Story | undefined;
+    persona?: Persona | undefined;
     setImageLink: (link: string) => void
 }
 
@@ -26,7 +27,8 @@ export default function ImageInputWithAI(props: Props) {
                 method: "POST",
                 body: JSON.stringify({
                     character: props.character,
-                    story: props.story
+                    story: props.story,
+                    persona: props.persona
                 })
             })
     
@@ -63,7 +65,7 @@ export default function ImageInputWithAI(props: Props) {
                 label="Image Link" 
                 placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
                 description="Direct link to an image. Link needs to end with image extension (e.g. .jpg)!" 
-                value={props.story?.image_link ?? props.character?.image_link ?? ""}
+                value={props.story?.image_link ?? props.character?.image_link ?? props.persona?.avatar_link ?? ""}
                 onValueChange={handleSetImageLink}
             />
             <Button 

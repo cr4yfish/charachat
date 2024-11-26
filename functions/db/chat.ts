@@ -62,6 +62,7 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             owner: {
                 user: db.character_owner,
                 username: db.character_owner_username,
+                avatar_link: db.character_owner_avatar_link,
             }
         },
         user: {
@@ -80,6 +81,19 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             likes: db.story_likes,
             chats: db.story_chats,
             image_link: db.story_image_link,
+        },
+        persona: {
+            id: db.persona_id,
+            full_name: db.persona_full_name,
+            bio: db.persona_bio,
+            avatar_link: db.persona_avatar_link,
+            is_private: db.persona_is_private,
+            created_at: db.persona_created_at,
+            creator: {
+                user: db.persona_creator,
+                username: db.persona_creator_username,
+                avatar_link: db.persona_creator_avatar_link,
+            }
         }
     } as Chat;
 

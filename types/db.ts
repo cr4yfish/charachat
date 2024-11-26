@@ -39,6 +39,7 @@ export type Chat = {
     story?: Story;
     llm: string;
     last_message?: string;
+    persona: Persona;
 }
 
 export type Profile = {
@@ -107,4 +108,14 @@ export type Tag = {
 export type User_Tier = {
     user: Profile;
     tier: number;
+}
+
+export type Persona = {
+    id: string;
+    created_at?: string;
+    full_name: string;
+    bio?: string;
+    avatar_link?: string;
+    creator: Profile;
+    is_private: boolean;
 }

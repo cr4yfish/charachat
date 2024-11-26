@@ -54,6 +54,7 @@ export async function LeftSidebar() {
                 <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
                 <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
                 <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
+                <SidebarLink link={`/user/${profile?.user}/personas`} isLoggedIn={isLoggedIn} icon="comedy_mask" label="Your Personas" />
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
