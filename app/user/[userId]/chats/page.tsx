@@ -8,7 +8,7 @@ import { getChats } from "@/functions/db/chat";
 
 export default async function UserChats({ params: {  } } : { params: { userId: string } }) {
 
-    const chats = await getChats(0, 15);
+    const chats = await getChats({ cursor: 0, limit: 5 });
 
     return (
         <>

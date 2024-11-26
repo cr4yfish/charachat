@@ -11,7 +11,7 @@ import InfiniteListLoader from "@/components/InfiniteListLoader";
 
 export default async function UserCharacters() {
 
-    const characters = await getUserCharacters(0, 5);
+    const characters = await getUserCharacters({ cursor: 0, limit: 5 });
 
     return (
         <>

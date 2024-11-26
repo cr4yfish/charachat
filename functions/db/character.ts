@@ -191,7 +191,7 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
     }));
 })
 
-export const getUserCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
+export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data: { user }} = await createClient().auth.getUser();
 
     if(!user?.id) {
@@ -203,7 +203,7 @@ export const getUserCharacters = cache(async (cursor: number, limit: number): Pr
         .select(characterMatcher)
         .eq("owner", user.id)
         .order("created_at", { ascending: false })
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
         throw error;

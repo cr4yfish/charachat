@@ -107,7 +107,7 @@ export const getPersonas = cache(async (props: LoadMoreProps) => {
     return await Promise.all(data.map(personaFormatter));
 })
 
-export const getUserPersonas = cache(async (cursor: number, limit: number) => {
+export const getUserPersonas = cache(async (props: LoadMoreProps) => {
     const { data: { session } } = await createClient().auth.getSession();
 
     if(!session?.user.id) {
@@ -118,7 +118,7 @@ export const getUserPersonas = cache(async (cursor: number, limit: number) => {
         .from(tableName)
         .select(personaMatcher)
         .eq("creator", session.user.id)
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
         console.error("Error fetching user personas", error);

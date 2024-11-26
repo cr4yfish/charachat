@@ -9,6 +9,7 @@ import { Chat } from "@/types/db";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
 import { decryptCharacter } from "./character";
 import { getKeyServerSide } from "../serverHelpers";
+import { LoadMoreProps } from "@/types/client";
 
 const chatMatcher = `
     *
@@ -143,12 +144,12 @@ export const getCharacterChats = cache(async (characterId: string): Promise<Chat
     }))
 })
 
-export const getChats = cache(async (cursor: number, limit: number): Promise<Chat[]> => {
+export const getChats = cache(async (props: LoadMoreProps): Promise<Chat[]> => {
     const { data, error } = await createClient()
         .from(tableName)
         .select(chatMatcher)
         .order("last_message_at", { ascending: false })
-        .range(cursor, cursor + limit)
+        .range(props.cursor, props.cursor + props.limit)
     
     if (error) {
         throw error;
