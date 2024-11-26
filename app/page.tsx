@@ -152,41 +152,6 @@ export default async function Home() {
           <CategoryScroller categories={categories} />
         </CurrentCategoryProvider>
 
-        <div className="flex flex-col gap-2 w-full relative">
-          <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
-            <p className="text-xs dark:text-zinc-400">Change the perspective of your Chats</p>
-            <h2 className="dark:prose-invert text-lg font-bold">Personas</h2>
-          </div>
-          
-          <InfiniteSwiperLoader 
-            loadMore={getPersonas} 
-            limit={5} 
-            initialData={personas} 
-            component={PersonaCard}
-            componentProps={{
-              hasLink: true,
-            }}
-          />
-        </div>
-
-        {categories.map((category) => (
-          <div key={category.id} className="flex flex-col gap-2 w-full relative">
-            <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
-              <p className="text-xs dark:text-zinc-400">{category.description}</p>
-              <h2 className="dark:prose-invert text-lg font-bold">{category.title}</h2>
-            </div>
-            <InfiniteSwiperLoader 
-              loadMore={getCharactersByCategory} 
-              args={{ categoryId: category.id }}
-              limit={5} 
-              component={CharacterCard}
-              componentProps={{
-                hasLink: true,
-              }}
-            />
-          </div>
-        ))}
-
       </div>
     </div>
   );
