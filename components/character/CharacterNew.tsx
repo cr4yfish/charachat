@@ -167,6 +167,25 @@ export default function CharacterNew(props: Props) {
                 profile={props.profile}
                 character={newCharacter}
             />
+
+            <TextareaWithCounter 
+                name="system_prompt" 
+                value={newCharacter.system_prompt}
+                onValueChange={(value) => updateValue("system_prompt", value )}
+                label="System Prompt addition"
+                description="Gets injected into the system prompt. Useful to set a chat-style." 
+                maxLength={500} 
+            />
+            <TextareaWithCounter 
+                name="image_prompt" 
+                value={newCharacter.image_prompt}
+                onValueChange={(value) => updateValue("image_prompt", value )}
+                label="Image Prompt addition"
+                description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
+                maxLength={100}
+                maxRows={2} 
+            />
+
             <CategoryAutocomplete 
                 setCategory={(category) => updateValue("category", category.id)}
             />

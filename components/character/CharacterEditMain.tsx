@@ -130,7 +130,7 @@ export default function CharacterEditMain(props: Props) {
             <TextareaWithCounter 
                 name="system_prompt" 
                 value={character.system_prompt}
-                onValueChange={(value) => setCharacter({ ...character, book: value })}
+                onValueChange={(value) => setCharacter({ ...character, system_prompt: value })}
                 label="System Prompt addition"
                 description="Gets injected into the system prompt. Useful to set a chat-style." 
                 maxLength={500} 
