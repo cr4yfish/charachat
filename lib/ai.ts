@@ -20,6 +20,11 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case "claude-3-5-haiku-latest":
             return profile.anthropic_encrypted_api_key;
 
+        case "command-r-plus":
+        case "command-r":
+        case "c4ai-aya-expanse-32b":
+            return profile.cohere_encrypted_api_key;
+
         default:
             return undefined;
     }
@@ -53,7 +58,10 @@ export type ModelId =
     "claude-3-5-haiku-latest" |
     "llama-3_2-3b-instruct-uncensored" |
     "openai-compatible" |
-    "grok-beta"
+    "grok-beta" |
+    "command-r-plus" |
+    "command-r" |
+    "c4ai-aya-expanse-32b"
 
 
 export type ImageModelId = 

@@ -7,6 +7,7 @@ import { createOllama } from 'ollama-ai-provider';
 import { createAnthropic  } from '@ai-sdk/anthropic';
 import { createVertex } from '@ai-sdk/google-vertex';
 import { createXai } from "@ai-sdk/xai";
+import { createCohere } from "@ai-sdk/cohere";
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
 
@@ -61,6 +62,14 @@ async function getMistral(modelId: string, apiKey?: string): Promise<LanguageMod
     });
 
     return mistral(modelId);
+}
+
+async function getCohere(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
+    const cohere = createCohere({
+        apiKey: apiKey
+    })
+
+    return cohere(modelId);
 }
 
 async function getUnrestricted(): Promise<LanguageModelV1> {
@@ -147,6 +156,11 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "grok-beta":
             return getXai(modelId, baseURL, apiKey);
 
+        case "command-r-plus":
+        case "command-r":
+        case "c4ai-aya-expanse-32b":
+            return getCohere(modelId, apiKey);
+            
         default:
             return getOpenAI(modelId, apiKey);
     }

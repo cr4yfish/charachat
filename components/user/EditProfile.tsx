@@ -58,7 +58,8 @@ export default function EditProfile(props: Props) {
                 mistral_encrypted_api_key: props.profile.mistral_encrypted_api_key && decryptMessage(props.profile.mistral_encrypted_api_key, keyBuffer),
                 anthropic_encrypted_api_key: props.profile.anthropic_encrypted_api_key && decryptMessage(props.profile.anthropic_encrypted_api_key, keyBuffer),
                 hf_encrypted_api_key: props.profile.hf_encrypted_api_key && decryptMessage(props.profile.hf_encrypted_api_key, keyBuffer),
-                replicate_encrypted_api_key: props.profile.replicate_encrypted_api_key && decryptMessage(props.profile.replicate_encrypted_api_key, keyBuffer)
+                replicate_encrypted_api_key: props.profile.replicate_encrypted_api_key && decryptMessage(props.profile.replicate_encrypted_api_key, keyBuffer),
+                cohere_encrypted_api_key: props.profile.cohere_encrypted_api_key && decryptMessage(props.profile.cohere_encrypted_api_key, keyBuffer)
             }
 
             setProfile(profileToEdit);
@@ -95,7 +96,8 @@ export default function EditProfile(props: Props) {
                 mistral_encrypted_api_key: profile.mistral_encrypted_api_key && encryptMessage(profile.mistral_encrypted_api_key, keyBuffer),
                 anthropic_encrypted_api_key: profile.anthropic_encrypted_api_key && encryptMessage(profile.anthropic_encrypted_api_key, keyBuffer),
                 hf_encrypted_api_key: profile.hf_encrypted_api_key && encryptMessage(profile.hf_encrypted_api_key, keyBuffer),
-                replicate_encrypted_api_key: profile.replicate_encrypted_api_key && encryptMessage(profile.replicate_encrypted_api_key, keyBuffer)
+                replicate_encrypted_api_key: profile.replicate_encrypted_api_key && encryptMessage(profile.replicate_encrypted_api_key, keyBuffer),
+                cohere_encrypted_api_key: profile.cohere_encrypted_api_key && encryptMessage(profile.cohere_encrypted_api_key, keyBuffer)
             }
 
             await updateProfile(profileToSave);
@@ -221,6 +223,11 @@ export default function EditProfile(props: Props) {
                         label="Groq API Key" type="text" 
                         description={<KeyInputDescription url="https://console.groq.com/keys" hasFreeTier />}
                         value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
+                    />
+                    <Input 
+                        label="Cohere API Key" type="text" 
+                        description={<KeyInputDescription url="https://dashboard.cohere.com/api-keys" hasFreeTier />}
+                        value={profile.cohere_encrypted_api_key} onValueChange={(value) => handleUpdateValue("cohere_encrypted_api_key", value)}
                     />
                     <Input 
                         label="Huggingface Inference API Key" type="text" 
