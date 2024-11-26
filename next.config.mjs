@@ -12,6 +12,16 @@ const withPWA = withPWAInit({
 export default withPWA({
   // Your Next.js config
   images: {
-    unoptimized: false
+    unoptimized: false,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lemmy.**",
+      },
+      {
+        protocol: "https",
+        hostname: "**.**", // match everything, is this a good idea? One way to find out I guess
+      },
+    ],
   }
 });
