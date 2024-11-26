@@ -42,7 +42,6 @@ export const decryptProfile = async (profile: Profile, key: string): Promise<Pro
 }
 
 const profileFormatter = async (db: any): Promise<Profile> => {
-
     const { data: { session } } = await createClient().auth.getSession();
 
     if((session?.user?.id === db.user) && !checkIsEncrypted(db.first_name)) {
@@ -74,7 +73,7 @@ export const getProfile = cache(async (userId: string) => {
 })
 
 export const updateProfile = async (profile: Profile) => {
-    const { data, error } = await createClient()
+    const { error } = await createClient()
         .from("profiles")
         .upsert(profile);
 
@@ -82,12 +81,10 @@ export const updateProfile = async (profile: Profile) => {
         console.error("Error updating profile", error);
         throw error;
     }
-
-    return await profileFormatter(data);
 }
 
 export const addTokens = async (userId: string, tokens: number) => {
-    const { data, error } = await createClient()
+    const { error } = await createClient()
         .from("profiles")
         .upsert({
             user: userId,
@@ -98,8 +95,6 @@ export const addTokens = async (userId: string, tokens: number) => {
         console.error("Error adding tokens", error);
         throw error;
     }
-
-    return await profileFormatter(data);
 }
 
 export const getTokens = async (userId: string): Promise<number> => {
