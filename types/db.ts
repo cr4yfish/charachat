@@ -39,7 +39,7 @@ export type Chat = {
     story?: Story;
     llm: string;
     last_message?: string;
-    persona: Persona;
+    persona?: Persona;
 }
 
 export type Profile = {

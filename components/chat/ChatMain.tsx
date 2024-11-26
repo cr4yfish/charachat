@@ -28,6 +28,7 @@ import { useSharedChat } from "@/context/SharedChatSettings";
 import ConditionalLink from "../utils/ConditionalLink";
 import PersonaCard from "../persona/PersonaCard";
 import Link from "next/link";
+import PersonaAutocomplete from "../persona/PersonaAutocomplete";
 
 type Props = {
     chat: Chat;
@@ -406,11 +407,11 @@ export default function ChatMain(props : Props) {
                     <div className="flex flex-col gap-2 w-full max-w-sm">
                         <div className="prose dark:prose-invert prose-p:m-0 prose-h3:m-0">
                             <h3>Selected Persona</h3>
-                            <p>This is who the AI will think is you.</p>
+                            <p>This is who the AI will think is you. Default is your User Profile.</p>
                         </div>
                         <PersonaCard 
                             fullWidth
-                            data={ props.chat.persona.id ? props.chat.persona :
+                            data={ chat?.persona?.id ? chat.persona :
                                 {
                                     id: props.user.user,
                                     full_name: props.chat.user.username,
@@ -423,6 +424,7 @@ export default function ChatMain(props : Props) {
                             hasLink={false} 
                         />
                         <div className="flex flex-row flex-wrap gap-1">
+                            <PersonaAutocomplete setPersona={(persona) => chat && setChat({...chat, persona: persona })} />
                             <Button onClick={() => alert("Coming soon")} variant="flat" color="secondary" startContent={<Icon filled>comedy_mask</Icon>}>Change Persona</Button>
                             <Link href={"/persona/new"}>
                                 <Button variant="flat" color="secondary" startContent={<Icon>add</Icon>}>Create new</Button>

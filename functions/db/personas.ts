@@ -122,6 +122,20 @@ export const getUserPersonas = cache(async (cursor: number, limit: number) => {
     return await Promise.all(data.map(personaFormatter));
 })
 
+export const searchPersonas = cache(async (search: string) => {
+    const { data, error } = await createClient()
+        .from(tableName)
+        .select(personaMatcher)
+        .ilike("full_name", `%${search}%`);
+
+    if (error) {
+        console.error("Error searching personas", error);
+        throw error;
+    }
+
+    return await Promise.all(data.map(personaFormatter));
+})
+
 export const updatePersona = async (persona: Persona) => {
 
     if(persona.is_private && !checkIsEncrypted(persona.full_name)) {
