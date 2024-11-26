@@ -1,6 +1,5 @@
 "use server";
 
-import { getCharacter } from "@/functions/db/character";
 import { Profile, Persona } from "@/types/db";
 import { getCurrentUser } from "@/functions/db/auth";
 import { Metadata } from "next";
@@ -9,20 +8,20 @@ import PersonaPage from "@/components/persona/PersonaPage";
 
 
 export async function generateMetadata(
-    { params: { characterId } } : { params: { characterId: string } }
+    { params: { personaId } } : { params: { personaId: string } }
 ) : Promise<Metadata> {
     
     try {
-        const character = await getCharacter(characterId);
+        const persona = await getPersona(personaId);
 
         return {
-            title: `${character.name}`,
+            title: `${persona.full_name}`,
         }
         
     } catch (error) {
         console.error(error);
         return {
-            title: `Viewing Characters`,
+            title: `Viewing Persona`,
         }   
     }
 
