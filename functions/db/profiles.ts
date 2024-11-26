@@ -5,6 +5,57 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase"
 import { Profile } from "@/types/db";
+import { getKeyServerSide } from "../serverHelpers";
+import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
+
+export const encryptProfile = async (profile: Profile, key: string): Promise<Profile> => {
+    try {
+        const keyBuffer = Buffer.from(key, "hex");
+
+        return {
+            ...profile,
+            first_name: encryptMessage(profile.first_name, keyBuffer),
+            last_name: encryptMessage(profile.last_name ?? "", keyBuffer),
+            bio: encryptMessage(profile.bio ?? "", keyBuffer),
+        }
+    } catch (error) {
+        console.error("Error encrypting profile", error);
+        return profile;
+    }
+}
+
+
+export const decryptProfile = async (profile: Profile, key: string): Promise<Profile> => {
+    try {
+        const keyBuffer = Buffer.from(key, "hex");
+
+        return {
+            ...profile,
+            first_name: decryptMessage(profile.first_name, keyBuffer),
+            last_name: decryptMessage(profile.last_name ?? "", keyBuffer),
+            bio: decryptMessage(profile.bio ?? "", keyBuffer),
+        }
+    } catch (error) {
+        console.error("Error decrypting profile", error);
+        return profile;
+    }
+}
+
+const profileFormatter = async (db: any): Promise<Profile> => {
+
+    const { data: { session } } = await createClient().auth.getSession();
+
+    if((session?.user?.id === db.user) && !checkIsEncrypted(db.first_name)) {
+        console.error("Profile is not encrypted. Fixing...");
+        const key = await getKeyServerSide();
+        const encrypted = await encryptProfile(db, key);
+        await updateProfile(encrypted);
+        return db;
+    }
+
+    const key = await getKeyServerSide();
+    return await decryptProfile(db, key);
+}
 
 
 export const getProfile = cache(async (userId: string) => {
@@ -19,7 +70,7 @@ export const getProfile = cache(async (userId: string) => {
         throw error;
     }
 
-    return data;
+    return await profileFormatter(data);
 })
 
 export const updateProfile = async (profile: Profile) => {
@@ -32,7 +83,7 @@ export const updateProfile = async (profile: Profile) => {
         throw error;
     }
 
-    return data;
+    return await profileFormatter(data);
 }
 
 export const addTokens = async (userId: string, tokens: number) => {
@@ -48,7 +99,7 @@ export const addTokens = async (userId: string, tokens: number) => {
         throw error;
     }
 
-    return data;
+    return await profileFormatter(data);
 }
 
 export const getTokens = async (userId: string): Promise<number> => {

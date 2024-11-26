@@ -9,7 +9,7 @@ import { Profile } from "@/types/db";
 
 import { loginSchema, signUpSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
-import { generateKey } from "@/lib/crypto";
+import { encryptMessage, generateKey } from "@/lib/crypto";
 
 export const checkIsLoggedIn = async () => {
     const { data: { user }, error } = await createClient().auth.getUser();
@@ -140,13 +140,18 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
         }
     }
 
+    // set cookie with key
+    const keyBuffer = generateKey(data.password, data.email);
+
+    cookies().set("key", keyBuffer.toString("hex"), { secure: true });
+
     const { error: profilesError } = await createClient().from("profiles").insert({
         user: user.id,
         username: props.username,
-        first_name: props.firstName,
-        last_name: props.lastName,
+        first_name: encryptMessage(props.firstName, keyBuffer),
+        last_name: encryptMessage(props.lastName, keyBuffer),
         avatar_link: props.avatarLink,
-        bio: props.bio,
+        bio: encryptMessage(props.bio, keyBuffer),
     })
 
     if(profilesError) {
@@ -158,10 +163,7 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
         }
     }
 
-    // set cookie with key
-    const keyBuffer = generateKey(data.password, data.email);
 
-    cookies().set("key", keyBuffer.toString("hex"), { secure: true });
 
     return {
         success: true,
