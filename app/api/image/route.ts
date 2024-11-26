@@ -8,11 +8,10 @@ type RequestBody = {
     character?: Character | undefined;
     story?: Story | undefined;
     persona?: Persona | undefined;
-    profile?: Profile | undefined;
 }
 
 export async function POST(req: Request) {
-    const { character, story, persona, profile } = (await req.json()) as RequestBody;
+    const { character, story, persona } = (await req.json()) as RequestBody;
 
     try {
         const profile = await getCurrentUser();
