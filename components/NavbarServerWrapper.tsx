@@ -14,7 +14,7 @@ export default async function NavbarServerWrapper() {
         const err = e as Error;
         // Anons are allowed here, not an error
         if(err.message !== "No user found") {
-            console.error("Error in LeftSidebar", e);
+            console.error("Error in NavbarServerWrapper", e);
         };
     }
 

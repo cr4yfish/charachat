@@ -79,7 +79,7 @@ export default async function CharacterView({ params: { characterId } }: { param
         const err = error as Error;
         // Anons are allowed here, not an error
         if(err.message !== "No user found") {
-            console.error("Error in LeftSidebar", error);
+            console.error("Error in c/characterId", error);
         };
     }
 

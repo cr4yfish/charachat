@@ -44,7 +44,7 @@ export default async function Story({ params: { storyId, characterId } }: { para
         const err = error as Error;
         // Anons are allowed here, not an error
         if(err.message !== "No user found") {
-            console.error("Error in LeftSidebar", error);
+            console.error("Error in c/character/story", error);
         };
     }
 

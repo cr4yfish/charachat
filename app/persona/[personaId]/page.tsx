@@ -71,7 +71,7 @@ export default async function PersonaView({ params: { personaId } }: { params: {
         const err = error as Error;
         // Anons are allowed here, not an error
         if(err.message !== "No user found") {
-            console.error("Error in LeftSidebar", error);
+            console.error("Error in persona/personaId", error);
         };
     }
     
