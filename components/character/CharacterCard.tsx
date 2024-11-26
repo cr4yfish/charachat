@@ -55,24 +55,28 @@ export default function CharacterCard(props: Props) {
                                 <Markdown className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</Markdown> 
                             </div>
 
-                           {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
+                         
                             <div className="flex flex-row items-center gap-2">
-                                <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
-                                    <Icon downscale>chat_bubble</Icon>
-                                    <span>{props.data.chats}</span>
-                                </div>
-                                <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
-                                    <Icon downscale>favorite</Icon>
-                                    <span>{props.data.likes}</span>
-                                </div>
+                                {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
+                                <>
+                                    <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                        <Icon downscale>chat_bubble</Icon>
+                                        <span>{props.data.chats}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                        <Icon downscale>favorite</Icon>
+                                        <span>{props.data.likes}</span>
+                                    </div>
+                                </>
+                                } 
                                 {props.data.is_private &&
-                                <div className="flex gap-1 items-center">
-                                    <Icon color="green-500" downscale filled>lock</Icon>
-                                    <span className="text-xs text-green-500">Private</span>
-                                </div>
+                                    <div className="flex gap-1 items-center">
+                                        <Icon color="green-500" downscale filled>lock</Icon>
+                                        <span className="text-xs text-green-500">Private</span>
+                                    </div>
                                 }
                             </div>
-                            } 
+                            
                         </div>
                     </CardBody>
                 </Card>
