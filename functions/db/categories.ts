@@ -5,6 +5,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Category } from "@/types/db";
+import { LoadMoreProps } from "@/types/client";
 
 export const searchCategories = cache(async (search: string): Promise<Category[]> => {
     const { data, error } = await createClient()
@@ -19,12 +20,12 @@ export const searchCategories = cache(async (search: string): Promise<Category[]
     return data;
 })
 
-export const getCategories = cache(async (cursor: number, limit: number): Promise<Category[]> => {
+export const getCategories = cache(async (props: LoadMoreProps): Promise<Category[]> => {
     const { data, error } = await createClient()
         .from("categories")
         .select("*")
         .order("created_at", { ascending: true })
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
         throw error;

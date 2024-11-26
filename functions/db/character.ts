@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/supabase";
 import { Character } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
+import { LoadMoreProps } from "@/types/client";
 
 const characterMatcher = `
     *,
@@ -119,12 +120,12 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
     return await characterFormatter(data);
 })
 
-export const getCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
+export const getCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from(characterTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
         
     if (error) {
         throw error;
@@ -135,12 +136,12 @@ export const getCharacters = cache(async (cursor: number, limit: number): Promis
     }));
 })
 
-export const getPopularCharacters = cache(async (cursor: number, limit: number): Promise<Character[]> => {
+export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from(characterTableName)
         .select(characterMatcher)
         .order("chats", { ascending: false })
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
         
     if (error) {
         throw error;
@@ -151,13 +152,20 @@ export const getPopularCharacters = cache(async (cursor: number, limit: number):
     }));
 })
 
-export const getCharactersByCategory = cache(async (categoryId: string, cursor: number, limit: number): Promise<Character[]> => {
+
+export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+    if(!props.args?.categoryId) {    
+        throw new Error("Category ID not found");
+    }
+
+    console.log("Category ID", props.args.categoryId);
+    
     const { data, error } = await createClient()
         .from(characterTableName)
         .select(characterMatcher)
-        .eq("category", categoryId)
+        .eq("category", props.args.categoryId)
         .order("created_at", { ascending: false })
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
         throw error;

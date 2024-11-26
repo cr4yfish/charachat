@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/supabase"
 import { Persona } from "@/types/db";
 import { checkIsEncrypted, decryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
+import { LoadMoreProps } from "@/types/client";
 
 const personaMatcher = `
     *,
@@ -92,11 +93,11 @@ export const getPersona = cache(async (personaId: string) => {
     return await personaFormatter(data);
 })
 
-export const getPersonas = cache(async (cursor: number, limit: number) => {
+export const getPersonas = cache(async (props: LoadMoreProps) => {
     const { data, error } = await createClient()
         .from(tableName)
         .select(personaMatcher)
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
         
     if (error) {
         console.error("Error fetching personas", error);

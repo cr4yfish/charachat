@@ -8,6 +8,7 @@ import { Story } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
 import { decryptCharacter } from "./character";
+import { LoadMoreProps } from "@/types/client";
 
 const storyMatcher = `
     *,
@@ -124,12 +125,12 @@ export const getCharacterStories = cache(async (characterId: string): Promise<St
     }))
 })
 
-export const getStories = cache(async (cursor: number, limit: number): Promise<Story[]> => {
+export const getStories = cache(async (props: LoadMoreProps): Promise<Story[]> => {
     const { data, error } = await createClient()
         .from(storyTableName)
         .select(storyMatcher)
         .order("created_at", { ascending: false })
-        .range(cursor, cursor + limit - 1);
+        .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
         throw error;

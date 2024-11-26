@@ -31,7 +31,7 @@ export default function CategoryScroller(props: Props) {
         setIsLoading(true)
 
         try {
-            const res = await getCharactersByCategory(category.id, characters.length, limit);   
+            const res = await getCharactersByCategory({ cursor: characters?.length ?? 0, limit, args: { categoryId: category.id } } );   
             if(characters) {
                 setCharacters([...characters, ...res]);
             } else {

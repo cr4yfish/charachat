@@ -6,10 +6,11 @@ import InfiniteScroll from "react-infinite-scroller";
 import { ScrollArea } from "./ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { Spinner } from "@nextui-org/spinner";
+import { LoadMoreProps } from "@/types/client";
 
 
 interface Props {
-    loadMore: (cursor: number, limit: number) => Promise<any[]>;
+    loadMore: (props: LoadMoreProps) => Promise<any[]>;
     limit: number;
     initialData: Array<any>;
     component: React.FC<any>;
@@ -29,7 +30,7 @@ export default function InfiniteListLoader(props: Props) {
         if (isLoading) return;
         setIsLoading(true);
         try {
-            const res = await props.loadMore(cursor, props.limit);
+            const res = await props.loadMore({ cursor, limit: props.limit });
             setCursor(cursor + res.length);
             setData([...data, ...res]);
 

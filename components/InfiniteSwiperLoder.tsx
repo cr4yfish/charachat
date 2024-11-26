@@ -7,13 +7,16 @@ import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { Spinner } from '@nextui-org/spinner';
 import { useToast } from '@/hooks/use-toast';
+import { LoadMoreProps } from '@/types/client';
+import { JSONObject } from '@ai-sdk/provider';
 
 interface Props {
-    loadMore: (cursor: number, limit: number) => Promise<any[]>;
+    loadMore: (props : LoadMoreProps) => Promise<any[]>;
     limit: number;
     initialData?: Array<any>;
     component: React.FC<any>;
     componentProps?: any;
+    args?: JSONObject;
 }
 
 
@@ -28,7 +31,7 @@ export default function InfiniteSwiperLoader(props: Props) {
         setIsLoading(true)
 
         try {
-            const res = await props.loadMore(items?.length ?? 0, props.limit)
+            const res = await props.loadMore({ cursor: items?.length ?? 0, limit: props.limit, args: props.args } )
             if(items) {
                 setItems([...items, ...res]);
             } else {
