@@ -25,6 +25,7 @@ export type Character = {
     is_liked?: boolean;
     system_prompt?: string;
     image_prompt: string;
+    first_message: string;
 }
 
 export type Chat = {

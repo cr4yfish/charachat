@@ -167,7 +167,14 @@ export default function CharacterNew(props: Props) {
                 profile={props.profile}
                 character={newCharacter}
             />
-
+            <TextareaWithCounter
+                name="first_message"
+                value={newCharacter.first_message}
+                onValueChange={(value) => updateValue("first_message", value)}
+                label="First Message"
+                description="The first message the character sends when the user starts the conversation (will be overriden by Story->First Message if in a Story) "
+                maxLength={5000}
+            />
             <TextareaWithCounter 
                 name="system_prompt" 
                 value={newCharacter.system_prompt}

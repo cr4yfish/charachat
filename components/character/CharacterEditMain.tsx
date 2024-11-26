@@ -127,6 +127,14 @@ export default function CharacterEditMain(props: Props) {
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
                 maxLength={8000} 
             />
+            <TextareaWithCounter
+                name="first_message"
+                value={character.first_message}
+                onValueChange={(value) => setCharacter({ ...character, first_message: value })}
+                label="First Message"
+                description="The first message the character sends when the user starts the conversation (will be overriden by Story->First Message if in a Story) "
+                maxLength={5000}
+            />
             <TextareaWithCounter 
                 name="system_prompt" 
                 value={character.system_prompt}

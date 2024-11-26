@@ -76,6 +76,7 @@ export const decryptCharacter = async (character: Character, key: string): Promi
             image_link: decryptMessage(character.image_link ?? "", buffer),
             personality: decryptMessage(character.personality, buffer),
             image_prompt: decryptMessage(character.image_prompt ?? "", buffer),
+            first_message: decryptMessage(character.first_message, buffer),
         }
     } catch (error) {
         console.error("Error decrypting character", error);
@@ -97,6 +98,7 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         image_link: encryptMessage(character.image_link ?? "", buffer),
         personality: encryptMessage(character.personality, buffer),
         image_prompt: encryptMessage(character.image_prompt ?? "", buffer),
+        first_message: encryptMessage(character.first_message, buffer),
     }
 }
 

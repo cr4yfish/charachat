@@ -261,8 +261,38 @@ export default function ChatMain(props : Props) {
                 is_edited: false,
                 is_deleted: false,
             }, key);
-            
-            
+        } else if(props.chat.character.first_message && props.chat.character.first_message.length > 0) {
+            setMessages([
+                {
+                    id: uuidv4(),
+                    content: props.chat.character.first_message?.replace("{{ user }}", props.user.first_name),
+                    role: "assistant",
+                    createdAt: new Date()
+                }
+            ])
+
+            if(isSelfDestruct) {
+                return;
+            }
+
+            const key = sessionStorage.getItem("key");
+
+            if(!key) {
+                console.error("No key found in session storage. Log out and back in to fix this.");
+                return;
+            }
+
+            await addMessage({
+                id: uuidv4(),
+                chat: props.chat,
+                character: props.chat.character,
+                user: props.user,
+                from_ai: true,
+                content: props.chat.character.first_message.replace("{{ user }}", props.user.first_name),
+                is_edited: false,
+                is_deleted: false,
+            }, key);
+
         }
 
         setIsSetupLoading(false);
