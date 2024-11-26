@@ -66,7 +66,7 @@ export default function PersonaEdit(props: Props) {
                     })
                 }
             } else {
-                setIsSaved(false);
+                throw new Error("Validation failed");
             }
         } catch (error) {
             console.error(error);
@@ -109,6 +109,7 @@ export default function PersonaEdit(props: Props) {
 
             <TextareaWithCounter 
                 label="Full name"
+                isRequired
                 value={persona.full_name}
                 onValueChange={(value) => updateValue("full_name", value)}
                 maxLength={100}
