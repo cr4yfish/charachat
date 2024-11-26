@@ -173,7 +173,7 @@ export default function NewStoryMain(props: Props) {
                 label="Story"
                 name="story"
                 description="The Story itself. Write in Natural Language. Is used as a backstory."
-                maxLength={2000}
+                maxLength={10000}
                 isRequired
                 buttonLabel="Generate Story"
                 api="/api/author/story/story"
@@ -190,7 +190,7 @@ export default function NewStoryMain(props: Props) {
                 label="First Message"
                 name="first_message"
                 description="The first message in the Story Chat, like a kick-off."
-                maxLength={500}
+                maxLength={5000}
                 isRequired
                 buttonLabel="Generate First Message"
                 api="/api/author/story/first_message"
