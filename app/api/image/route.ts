@@ -2,7 +2,7 @@ import { generateImage } from "@/functions/ai/image";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { decryptMessage } from "@/lib/crypto";
-import { Character, Persona, Profile, Story } from "@/types/db";
+import { Character, Persona, Story } from "@/types/db";
 
 type RequestBody = {
     character?: Character | undefined;
