@@ -6,7 +6,7 @@ import InfiniteListLoader from "@/components/InfiniteListLoader";
 
 export default async function UserStories({ params: {  } } : { params: { userId: string } }) {
 
-    const stories = await getStories(0, 5);
+    const stories = await getStories({ cursor: 0, limit: 5 });
 
     return (
         <>
