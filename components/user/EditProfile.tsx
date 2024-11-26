@@ -45,7 +45,7 @@ export default function EditProfile(props: Props) {
         try {
             const key = sessionStorage.getItem('key');
 
-            if(!key) { throw new Error("No key found in session storage");  }
+            if(!key) { throw new Error("No key found in session storage. Log out and back in to fix this.");  }
 
             const keyBuffer = Buffer.from(key, 'hex');
 
@@ -82,7 +82,7 @@ export default function EditProfile(props: Props) {
             const key = sessionStorage.getItem('key');
 
             if(!key) {
-                throw new Error("No key found in session storage");
+                throw new Error("No key found in session storage. Log out and back in to fix this.");
             }
 
             const keyBuffer = Buffer.from(key, 'hex');

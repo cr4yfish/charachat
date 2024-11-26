@@ -26,6 +26,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { LLMsWithAPIKeys } from "@/lib/ai";
 import { useSharedChat } from "@/context/SharedChatSettings";
 import ConditionalLink from "../utils/ConditionalLink";
+import PersonaCard from "../persona/PersonaCard";
+import Link from "next/link";
 
 type Props = {
     chat: Chat;
@@ -128,7 +130,7 @@ export default function ChatMain(props : Props) {
                 const key = sessionStorage.getItem("key");
 
                 if(!key) {
-                    console.error("No key found in session storage");
+                    console.error("No key found in session storage. Log out and back in to fix this.");
                     return;
                 }
 
@@ -244,7 +246,7 @@ export default function ChatMain(props : Props) {
             const key = sessionStorage.getItem("key");
 
             if(!key) {
-                console.error("No key found in session storage");
+                console.error("No key found in session storage. Log out and back in to fix this.");
                 return;
             }
 
@@ -273,7 +275,7 @@ export default function ChatMain(props : Props) {
         const key = sessionStorage.getItem("key");
 
         if(!key) {
-            console.error("No key found in session storage");
+            console.error("No key found in session storage. Log out and back in to fix this.");
             return;
         }
 
@@ -375,63 +377,91 @@ export default function ChatMain(props : Props) {
         </ScrollArea>
  
         {((messages.length == 0 && props.initMessages.length == 0) || (!chat?.llm)) && (
-            <div className="flex flex-col gap-4 items-start justify-center h-full w-full px-8 overflow-y-hidden">
-                <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
-                    <h1>Select an AI to get started</h1>
-                    <p>Only ones for which you have a key are displayed.</p>
-                    <span>The following models are available for free currently:</span>
-                    <ul>
-                        <li>Nemo (messages used by Mistral for training)</li>
-                        <li>Grok (recommended, unrestricted)</li>
-                    </ul>
-                </div>
-                
-                <Select 
-                    onValueChange={(value) =>  chat && setChat({...chat, llm: value})}
-                    defaultValue={props.chat.llm}
-                >
-                    <SelectTrigger className="w-[200px]">
-                        <SelectValue placeholder="Select an AI" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {LLMsWithAPIKeys(props.user).map((llm) => (
-                            <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                
-                <div className="flex flex-col gap-1 prose dark:prose-invert prose-p:m-0">
-                    <Switch isSelected={isSelfDestruct} onValueChange={setIsSelfDestruct}>Don&apos;t save messages</Switch>
-                    <p className="text-xs max-w-md">If turned on, messages won&apos;t be saved and <b className="text-red-400">will be gone</b> once you leave this page or refresh the browser. <b className="text-green-400">Encryption is turned on regardless of this option.</b></p>
-                </div>
-                
-
-                <div className="flex flex-wrap items-center gap-4">
-                    <Button
-                        radius="full"
-                        color="primary"
-                        size="lg"
-                        isLoading={isSetupLoading}
-                        onClick={setup}
-                        isDisabled={chat?.llm.length == 0}
+            <div className="absolute top-[100px] h-full w-full px-8 overflow-y-auto pb-40">
+                <div className="relative h-fit w-full flex flex-col gap-4 items-start justify-center">
+                    <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
+                        <h1>Chat setup</h1>
+                        <p>Only AIs for which you have a key are displayed.</p>
+                        <span>The following models are available for free currently:</span>
+                        <ul>
+                            <li>Nemo (messages used by Mistral for training)</li>
+                            <li>Grok (recommended, unrestricted)</li>
+                        </ul>
+                    </div>
+                    
+                    <Select 
+                        onValueChange={(value) =>  chat && setChat({...chat, llm: value})}
+                        defaultValue={props.chat.llm}
                     >
-                        Start Chat
-                    </Button>       
-                    <div className="w-fit">
-                        <ConditionalLink active={!isSetupLoading} href={`/user/${props.user.user}/edit`} >
-                            <Button
-                                radius="full"
-                                color="secondary"
-                                size="lg"
-                                variant="flat"
-                                isDisabled={isSetupLoading}
-                            >
-                                Add API Keys
-                            </Button>
-                        </ConditionalLink>
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Select an AI" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {LLMsWithAPIKeys(props.user).map((llm) => (
+                                <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    <div className="flex flex-col gap-2 w-full max-w-sm">
+                        <div className="prose dark:prose-invert prose-p:m-0 prose-h3:m-0">
+                            <h3>Selected Persona</h3>
+                            <p>This is who the AI will think is you.</p>
+                        </div>
+                        <PersonaCard 
+                            fullWidth
+                            data={ props.chat.persona.id ? props.chat.persona :
+                                {
+                                    id: props.user.user,
+                                    full_name: props.chat.user.username,
+                                    bio: props.chat.user.bio,
+                                    avatar_link: props.chat.user.avatar_link,
+                                    creator: props.chat.user,
+                                    is_private: false
+                                } 
+                            } 
+                            hasLink={false} 
+                        />
+                        <div className="flex flex-row flex-wrap gap-1">
+                            <Button onClick={() => alert("Coming soon")} variant="flat" color="secondary" startContent={<Icon filled>comedy_mask</Icon>}>Change Persona</Button>
+                            <Link href={"/persona/new"}>
+                                <Button variant="flat" color="secondary" startContent={<Icon>add</Icon>}>Create new</Button>
+                            </Link>
+                        </div>
+                    
+                    </div>
+                    
+                    <div className="flex flex-col gap-1 prose dark:prose-invert prose-p:m-0">
+                        <Switch isSelected={isSelfDestruct} onValueChange={setIsSelfDestruct}>Don&apos;t save messages</Switch>
+                        <p className="text-xs max-w-md">If turned on, messages won&apos;t be saved and <b className="text-red-400">will be gone</b> once you leave this page or refresh the browser. <b className="text-green-400">Encryption is turned on regardless of this option.</b></p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4">
+                        <Button
+                            radius="full"
+                            color="primary"
+                            size="lg"
+                            isLoading={isSetupLoading}
+                            onClick={setup}
+                            isDisabled={chat?.llm.length == 0}
+                        >
+                            Start Chat
+                        </Button>       
+                        <div className="w-fit">
+                            <ConditionalLink active={!isSetupLoading} href={`/user/${props.user.user}/edit`} >
+                                <Button
+                                    radius="full"
+                                    color="secondary"
+                                    size="lg"
+                                    variant="flat"
+                                    isDisabled={isSetupLoading}
+                                >
+                                    Add API Keys
+                                </Button>
+                            </ConditionalLink>
+                        </div>
                     </div>
                 </div>
-
             </div>   
         )}
 
