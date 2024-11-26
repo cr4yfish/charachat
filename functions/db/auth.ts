@@ -99,6 +99,7 @@ type SignUpProps = {
     firstName: string,
     lastName: string,
     avatarLink: string,
+    bio: string;
     email: string,
     password: string
 }
@@ -110,6 +111,7 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
         firstName: props.firstName,
         lastName: props.lastName,
         avatarLink: props.avatarLink,
+        bio: props.bio,
         email: props.email,
         password: props.password
     }
@@ -143,7 +145,8 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
         username: props.username,
         first_name: props.firstName,
         last_name: props.lastName,
-        avatar_link: props.avatarLink
+        avatar_link: props.avatarLink,
+        bio: props.bio,
     })
 
     if(profilesError) {

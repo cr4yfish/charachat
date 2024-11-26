@@ -11,6 +11,7 @@ import { login, LoginResponse, signUp } from "@/functions/db/auth";
 
 import { loginSchema, signUpSchema } from "@/lib/schemas";
 import { generateKey } from "@/lib/crypto";
+import TextareaWithCounter from "../utils/TextareaWithCounter";
 
 type Props = {
     shouldRedirect?: boolean;
@@ -26,6 +27,7 @@ export default function LoginCard(props: Props) {
     const [avatarLink, setAvatarLink] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [bio, setBio] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
@@ -55,6 +57,7 @@ export default function LoginCard(props: Props) {
                     firstName: firstName ?? "",
                     lastName: lastName ?? "",
                     avatarLink: avatarLink ?? "",
+                    bio: bio ?? "",
                     email: email ?? "",
                     password: password ?? "",
                 });
@@ -113,8 +116,8 @@ export default function LoginCard(props: Props) {
 
     return (
         <>
-        <form onSubmit={handleSubmit} className="w-full max-w-md">
-            <Card>
+        <form onSubmit={handleSubmit} className="w-full max-w-md h-full max-h-screen overflow-auto pb-20">
+            <Card className="">
                 <CardHeader className="text-2xl font-bold">{isSignUp ? "Sign up ": "Log in"}</CardHeader>
                 <CardBody className="flex flex-col gap-2">
 
@@ -161,6 +164,14 @@ export default function LoginCard(props: Props) {
                             onValueChange={setAvatarLink} 
                             errorMessage={ signUpSchema.shape.avatarLink.safeParse(avatarLink).error?.issues[0]?.message }
                             isInvalid={ isSubmit && signUpSchema.shape.avatarLink.safeParse(avatarLink).error?.issues[0]?.message ? true : false }
+                        />
+                        <TextareaWithCounter 
+                            name="bio"
+                            label="Bio"
+                            description="Optional. Only visible to you & AI"
+                            maxLength={2500}
+                            value={bio}
+                            onValueChange={setBio}
                         />
 
                         </>

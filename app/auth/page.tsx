@@ -14,7 +14,7 @@ export default async function Login() {
 
     return (
         <>
-        <div className="z-10 px-4 py-6 h-screen flex flex-col gap-4 items-center justify-center pt-[15vh] pb-[33vh]">
+        <div className="z-10 px-4 py-6 h-screen flex flex-col gap-4 items-center justify-center">
             <LoginCard />
         </div>
         </>
