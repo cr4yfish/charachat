@@ -1,7 +1,7 @@
 "use server";
 
 import CharacterCard from "@/components/character/CharacterCard";
-import { getCharacters, getPopularCharacters } from "@/functions/db/character";
+import { getCharacters, getCharactersByCategory, getPopularCharacters } from "@/functions/db/character";
 import { Character } from "@/types/db";
 
 import { getStories } from "@/functions/db/stories";
@@ -18,18 +18,24 @@ import PersonaCard from "@/components/persona/PersonaCard";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Button } from "@/components/utils/Button";
+import { LoadMoreProps } from "@/types/client";
 
 export default async function Home() {
 
+  const defaultLoad: LoadMoreProps = {
+    cursor: 0,
+    limit: 5,
+  }
+
   let characters: Character[] = [];
   let popularCharacters: Character[] = [];
-  const stories = await getStories(0, 5);
-  const categories = await getCategories(0, 5);
-  const personas = await getPersonas(0, 5);
+  const stories = await getStories(defaultLoad);
+  const categories = await getCategories(defaultLoad);
+  const personas = await getPersonas(defaultLoad);
 
   try {
-    characters = await getCharacters(0, 5);
-    popularCharacters = await getPopularCharacters(0, 5);
+    characters = await getCharacters(defaultLoad);
+    popularCharacters = await getPopularCharacters(defaultLoad);
   } catch (error) {
     const err = error as Error;
     return (
@@ -162,6 +168,24 @@ export default async function Home() {
             }}
           />
         </div>
+
+        {categories.map((category) => (
+          <div key={category.id} className="flex flex-col gap-2 w-full relative">
+            <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
+              <p className="text-xs dark:text-zinc-400">{category.description}</p>
+              <h2 className="dark:prose-invert text-lg font-bold">{category.title}</h2>
+            </div>
+            <InfiniteSwiperLoader 
+              loadMore={getCharactersByCategory} 
+              args={{ categoryId: category.id }}
+              limit={5} 
+              component={CharacterCard}
+              componentProps={{
+                hasLink: true,
+              }}
+            />
+          </div>
+        ))}
 
       </div>
     </div>
