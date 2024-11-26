@@ -56,7 +56,7 @@ export default function LoginButton(props: Props) {
                 {!isLoggedIn && 
                     <DialogTrigger asChild>
                         <Button 
-                            color="primary" 
+                            color="primary" radius="full"
                             size={props.isSmall ? "md" : "lg"} 
                             fullWidth={!props.isSmall}
                         >
