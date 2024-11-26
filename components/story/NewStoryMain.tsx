@@ -12,6 +12,7 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
 import ImageInputWithAI from "../ImageInputWithAI";
 import StoryCard from "./StoryCard";
+import { Switch } from "@nextui-org/switch";
 
 
 type Props = {
@@ -31,6 +32,7 @@ export default function NewStoryMain(props: Props) {
         story: props.story?.story || "",
         first_message: props.story?.first_message || "",
         image_link: props.story?.image_link || "",
+        is_private: props.story?.is_private || false,
     })
 
     const [errorMessages, setErrorMessages] = useState<{
@@ -75,7 +77,8 @@ export default function NewStoryMain(props: Props) {
                     description: story.description,
                     story: story.story,
                     first_message: story.first_message,
-                    image_link: story.image_link
+                    image_link: story.image_link,
+                    is_private: story.is_private,
                 });
 
                 setIsSaved(true);
@@ -106,7 +109,7 @@ export default function NewStoryMain(props: Props) {
         setIsDeleting(false);        
     }
 
-    const updateValue = (key: string, value: string) => {
+    const updateValue = (key: string, value: string | boolean) => {
         setStory(prevValue => {
             return {
                 ...prevValue,
@@ -200,7 +203,16 @@ export default function NewStoryMain(props: Props) {
                 setImageLink={(value) => updateValue("image_link", value)}
             />
 
-                      
+            <div className="flex flex-col gap-1">
+                <Switch 
+                    isSelected={story.is_private} 
+                    onValueChange={(value) => updateValue("is_private", value)}
+                >
+                    Private
+                </Switch>
+                <p className="text-xs dark:text-zinc-400">When set to Private, the <b>Story gets encrypted and only you will be able to see and interact with it</b>. Note that it might still appear on the front page, but only you will see it. Please avoid this if possible to contribute to the Project.</p>
+            </div>
+
             <div className="flex flex-col gap-1">
                 <h3 className="text-lg font-bold">Preview</h3>
                 <StoryCard fullWidth data={story} hasLink={false} />

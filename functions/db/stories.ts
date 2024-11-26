@@ -5,6 +5,9 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Story } from "@/types/db";
+import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
+import { getKeyServerSide } from "../serverHelpers";
+import { decryptCharacter } from "./character";
 
 const storyMatcher = `
     *,
@@ -16,14 +19,57 @@ const storyMatcher = `
 `
 const storyTableName = "stories_overview"
 
-const storyReturnFormat = (db: any): Story => {
-    return {
+const storyReturnFormat = async (db: any): Promise<Story> => {
+    const story = {
         ...db,
         character: {
             ...db.characters,
             owner: db.characters.profiles
         },
         creator: db.profiles
+    } as Story;
+
+    if(story.is_private && !checkIsEncrypted(story.title)) {
+        // private but not encrypted
+
+        await updateStory(story);
+        return story;
+    }
+
+    const key = await getKeyServerSide();
+    return await decryptStory(story, key);
+}
+
+export const decryptStory = async (story: Story, key: string): Promise<Story> => {
+    const keyBuffer = Buffer.from(key, "hex");
+
+    try {
+        return {
+            ...story,
+            title: decryptMessage(story.title, keyBuffer),
+            description: decryptMessage(story.description, keyBuffer),
+            story: decryptMessage(story.story, keyBuffer),
+            image_link: decryptMessage(story.image_link, keyBuffer),
+            first_message: decryptMessage(story.first_message, keyBuffer),
+            character: await decryptCharacter(story.character, key)
+        }
+
+    } catch(e) {
+        console.error("Error decrypting story", e);
+        return story;
+    }
+}
+
+export const encryptStory = async (story: Story, key: string): Promise<Story> => {
+    const keyBuffer = Buffer.from(key, "hex");
+
+    return {
+        ...story,
+        title: encryptMessage(story.title, keyBuffer),
+        description: encryptMessage(story.description, keyBuffer),
+        story: encryptMessage(story.story, keyBuffer),
+        image_link: encryptMessage(story.image_link, keyBuffer),
+        first_message: encryptMessage(story.first_message, keyBuffer)
     }
 }
 
@@ -39,7 +85,7 @@ export const getStory = cache(async (storyId: string): Promise<Story> => {
         throw error;
     }
 
-    return storyReturnFormat(data);
+    return await storyReturnFormat(data);
 })
 
 export const searchStories = cache(async (search: string): Promise<Story[]> => {
@@ -52,9 +98,9 @@ export const searchStories = cache(async (search: string): Promise<Story[]> => {
         throw error;
     }
 
-    return data.map((db: any) => {
-        return storyReturnFormat(db);
-    });
+    return Promise.all(data.map(async(db: any) => {
+        return await storyReturnFormat(db);
+    }))
 })
 
 export const getCharacterStories = cache(async (characterId: string): Promise<Story[]> => {
@@ -67,9 +113,9 @@ export const getCharacterStories = cache(async (characterId: string): Promise<St
         throw error;
     }
 
-    return data.map((db: any) => {
-        return storyReturnFormat(db);
-    });
+    return Promise.all(data.map(async(db: any) => {
+        return await storyReturnFormat(db);
+    }))
 })
 
 export const getStories = cache(async (cursor: number, limit: number): Promise<Story[]> => {
@@ -83,9 +129,9 @@ export const getStories = cache(async (cursor: number, limit: number): Promise<S
         throw error;
     }
 
-    return data.map((db: any) => {
-        return storyReturnFormat(db);
-    });
+    return Promise.all(data.map(async(db: any) => {
+        return await storyReturnFormat(db);
+    }))
 })
 
 type CreateStoryProps = {
@@ -97,6 +143,7 @@ type CreateStoryProps = {
     story: string;
     image_link: string;
     first_message: string;
+    is_private: boolean;
 }
 
 export const createStory = async (params : CreateStoryProps): Promise<Story> => {
@@ -110,7 +157,8 @@ export const createStory = async (params : CreateStoryProps): Promise<Story> => 
         description: params.description,
         story: params.story,
         image_link: params.image_link,
-        first_message: params.first_message
+        first_message: params.first_message,
+        is_private: params.is_private
     })
     .eq("id", params.storyId)
     .select(storyMatcher)
@@ -120,27 +168,31 @@ export const createStory = async (params : CreateStoryProps): Promise<Story> => 
         throw error;
     }
 
-    return storyReturnFormat(data);
+    return await storyReturnFormat(data);
 }
 
-export const updateStory = async (story: Story): Promise<Story> => {
+export const updateStory = async (story: Story): Promise<void> => {
 
-    const { data, error } = await createClient()
+    // if story is private and not encrypted, encrypt it before uploading
+    if(story.is_private && !checkIsEncrypted(story.title)) {
+        const key = await getKeyServerSide();
+        story = await encryptStory(story, key);
+    }
+
+    const { error } = await createClient()
         .from("stories")
         .update({
             title: story.title,
             description: story.description,
             story: story.story,
-            image_link: story.image_link
+            image_link: story.image_link,
+            is_private: story.is_private,
         })
         .eq("id", story.id)
-        .single();
 
     if (error) {
         throw error;
     }
-
-    return storyReturnFormat(data);
 
 }
 

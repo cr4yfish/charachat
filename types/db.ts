@@ -77,6 +77,7 @@ export type Story = {
     first_message: string;
     chats?: number;
     likes?: number;
+    is_private: boolean;
 }
 
 export type Message = {
