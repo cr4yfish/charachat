@@ -162,7 +162,7 @@ export default function EditProfile(props: Props) {
                 description="Tell us about yourself. This will be given to the AI to improve responses." 
                 value={profile.bio} 
                 onValueChange={(value) => handleUpdateValue('bio', value)} 
-                maxLength={250} 
+                maxLength={2000} 
             />
             <Input 
                 label="Avatar Image" 
