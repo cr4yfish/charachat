@@ -13,6 +13,8 @@ import InfiniteSwiperLoader from "@/components/InfiniteSwiperLoder";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 import Spotlight from "@/components/Spotlight";
 import Link from "next/link";
+import { getPersonas } from "@/functions/db/personas";
+import PersonaCard from "@/components/persona/PersonaCard";
 
 export default async function Home() {
 
@@ -20,6 +22,7 @@ export default async function Home() {
   let popularCharacters: Character[] = [];
   const stories = await getStories(0, 5);
   const categories = await getCategories(0, 5);
+  const personas = await getPersonas(0, 5);
 
   try {
     characters = await getCharacters(0, 5);
@@ -94,6 +97,19 @@ export default async function Home() {
         <CurrentCategoryProvider>
           <CategoryScroller categories={categories} />
         </CurrentCategoryProvider>
+
+        <div className="flex flex-col gap-2 w-full relative">
+          <h2 className="dark:prose-invert text-lg font-bold">Personas</h2>
+          <InfiniteSwiperLoader 
+            loadMore={getPersonas} 
+            limit={5} 
+            initialData={personas} 
+            component={PersonaCard}
+            componentProps={{
+              hasLink: true,
+            }}
+          />
+        </div>
 
       </div>
     </div>
