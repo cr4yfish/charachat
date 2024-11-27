@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { generateText, streamText } from "ai";
+import { CoreTool, generateText, GenerateTextResult, streamText, StreamTextResult } from "ai";
 import { Profile } from "@/types/db";
 import { cookies } from "next/headers";
 
@@ -50,7 +51,7 @@ export async function author({ profile, systemText, prompt, noStream }: AuthorPr
                 apiKey: decryptedAPIKey,
             }),
         })   
-        return result;
+        return result as GenerateTextResult<Record<string, CoreTool<any, any>>>;
     }
 
     const result = await streamText({
@@ -62,5 +63,5 @@ export async function author({ profile, systemText, prompt, noStream }: AuthorPr
         }),
     })
 
-    return result;
+    return result as StreamTextResult<Record<string, CoreTool<any, any>>>;
 }
