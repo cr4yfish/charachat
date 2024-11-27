@@ -12,11 +12,10 @@ import { getUserTier } from "../db/profiles";
 type AuthorProps = {
     profile: Profile,
     systemText: string,
-    prompt: string,
-    noStream?: boolean
+    prompt: string
 }
 
-export async function author({ profile, systemText, prompt, noStream }: AuthorProps) {
+async function getModelApiKey(profile: Profile): Promise<string|undefined> {
 
     const cookiesStore = cookies();
 
@@ -41,27 +40,33 @@ export async function author({ profile, systemText, prompt, noStream }: AuthorPr
         const tier = await getUserTier(profile.user);
         if(tier !== 1) { throw new Error("You do not have access to this model"); }
     }
-  
-    if(noStream) {
-        const result = await generateText({
-            system: systemText,
-            prompt: prompt,
-            model: await getLanguageModel({
-                modelId: profile.default_llm,
-                apiKey: decryptedAPIKey,
-            }),
-        })   
-        return result as GenerateTextResult<Record<string, CoreTool<any, any>>>;
-    }
+
+    return decryptedAPIKey;
+}
+
+export async function author({ profile, systemText, prompt }: AuthorProps) {
 
     const result = await streamText({
         system: systemText,
         prompt: prompt,
         model: await getLanguageModel({
             modelId: profile.default_llm,
-            apiKey: decryptedAPIKey,
+            apiKey: await getModelApiKey(profile),
         }),
     })
 
     return result as StreamTextResult<Record<string, CoreTool<any, any>>>;
+
+}
+
+export async function authorNoStream({ profile, systemText, prompt }: AuthorProps) {
+    const result = await generateText({
+        system: systemText,
+        prompt: prompt,
+        model: await getLanguageModel({
+            modelId: profile.default_llm,
+            apiKey: await getModelApiKey(profile),
+        }),
+    })   
+    return result as GenerateTextResult<Record<string, CoreTool<any, any>>>;
 }

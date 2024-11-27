@@ -5,7 +5,7 @@ import { z } from "zod";
 import { getChat, updateChat, updateDynamicMemory } from '../db/chat';
 import { generateImage } from './image';
 import { Chat, Profile } from '@/types/db';
-import { author } from './author';
+import { author, authorNoStream } from './author';
 import { getCurrentUser } from '../db/auth';
 
 // server side tool
@@ -43,9 +43,8 @@ export const removeMemory = (props: AddNewMemoryProps) => {
             try {
                 const profile = await getCurrentUser();
                 const memory = (await getChat(props.chat.id)).dynamic_book
-                const newMemoryStream = await author({
+                const newMemoryStream = await authorNoStream({
                     profile,
-                    noStream: true,
                     systemText: "You selectively remove a piece of information from a given text. You then return the resulting text only.",
                     prompt: `
                         Remove the following: ${forgetThis}.
@@ -166,7 +165,7 @@ export const getMemoryTool = (props: GetMemoryToolProps) => {
     return tool({
         description: "Retrieve the Memory to get chat context in order to response well to a prompt.",
         parameters: z.object({ }),
-        execute: async({  } : { }) => {
+        execute: async() => {
             try {
                 const dynamicBook = (await getChat(props.chat.id)).dynamic_book;
                 console.log("get memory tool:", dynamicBook);
