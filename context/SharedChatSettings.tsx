@@ -9,7 +9,7 @@ import { updateChat } from "@/functions/db/chat";
 
 interface SharedChatContextProps {
     chat: Chat | null;
-    setChat: (chat: Chat) => void;
+    setChat: React.Dispatch<React.SetStateAction<Chat | null>>;
     syncDb: (chat: Chat) => Promise<void>;
 }
 
