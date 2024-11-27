@@ -29,6 +29,7 @@ import ConditionalLink from "../utils/ConditionalLink";
 import PersonaCard from "../persona/PersonaCard";
 import Link from "next/link";
 import PersonaAutocomplete from "../persona/PersonaAutocomplete";
+import ToolMessage from "./ToolMessage";
 
 type Props = {
     chat: Chat;
@@ -47,7 +48,7 @@ export default function ChatMain(props : Props) {
     const [isSelfDestruct, setIsSelfDestruct] = useState(false);
     const { toast } = useToast();
 
-    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload, stop } = useChat({
         initialMessages: props.initMessages.map((m) => {
             return {
                 id: m.id,
@@ -158,6 +159,11 @@ export default function ChatMain(props : Props) {
 
         },
         onError: async (err) => {
+            if(err.message === "Trying to add assistant message as user message") {
+                console.log("Got expected error");
+                return;
+            }
+
             console.error("Error in chat", err.message, error);
             toast({
                 title: "Error",
@@ -354,10 +360,14 @@ export default function ChatMain(props : Props) {
 
     const handleSubmitAdapter = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        handleSubmit(e, {
-            allowEmptySubmit: true
-        });
-        scrollToBottom();
+        if(isLoading) {
+            stop();
+        } else {
+            handleSubmit(e, {
+                allowEmptySubmit: true
+            });
+            scrollToBottom();
+        }
     }
 
     return (
@@ -391,6 +401,14 @@ export default function ChatMain(props : Props) {
                                     }
                                 </div>
                             )}
+                            <ToolMessage 
+                                key={message.id + "tool"}
+                                message={message}
+                                chat={chat}
+                                setChat={setChat}
+                                user={props.user}
+                                setMessages={setMessages}
+                            />
                             <Messagebubble 
                                 key={message.id} 
                                 message={message} 
@@ -550,8 +568,8 @@ export default function ChatMain(props : Props) {
                     }}
                     className={`max-w-xs max-md:max-w-xs transition-all ${isInputFocused && "max-w-lg max-md:max-w-full"} `}
                     endContent={
-                        <Button isLoading={isLoading} id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
-                            <Icon filled>send</Icon>
+                        <Button id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
+                            <Icon filled>{isLoading ? "stop" : "send"}</Icon>
                         </Button>
                     } 
                 />
