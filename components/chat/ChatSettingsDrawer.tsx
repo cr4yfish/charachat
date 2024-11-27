@@ -81,6 +81,13 @@ export default function ChatSettingsDrawer() {
                         <Input label="Chat Title" value={chat?.title} onValueChange={(value) => chat && setChat({...chat, title: value})} />
                         <Input label="Chat Description" value={chat?.description} onValueChange={(value) => chat && setChat({...chat, description: value})} />
                         <TextareaWithCounter 
+                            label="Chat Memory"
+                            description="Important information the Character remembered"
+                            maxLength={10000}
+                            value={chat?.dynamic_book}
+                            onValueChange={(value) => chat && setChat({...chat, dynamic_book: value})}
+                        />
+                        <TextareaWithCounter 
                             label="Negative Prompt"
                             description="What the AI shouldn't say. Treat like a soft-banned words list. The AI will try to avoid saying anything you describe here."
                             maxLength={200}
