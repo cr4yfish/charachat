@@ -148,7 +148,12 @@ export async function POST(req: Request) {
             }
         });
     
-        return result.toDataStreamResponse();
+        if("toDataStreamResponse" in result) {
+            return result.toDataStreamResponse();
+        } else {
+            throw Error("Fatal error: streamText was incorrectly called.")
+        }
+        
 
     } catch (e) {
         const err = e as Error;
