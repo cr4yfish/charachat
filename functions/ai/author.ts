@@ -1,5 +1,5 @@
 
-import { streamText } from "ai";
+import { generateText, streamText } from "ai";
 import { Profile } from "@/types/db";
 import { cookies } from "next/headers";
 
@@ -12,9 +12,10 @@ type AuthorProps = {
     profile: Profile,
     systemText: string,
     prompt: string,
+    noStream?: boolean
 }
 
-export async function author({ profile, systemText, prompt }: AuthorProps) {
+export async function author({ profile, systemText, prompt, noStream }: AuthorProps) {
 
     const cookiesStore = cookies();
 
@@ -40,6 +41,18 @@ export async function author({ profile, systemText, prompt }: AuthorProps) {
         if(tier !== 1) { throw new Error("You do not have access to this model"); }
     }
   
+    if(noStream) {
+        const result = await generateText({
+            system: systemText,
+            prompt: prompt,
+            model: await getLanguageModel({
+                modelId: profile.default_llm,
+                apiKey: decryptedAPIKey,
+            }),
+        })   
+        return result;
+    }
+
     const result = await streamText({
         system: systemText,
         prompt: prompt,
