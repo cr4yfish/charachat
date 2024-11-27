@@ -25,6 +25,12 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case "c4ai-aya-expanse-32b":
             return profile.cohere_encrypted_api_key;
 
+        case "grok-beta":
+            return process.env.X_AI_API_KEY;
+
+        case "open-nemo-mistral":
+            return process.env.MISTRAL_API_KEY;
+
         default:
             return undefined;
     }
