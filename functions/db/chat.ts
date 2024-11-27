@@ -247,6 +247,13 @@ export const updateChat = async (chat: Chat): Promise<void> => {
 
 export const updateDynamicMemory = async (chatId: string, memory: string): Promise<void> => {
     const key = await getKeyServerSide();
+
+    const dynamic_book = (await getChat(chatId)).dynamic_book;
+
+    if(dynamic_book) {
+        memory = `${dynamic_book}. ${memory}`;
+    }
+
     const encryptedMemory = encryptMessage(memory, Buffer.from(key, "hex"));
     
     const { error } = await createClient()
