@@ -29,7 +29,6 @@ const personaFormatter = async (data: any): Promise<Persona> => {
     if(persona.is_private) {
 
         if(!checkIsEncrypted(persona.full_name)) {
-            console.log("Persona is private but not encrypted");
             await updatePersona(persona);
             return persona;
         }
@@ -145,7 +144,6 @@ export const searchPersonas = cache(async (search: string) => {
 export const updatePersona = async (persona: Persona) => {
 
     if(persona.is_private && !checkIsEncrypted(persona.full_name)) {
-        console.log("Encrypting persona in update");
         const key = await getKeyServerSide();
         persona = await encryptPersona(persona, key);
     }

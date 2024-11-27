@@ -158,8 +158,6 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
         throw new Error("Category ID not found");
     }
 
-    console.log("Category ID", props.args.categoryId);
-    
     const { data, error } = await createClient()
         .from(characterTableName)
         .select(characterMatcher)
