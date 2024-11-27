@@ -41,6 +41,7 @@ export type Chat = {
     llm: string;
     last_message?: string;
     persona?: Persona;
+    negative_prompt?: string;
 }
 
 export type Profile = {

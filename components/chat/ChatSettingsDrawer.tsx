@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select"
 import { useSharedChat } from "@/context/SharedChatSettings";
 import Link from "next/link";
+import TextareaWithCounter from "../utils/TextareaWithCounter";
 
 
 export default function ChatSettingsDrawer() {
@@ -79,6 +80,13 @@ export default function ChatSettingsDrawer() {
                     <div className="flex flex-col gap-2">
                         <Input label="Chat Title" value={chat?.title} onValueChange={(value) => chat && setChat({...chat, title: value})} />
                         <Input label="Chat Description" value={chat?.description} onValueChange={(value) => chat && setChat({...chat, description: value})} />
+                        <TextareaWithCounter 
+                            label="Negative Prompt"
+                            description="What the AI shouldn't say. Treat like a soft-banned words list. The AI will try to avoid saying anything you describe here."
+                            maxLength={200}
+                            value={chat?.negative_prompt}
+                            onValueChange={(value) => chat && setChat({...chat, negative_prompt: value})}
+                        />
                         <Select 
                             onValueChange={(value) => chat && setChat({...chat, llm: value})}
                             defaultValue={chat?.llm}

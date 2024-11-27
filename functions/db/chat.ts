@@ -6,7 +6,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
-import { decryptMessage, encryptMessage } from "@/lib/crypto";
+import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { decryptCharacter } from "./character";
 import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
@@ -22,26 +22,10 @@ const chatFormatter = async (db: any): Promise<Chat> => {
 
     const key = cookiesStore.get("key")?.value;
 
-    if(!key) {
-        throw new Error("No key");
-    }
-
-    let decryptedMessage = "";
-    
-    if(db.last_message && db.last_message.length > 0) {
-        decryptedMessage = decryptMessage(db.last_message, Buffer.from(key, "hex"));
-    }
-
-    let decryptedDynamicBook = "";
-
-    if(db.dynamic_book && db.dynamic_book !== null && db.dynamic_book.length > 1) {
-        decryptedDynamicBook = decryptMessage(db.dynamic_book, Buffer.from(key, "hex"));
-    }
+    if(!key) { throw new Error("No key"); }
 
     const chat = {
         ...db,
-        last_message: decryptedMessage,
-        dynamic_book: decryptedDynamicBook,
         character: {
             id: db.character_id,
             name: db.character_name,
@@ -99,18 +83,53 @@ const chatFormatter = async (db: any): Promise<Chat> => {
         }
     } as Chat;
 
-    if(chat.character.is_private) {
+    const decryptedChat = await decryptChat(chat, key);
+
+    if(decryptedChat.character.is_private) {
         try {
             const key = await getKeyServerSide();
-            chat.character = await decryptCharacter(chat.character, key);
+            decryptedChat.character = await decryptCharacter(decryptedChat.character, key);
         } catch (error) {
             console.error("Error decrypting character", error);
-            return chat;
+            return decryptedChat;
         }
- 
     }
 
-    return chat;
+    return decryptedChat;
+}
+
+export const encryptChat = async(chat: Chat, key: string): Promise<Chat> => {
+    try {
+        const keyBuffer = Buffer.from(key, "hex");
+        return {
+            ...chat,
+            last_message: encryptMessage(chat.last_message ?? "", keyBuffer),
+            dynamic_book: encryptMessage(chat.dynamic_book ?? "", keyBuffer),
+            negative_prompt: encryptMessage(chat.negative_prompt ?? "", keyBuffer),
+            title: encryptMessage(chat.title, keyBuffer),
+            description: encryptMessage(chat.description, keyBuffer)
+        }
+    } catch (error) {
+        console.error(error);
+        return chat;
+    }
+}
+
+export const decryptChat = async(chat: Chat, key: string): Promise<Chat> => {
+    try {
+        const keyBuffer = Buffer.from(key, "hex");
+        return {
+            ...chat,
+            last_message: decryptMessage(chat.last_message ?? "", keyBuffer),
+            dynamic_book: decryptMessage(chat.dynamic_book ?? "", keyBuffer),
+            negative_prompt: decryptMessage(chat.negative_prompt ?? "", keyBuffer),
+            title: decryptMessage(chat.title, keyBuffer),
+            description: decryptMessage(chat.description, keyBuffer)
+        }
+    } catch (error) {
+        console.error("Error decrypting chat:",error);
+        return chat;
+    }
 }
 
 export const getChat = cache(async (chatId: string): Promise<Chat> => {
@@ -125,7 +144,7 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
         throw error;
     }
 
-    return chatFormatter(data);
+    return await chatFormatter(data);
 })
 
 export const getCharacterChats = cache(async (characterId: string): Promise<Chat[]> => {
@@ -169,17 +188,22 @@ type CreateChatProps = {
     description: string;
     storyId?: string;
     llm?: string;
+    negative_prompt?: string
 }
 
-export const createChat = async ({ chatId, userId, characterId, title, description, storyId, llm } : CreateChatProps): Promise<Chat> => {
+export const createChat = async ({ chatId, userId, characterId, title, description, storyId, llm, negative_prompt } : CreateChatProps): Promise<Chat> => {
+    const key = await getKeyServerSide();
+    const keyBuffer = Buffer.from(key, "hex");
+
     const { data, error } = await createClient()
     .from("chats")
     .insert([{
         id: chatId,
         user: userId,
         character: characterId,
-        title: title,
-        description: description,
+        title: encryptMessage(title, keyBuffer),
+        description: encryptMessage(description, keyBuffer),
+        negative_prompt: encryptMessage(negative_prompt ?? "", keyBuffer),
         story: storyId,
         llm: llm ?? "",
     }])
@@ -195,6 +219,13 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
 }
 
 export const updateChat = async (chat: Chat): Promise<void> => {
+
+    if(!checkIsEncrypted(chat.title)) {
+        // encrypt chat before uploading
+        const key = await getKeyServerSide();
+        chat = await encryptChat(chat, key)
+    }
+
     const { error } = await createClient()
         .from("chats")
         .update({
@@ -202,7 +233,8 @@ export const updateChat = async (chat: Chat): Promise<void> => {
             title: chat.title,
             description: chat.description,
             last_message_at: chat.last_message_at ?? chat.created_at,
-            llm: chat.llm
+            llm: chat.llm,
+            negative_prompt: chat.negative_prompt,
         })
         .eq("id", chat.id)
 
