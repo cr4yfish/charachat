@@ -46,6 +46,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
         chat = await getChat(chatId);
     } catch (error) {
         console.error("Error getting chat information with chatId:", chatId, "and error:" ,error);
+        chat = null;
     }
 
     if (!chat) {
