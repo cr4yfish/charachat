@@ -82,8 +82,8 @@ export const generateImageTool = (props: GenerateImageToolProps) => tool({
     execute: async ({ text }: { text: string }) => {
         try {
 
-            let hfApiKey = props.chat.user.hf_encrypted_api_key;
-            let replicateApiKey = props.chat.user.replicate_encrypted_api_key;
+            let hfApiKey = undefined;
+            let replicateApiKey = undefined;
 
             if(!hfApiKey && !replicateApiKey) {
                 throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
@@ -103,7 +103,11 @@ export const generateImageTool = (props: GenerateImageToolProps) => tool({
                 const err = e as Error;
                 throw new Error("Error decrypting API keys: " + err.message);
             }
-         
+            
+            if(!hfApiKey && !replicateApiKey) {
+                throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
+            }
+
             const link = await generateImage({
                 inputs: text,
                 hfToken: hfApiKey,
