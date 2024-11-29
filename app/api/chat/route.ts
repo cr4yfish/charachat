@@ -13,7 +13,6 @@ import { getLanguageModel } from '@/functions/ai/llm';
 import { decryptMessage } from '@/lib/crypto';
 import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
-import { addNewMemory, addToolResultToChat, chatRenameTool, generateImageTool, getMemoryTool, removeMemory, summarizeTool } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
     try {
@@ -54,22 +53,12 @@ export async function POST(req: Request) {
         }
 
         let decryptedAPIKey: string | undefined = undefined;
-        let decryptedHfApiKey: string | undefined = undefined;
-        let decryptedReplicateApiKey: string | undefined = undefined;
 
         const encryptedAPIKey = getProfileAPIKey(chat.llm as ModelId, profile);
         if(!encryptedAPIKey && !isFreeModel(chat.llm as ModelId)) {
             return new Response(`No Api key found for AI: ${chat.llm}`, { status: 400 });
         } else if(encryptedAPIKey) {
             decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
-        }
-
-        if(profile.hf_encrypted_api_key) {
-            decryptedHfApiKey = decryptMessage(profile.hf_encrypted_api_key, Buffer.from(key, 'hex'));
-        }
-
-        if(profile.replicate_encrypted_api_key) {
-            decryptedReplicateApiKey = decryptMessage(profile.replicate_encrypted_api_key, Buffer.from(key, 'hex'));
         }
         
         if(isPaidModel(chat.llm as ModelId)) {
@@ -132,20 +121,6 @@ export async function POST(req: Request) {
                 ${chat.dynamic_book}
             `,
             messages: convertToCoreMessages(messages),
-            toolChoice: "auto",
-            tools: {
-                addToolResultToChat: addToolResultToChat(),
-                addNewMemory: addNewMemory({ chat }),
-                summarize: summarizeTool({ profile }),
-                chatRenameTool: chatRenameTool({ chat}),
-                getMemoryTool: getMemoryTool({ chat }),
-                removeMemory: removeMemory({ chat }),
-                generateImage: generateImageTool({
-                    chat,
-                    decryptedHfApiKey: decryptedHfApiKey || "",
-                    decryptedReplicateApiKey: decryptedReplicateApiKey || "",
-                }),
-            }
         });
 
         return result.toDataStreamResponse();
