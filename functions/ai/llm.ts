@@ -167,12 +167,12 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
             return getCohere(modelId, apiKey);
             
         default:
-            return getOpenAI(modelId, apiKey);
+            throw new Error("Model not found");
     }
 }
 
 
-export async function getModelApiKey(profile: Profile): Promise<string|undefined> {
+export async function getModelApiKey(profile: Profile): Promise<string> {
 
     const cookiesStore = cookies();
 
@@ -196,6 +196,10 @@ export async function getModelApiKey(profile: Profile): Promise<string|undefined
         // check if user has access to this model
         const tier = await getUserTier(profile.user);
         if(tier !== 1) { throw new Error("You do not have access to this model"); }
+    }
+
+    if(!decryptedAPIKey) {
+        throw new Error("You do not have access to this model");   
     }
 
     return decryptedAPIKey;
