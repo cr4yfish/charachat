@@ -31,6 +31,14 @@ export async function POST(req: Request) {
             throw new Error("Trying to add assistant message as user message");
         }
 
+        if(!chat || !chat.id) {
+            throw new Error("No chat provided");
+        }
+
+        if(!profile || !profile.user) {
+            throw new Error("No profile provided");
+        }
+
         const message: Message = {
             id: uuidv4(),
             chat: chat,
