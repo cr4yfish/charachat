@@ -25,19 +25,10 @@ export async function POST(req: Request) {
 
         const latestMessage: AIMessage = messages[messages.length-1];
 
-        if(latestMessage.role !== "user") {
-            //console.log("Why is this here?", latestMessage.content)
-
-            throw new Error("Trying to add assistant message as user message");
-        }
-
-        if(!chat || !chat.id) {
-            throw new Error("No chat provided");
-        }
-
-        if(!profile || !profile.user) {
-            throw new Error("No profile provided");
-        }
+        if(!latestMessage) { throw new Error("No latest message"); }
+        if(latestMessage.role !== "user") { throw new Error("Trying to add assistant message as user message"); }
+        if(!chat || !chat.id) { throw new Error("No chat provided"); }
+        if(!profile || !profile.user) { throw new Error("No profile provided"); }
 
         const message: Message = {
             id: uuidv4(),
