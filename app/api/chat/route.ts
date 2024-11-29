@@ -13,7 +13,7 @@ import { getLanguageModel } from '@/functions/ai/llm';
 import { decryptMessage } from '@/lib/crypto';
 import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
-import { addNewMemory, getMemoryTool, removeMemory } from '@/functions/ai/tools';
+import { addNewMemory, addToolResultToChat, chatRenameTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
     try {
@@ -54,12 +54,22 @@ export async function POST(req: Request) {
         }
 
         let decryptedAPIKey: string | undefined = undefined;
+        let decryptedHfApiKey: string | undefined = undefined;
+        let decryptedReplicateApiKey: string | undefined = undefined;
 
         const encryptedAPIKey = getProfileAPIKey(chat.llm as ModelId, profile);
         if(!encryptedAPIKey && !isFreeModel(chat.llm as ModelId)) {
             return new Response(`No Api key found for AI: ${chat.llm}`, { status: 400 });
         } else if(encryptedAPIKey) {
             decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
+        }
+
+        if(profile.hf_encrypted_api_key) {
+            decryptedHfApiKey = decryptMessage(profile.hf_encrypted_api_key, Buffer.from(key, 'hex'));
+        }
+
+        if(profile.replicate_encrypted_api_key) {
+            decryptedReplicateApiKey = decryptMessage(profile.replicate_encrypted_api_key, Buffer.from(key, 'hex'));
         }
         
         if(isPaidModel(chat.llm as ModelId)) {
@@ -80,11 +90,11 @@ export async function POST(req: Request) {
                 Replace {{user}} with the username in your responses.
                 You are prohibited from saying anything described here (can be empty): ${chat.negative_prompt}
                 The following tools are available to you:
-                - addNewMemory: Add a new memory to the character's knowledge.
-                - generateImage: Generate an image with text.
+                - addNewMemory: Add a new memory to the character's knowledge
+                - generateImage: Generate an image with text
                 - summarize: Generate a summary of a given conversation context
                 - chatRenameTool: Rename the Chat when the Topic changes
-                - getMemoryTool: Get your Chat memory to get context to answer the user.
+                - getMemory: Get your Chat memory
                 - addToolResultToChat: Add any tool result the chat. It will only then be displayed to the user. Use when user should see the result
                 - removeMemory: Remove someting from the memory. Either on user request or the topic changes and the information wont be needed anymore
 
@@ -123,9 +133,19 @@ export async function POST(req: Request) {
             `,
             messages: convertToCoreMessages(messages),
             tools: {
+
+                // memory
                 addNewMemory: addNewMemory({ chat }),
                 removeMemory: removeMemory({ chat }),
-                getMemoryTool: getMemoryTool({ chat }),
+                getMemory: getMemory({ chat }),
+                
+                // multi modal
+                generateImage: generateImageTool({ chat, decryptedHfApiKey, decryptedReplicateApiKey }),
+
+                // misc tools for chat
+                summarize: summarizeTool({ profile }),
+                chatRename: chatRenameTool({ chat }),
+                addToolResultToChat: addToolResultToChat(),
             }
         });
 
