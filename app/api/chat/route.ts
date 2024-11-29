@@ -10,6 +10,7 @@ import { addMessage } from '@/functions/db/messages';
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { updateDynamicMemory } from '@/functions/db/chat';
+import { chatRenameTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
     try {
@@ -125,7 +126,79 @@ export async function POST(req: Request) {
                             return err.message;
                         }
                     }
-                })
+                }),
+                removeMemory: tool({
+                    description: "Remove someting from the memory. Either on user request or the topic changes and the information wont be needed anymore.",
+                    parameters: z.object({ memory: z.string() }),
+                    execute: async ({ memory }: { memory: string }) => {
+                        try {
+                            return await removeMemory({
+                                chat,
+                                memory,
+                            })
+                            return memory;
+                        } catch (error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                }),
+                getMemory: tool({
+                    description: "Retrieve the Memory to get chat context in order to respond well to a prompt.",
+                    parameters: z.object({ }),
+                    execute: async() => {
+                        try {
+                            return await getMemory({ chat })
+                        } catch(error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    } 
+                }),
+                
+                summarize: tool({
+                    description: "Summarize the conversation",
+                    parameters: z.object({ text: z.string().describe("A bunch of text to summarize") }),
+                    execute: async ({ text }: { text: string }) => {
+                        try {
+                            return summarizeTool({ profile, text })
+                
+                        } catch (error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                }),
+                chatRename: tool({
+                    description: "Rename the Chat when conversation theme changes",
+                    parameters: z.object({ newTitle: z.string().describe("New title of the chat"), newDescription: z.string().describe("New very short description of the title") }),
+                    execute: async({ newTitle, newDescription } : { newTitle: string, newDescription: string }) => {
+                        try {
+                            return await chatRenameTool({ chat, newTitle, newDescription })
+                        } catch(error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                }),
+
+                generateImage: tool({
+                    description: "Text to Image Tool.",
+                    parameters: z.object({ prompt: z.string().describe("Prompt to generate the image") }),
+                    execute: async ({ prompt }: { prompt: string }) => {
+                        try {
+                            return await generateImageTool({ chat, prompt })
+                        } catch(error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                }),
             }
         });
 
