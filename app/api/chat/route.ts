@@ -13,7 +13,7 @@ import { getLanguageModel } from '@/functions/ai/llm';
 import { decryptMessage } from '@/lib/crypto';
 import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
-import { addNewMemory, generateImageTool, getMemory, removeMemory } from '@/functions/ai/tools';
+import { addNewMemory, getMemory, removeMemory } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
     try {
@@ -138,7 +138,6 @@ export async function POST(req: Request) {
                 getMemory: getMemory({ chat }),
                 
                 // multi modal
-                generateImage: generateImageTool({ chat }),
             }
         });
 
