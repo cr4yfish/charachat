@@ -9,7 +9,7 @@ import { addMessage } from '@/functions/db/messages';
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
-import { addNewMemory, getMemory, removeMemory } from '@/functions/ai/tools';
+import { addNewMemory } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
     try {
@@ -109,9 +109,7 @@ export async function POST(req: Request) {
             `,
             messages: convertToCoreMessages(messages),
             tools: {
-                addNewMemory: addNewMemory({ chat }),
-                removeMemory: removeMemory({ chat }),
-                getMemory: getMemory({ chat }),
+                addNewMemory: addNewMemory({ chat })
             }
         });
 

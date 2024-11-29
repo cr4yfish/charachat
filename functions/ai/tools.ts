@@ -17,6 +17,11 @@ export const addNewMemory = (props: AddNewMemoryProps) => tool({
     parameters: z.object({ memory: z.string() }),
     execute: async ({ memory }: { memory: string }) => {
         try {
+
+            if(!props.chat?.id) {
+                throw new Error("No chat for addNewMemory tool")
+            }
+
             await updateDynamicMemory(
                 props.chat.id,
                 memory
@@ -78,7 +83,7 @@ export const generateImageTool = (props: GenerateImageToolProps) => tool({
     parameters: z.object({ text: z.string().describe("Prompt to generate the image") }),
     execute: async ({ text }: { text: string }) => {
         console.log(props.chat, text);
-        return "success"
+        return "success";
     }
 })
 
