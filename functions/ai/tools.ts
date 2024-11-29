@@ -3,12 +3,9 @@
 import { tool } from 'ai';
 import { z } from "zod";
 import { getChat, updateChat, updateDynamicMemory } from '../db/chat';
-import { generateImage } from './image';
 import { Chat, Profile } from '@/types/db';
 import { author, authorNoStream } from './author';
 import { getCurrentUser } from '../db/auth';
-import { decryptMessage } from '@/lib/crypto';
-import { getKeyServerSide } from '../serverHelpers';
 
 // server side tool
 type AddNewMemoryProps = {
@@ -78,50 +75,10 @@ type GenerateImageToolProps = {
 // server side tool
 export const generateImageTool = (props: GenerateImageToolProps) => tool({
     description: "Text to Image Tool",
-    parameters: z.object({ text: z.string().describe("Prompt to generate the image.") }),
+    parameters: z.object({ text: z.string().describe("Prompt to generate the image") }),
     execute: async ({ text }: { text: string }) => {
-        try {
-
-            let hfApiKey = undefined;
-            let replicateApiKey = undefined;
-
-            if(!hfApiKey && !replicateApiKey) {
-                throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
-            }
-
-            const key = await getKeyServerSide();
-
-            try {
-                if(hfApiKey) {
-                    hfApiKey = decryptMessage(hfApiKey, Buffer.from(key, 'hex'));  
-                }
-                if(replicateApiKey) {
-                    replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(key, 'hex'));
-                }
-            } catch (e) {
-                console.error(e);
-                const err = e as Error;
-                throw new Error("Error decrypting API keys: " + err.message);
-            }
-            
-            if(!hfApiKey && !replicateApiKey) {
-                throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
-            }
-
-            const link = await generateImage({
-                inputs: text,
-                hfToken: hfApiKey,
-                replicateToken: replicateApiKey,
-                prefix: props.chat.character.image_prompt || ""
-            })
-
-            return link;
-
-        } catch (error) {
-            console.error(error);
-            const err = error as Error;
-            return err.message;
-        }
+        console.log(props.chat, text);
+        return "success"
     }
 })
 
