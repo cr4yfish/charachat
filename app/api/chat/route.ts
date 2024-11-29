@@ -13,6 +13,7 @@ import { getLanguageModel } from '@/functions/ai/llm';
 import { decryptMessage } from '@/lib/crypto';
 import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
 import { getUserTier } from '@/functions/db/profiles';
+import { addNewMemory, getMemoryTool, removeMemory } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
     try {
@@ -121,6 +122,11 @@ export async function POST(req: Request) {
                 ${chat.dynamic_book}
             `,
             messages: convertToCoreMessages(messages),
+            tools: {
+                addNewMemory: addNewMemory({ chat }),
+                removeMemory: removeMemory({ chat }),
+                getMemoryTool: getMemoryTool({ chat }),
+            }
         });
 
         return result.toDataStreamResponse();
