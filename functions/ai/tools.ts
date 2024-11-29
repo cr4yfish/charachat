@@ -18,10 +18,6 @@ export const addNewMemory = (props: AddNewMemoryProps) => tool({
     execute: async ({ memory }: { memory: string }) => {
         try {
 
-            if(!props.chat?.id) {
-                throw new Error("No chat for addNewMemory tool")
-            }
-
             await updateDynamicMemory(
                 props.chat.id,
                 memory

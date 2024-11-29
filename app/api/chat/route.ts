@@ -2,14 +2,14 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
-
+import { z } from "zod";
 import { Chat, Message, Profile } from '@/types/db';
-import { convertToCoreMessages, streamText, Message as AIMessage } from 'ai';
+import { convertToCoreMessages, streamText, Message as AIMessage, tool } from 'ai';
 import { addMessage } from '@/functions/db/messages';
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
-import { addNewMemory } from '@/functions/ai/tools';
+import { updateDynamicMemory } from '@/functions/db/chat';
 
 export async function POST(req: Request) {
     try {
@@ -109,7 +109,23 @@ export async function POST(req: Request) {
             `,
             messages: convertToCoreMessages(messages),
             tools: {
-                addNewMemory: addNewMemory({ chat })
+                addNewMemory: tool({
+                    description: "Add a new memory to the character's knowledge.",
+                    parameters: z.object({ memory: z.string() }),
+                    execute: async ({ memory }: { memory: string }) => {
+                        try {
+                            await updateDynamicMemory(
+                                chat.id,
+                                memory
+                            )
+                            return memory;
+                        } catch (error) {
+                            console.error(error);
+                            const err = error as Error;
+                            return err.message;
+                        }
+                    }
+                })
             }
         });
 
