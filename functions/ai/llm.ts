@@ -10,6 +10,11 @@ import { createXai } from "@ai-sdk/xai";
 import { createCohere } from "@ai-sdk/cohere";
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
+import { Profile } from '@/types/db';
+import { cookies } from 'next/headers';
+import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
+import { decryptMessage } from '@/lib/crypto';
+import { getUserTier } from '../db/profiles';
 
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
@@ -166,3 +171,32 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
     }
 }
 
+
+export async function getModelApiKey(profile: Profile): Promise<string|undefined> {
+
+    const cookiesStore = cookies();
+
+    // Generate the story field in a Story
+    // based on Title and Description
+    const key = cookiesStore.get("key")?.value;
+
+    if(!key) {
+        throw new Error("No key cookie");
+    }
+
+    let decryptedAPIKey: string | undefined = undefined;
+    const encryptedAPIKey = getProfileAPIKey(profile.default_llm as ModelId, profile);
+    if(!encryptedAPIKey && !isFreeModel(profile.default_llm as ModelId)) {
+        throw new Error("No API key found");
+    } else if(encryptedAPIKey) {
+        decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
+    }
+
+    if(isPaidModel(profile.default_llm as ModelId)) {
+        // check if user has access to this model
+        const tier = await getUserTier(profile.user);
+        if(tier !== 1) { throw new Error("You do not have access to this model"); }
+    }
+
+    return decryptedAPIKey;
+}

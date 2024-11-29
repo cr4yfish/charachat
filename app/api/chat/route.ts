@@ -6,13 +6,9 @@ import { cookies } from 'next/headers';
 import { Chat, Message, Profile } from '@/types/db';
 import { convertToCoreMessages, streamText, Message as AIMessage } from 'ai';
 import { addMessage } from '@/functions/db/messages';
-import { updateChat } from '@/functions/db/chat';
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
-import { getLanguageModel } from '@/functions/ai/llm';
-import { decryptMessage } from '@/lib/crypto';
-import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
-import { getUserTier } from '@/functions/db/profiles';
+import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { addNewMemory, getMemory, removeMemory } from '@/functions/ai/tools';
 
 export async function POST(req: Request) {
@@ -22,6 +18,8 @@ export async function POST(req: Request) {
 
         const profile: Profile = initProfile as Profile;
         const chat: Chat = initChat as Chat;
+
+        if(!messages) { throw new Error("No messages provided"); }
 
         const latestMessage: AIMessage = messages[messages.length-1];
 
@@ -47,28 +45,13 @@ export async function POST(req: Request) {
         }
 
         if((message.content !== "" && message.content !== _INTRO_MESSAGE) && !selfDestruct) {
+            console.log("Adding message to db");
             await addMessage(message, key);
-            chat.last_message_at = new Date().toISOString();
-            await updateChat(chat);
         }
 
-        let decryptedAPIKey: string | undefined = undefined;  
-
-        const encryptedAPIKey = getProfileAPIKey(chat.llm as ModelId, profile);
-        if(!encryptedAPIKey && !isFreeModel(chat.llm as ModelId)) {
-            return new Response(`No Api key found for AI: ${chat.llm}`, { status: 400 });
-        } else if(encryptedAPIKey) {
-            decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
-        }
-        
-        if(isPaidModel(chat.llm as ModelId)) {
-            // check if user has access to this model
-            const tier = await getUserTier(profile.user);
-            if(tier !== 1) { return new Response("You do not have access to this model", { status: 403 }); }
-        }
         const model = await getLanguageModel({
             modelId: chat.llm || profile.default_llm,
-            apiKey: decryptedAPIKey,
+            apiKey: await getModelApiKey(profile),
         });
 
         const result = await streamText({
