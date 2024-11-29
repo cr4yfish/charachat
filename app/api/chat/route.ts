@@ -53,23 +53,13 @@ export async function POST(req: Request) {
             await updateChat(chat);
         }
 
-        let decryptedAPIKey: string | undefined = undefined;
-        let decryptedHfApiKey: string | undefined = undefined;
-        let decryptedReplicateApiKey: string | undefined = undefined;
+        let decryptedAPIKey: string | undefined = undefined;  
 
         const encryptedAPIKey = getProfileAPIKey(chat.llm as ModelId, profile);
         if(!encryptedAPIKey && !isFreeModel(chat.llm as ModelId)) {
             return new Response(`No Api key found for AI: ${chat.llm}`, { status: 400 });
         } else if(encryptedAPIKey) {
             decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
-        }
-
-        if(profile.hf_encrypted_api_key) {
-            decryptedHfApiKey = decryptMessage(profile.hf_encrypted_api_key, Buffer.from(key, 'hex'));
-        }
-
-        if(profile.replicate_encrypted_api_key) {
-            decryptedReplicateApiKey = decryptMessage(profile.replicate_encrypted_api_key, Buffer.from(key, 'hex'));
         }
         
         if(isPaidModel(chat.llm as ModelId)) {
@@ -140,8 +130,7 @@ export async function POST(req: Request) {
                 getMemory: getMemory({ chat }),
                 
                 // multi modal
-                generateImage: generateImageTool({ chat, decryptedHfApiKey, decryptedReplicateApiKey }),
-
+                generateImage: generateImageTool({ chat }),
             }
         });
 

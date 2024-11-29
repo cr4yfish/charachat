@@ -7,6 +7,8 @@ import { generateImage } from './image';
 import { Chat, Profile } from '@/types/db';
 import { author, authorNoStream } from './author';
 import { getCurrentUser } from '../db/auth';
+import { decryptMessage } from '@/lib/crypto';
+import { getKeyServerSide } from '../serverHelpers';
 
 // server side tool
 type AddNewMemoryProps = {
@@ -70,21 +72,42 @@ export const removeMemory = (props: AddNewMemoryProps) => tool({
 
 
 type GenerateImageToolProps = {
-    chat: Chat,
-    decryptedHfApiKey: string | undefined,
-    decryptedReplicateApiKey: string | undefined
+    chat: Chat
 }
 
 // server side tool
 export const generateImageTool = (props: GenerateImageToolProps) => tool({
     description: "Text to Image Tool",
-    parameters: z.object({ text: z.string().describe("Describe whats going on in the chat context") }),
+    parameters: z.object({ text: z.string().describe("Prompt to generate the image.") }),
     execute: async ({ text }: { text: string }) => {
         try {
+
+            let hfApiKey = props.chat.user.hf_encrypted_api_key;
+            let replicateApiKey = props.chat.user.replicate_encrypted_api_key;
+
+            if(!hfApiKey && !replicateApiKey) {
+                throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
+            }
+
+            const key = await getKeyServerSide();
+
+            try {
+                if(hfApiKey) {
+                    hfApiKey = decryptMessage(hfApiKey, Buffer.from(key, 'hex'));  
+                }
+                if(replicateApiKey) {
+                    replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(key, 'hex'));
+                }
+            } catch (e) {
+                console.error(e);
+                const err = e as Error;
+                throw new Error("Error decrypting API keys: " + err.message);
+            }
+         
             const link = await generateImage({
                 inputs: text,
-                hfToken: props.decryptedHfApiKey,
-                replicateToken: props.decryptedReplicateApiKey,
+                hfToken: hfApiKey,
+                replicateToken: replicateApiKey,
                 prefix: props.chat.character.image_prompt || ""
             })
 
