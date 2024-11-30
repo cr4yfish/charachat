@@ -9,7 +9,7 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { Switch } from "@nextui-org/switch";
-import { createPersona, deletePersona } from "@/functions/db/personas";
+import { createPersona, deletePersona, updatePersona } from "@/functions/db/personas";
 import PersonaCard from "./PersonaCard";
 import { useToast } from "@/hooks/use-toast";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
@@ -45,17 +45,27 @@ export default function PersonaEdit(props: Props) {
             const avatarLinkResult = personaSchema.shape.avatarLink.safeParse(persona.avatar_link);
 
             if(fullNameResult.success && bioResult.success && avatarLinkResult.success) {
-                // Submit the Story
-                await createPersona({
-                    id: persona.id,
-                    creator: props.persona.creator,
-                    full_name: persona.full_name,
-                    bio: persona.bio,
-                    avatar_link: persona.avatar_link,
-                    is_private: persona.is_private,
-                });
-
-                setIsSaved(true);
+                
+                if(props.editMode) {
+                    await updatePersona({
+                        ...props.persona,
+                        full_name: persona.full_name,
+                        bio: persona.bio,
+                        avatar_link: persona.avatar_link,
+                        is_private: persona.is_private,
+                    } as Persona)
+                } else {
+                    await createPersona({
+                        id: persona.id,
+                        creator: props.persona.creator,
+                        full_name: persona.full_name,
+                        bio: persona.bio,
+                        avatar_link: persona.avatar_link,
+                        is_private: persona.is_private,
+                    });
+                    setIsSaved(true);
+                }
+                
                 if(!props.editMode) {
                     window.location.href = `/persona/${persona.id}`;
                 } else {
