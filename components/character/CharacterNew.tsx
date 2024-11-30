@@ -15,6 +15,7 @@ import CharacterCard from "./CharacterCard";
 import { getKeyClientSide } from "@/lib/crypto";
 import { encryptCharacter } from "@/functions/db/character";
 import ImageInputWithAI from "../ImageInputWithAI";
+import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
 
 type Props = {
     initCharacter: Character;
@@ -88,7 +89,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Name"
                 placeholder="Albert Einstein"
                 description="Name of the Character" 
-                maxLength={100}
+                maxLength={_CHARACTER_MAX_LENGTH.name}
                 minRows={1}
                 maxRows={1}
                 value={newCharacter.name}
@@ -100,7 +101,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Description"
                 placeholder="Physicist, mathematician, and author"
                 description="Very short description of the Character" 
-                maxLength={5000} 
+                maxLength={_CHARACTER_MAX_LENGTH.description} 
                 initValue={newCharacter.description}
                 setValue={(value) => updateValue("description", value)}
                 character={newCharacter}
@@ -114,7 +115,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Personality"
                 placeholder="Curious, imaginative, and open-minded"
                 description="Personality traits of the character"
-                maxLength={1000}
+                maxLength={_CHARACTER_MAX_LENGTH.personality}
                 initValue={newCharacter.personality}
                 setValue={(value) => updateValue("personality", value)}
                 character={newCharacter}
@@ -128,7 +129,7 @@ export default function CharacterNew(props: Props) {
                 label="Character Bio"
                 placeholder="Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. He was born in 1879 and died in 1955."
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
-                maxLength={5000} 
+                maxLength={_CHARACTER_MAX_LENGTH.bio} 
                 initValue={newCharacter.bio}
                 profile={props.profile}
                 buttonLabel="Generate Bio"
@@ -149,7 +150,7 @@ export default function CharacterNew(props: Props) {
                 isRequired
                 placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
                 description="Introduction of the character. Describe how the character would introduce themselves." 
-                maxLength={5000} 
+                maxLength={_CHARACTER_MAX_LENGTH.intro} 
                 initValue={newCharacter.intro}
                 character={newCharacter}
                 setValue={(value) => updateValue("intro", value)}
@@ -160,7 +161,7 @@ export default function CharacterNew(props: Props) {
                 initValue={newCharacter.book}
                 setValue={(value) => updateValue("book", value)}
                 description="All background information you can provide - the more the better. Background stories, relationsships, example dialogs etc." 
-                maxLength={8000} 
+                maxLength={_CHARACTER_MAX_LENGTH.book} 
                 isRequired
                 buttonLabel="Generate Book"
                 api="/api/author/character/book"
@@ -173,7 +174,7 @@ export default function CharacterNew(props: Props) {
                 onValueChange={(value) => updateValue("first_message", value)}
                 label="First Message"
                 description="The first message the character sends when the user starts the conversation (will be overriden by Story->First Message if in a Story) "
-                maxLength={5000}
+                maxLength={_CHARACTER_MAX_LENGTH.first_message}
             />
             <TextareaWithCounter 
                 name="system_prompt" 
@@ -181,7 +182,7 @@ export default function CharacterNew(props: Props) {
                 onValueChange={(value) => updateValue("system_prompt", value )}
                 label="System Prompt addition"
                 description="Gets injected into the system prompt. Useful to set a chat-style." 
-                maxLength={500} 
+                maxLength={_CHARACTER_MAX_LENGTH.system_prompt} 
             />
             <TextareaWithCounter 
                 name="image_prompt" 
@@ -189,7 +190,7 @@ export default function CharacterNew(props: Props) {
                 onValueChange={(value) => updateValue("image_prompt", value )}
                 label="Image Prompt addition"
                 description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
-                maxLength={100}
+                maxLength={_CHARACTER_MAX_LENGTH.image_prompt}
                 maxRows={2} 
             />
 

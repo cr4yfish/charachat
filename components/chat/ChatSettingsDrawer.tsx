@@ -7,7 +7,6 @@ import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
-import { Input } from "@nextui-org/input";
 import { LLMs } from "@/lib/ai";
 import {
     Sheet,
@@ -28,6 +27,7 @@ import {
 import { useSharedChat } from "@/context/SharedChatSettings";
 import Link from "next/link";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
+import { _CHAT_MAX_LENGTH } from "@/lib/maxLength";
 
 
 export default function ChatSettingsDrawer() {
@@ -78,19 +78,33 @@ export default function ChatSettingsDrawer() {
                 </SheetHeader>
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex flex-col gap-2">
-                        <Input label="Chat Title" value={chat?.title} onValueChange={(value) => chat && setChat({...chat, title: value})} />
-                        <Input label="Chat Description" value={chat?.description} onValueChange={(value) => chat && setChat({...chat, description: value})} />
+                        <TextareaWithCounter 
+                            label="Chat Title" 
+                            description="The title of the chat"
+                            maxRows={1}
+                            maxLength={_CHAT_MAX_LENGTH.title}
+                            value={chat?.title} 
+                            onValueChange={(value) => chat && setChat({...chat, title: value})} 
+                        />
+                        <TextareaWithCounter 
+                            label="Chat Description"
+                            description="A short description of the chat"
+                            maxRows={5}
+                            maxLength={_CHAT_MAX_LENGTH.description}
+                            value={chat?.description} 
+                            onValueChange={(value) => chat && setChat({...chat, description: value})}
+                        />
                         <TextareaWithCounter 
                             label="Chat Memory"
                             description="Important information the Character remembered"
-                            maxLength={10000}
+                            maxLength={_CHAT_MAX_LENGTH.dynamic_book}
                             value={chat?.dynamic_book}
                             onValueChange={(value) => chat && setChat({...chat, dynamic_book: value})}
                         />
                         <TextareaWithCounter 
                             label="Negative Prompt"
                             description="What the AI shouldn't say. Treat like a soft-banned words list. The AI will try to avoid saying anything you describe here."
-                            maxLength={200}
+                            maxLength={_CHAT_MAX_LENGTH.negative_prompt}
                             value={chat?.negative_prompt}
                             onValueChange={(value) => chat && setChat({...chat, negative_prompt: value})}
                         />
