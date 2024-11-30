@@ -212,7 +212,7 @@ export default function AICharacterCardsImporter(props: Props) {
 
                 <div className="flex flex-col gap-2">
                     <h3 className="font-bold text-sm dark:text-zinc-400">Search Results</h3>
-                    {characterPage.slice(0,10).map((page, index) => (
+                    {characterPage.map((page, index) => (
                         <CharacterPageCard 
                             page={page} 
                             callback={handleImportCharacter}

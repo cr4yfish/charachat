@@ -197,7 +197,7 @@ export default function FandomImporter(props: Props) {
 
                 <div className="flex flex-col gap-2">
                     <h3 className="font-bold text-sm dark:text-zinc-400">Search Results</h3>
-                    {fandomPages.slice(0,10).map((page, index) => (
+                    {fandomPages.map((page, index) => (
                         <FandomPageCard 
                             fandompage={page} 
                             callback={handleImportCharacter}

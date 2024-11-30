@@ -204,7 +204,7 @@ export default function AnimeImport(props: Props) {
 
                 <div className="flex flex-col gap-2">
                     <h3 className="font-bold text-sm dark:text-zinc-400">Search Results</h3>
-                    {animeCharacters.slice(0,10).map((char, index) => (
+                    {animeCharacters.map((char, index) => (
                         <AnimeCharCard 
                             character={char} 
                             callback={handleImportCharacter}

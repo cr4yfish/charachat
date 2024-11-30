@@ -182,7 +182,7 @@ export default function WikipediaImport(props: Props) {
 
                 <div className="flex flex-col gap-2">
                     <h3 className="font-bold text-sm dark:text-zinc-400">Search Results</h3>
-                    {wikiPages.slice(0,10).map((page, index) => (
+                    {wikiPages.map((page, index) => (
                         <WikiPageCard 
                             wikipage={page} 
                             callback={handleImportCharacter}
