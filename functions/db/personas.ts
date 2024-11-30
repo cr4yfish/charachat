@@ -5,7 +5,7 @@ import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase"
 import { Persona } from "@/types/db";
-import { checkIsEncrypted, decryptMessage } from "@/lib/crypto";
+import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
 
@@ -67,9 +67,9 @@ export const encryptPersona = async (persona: Persona, key: string): Promise<Per
      const keyBuffer = Buffer.from(key, "hex");
      return {
         ...persona,
-        full_name: decryptMessage(persona.full_name, keyBuffer),
-        bio: persona.bio ? decryptMessage(persona.bio, keyBuffer) : undefined,
-        avatar_link: persona.avatar_link ? decryptMessage(persona.avatar_link, keyBuffer) : undefined
+        full_name: encryptMessage(persona.full_name, keyBuffer),
+        bio: persona.bio ? encryptMessage(persona.bio, keyBuffer) : undefined,
+        avatar_link: persona.avatar_link ? encryptMessage(persona.avatar_link, keyBuffer) : undefined
      }   
     } catch (error) {
         console.error("Error encrypting persona", error);
@@ -142,7 +142,6 @@ export const searchPersonas = cache(async (search: string) => {
 })
 
 export const updatePersona = async (persona: Persona) => {
-
     if(persona.is_private && !checkIsEncrypted(persona.full_name)) {
         const key = await getKeyServerSide();
         persona = await encryptPersona(persona, key);
