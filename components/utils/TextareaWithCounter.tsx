@@ -43,7 +43,13 @@ export default function TextareaWithCounter(props: Props) {
                 //setValue(value);
                 if(props.onValueChange) props.onValueChange(value);
             }}
-            endContent={<span className="text-xs dark:text-slate-400 self-end ">{value.length}/{props.maxLength}</span>}
+            endContent={
+                <span 
+                    className="text-xs dark:text-slate-400 self-end "
+                >
+                    {value.length.toLocaleString()} / {props.maxLength.toLocaleString()}
+                </span>
+            }
             classNames={{
                 innerWrapper: "flex flex-col justify-center",
             }}
