@@ -6,7 +6,7 @@ import { authorNoStream } from './author';
 import { getCurrentUser } from '../db/auth';
 import { getKeyServerSide } from '../serverHelpers';
 import { decryptMessage } from '@/lib/crypto';
-import { generateImage } from './image';
+import { generateImage, generateImageOfCharacter } from './image';
 
 type AddMemoryProps = {
     chat: Chat,
@@ -107,6 +107,30 @@ export const generateImageTool = async (props: GenerateImageToolProps) => {
 
         return link;
 
+    } catch (error) {
+        console.error(error);
+        const err = error as Error;
+        return err.message;
+    }
+}
+
+export const generateImageOfCharacterTool = async (props: GenerateImageToolProps) => {
+    try {
+        let replicateApiKey = props.profile.replicate_encrypted_api_key;
+
+        if(!replicateApiKey) {
+            throw Error("Replicate API keys are not available. Please add them to your profile to use this tool.")
+        }
+
+        replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(await getKeyServerSide(), 'hex'));
+
+        return await generateImageOfCharacter({
+            inputs: props.prompt,
+            replicateToken: replicateApiKey,
+            prefix: props.chat.character.image_prompt || "",
+            character: props.chat.character
+        })
+        
     } catch (error) {
         console.error(error);
         const err = error as Error;

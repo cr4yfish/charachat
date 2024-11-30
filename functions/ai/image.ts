@@ -2,9 +2,10 @@ import { ImgurClient } from "imgur"
 import Replicate from "replicate";
 import { HfInference } from "@huggingface/inference";
 import { ImageModelId } from "@/lib/ai";
+import { Character } from "@/types/db";
 
 
-type GenerateImageProps = {
+interface GenerateImageProps {
     hfToken?: string | undefined;
     replicateToken?: string | undefined;
     inputs: string;
@@ -60,6 +61,32 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
 
     return link;
 
+}
+
+interface GenerateImageOfCharacterProps extends GenerateImageProps {
+    character: Character;
+}
+
+export async function generateImageOfCharacter(props: GenerateImageOfCharacterProps): Promise<string> {
+    const replicate = new Replicate({
+        auth: props.replicateToken
+    });
+    const output = await replicate.run(
+        "tencentarc/photomaker:ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4", 
+        { 
+            input: {
+                prompt: props.prefix + props.inputs + " img", 
+                input_image: props.character.image_link,
+                disable_safety_checker: true,
+                negative_prompt: "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
+                disable_safeity_checker: true
+            } 
+        }
+    );
+
+    const repOutput: ReplicateOutput = output as ReplicateOutput;
+
+    return repOutput[0];
 }
 
 export async function uploadImageToImgur(base64: string): Promise<string> {

@@ -9,7 +9,7 @@ import { addMessage } from '@/functions/db/messages';
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
-import { addMemory, banStringsTool, chatRenameTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
+import { addMemory, banStringsTool, chatRenameTool, generateImageOfCharacterTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
 import { ModelId } from '@/lib/ai';
 
 // map response length to prompt content
@@ -75,6 +75,7 @@ export async function POST(req: Request) {
                 The following tools are available to you:
                 - addNewMemory: Add a new memory to the character's knowledge
                 - generateImage: Generate an image with text
+                - generateImageOfYourself: Generate an image of yourself
                 - summarize: Generate a summary of a given conversation context
                 - chatRenameTool: Rename the Chat when the Topic changes
                 - getMemory: Get your Chat memory
@@ -166,6 +167,14 @@ export async function POST(req: Request) {
                     parameters: z.object({ prompt: z.string().describe("Prompt to generate the image") }),
                     execute: async ({ prompt }: { prompt: string }) => {
                         return await generateImageTool({ chat, profile, prompt })
+                    }
+                }),
+
+                generateImageOfYourself: tool({
+                    description: "Generate an image of yourself",
+                    parameters: z.object({ prompt: z.string().describe("Prompt to generate the image") }),
+                    execute: async ({ prompt }: { prompt: string }) => {
+                        return await generateImageOfCharacterTool({ chat, profile, prompt })
                     }
                 }),
             }

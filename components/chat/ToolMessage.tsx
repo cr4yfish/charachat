@@ -33,7 +33,7 @@ export default function ToolMessage(props: Props) {
                             />
                 }
 
-                if(toolInvocation.toolName == "generateImage") {
+                if(toolInvocation.toolName == "generateImage" || toolInvocation.toolName == "generateImageOfYourself") {
                     return <GenerateImageTool 
                                 key={toolInvocation.toolCallId}
                                 toolInvocation={toolInvocation}

@@ -139,7 +139,7 @@ export default function GenerateImageTool(props: Props) {
             <div key={props.toolInvocation.toolCallId} className="w-full h-full">
                 <div className="flex flex-col items-center gap-2">
                     <Image src={props.toolInvocation.result} alt="" width={200} height={200} className=" rounded-xl" />
-                    <video src={videoLink} controls className="rounded-xl" width={200} />
+                    {videoLink && <video src={videoLink} controls className="rounded-xl" width={200} />}
                     <div className="flex flex-col gap-2">
                         <p className="dark:text-zinc-400 text-xs max-w-xs">{props.toolInvocation.args.text}</p>
                         <Button variant="flat" color="secondary" onClick={handleAddMessage}>Save in chat</Button>
