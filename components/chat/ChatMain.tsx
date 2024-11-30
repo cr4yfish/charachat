@@ -61,6 +61,7 @@ export default function ChatMain(props : Props) {
         initialInput: "",
         maxSteps: 3,
         keepLastMessageOnError: true,
+        generateId: () => uuidv4(),
         body: {
             profile: props.user,
             chat: chat,
@@ -108,7 +109,7 @@ export default function ChatMain(props : Props) {
 
             // add message to db
             const newMessage: Message = {
-                id: uuidv4(),
+                id: message.id,
                 chat: chat,
                 character: props.chat.character,
                 user: props.user,
