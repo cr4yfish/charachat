@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-import { createClient } from "@/utils/supabase/supabase";
+import { createAdminClient, createClient } from "@/utils/supabase/supabase";
 import { cache } from "react";
 import { getProfile } from "./profiles";
 import { Profile } from "@/types/db";
@@ -178,4 +178,17 @@ export const logout = async () => {
     cookies().set("key", "", { secure: true });
 
     revalidatePath("/");
+}
+
+export async function deleteAccount() {
+
+    // cross check
+    const { data: { user } } = await createClient().auth.getUser();
+
+    if(!user?.id) {
+        throw new Error("User not found");
+    }
+
+    // delete user
+    return await createAdminClient().auth.admin.deleteUser(user.id)
 }

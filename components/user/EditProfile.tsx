@@ -11,7 +11,7 @@ import Icon from "../utils/Icon";
 import { Profile } from "@/types/db";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
-import { updateProfile } from "@/functions/db/profiles";
+import { deleteUser, updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
 import { LLMsWithAPIKeys } from "@/lib/ai";
@@ -126,7 +126,8 @@ export default function EditProfile(props: Props) {
         setIsDeleting(true);
 
         try {
-            // await deleteProfile(profile);
+            await deleteUser();
+            window.location.reload();
         } catch (error) {
             console.error(error);
         }

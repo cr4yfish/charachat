@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/supabase"
 import { Profile } from "@/types/db";
 import { getKeyServerSide } from "../serverHelpers";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
+import { deleteAccount } from "./auth";
 
 export const encryptProfile = async (profile: Profile, key: string): Promise<Profile> => {
     try {
@@ -126,3 +127,23 @@ export const getUserTier = cache(async (userId: string) => {
 
     return data.tier;   
 })
+
+export const deleteUser = async () => {
+    const { data: { user } } = await createClient().auth.getUser();
+
+    if(!user?.id) {
+        throw new Error("User not found");
+    }
+
+    const { error } = await createClient()
+        .from("profiles")
+        .delete()
+        .eq("user", user.id);
+
+    if (error) {
+        console.error("Error deleting user", error);
+        throw error;
+    }
+
+    await deleteAccount();
+}
