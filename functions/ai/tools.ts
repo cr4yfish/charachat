@@ -132,9 +132,10 @@ export const generateImageOfCharacterTool = async (props: GenerateImageToolProps
         })
         
     } catch (error) {
-        console.error(error);
-        const err = error as Error;
-        return err.message;
+        // happens a lot when ID doesnt work on the image
+        // fallback to normal image
+        console.error("generateImageOfCharacter error. Fallback to normal. Error:",error);
+        return generateImageTool(props);
     }
 }
 
