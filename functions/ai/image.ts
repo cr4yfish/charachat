@@ -72,14 +72,15 @@ export async function generateImageOfCharacter(props: GenerateImageOfCharacterPr
         auth: props.replicateToken
     });
     const output = await replicate.run(
-        "tencentarc/photomaker:ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4", 
+        "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0", 
         { 
             input: {
                 prompt: props.prefix + props.inputs + " img", 
-                input_image: props.character.image_link,
+                main_face_image: props.character.image_link,
                 disable_safety_checker: true,
                 negative_prompt: "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
-                disable_safeity_checker: true
+                output_format: "jpg",
+
             } 
         }
     );
