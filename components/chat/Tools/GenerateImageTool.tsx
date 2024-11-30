@@ -4,13 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import { ToolInvocation, Message as AIMessage } from "ai";
 import { v4 as uuidv4 } from "uuid"
-import { Alert, AlertTitle } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Spinner } from "@nextui-org/spinner";
 import { getKeyClientSide } from "@/lib/crypto";
 import { addMessage } from "@/functions/db/messages";
 import { Chat, Profile, Message } from "@/types/db";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/utils/Button";
+import { isValidURL } from "@/lib/utils";
 
 type Props = {
     toolInvocation: ToolInvocation,
@@ -21,10 +22,28 @@ type Props = {
 
 export default function GenerateImageTool(props: Props) {
     const [isVideoGenerating, setIsVideoGenerating] = useState(false);
-    const [videoLink, setVideoLink] = useState("");
+    const [videoLink, setVideoLink] = useState<string | undefined>(undefined);
     const { toast } = useToast();
 
     if("result" in props.toolInvocation) {
+
+        if(!isValidURL(props.toolInvocation.result)) {            
+            return (
+                <Alert 
+                    key={props.toolInvocation.toolCallId} 
+                    className="dark:bg-danger/5"
+                    variant={"destructive"}
+                >
+                    <AlertTitle className="flex items-center gap-2 dark:prose-invert">
+                        Error generating the image.
+                    </AlertTitle>
+                    <AlertDescription>
+                        {props.toolInvocation.result}
+                    </AlertDescription>
+                </Alert>
+            );
+        }
+
         // create new message with image
         const newMessage: AIMessage = {
             id: "image-" + props.toolInvocation.toolCallId,
@@ -93,7 +112,7 @@ export default function GenerateImageTool(props: Props) {
                 content: `<video width="320" height="240" controls>
                 <source src=${videoLink} type="video/mp4">
                 Your browser does not support the video tag.
-              </video>`,
+            </video>`,
                 createdAt: new Date(),
             }
                 
@@ -133,15 +152,13 @@ export default function GenerateImageTool(props: Props) {
 
     }
 
-    return 'result' in props.toolInvocation ? (
-        <div key={props.toolInvocation.toolCallId + 2} className="w-full h-full">
-        </div>
-    ) : (
+    return (
         <Alert key={props.toolInvocation.toolCallId} className=" dark:bg-transparent ">
             <AlertTitle className="flex items-center gap-2 dark:prose-invert">
                 <Spinner size="sm" />
                 <p className=" dark:text-zinc-400 ">Generating an image...</p>
             </AlertTitle>
         </Alert>
-    );
+    )
+    
 }

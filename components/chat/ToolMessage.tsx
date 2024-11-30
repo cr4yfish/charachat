@@ -17,8 +17,12 @@ type Props = {
 
 export default function ToolMessage(props: Props) {
 
+    if(!props.message.toolInvocations) {
+        return null;
+    }
+
     return (
-        <>
+        <div className="mb-4">
             {props.message.toolInvocations?.map((toolInvocation: ToolInvocation) => {
 
                 if(toolInvocation.toolName == "addNewMemory") {
@@ -54,6 +58,6 @@ export default function ToolMessage(props: Props) {
                 }
 
             })}
-        </>
+        </div>
     )
 }

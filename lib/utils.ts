@@ -72,5 +72,18 @@ export const truncateText = (text: string, maxLength=40) => {
   return text.substring(0, maxLength) + '...';
 };
 
+/**
+ * Holy shit this is so stupid
+ * @param string 
+ * @returns 
+ */
+export function isValidURL(string: string) {
+  try {
+    new URL(string);
+    return true;
+  } catch {
+    return false;
+  } 
+}
 
 export const _INTRO_MESSAGE = "Introduce yourself and if there is a story: Recap the story in your message.";

@@ -10,6 +10,8 @@ import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { decryptCharacter } from "./character";
 import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
+import { summarizeTool } from "../ai/tools";
+import { getCurrentUser } from "./auth";
 
 const chatMatcher = `
     *
@@ -245,7 +247,7 @@ export const updateChat = async (chat: Chat): Promise<void> => {
 
 }
 
-export const updateDynamicMemory = async (chatId: string, memory: string): Promise<void> => {
+export const updateDynamicMemory = async (chatId: string, memory: string): Promise<string> => {
     const key = await getKeyServerSide();
 
     const dynamic_book = (await getChat(chatId)).dynamic_book;
@@ -254,7 +256,12 @@ export const updateDynamicMemory = async (chatId: string, memory: string): Promi
         memory = `${dynamic_book}. ${memory}`;
     }
 
-    const encryptedMemory = encryptMessage(memory, Buffer.from(key, "hex"));
+    const profile = await getCurrentUser();
+
+    // summarize the new dynamic book
+    const summarizedBook = await summarizeTool({ text: memory, profile });
+
+    const encryptedMemory = encryptMessage(summarizedBook, Buffer.from(key, "hex"));
     
     const { error } = await createClient()
         .from("chats")
@@ -267,6 +274,8 @@ export const updateDynamicMemory = async (chatId: string, memory: string): Promi
         console.error("Error updating chat", error);
         throw error;
     }
+
+    return summarizedBook;
 }
 
 export const deleteChat = async (chatId: string): Promise<void> => {

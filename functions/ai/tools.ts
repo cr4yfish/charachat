@@ -1,12 +1,21 @@
 "use server";
 
-import { getChat, updateChat } from '../db/chat';
+import { getChat, updateChat, updateDynamicMemory } from '../db/chat';
 import { Chat, Profile } from '@/types/db';
-import { author, authorNoStream } from './author';
+import { authorNoStream } from './author';
 import { getCurrentUser } from '../db/auth';
 import { getKeyServerSide } from '../serverHelpers';
 import { decryptMessage } from '@/lib/crypto';
 import { generateImage } from './image';
+
+type AddMemoryProps = {
+    chat: Chat,
+    memory: string,
+}
+
+export const addMemory = async (props: AddMemoryProps): Promise<string> => {
+    return await updateDynamicMemory(props.chat.id, props.memory)
+}
 
 // server side tool
 type RemoveMemoryProps = {
@@ -68,31 +77,24 @@ type GenerateImageToolProps = {
 // server side tool
 export const generateImageTool = async (props: GenerateImageToolProps) => {
     try {
-
         let hfApiKey = undefined;
         let replicateApiKey = undefined;
 
         if(!hfApiKey && !replicateApiKey) {
-            throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
+            throw Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
         }
 
         const key = await getKeyServerSide();
 
-        try {
-            if(hfApiKey) {
-                hfApiKey = decryptMessage(hfApiKey, Buffer.from(key, 'hex'));  
-            }
-            if(replicateApiKey) {
-                replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(key, 'hex'));
-            }
-        } catch (e) {
-            console.error(e);
-            const err = e as Error;
-            throw new Error("Error decrypting API keys: " + err.message);
+        if(hfApiKey) {
+            hfApiKey = decryptMessage(hfApiKey, Buffer.from(key, 'hex'));  
+        }
+        if(replicateApiKey) {
+            replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(key, 'hex'));
         }
         
         if(!hfApiKey && !replicateApiKey) {
-            throw new Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
+            throw Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")
         }
 
         const link = await generateImage({
@@ -121,13 +123,13 @@ type SummarizeToolProps = {
 
 export const summarizeTool = async (props: SummarizeToolProps) => {
     try {
-        const summarizedText = await author({
+        const summarizedText = await authorNoStream({
             profile: props.profile,
-            systemText: "You are a summarize tool",
+            systemText: "You are a summarize tool for AI. You remove unnessesary words and shorten everything as much as possible. Your summary is always significantly shorter than the original text.",
             prompt: "Summarize this text: " + props.text
         })
 
-        return summarizedText
+        return summarizedText.text;
 
     } catch (error) {
         console.error(error);
@@ -153,6 +155,28 @@ export const chatRenameTool = async (props: ChatRenameToolProps) => {
         })
 
         return "success"
+    } catch(error) {
+        console.error(error);
+        const err = error as Error;
+        return err.message;
+    }
+}
+
+type BanStringsToolProps = {
+    chat: Chat,
+    strings: string[],
+}
+
+export const banStringsTool = async (props: BanStringsToolProps) => {
+    try {
+
+        await updateChat({
+            ...props.chat,
+            negative_prompt: (props.chat.negative_prompt ?? "") + "," + props.strings.join(",")
+        })
+
+        return `Banned ${props.strings.join(",")}`;
+
     } catch(error) {
         console.error(error);
         const err = error as Error;
