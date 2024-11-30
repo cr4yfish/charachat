@@ -172,7 +172,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 }
 
 
-export async function getModelApiKey(profile: Profile): Promise<string> {
+export async function getModelApiKey(profile: Profile, model?: ModelId): Promise<string> {
 
     const cookiesStore = cookies();
 
@@ -185,14 +185,14 @@ export async function getModelApiKey(profile: Profile): Promise<string> {
     }
 
     let decryptedAPIKey: string | undefined = undefined;
-    const encryptedAPIKey = getProfileAPIKey(profile.default_llm as ModelId, profile);
-    if(!encryptedAPIKey && !isFreeModel(profile.default_llm as ModelId)) {
+    const encryptedAPIKey = getProfileAPIKey(model || profile.default_llm as ModelId, profile);
+    if(!encryptedAPIKey && !isFreeModel(model || profile.default_llm as ModelId)) {
         throw new Error("No API key found");
     } else if(encryptedAPIKey) {
         decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
     }
 
-    if(isPaidModel(profile.default_llm as ModelId)) {
+    if(isPaidModel(model || profile.default_llm as ModelId)) {
         // check if user has access to this model
         const tier = await getUserTier(profile.user);
         if(tier !== 1) { throw new Error("You do not have access to this model"); }

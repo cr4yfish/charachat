@@ -10,6 +10,7 @@ import { addMessage } from '@/functions/db/messages';
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { addMemory, banStringsTool, chatRenameTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
+import { ModelId } from '@/lib/ai';
 
 export async function POST(req: Request) {
     try {
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
 
         const model = await getLanguageModel({
             modelId: chat.llm || profile.default_llm,
-            apiKey: await getModelApiKey(profile),
+            apiKey: await getModelApiKey(profile, chat.llm as ModelId),
         });
 
         const result = await streamText({
