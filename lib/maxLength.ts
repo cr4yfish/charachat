@@ -12,7 +12,8 @@ export const _CHARACTER_MAX_LENGTH: MaxLength = {
     book: 8000,
     first_message: 5000,
     system_protmp: 2000,
-    image_prompt: 500,
+    image_prompt: 1000,
+    system_prompt: 2000,
 }
 
 export const _CHAT_MAX_LENGTH: MaxLength = {
