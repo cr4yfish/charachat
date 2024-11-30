@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
-
+import { Chip } from "@nextui-org/chip";
 import { Chat } from "@/types/db";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -13,7 +13,6 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
 import { Input } from "@nextui-org/input";
 import { Avatar } from "@nextui-org/avatar";
-import { truncateText } from "@/lib/utils";
 
 
 type Props = {
@@ -52,40 +51,44 @@ export default function ChatCard(props: Props) {
 
     return (
         <>
-       
-        <Card 
-            className={`
-                w-full bg-transparent x
-                hover:bg-zinc-800
-            `}
-        >
-            <CardBody className="flex flex-row gap-2 items-center justify-start w-full">
-                
-                <Avatar src={chat.character.image_link} />
-                
-                <div className="flex flex-row gap-2 items-center justify-between w-full">
-                    <div className="flex flex-col">
-                        <h3 className="font-bold text-lg">{chat.title}</h3>
-                        <div className="w-full max-w-xs max-sm:max-w-xs relative">
-                            <p className={` dark:text-zinc-400 single-line w-full text-xs single-line `} >
-                                {truncateText(props.data.last_message ?? "", 20)}
-                            </p>
+       <Link href={`/chat/${props.data.id}`}>
+            <Card 
+                className={`
+                    w-full bg-transparent x shadow-none
+                    hover:bg-zinc-800
+                `}
+            >
+                <CardBody className="flex flex-row gap-2 items-center justify-start w-full">
+                    
+                    <Avatar src={chat.character.image_link} />
+                    
+                    <div className="flex flex-row gap-2 items-center justify-between w-full">
+
+                        <div className="flex flex-col w-full">
+                            <div className="flex items-center gap-2">
+                                <p className="text-sm text-zinc-400">{chat.title}</p>
+                                {chat.story?.id && <Chip className="text-xs font-medium dark:text-zinc-300 dark:bg-zinc-800">Story</Chip>}
+                            </div>
+                            
+                            <h3 className="font-bold text-lg">{chat.character.name}</h3>
+                            <div className="w-full max-w-xs max-sm:max-w-xs relative">
+                                <p className={` dark:text-zinc-400 single-line w-full text-xs single-line `} >
+                                    {props.data.last_message}
+                                </p>
+                            </div>
                         </div>
-                        {chat.last_message_at && <p className="dark:text-zinc-400 text-xs">{new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>}
+
+                        <div>
+                            {chat.last_message_at && <p className="dark:text-zinc-400 text-xs">{new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>}
+                        </div>
+
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Button onClick={() => setIsModalOpen(true)} variant="light" color="warning" isIconOnly><Icon>edit</Icon></Button>
-                        <Link key={props.data.id} href={`/chat/${props.data.id}`}>
-                            <Button variant="flat" color="primary" size="lg"><Icon filled>play_circle</Icon>Chat</Button>
-                        </Link>
-                    </div>
-                </div>
+            
+                </CardBody>
 
-        
-            </CardBody>
-
-        </Card>
+            </Card>
+        </Link>
     
         <BlurModal 
             isOpen={isModalOpen} 
