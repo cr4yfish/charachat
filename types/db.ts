@@ -42,6 +42,7 @@ export type Chat = {
     last_message?: string;
     persona?: Persona;
     negative_prompt?: string;
+    response_length: number;
 }
 
 export type Profile = {

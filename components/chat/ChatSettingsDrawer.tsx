@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Avatar } from "@nextui-org/avatar";
-
+import { Slider } from "@nextui-org/slider";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
@@ -76,8 +76,26 @@ export default function ChatSettingsDrawer() {
                     <SheetDescription>Chat with {chat?.character.name}</SheetDescription>
                     <SheetTitle>Chat Settings</SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col justify-between h-full">
+                <div className="flex flex-col gap-4 justify-between h-full max-h-screen overflow-auto">
                     <div className="flex flex-col gap-2">
+    
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm dark:text-zinc-400">Select the LLM to use</span>
+                            <Select 
+                                onValueChange={(value) => chat && setChat({...chat, llm: value})}
+                                defaultValue={chat?.llm}
+                            >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Select an AI" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {LLMs.map((llm) => (
+                                        <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
                         <TextareaWithCounter 
                             label="Chat Title" 
                             description="The title of the chat"
@@ -108,19 +126,31 @@ export default function ChatSettingsDrawer() {
                             value={chat?.negative_prompt}
                             onValueChange={(value) => chat && setChat({...chat, negative_prompt: value})}
                         />
-                        <Select 
-                            onValueChange={(value) => chat && setChat({...chat, llm: value})}
-                            defaultValue={chat?.llm}
-                        >
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Select an AI" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {LLMs.map((llm) => (
-                                    <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+
+                        <div className="flex flex-col gap-2 w-full relative max-w-full">
+                            <span className="text-sm dark:text-zinc-400">Change average response length</span>
+                            <Slider 
+                                showSteps 
+                                step={1} 
+                                hideValue
+                                className="max-w-[95%] self-center"
+                                value={[chat?.response_length ?? 0]}
+                                onChange={(e) => {
+                                    if (chat) {
+                                        setChat({...chat, response_length: (e as Array<number>)[0]});
+                                    }
+                                }}
+                                label="Response length"
+                                minValue={1}
+                                size="lg"
+                                maxValue={3} 
+                                marks={[
+                                    { value: 1, label: "Short" },
+                                    { value: 2, label: "Long" },
+                                    { value: 3, label: "Novel" }
+                                ]}
+                            />
+                        </div>
 
                     </div>
 

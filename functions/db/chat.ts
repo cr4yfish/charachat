@@ -237,6 +237,7 @@ export const updateChat = async (chat: Chat): Promise<void> => {
             last_message_at: chat.last_message_at ?? chat.created_at,
             llm: chat.llm,
             negative_prompt: chat.negative_prompt,
+            response_length: chat.response_length
         })
         .eq("id", chat.id)
 

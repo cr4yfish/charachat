@@ -12,6 +12,13 @@ import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { addMemory, banStringsTool, chatRenameTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
 import { ModelId } from '@/lib/ai';
 
+// map response length to prompt content
+const responseLengthToPrompt = {
+    0: "You respond in short messages, how a human would respond in a chat.",
+    1: "You respond in medium to long messages.",
+    2: "You response in long the longest message possible.",
+}
+
 export async function POST(req: Request) {
     try {
         const { messages, profile: initProfile, chat: initChat, selfDestruct } = await req.json();
@@ -83,7 +90,7 @@ export async function POST(req: Request) {
                 You are ${chat?.character.name}, ${chat?.character.description}, ${chat?.character.bio}.
                 Your are chatting with ${chat?.persona?.full_name ?? (profile?.first_name + " " + profile?.last_name)} with bio: ${chat.persona?.bio ?? profile?.bio}.
 
-                Your responses have to be in character. Be as authentic as possible. You respond in short messages, how a human would respond in a chat.
+                Your responses have to be in character. Be as authentic as possible. ${responseLengthToPrompt[(chat?.response_length as keyof typeof responseLengthToPrompt) ?? 0]}
                 Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
                 Always stay in character no matter what the user says.
             
