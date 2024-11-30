@@ -23,7 +23,10 @@ type Props = {
 export default function GenerateImageTool(props: Props) {
     const [isVideoGenerating, setIsVideoGenerating] = useState(false);
     const [videoLink, setVideoLink] = useState<string | undefined>(undefined);
+    const [isAddedToChat, setIsAddedToChat] = useState(false);
     const { toast } = useToast();
+    
+    if(isAddedToChat) return null;
 
     if("result" in props.toolInvocation) {
 
@@ -70,6 +73,7 @@ export default function GenerateImageTool(props: Props) {
 
             const key = getKeyClientSide();
             await addMessage(message ,key);
+            setIsAddedToChat(true);
         }
 
         const handleGenerateVideo = async () => {
@@ -90,6 +94,7 @@ export default function GenerateImageTool(props: Props) {
                 const { link } = await res.json();
 
                 setVideoLink(link);
+                setIsAddedToChat(true);
 
             } catch (error) {
                 console.error(error);
