@@ -39,7 +39,7 @@ export default function ChatCardSmall(props: Props) {
             >
                 <CardBody className="flex flex-row gap-2 items-center justify-start">
 
-                    <Avatar src={props.data.character.image_link} size="md" />
+                    <Avatar src={props.data.character.image_link} size="md" className="h-[40px] w-[50px]" />
 
                     <div className="flex flex-col w-full">
                         <div className="flex flex-row items-center justify-between w-full">
