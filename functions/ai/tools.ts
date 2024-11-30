@@ -71,14 +71,15 @@ export const getMemory = async (props: GetMemoryToolProps) => {
 
 type GenerateImageToolProps = {
     chat: Chat,
+    profile: Profile,
     prompt: string,
 }
 
 // server side tool
 export const generateImageTool = async (props: GenerateImageToolProps) => {
     try {
-        let hfApiKey = undefined;
-        let replicateApiKey = undefined;
+        let hfApiKey = props.profile.hf_encrypted_api_key;
+        let replicateApiKey = props.profile.replicate_encrypted_api_key;
 
         if(!hfApiKey && !replicateApiKey) {
             throw Error("Neither Huggingface nor Replicate API keys are available. Please add them to your profile to use this tool.")

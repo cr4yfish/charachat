@@ -165,7 +165,7 @@ export async function POST(req: Request) {
                     description: "Text to Image Tool.",
                     parameters: z.object({ prompt: z.string().describe("Prompt to generate the image") }),
                     execute: async ({ prompt }: { prompt: string }) => {
-                        return await generateImageTool({ chat, prompt })
+                        return await generateImageTool({ chat, profile, prompt })
                     }
                 }),
             }
