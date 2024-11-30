@@ -36,7 +36,7 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
         return repOutput[0];
     }
 
-    const hf = new HfInference(props.hfToken || process.env.HF_API_KEY);
+    const hf = new HfInference(props.hfToken);
     const model: ImageModelId = "black-forest-labs/FLUX.1-schnell";
 
     const blob = await hf.textToImage({

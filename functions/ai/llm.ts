@@ -19,7 +19,7 @@ import { getUserTier } from '../db/profiles';
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
         baseURL: baseURL || "https://api.groq.com/openai/v1",
-        apiKey: apiKey || process.env.GROQ_API_KEY
+        apiKey: apiKey
     })
 
     return groq(modelId);
@@ -29,7 +29,7 @@ async function getOllama(modelId: string, baseURL?: string, apiKey?: string): Pr
     const ollama = createOllama({
         baseURL: baseURL || 'https://api.ollama.com',
         headers: {
-            'Authorization': `Bearer ${apiKey || process.env.OLLAMA_API_KEY}`
+            'Authorization': `Bearer ${apiKey}`
         }
     });
 
@@ -39,7 +39,7 @@ async function getOllama(modelId: string, baseURL?: string, apiKey?: string): Pr
 async function getAnthropic(modelId: string, apiKey?: string, baseURL?: string,): Promise<LanguageModelV1> {
     const anthropic = createAnthropic({
         baseURL: baseURL || 'https://api.anthropic.com/v1',
-        apiKey: apiKey || process.env.ANTHROPIC_API_KEY
+        apiKey: apiKey
     });
 
     return anthropic(modelId);
@@ -47,7 +47,7 @@ async function getAnthropic(modelId: string, apiKey?: string, baseURL?: string,)
 
 async function getOpenAI(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
     const openai = createOpenAI({
-        apiKey: apiKey || process.env.OPENAI_API_KEY
+        apiKey: apiKey
     });
 
     return openai(modelId);
@@ -55,7 +55,7 @@ async function getOpenAI(modelId: string, apiKey?: string): Promise<LanguageMode
 
 async function getGemini(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
     const gemini = createGoogleGenerativeAI({
-        apiKey: apiKey || process.env.GEMINI_API_KEY
+        apiKey: apiKey
     });
 
     return gemini(modelId);
