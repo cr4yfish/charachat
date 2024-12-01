@@ -22,3 +22,15 @@ export const _CHAT_MAX_LENGTH: MaxLength = {
     dynamic_book: 10000,
     negative_prompt: 2000,
 }
+
+export const _STORY_MAX_LENGHT: MaxLength = {
+    title: 100,
+    description: 1000,
+    story: 10000,
+    first_message: 5000,
+}
+
+export const _PERSONA_MAX_LENGTH: MaxLength = {
+    fullName: 100,
+    bio: 2000,
+}
