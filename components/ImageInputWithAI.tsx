@@ -6,6 +6,7 @@ import { Character, Persona, Profile, Story } from "@/types/db";
 import { Button } from "./utils/Button";
 import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
+import { isValidURL } from "@/lib/utils";
 
 
 type Props = {
@@ -59,6 +60,16 @@ export default function ImageInputWithAI(props: Props) {
     }
 
     const handleSetImageLink = async (imageLink: string) => {
+
+        if(!isValidURL(imageLink) || !imageLink.includes("https://")) {
+            toast({
+                title: "Error",
+                description: "Invalid image link. Make sure it starts with https:// and ends with .jpg/.png or another image extension",
+                variant: "destructive"
+            })
+            return;
+        }
+
         props.setImageLink(imageLink);
     }
 
