@@ -141,6 +141,30 @@ export const getStories = cache(async (props: LoadMoreProps): Promise<Story[]> =
     }))
 })
 
+export const getUserStories = cache(async (props: LoadMoreProps): Promise<Story[]> => {
+
+    const { data: { session } } = await createClient().auth.getSession();
+
+    if(!session?.user.id) {
+        throw new Error("No user session found");
+    }
+
+    const { data, error } = await createClient()
+        .from(storyTableName)
+        .select(storyMatcher)
+        .eq("creator", session.user.id)
+        .order("created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1);
+
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async(db: any) => {
+        return await storyReturnFormat(db);
+    }))
+})
+
 type CreateStoryProps = {
     storyId: string;
     userId: string;
