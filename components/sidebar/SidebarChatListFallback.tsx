@@ -1,13 +1,13 @@
 "use server"
 
-import { Skeleton } from "../ui/skeleton"
+import ChatCardSmallSkeleton from "../chat/ChatCardSmallSkeleton"
 
 export default async function SidebarChatListFallback() {
     return (
         <>
         <div className="flex flex-col gap-2">
             {[...Array(15)].map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
+                <ChatCardSmallSkeleton key={i} />
             ))}
         </div>
         </>
