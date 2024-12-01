@@ -16,6 +16,7 @@ interface Props {
     component: React.FC<any>;
     scrollerProps?: React.ComponentPropsWithoutRef<typeof InfiniteScroll>
     componentProps?: any;
+    skeleton?: React.FC<any>;
 }
 
 
@@ -53,17 +54,17 @@ export default function InfiniteListLoader(props: Props) {
     return (
         <>
         <ScrollArea className="w-full h-full overflow-y-auto" >
-                <InfiniteScroll
-                    pageStart={0}
-                    loadMore={async() => await handleLoadMore()}
-                    hasMore={hasMore}
-                    loader={<div key={0}>{isLoading && <Spinner />}</div>}
-                    className="flex flex-col gap-2 w-full h-fit"
-                >
-                    {data.map((item, index) => (
-                        <props.component key={index} data={item} {...props.componentProps} />
-                    ))}
-                </InfiniteScroll>
+            <InfiniteScroll
+                pageStart={0}
+                loadMore={async() => await handleLoadMore()}
+                hasMore={hasMore}
+                loader={<div key={0}>{isLoading && (props.skeleton ? <props.skeleton /> : <Spinner />)}</div>}
+                className="flex flex-col gap-2 w-full h-fit"
+            >
+                {data.map((item, index) => (
+                    <props.component key={index} data={item} {...props.componentProps} />
+                ))}
+            </InfiniteScroll>
         </ScrollArea>
         </>
     )
