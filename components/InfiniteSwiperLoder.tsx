@@ -2,10 +2,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-
+import { Skeleton } from './ui/skeleton';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
-import { Spinner } from '@nextui-org/spinner';
 import { useToast } from '@/hooks/use-toast';
 import { LoadMoreProps } from '@/types/client';
 import { JSONObject } from '@ai-sdk/provider';
@@ -17,12 +16,14 @@ interface Props {
     component: React.FC<any>;
     componentProps?: any;
     args?: JSONObject;
+    rows?: number;
 }
 
 
 export default function InfiniteSwiperLoader(props: Props) {
     const { toast } = useToast();
     const [items, setItems] = useState<any[]>(props.initialData ?? []);
+    const [rowsArray, setRowsArray] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -73,15 +74,16 @@ export default function InfiniteSwiperLoader(props: Props) {
         }
     }, []);
 
-    // Load more data until container has overflow
     useEffect(() => {
-        if(containerRef.current) {
-            const container = containerRef.current;
-            if (!(container.scrollWidth > container.clientWidth)) {
-                handleLoadMore();
-            }
-        }
-    }, [containerRef.current?.scrollWidth])
+        const itemsPerRow = Math.ceil(items.length / (props.rows ?? 1));
+        setRowsArray(Array.from({ length: props.rows ?? 1 }, (_, rowIndex) =>
+            items.slice(rowIndex * itemsPerRow, (rowIndex + 1) * itemsPerRow)
+        ));
+    }, [props.rows, items])
+
+    useEffect(() => {
+        console.log(rowsArray);
+    }, [rowsArray])
 
     return (
         <ScrollArea asChild >
@@ -90,14 +92,16 @@ export default function InfiniteSwiperLoader(props: Props) {
                 className="overflow-x-auto w-full"
                 ref={containerRef}
             >
-                <div
-                
-                className="w-fit flex flex-row gap-2 pr-10 pb-2"
-                >
-                    {items?.map((item, index) => (
-                        <props.component key={index} data={item} {...props.componentProps} />
+                <div className="w-fit flex flex-col gap-2 pr-10 pb-2" >
+                    {rowsArray.map((rowItems, rowIndex) => (
+                        <div key={rowIndex} className="flex flex-row flex-nowrap gap-2 relative w-fit">
+                            {rowItems.map((item: any, index: number) => (
+                                <props.component key={index} data={item} {...props.componentProps} />
+                            ))}
+                            {isLoading && <Skeleton className=' w-[300px] relative min-h-full rounded-lg' />}
+                        </div>
                     ))}
-                    {isLoading && <Spinner />}
+                    
                 </div>
             </ScrollShadow>
         </ScrollArea>
