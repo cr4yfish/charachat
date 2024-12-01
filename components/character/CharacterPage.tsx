@@ -92,7 +92,7 @@ export default function CharacterPage(props: Props) {
                 <Image src={safeParseLink(props.character.image_link)} layout="fill" className="object-cover" alt="" />
             </div>
 
-            <div className="flex flex-row max-md:flex-col gap-6 items-center justify-center w-full">
+            <div className="flex flex-row max-md:flex-col gap-6 items-start max-md:items-center justify-center w-full">
 
                 <div className="flex flex-col justify-center gap-4 max-md:w-full">
                     <div className="flex flex-col gap-2 items-center justify-center">
