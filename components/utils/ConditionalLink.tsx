@@ -1,21 +1,29 @@
 import React from "react"
 import Link from "next/link"
 
-export default function ConditionalLink({ children, href, active, target } : { children: React.ReactNode, href: string, active: boolean, target?: string }) {
-    if(active) {
+type Props = {
+    children: React.ReactNode;
+    href: string;
+    active: boolean;
+    target?: string;
+    fullWidth?: boolean;
+}
+
+export default function ConditionalLink(props: Props) {
+    if(props.active) {
         return (
             <Link
-                className="w-fit"
-                href={href}
-                target={target}
+                className={props.fullWidth ? "w-full" : "w-fit"}
+                href={props.href}
+                target={props.target}
             >
-                {children}
+                {props.children}
             </Link>
         )
     } else {
         return (
             <>
-            {children}
+            {props.children}
             </>
         )
     }
