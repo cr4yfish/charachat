@@ -28,7 +28,7 @@ export default function ChatCardSmall(props: Props) {
 
     return (
         <>
-        <ConditionalLink active={props.hasLink !== undefined} href={`/chat/${props.data.id}`}>
+        <ConditionalLink fullWidth active={props.hasLink !== undefined} href={`/chat/${props.data.id}`}>
             <Card 
                 isPressable={props.hasLink} shadow="none"
                 className={`
