@@ -13,6 +13,7 @@ import { createPersona, deletePersona, updatePersona } from "@/functions/db/pers
 import PersonaCard from "./PersonaCard";
 import { useToast } from "@/hooks/use-toast";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
+import { _PERSONA_MAX_LENGTH } from "@/lib/maxLength";
 
 
 type Props = {
@@ -123,14 +124,14 @@ export default function PersonaEdit(props: Props) {
                 isRequired
                 value={persona.full_name}
                 onValueChange={(value) => updateValue("full_name", value)}
-                maxLength={100}
+                maxLength={_PERSONA_MAX_LENGTH.fullName}
             />
 
             <TextareaWithCounter 
                 label="Bio"
                 value={persona.bio}
                 onValueChange={(value) => updateValue("bio", value)}
-                maxLength={2000}
+                maxLength={_PERSONA_MAX_LENGTH.bio}
             />
 
             <ImageInputWithAI
