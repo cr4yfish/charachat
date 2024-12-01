@@ -10,11 +10,11 @@ type Props = {
     
 }
 
-export default async function PopularCharactersSwiper(props: Props) {
+export default async function CharactersSwiper(props: Props) {
         
     const defaultLoad: LoadMoreProps = {
         cursor: 0,
-        limit: 15,
+        limit: 18,
     }
 
     let characters: Character[] = [];

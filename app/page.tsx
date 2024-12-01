@@ -3,13 +3,13 @@
 import { getCharacters, getPopularCharacters } from "@/functions/db/character";
 import Searchbar from "@/components/Searchbar";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
-import PopularCharactersSwiper from "@/components/homepage/PopularCharacters";
 import { Suspense } from "react";
 import InfiniteSwiperLoaderFallback from "@/components/InfiniteSwiperLoaderFallback";
 import StoriesSwiper from "@/components/homepage/StoriesSwiper";
 import CategoriesLoader from "@/components/homepage/CategoriesLoader";
 import SpotlightLoader from "@/components/homepage/SpotlightLoader";
 import News from "@/components/homepage/News";
+import CharactersSwiper from "@/components/homepage/CharactersSwiper";
 
 export default async function Home() {
 
@@ -29,7 +29,7 @@ export default async function Home() {
               <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
           </div>
           <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
-            <PopularCharactersSwiper loader={getPopularCharacters} />
+            <CharactersSwiper loader={getPopularCharacters} />
           </Suspense>
       </div>
       
@@ -50,7 +50,7 @@ export default async function Home() {
           <h2 className="dark:prose-invert text-lg font-bold">New</h2>
         </div>
         <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
-          <PopularCharactersSwiper loader={getCharacters} />
+          <CharactersSwiper loader={getCharacters} />
         </Suspense>
       </div>
 

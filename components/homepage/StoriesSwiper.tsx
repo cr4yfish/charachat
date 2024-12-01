@@ -10,7 +10,7 @@ export default async function StoriesSwiper() {
         
     const defaultLoad: LoadMoreProps = {
         cursor: 0,
-        limit: 15,
+        limit: 16,
     }
 
     let stories: Story[] = [];
