@@ -31,32 +31,32 @@ export default async function Home() {
           <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
             <CharactersSwiper loader={getPopularCharacters} />
           </Suspense>
-      </div>
+        </div>
       
 
-      <div className="flex flex-col gap-2">
-        <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
-          <p className="text-xs dark:text-zinc-400">Immerse yourself in these engaging stories</p>
-          <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
+        <div className="flex flex-col gap-2">
+          <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
+            <p className="text-xs dark:text-zinc-400">Immerse yourself in these engaging stories</p>
+            <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
+          </div>
+          <Suspense fallback={<InfiniteSwiperLoaderFallback rows={2} />}>
+            <StoriesSwiper />
+          </Suspense>
         </div>
-        <Suspense fallback={<InfiniteSwiperLoaderFallback rows={2} />}>
-          <StoriesSwiper />
-        </Suspense>
-      </div>
 
-      <div className="flex flex-col gap-2 w-full relative">
-        <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
-          <p className="text-xs dark:text-zinc-400">Check out what the Community made</p>
-          <h2 className="dark:prose-invert text-lg font-bold">New</h2>
+        <div className="flex flex-col gap-2 w-full relative">
+          <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
+            <p className="text-xs dark:text-zinc-400">Check out what the Community made</p>
+            <h2 className="dark:prose-invert text-lg font-bold">New</h2>
+          </div>
+          <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
+            <CharactersSwiper loader={getCharacters} />
+          </Suspense>
         </div>
-        <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
-          <CharactersSwiper loader={getCharacters} />
-        </Suspense>
-      </div>
 
-      <CurrentCategoryProvider>
-        <CategoriesLoader />
-      </CurrentCategoryProvider>
+        <CurrentCategoryProvider>
+          <CategoriesLoader />
+        </CurrentCategoryProvider>
 
       </div>
     </div>
