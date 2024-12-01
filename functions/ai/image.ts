@@ -1,3 +1,5 @@
+"use server";
+
 import { ImgurClient } from "imgur"
 import Replicate from "replicate";
 import { HfInference } from "@huggingface/inference";
@@ -35,31 +37,36 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
         const repOutput: ReplicateOutput = output as ReplicateOutput;
 
         return repOutput[0];
-    }
+    } else {
 
-    const hf = new HfInference(props.hfToken);
-    const model: ImageModelId = "black-forest-labs/FLUX.1-schnell";
-
-    const blob = await hf.textToImage({
-        model: model,
-        inputs: props.inputs,
-        parameters: {
-            height: 512,
-            width: 512,
+        if(!props.hfToken) {
+            throw new Error("No hf token provided");
         }
-    }).catch((e) => {
-        throw new Error(e);
-    })
 
-    if(!blob) {
-        throw new Error("Error generating image");
+        const hf = new HfInference(props.hfToken);
+        const model: ImageModelId = "black-forest-labs/FLUX.1-schnell";
+
+        const blob = await hf.textToImage({
+            model: model,
+            inputs: props.inputs,
+            parameters: {
+                height: 512,
+                width: 512,
+            }
+        }).catch((e) => {
+            throw new Error(e);
+        })
+
+        if(!blob) {
+            throw new Error("Error generating image");
+        }
+
+        const base64 =  (await blob.arrayBuffer().then((buffer) => Buffer.from(buffer).toString("base64")));
+
+        const link = await uploadImageToImgur(base64);
+
+        return link;
     }
-
-    const base64 =  (await blob.arrayBuffer().then((buffer) => Buffer.from(buffer).toString("base64")));
-
-    const link = await uploadImageToImgur(base64);
-
-    return link;
 
 }
 
