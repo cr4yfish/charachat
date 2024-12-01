@@ -30,7 +30,7 @@ export default async function StoriesSwiper() {
         <>
         <InfiniteSwiperLoader 
             loadMore={getStories} 
-            limit={5} 
+            limit={15} 
             rows={2}
             initialData={stories} 
             component={StoryCard}

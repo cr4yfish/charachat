@@ -107,7 +107,7 @@ export default function CategoryScroller(props: Props) {
         
             <InfiniteSwiperLoader 
                 loadMore={getCategories}
-                limit={5}
+                limit={15}
                 initialData={props.categories}
                 component={CategoryCardWithContext}
             />

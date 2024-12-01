@@ -34,7 +34,7 @@ export default async function PopularCharactersSwiper(props: Props) {
         <>
         <InfiniteSwiperLoader 
             loadMore={props.loader} 
-            limit={5} 
+            limit={15} 
             rows={3}
             initialData={characters} 
             component={CharacterCard}
