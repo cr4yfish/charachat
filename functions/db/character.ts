@@ -8,6 +8,7 @@ import { Character } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
+import { safeParseLink } from "@/lib/utils";
 
 const characterMatcher = `
     *,
@@ -136,17 +137,21 @@ export const getCharacters = cache(async (props: LoadMoreProps): Promise<Charact
     }));
 })
 
+/**
+ * Gets the latest 2 characters and returns the first one with a working image link
+ */
 export const getNewestCharacter = cache(async (): Promise<Character> => {
     const { data, error } = await createClient()
         .from(characterTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
+        .range(0, 2);
 
     if (error) {
         throw error;
     }
 
-    return await characterFormatter(data[0]);
+    return await characterFormatter(data.find((c) => safeParseLink(c.image_link) !== ""));
 })
 
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
