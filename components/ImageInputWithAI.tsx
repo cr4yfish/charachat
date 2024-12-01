@@ -6,7 +6,8 @@ import { Character, Persona, Profile, Story } from "@/types/db";
 import { Button } from "./utils/Button";
 import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
-import { isValidURL } from "@/lib/utils";
+import { isValidURL, safeParseLink } from "@/lib/utils";
+import { Avatar } from "@nextui-org/avatar";
 
 
 type Props = {
@@ -112,14 +113,19 @@ export default function ImageInputWithAI(props: Props) {
     return (
         <>
         <div>
-            <Input 
-                name="image_link"
-                label="Image Link" 
-                placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                description={`Paste an image link (ending on .jpg/.png) ${!props.disableAI ? ", generate one with AI" : ""} or upload one`}
-                value={props.story?.image_link ?? props.character?.image_link ?? props.persona?.avatar_link ?? props.profile?.avatar_link ?? ""}
-                onValueChange={handleSetImageLink}
-            />
+            <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                    <Avatar className="min-w-[50px] h-[50px]" src={safeParseLink(props.story?.image_link ?? props.character?.image_link ?? props.persona?.avatar_link ?? props.profile?.avatar_link ?? "")} alt="" />
+                    <Input 
+                        name="image_link"
+                        label="Image Link" 
+                        placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
+                        value={props.story?.image_link ?? props.character?.image_link ?? props.persona?.avatar_link ?? props.profile?.avatar_link ?? ""}
+                        onValueChange={handleSetImageLink}
+                    />
+                </div>
+                <p className="text-xs dark:text-zinc-400">{`Paste an image link (ending on .jpg/.png) ${!props.disableAI ? ", generate one with AI" : ""} or upload one`}</p>
+            </div>
             <div className="flex items-center gap-1 flex-wrap">
                 {!props.disableAI &&
                     <Button 
