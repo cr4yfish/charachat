@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { Character, Profile, Story } from "@/types/db";
 import { Button } from "@/components/utils/Button";
 import { FormEvent, useState } from "react";
-import StoryInputWithAI from "./StoryInputWithAI";
+import InputWithAI from "./InputWithAI";
 import CharacterCard from "../character/CharacterCard";
 import { storySchema } from "@/lib/schemas";
 import { createStory, deleteStory } from "@/functions/db/stories";
@@ -127,7 +127,7 @@ export default function NewStoryMain(props: Props) {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <h2 className="text-lg font-bold">Story Details</h2>
 
-            <StoryInputWithAI 
+            <InputWithAI 
                 story={story}
                 profile={props.profile}
                 character={props.character}
@@ -147,7 +147,7 @@ export default function NewStoryMain(props: Props) {
                 errorMessage={errorMessages?.title}
             />
 
-            <StoryInputWithAI 
+            <InputWithAI 
                 story={story}
                 profile={props.profile}
                 character={props.character}
@@ -165,7 +165,7 @@ export default function NewStoryMain(props: Props) {
                 errorMessage={errorMessages?.description}
             />
 
-            <StoryInputWithAI 
+            <InputWithAI 
                 story={story}
                 profile={props.profile}
                 character={props.character}
@@ -182,7 +182,7 @@ export default function NewStoryMain(props: Props) {
                 errorMessage={errorMessages?.story}
             />
 
-            <StoryInputWithAI 
+            <InputWithAI 
                 story={story}
                 profile={props.profile}
                 character={props.character}

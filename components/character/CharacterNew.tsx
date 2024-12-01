@@ -10,7 +10,7 @@ import { useState } from "react";
 import { saveCharacter } from "@/app/c/new/actions";
 import { Button } from "../utils/Button";
 import { Character, Profile } from "@/types/db";
-import StoryInputWithAI from "../story/StoryInputWithAI";
+import InputWithAI from "../story/InputWithAI";
 import CharacterCard from "./CharacterCard";
 import { getKeyClientSide } from "@/lib/crypto";
 import { encryptCharacter } from "@/functions/db/character";
@@ -95,7 +95,7 @@ export default function CharacterNew(props: Props) {
                 value={newCharacter.name}
                 onValueChange={(value) => updateValue("name", value)} 
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="description" 
                 isRequired
                 label="Character Description"
@@ -109,7 +109,7 @@ export default function CharacterNew(props: Props) {
                 buttonLabel="Generate Description"
                 api="/api/author/character"
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="personality"
                 isRequired
                 label="Character Personality"
@@ -123,7 +123,7 @@ export default function CharacterNew(props: Props) {
                 buttonLabel="Generate Personality"
                 api="/api/author/character"
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="bio" 
                 isRequired
                 label="Character Bio"
@@ -137,7 +137,7 @@ export default function CharacterNew(props: Props) {
                 character={newCharacter}
                 setValue={(value) => updateValue("bio", value)}
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="intro" 
                 label="Character Intro"
                 buttonLabel="Generate Intro"
@@ -151,7 +151,7 @@ export default function CharacterNew(props: Props) {
                 character={newCharacter}
                 setValue={(value) => updateValue("intro", value)}
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="book" 
                 label="Character Book"
                 initValue={newCharacter.book}
@@ -164,7 +164,7 @@ export default function CharacterNew(props: Props) {
                 profile={props.profile}
                 character={newCharacter}
             />
-            <StoryInputWithAI
+            <InputWithAI
                 name="first_message"
                 initValue={newCharacter.first_message}
                 setValue={(value) => updateValue("first_message", value)}
@@ -176,7 +176,7 @@ export default function CharacterNew(props: Props) {
                 character={newCharacter}
                 buttonLabel="Generate First Message"
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="system_prompt" 
                 initValue={newCharacter.system_prompt}
                 setValue={(value) => updateValue("system_prompt", value )}
@@ -188,7 +188,7 @@ export default function CharacterNew(props: Props) {
                 profile={props.profile}
                 character={newCharacter}
             />
-            <StoryInputWithAI 
+            <InputWithAI 
                 name="image_prompt" 
                 initValue={newCharacter.image_prompt}
                 setValue={(value) => updateValue("image_prompt", value )}

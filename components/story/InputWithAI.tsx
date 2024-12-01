@@ -28,7 +28,7 @@ type Props = {
     errorMessage?: string;
 }
 
-export default function StoryInputWithAI(props: Props) {
+export default function InputWithAI(props: Props) {
     const { toast } = useToast();
     const [localValue, setLocalValue] = useState(props.initValue || "");
     const { messages, isLoading, reload } = useChat({
