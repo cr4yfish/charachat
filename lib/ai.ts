@@ -41,10 +41,7 @@ export const LLMsWithAPIKeys = (profile: Profile) => {
         if(
             getProfileAPIKey(llm.key, profile) || 
 
-            isFreeModel(llm.key) ||
-
-            // The unrestricted model is managed by the server
-            (llm.key === "llama-3_2-3b-instruct-uncensored") 
+            isFreeModel(llm.key)
 
         ) {
             return llm;
@@ -62,7 +59,6 @@ export type ModelId =
     "open-mistral-nemo" |
     "claude-3-5-sonnet-latest" |
     "claude-3-5-haiku-latest" |
-    "llama-3_2-3b-instruct-uncensored" |
     "openai-compatible" |
     "grok-beta" |
     "command-r-plus" |
@@ -77,13 +73,6 @@ export const isFreeModel = (modelId: ModelId) => {
     switch(modelId) {
         case "open-mistral-nemo":
         case "grok-beta":
-            return true;
-    }
-}
-
-export const isPaidModel = (modelId: ModelId) => {
-    switch(modelId) {
-        case "llama-3_2-3b-instruct-uncensored":
             return true;
     }
 }
@@ -129,10 +118,6 @@ export const LLMs: LLMType[] = [
     {
         "key": "claude-3-5-haiku-latest",
         "name": "Claude 3.5 Haiku"
-    },
-    {
-        "key": "llama-3_2-3b-instruct-uncensored",
-        "name": "Llama3.2 Unrestricted"
     },
     {
         "key": "openai-compatible",

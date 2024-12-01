@@ -5,16 +5,14 @@ import { createMistral } from '@ai-sdk/mistral';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOllama } from 'ollama-ai-provider';
 import { createAnthropic  } from '@ai-sdk/anthropic';
-import { createVertex } from '@ai-sdk/google-vertex';
 import { createXai } from "@ai-sdk/xai";
 import { createCohere } from "@ai-sdk/cohere";
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
 import { Profile } from '@/types/db';
 import { cookies } from 'next/headers';
-import { getProfileAPIKey, isFreeModel, isPaidModel, ModelId } from '@/lib/ai';
+import { getProfileAPIKey, isFreeModel, ModelId } from '@/lib/ai';
 import { decryptMessage } from '@/lib/crypto';
-import { getUserTier } from '../db/profiles';
 
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
@@ -77,31 +75,6 @@ async function getCohere(modelId: string, apiKey?: string): Promise<LanguageMode
     return cohere(modelId);
 }
 
-async function getUnrestricted(): Promise<LanguageModelV1> {
-
-    const creds = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS!);
-    const project = process.env.GOOGLE_VERTEX_PROJECT!;
-    const location = process.env.GOOGLE_VERTEX_LOCATION!;
-    
-    const vertex = createVertex({
-        project: project,
-        location: location,
-        googleAuthOptions: {
-            credentials: creds
-        },
-        
-    })
-    return vertex("projects/charachat/locations/us-central1/endpoints/1827049675782356992", {
-        safetySettings: [
-            { category: 'HARM_CATEGORY_UNSPECIFIED', threshold: 'BLOCK_ONLY_HIGH' },
-            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
-            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
-            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
-            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
-        ]
-    });
-}
-
 async function getOpenAICompatible(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const openAICompatible = createOpenAI({
         baseURL: baseURL,
@@ -152,9 +125,6 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "claude-3-5-haiku-latest":
             return getAnthropic(modelId, apiKey);
 
-        case "llama-3_2-3b-instruct-uncensored":
-            return getUnrestricted();
-
         case "openai-compatible":
             return getOpenAICompatible(modelId, baseURL, apiKey);
 
@@ -190,12 +160,6 @@ export async function getModelApiKey(profile: Profile, model?: ModelId): Promise
         throw new Error("No API key found");
     } else if(encryptedAPIKey) {
         decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
-    }
-
-    if(isPaidModel(model || profile.default_llm as ModelId)) {
-        // check if user has access to this model
-        const tier = await getUserTier(profile.user);
-        if(tier !== 1) { throw new Error("You do not have access to this model"); }
     }
 
     if(!decryptedAPIKey) {
