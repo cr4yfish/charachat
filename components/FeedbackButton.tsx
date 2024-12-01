@@ -44,7 +44,7 @@ export default function FeedbackButton(props: Props) {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                <DialogTitle>Submit Anonmyous Feedback</DialogTitle>
+                <DialogTitle>Submit Anonymous Feedback</DialogTitle>
                 <DialogDescription>
                     Charachat survives on User feedback and suggestions. Any feedback submitted here is completely anonymous. The only data collected is the current date, where you submitted this and the feedback itself. Thank you very much for your time!
                 </DialogDescription>
