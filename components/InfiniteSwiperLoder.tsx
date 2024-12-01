@@ -78,10 +78,14 @@ export default function InfiniteSwiperLoader(props: Props) {
     }, [cursor, isLoading, items, props, toast]);
 
     useEffect(() => {
-        const itemsPerRow = Math.ceil(items.length / (props.rows ?? 1));
-        setRowsArray(Array.from({ length: props.rows ?? 1 }, (_, rowIndex) =>
-            items.slice(rowIndex * itemsPerRow, (rowIndex + 1) * itemsPerRow)
-        ));
+        const rows = props.rows ?? 1;
+        const columns = Math.ceil(items.length / rows);
+        const newRowsArray = Array.from({ length: rows }, (_, rowIndex) =>
+            Array.from({ length: columns }, (_, colIndex) =>
+                items[rowIndex + colIndex * rows]
+            ).filter(item => item !== undefined)
+        );
+        setRowsArray(newRowsArray);
     }, [props.rows, items])
 
     return (
