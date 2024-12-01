@@ -28,6 +28,7 @@ import { useSharedChat } from "@/context/SharedChatSettings";
 import Link from "next/link";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { _CHAT_MAX_LENGTH } from "@/lib/maxLength";
+import StoryCard from "../story/StoryCard";
 
 
 export default function ChatSettingsDrawer() {
@@ -152,6 +153,8 @@ export default function ChatSettingsDrawer() {
                             />
                         </div>
 
+                        {chat?.story && <StoryCard data={chat?.story} hasLink />}
+                        
                     </div>
 
                     <div className="flex flex-col gap-2">
