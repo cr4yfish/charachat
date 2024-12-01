@@ -136,6 +136,19 @@ export const getCharacters = cache(async (props: LoadMoreProps): Promise<Charact
     }));
 })
 
+export const getNewestCharacter = cache(async (): Promise<Character> => {
+    const { data, error } = await createClient()
+        .from(characterTableName)
+        .select(characterMatcher)
+        .order("created_at", { ascending: false })
+
+    if (error) {
+        throw error;
+    }
+
+    return await characterFormatter(data[0]);
+})
+
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await createClient()
         .from(characterTableName)
