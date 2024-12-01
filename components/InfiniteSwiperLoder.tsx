@@ -23,56 +23,61 @@ interface Props {
 export default function InfiniteSwiperLoader(props: Props) {
     const { toast } = useToast();
     const [items, setItems] = useState<any[]>(props.initialData ?? []);
+    const [cursor, setCursor] = useState(props.initialData?.length ?? 0)
+    const [canLoadMore, setCanLoadMore] = useState(true);
     const [rowsArray, setRowsArray] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleLoadMore = async () => {
-        if(isLoading) return;
-        setIsLoading(true)
 
-        try {
-            const res = await props.loadMore({ cursor: items?.length ?? 0, limit: props.limit, args: props.args } )
-            if(items) {
-                setItems([...items, ...res]);
-            } else {
-                setItems(res);
-            }
-
-            if(res.length < props.limit) {
-                containerRef.current?.removeEventListener('scroll', handleScroll);
-            }
-
-        } catch(error) {
-            const err = error as Error;
-            toast({
-                title: "Error",
-                description: err.message,
-                variant: "destructive"
-            })
-        }
-        
-        setIsLoading(false);
-    }
-
-    const handleScroll = () => {
-        if (containerRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-            if (scrollLeft + clientWidth >= scrollWidth - 5) {
-                handleLoadMore();
-            };
-            
-        }
-    };
 
     // load more data on scrolling to end
     useEffect(() => {
+        const handleScroll = async () => {
+            if (containerRef.current) {
+                const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+                if (scrollLeft + clientWidth >= scrollWidth - 5) {
+                    if(isLoading || !canLoadMore) return;
+                    setIsLoading(true)
+            
+                    try {
+                        const res = await props.loadMore({ cursor: cursor, limit: props.limit, args: props.args } )
+                        
+                        console.log("Cursor:", cursor, "num items:", res.length, "items:", res, "next cursor:", cursor + res.length);
+                        
+                        setCursor(prevCursor => prevCursor + res.length);
+            
+                        if(items) {
+                            setItems(prevItems => [...prevItems, ...res]);
+                        } else {
+                            setItems(res);
+                        }
+            
+                        if(res.length < props.limit) {
+                            containerRef.current?.removeEventListener('scroll', handleScroll);
+                            setCanLoadMore(false);
+                        }
+            
+                    } catch(error) {
+                        const err = error as Error;
+                        toast({
+                            title: "Error",
+                            description: err.message,
+                            variant: "destructive"
+                        })
+                    }
+                    
+                    setIsLoading(false);
+                };
+            }
+        };
+
         const container = containerRef.current;
         if (container) {
             container.addEventListener('scroll', handleScroll);
             return () => container.removeEventListener('scroll', handleScroll);
         }
-    }, []);
+    }, [cursor, isLoading, items, props, toast]);
 
     useEffect(() => {
         const itemsPerRow = Math.ceil(items.length / (props.rows ?? 1));
@@ -80,10 +85,6 @@ export default function InfiniteSwiperLoader(props: Props) {
             items.slice(rowIndex * itemsPerRow, (rowIndex + 1) * itemsPerRow)
         ));
     }, [props.rows, items])
-
-    useEffect(() => {
-        console.log(rowsArray);
-    }, [rowsArray])
 
     return (
         <ScrollArea asChild >
