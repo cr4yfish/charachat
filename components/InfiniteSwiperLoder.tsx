@@ -43,8 +43,6 @@ export default function InfiniteSwiperLoader(props: Props) {
                     try {
                         const res = await props.loadMore({ cursor: cursor, limit: props.limit, args: props.args } )
                         
-                        console.log("Cursor:", cursor, "num items:", res.length, "items:", res, "next cursor:", cursor + res.length);
-                        
                         setCursor(prevCursor => prevCursor + res.length);
             
                         if(items) {

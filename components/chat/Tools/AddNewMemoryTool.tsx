@@ -18,7 +18,6 @@ export default function AddNewMemoryTool(props: Props) {
     useEffect(() => {
         if("result" in props.toolInvocation) {
             const memory = props.toolInvocation.result;
-            console.log("Updating chat state");
             props.setChat((prev) => {
                 if(!prev) return {} as Chat; // this should never actually run
                 return {

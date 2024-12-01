@@ -35,9 +35,7 @@ export const removeMemory = async (props: RemoveMemoryProps) => {
                 From this text: ${memory}
             `
         })
-        console.log("got author stream", props.memory, memory);
         const newMemory = newMemoryStream.text
-        console.log("new memory:", newMemory)
 
         await updateChat({
             ...props.chat,
@@ -60,7 +58,6 @@ type GetMemoryToolProps = {
 export const getMemory = async (props: GetMemoryToolProps) => {
     try {
         const dynamicBook = (await getChat(props.chat.id)).dynamic_book;
-        console.log("get memory tool:", dynamicBook);
         return dynamicBook;
     } catch(error) {
         console.error(error);
