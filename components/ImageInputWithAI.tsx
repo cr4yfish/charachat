@@ -2,7 +2,6 @@
 
 import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
-import { Character, Persona, Profile, Story } from "@/types/db";
 import { Button } from "./utils/Button";
 import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
@@ -11,10 +10,8 @@ import { Avatar } from "@nextui-org/avatar";
 
 
 type Props = {
-    character?: Character | undefined;
-    story?: Story | undefined;
-    persona?: Persona | undefined;
-    profile?: Profile | undefined;
+    contextFields: string[];
+    imageLink: string | undefined;
     setImageLink: (link: string) => void;
     disableAI?: boolean;
 }
@@ -33,9 +30,7 @@ export default function ImageInputWithAI(props: Props) {
             const res = await fetch("/api/image", {
                 method: "POST",
                 body: JSON.stringify({
-                    character: props.character,
-                    story: props.story,
-                    persona: props.persona,
+                    contextFields: props.contextFields
                 })
             })
     
@@ -46,7 +41,9 @@ export default function ImageInputWithAI(props: Props) {
                 }
                 handleSetImageLink(link);
             } else {
-                throw new Error("Failed to generate image");
+                const text = await res.text();
+                console.error("Text:",text);
+                throw new Error("Failed to generate image. Error Message: " + text);
             }
         } catch(e) {
             const err = e as Error;
@@ -115,12 +112,12 @@ export default function ImageInputWithAI(props: Props) {
         <div>
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                    <Avatar className="min-w-[50px] h-[50px]" src={safeParseLink(props.story?.image_link ?? props.character?.image_link ?? props.persona?.avatar_link ?? props.profile?.avatar_link ?? "")} alt="" />
+                    <Avatar className="min-w-[50px] h-[50px]" src={safeParseLink(props.imageLink)} alt="" />
                     <Input 
                         name="image_link"
                         label="Image Link" 
                         placeholder="https://i.imgur.com/XgbZdeAb.jpg" 
-                        value={props.story?.image_link ?? props.character?.image_link ?? props.persona?.avatar_link ?? props.profile?.avatar_link ?? ""}
+                        value={props.imageLink}
                         onValueChange={handleSetImageLink}
                     />
                 </div>

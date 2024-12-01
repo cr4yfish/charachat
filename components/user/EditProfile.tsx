@@ -172,7 +172,8 @@ export default function EditProfile(props: Props) {
                 maxLength={2000} 
             />
             <ImageInputWithAI
-                profile={profile}
+                contextFields={[profile.first_name, profile.last_name ?? "", profile.bio ?? ""]}
+                imageLink={profile.avatar_link}
                 setImageLink={(value) => handleUpdateValue('avatar_link', value)}
             />
 

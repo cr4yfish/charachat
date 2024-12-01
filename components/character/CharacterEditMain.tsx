@@ -106,10 +106,6 @@ export default function CharacterEditMain(props: Props) {
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
                 maxLength={_CHARACTER_MAX_LENGTH.bio} 
             />
-            <ImageInputWithAI
-                character={character}
-                setImageLink={(image_link) => setCharacter({ ...character, image_link })}
-            />
             <TextareaWithCounter 
                 name="intro" 
                 label="Character Intro"
@@ -152,6 +148,11 @@ export default function CharacterEditMain(props: Props) {
                 description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
                 maxLength={_CHARACTER_MAX_LENGTH.image_prompt}
                 maxRows={2} 
+            />
+            <ImageInputWithAI
+                contextFields={[character.image_prompt ?? "", character.name, character.description, character.personality, ]}
+                imageLink={character.image_link}
+                setImageLink={(image_link) => setCharacter({ ...character, image_link })}
             />
             <CategoryAutocomplete
                 setCategory={(category) => setCharacter({ ...character, category })}

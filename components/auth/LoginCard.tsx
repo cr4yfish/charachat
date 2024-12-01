@@ -158,6 +158,8 @@ export default function LoginCard(props: Props) {
                         />
                         <ImageInputWithAI 
                             setImageLink={setAvatarLink}
+                            imageLink={avatarLink}
+                            contextFields={[firstName, lastName, bio]}
                             disableAI
                         />
                         <TextareaWithCounter 

@@ -134,7 +134,8 @@ export default function PersonaEdit(props: Props) {
             />
 
             <ImageInputWithAI
-                persona={persona}
+                contextFields={[persona.full_name, persona.bio ?? ""]}
+                imageLink={persona.avatar_link}
                 setImageLink={(value) => updateValue("avatar_link", value)}
             />
 

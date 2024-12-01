@@ -2,41 +2,42 @@ import { generateImage } from "@/functions/ai/image";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { decryptMessage } from "@/lib/crypto";
-import { Character, Persona, Story } from "@/types/db";
 
 type RequestBody = {
-    character?: Character | undefined;
-    story?: Story | undefined;
-    persona?: Persona | undefined;
+    contextFields: string[],
 }
 
 export async function POST(req: Request) {
-    const { character, story, persona } = (await req.json()) as RequestBody;
+    const { contextFields } = (await req.json()) as RequestBody;
 
     try {
         const profile = await getCurrentUser();
 
+        const key = await getKeyServerSide();
+        const keyBuffer = Buffer.from(key, "hex");
         let hfToken: string | undefined, replicateToken: string | undefined;
 
         if(profile.hf_encrypted_api_key) {
-            // decrypt the api key
-            const key = await getKeyServerSide();
-            hfToken = decryptMessage(profile.hf_encrypted_api_key, Buffer.from(key, "hex"));
-        } else if(profile.replicate_encrypted_api_key) {
-            const key = await getKeyServerSide();
-            replicateToken = decryptMessage(profile.replicate_encrypted_api_key, Buffer.from(key, "hex"));
+            hfToken = decryptMessage(profile.hf_encrypted_api_key, keyBuffer);
+        } 
+
+        if(profile.replicate_encrypted_api_key) {
+            replicateToken = decryptMessage(profile.replicate_encrypted_api_key, keyBuffer);
+        } 
+
+        if(!hfToken && !replicateToken) {
+            return new Response("No API keys found", { status: 400 });
         }
 
-        const title = character?.name || story?.title || persona?.full_name || profile?.username;
-        const description = character?.description || story?.description || persona?.bio || profile.bio;
+        let input = "";
 
-        if(!title || !description) {
-            throw new Error("Missing required fields");
-        }
+        contextFields.forEach((field) => {
+            input += field.slice(0, 100) + " ";
+        });
 
         const link = await generateImage({
             hfToken, replicateToken,
-            inputs: `${title} ${description}`,
+            inputs: input
         })
 
         return new Response(JSON.stringify({ link: link }), { status: 200 });
