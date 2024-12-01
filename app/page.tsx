@@ -22,7 +22,7 @@ export default async function Home() {
 
   const defaultLoad: LoadMoreProps = {
     cursor: 0,
-    limit: 5,
+    limit: 15,
   }
 
   let characters: Character[] = [];
@@ -105,6 +105,7 @@ export default async function Home() {
           <InfiniteSwiperLoader 
             loadMore={getPopularCharacters} 
             limit={5} 
+            rows={3}
             initialData={popularCharacters} 
             component={CharacterCard}
             componentProps={{
@@ -121,6 +122,7 @@ export default async function Home() {
           <InfiniteSwiperLoader 
             loadMore={getStories}
             limit={5}
+            rows={2}
             initialData={stories}
             component={StoryCard}
             componentProps={{
@@ -137,6 +139,7 @@ export default async function Home() {
           <InfiniteSwiperLoader 
             loadMore={getCharacters} 
             limit={5} 
+            rows={3}
             initialData={characters} 
             component={CharacterCard}
             componentProps={{

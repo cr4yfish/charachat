@@ -9,8 +9,8 @@ import { getCategories } from "@/functions/db/categories";
 import { useCurrentCategory } from "@/context/CurrentCategoryProvider";
 import CategoryCardWithContext from "./character/CategoryCardWithContext";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
-import { Spinner } from "@nextui-org/spinner";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "./ui/skeleton";
 
 type Props = {
     categories: Category[]
@@ -121,7 +121,7 @@ export default function CategoryScroller(props: Props) {
                     {characters.map((char, index) => (
                         <CharacterCard key={index} data={char} hasLink />
                     ))}
-                    {isLoading && <Spinner />}
+                    {isLoading && (Array.from({ length: 15 }, (_, index) => index).map((_, index) => <Skeleton key={index} className='h-[150px] w-[310px] relative rounded-xl' />) )}
                     {characters.length == 0 && !isLoading &&
                         <div>
                             <p>No characters found in this category</p>

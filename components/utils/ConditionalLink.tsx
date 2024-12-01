@@ -5,7 +5,7 @@ export default function ConditionalLink({ children, href, active, target } : { c
     if(active) {
         return (
             <Link
-                className="w-full"
+                className="w-fit"
                 href={href}
                 target={target}
             >
