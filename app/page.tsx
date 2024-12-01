@@ -17,6 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Button } from "@/components/utils/Button";
 import { LoadMoreProps } from "@/types/client";
+import { safeParseLink } from "@/lib/utils";
 
 export default async function Home() {
 
@@ -59,7 +60,7 @@ export default async function Home() {
 
         <Searchbar />
 
-        <Spotlight character={characters[0]} />
+        <Spotlight character={characters.find((c) => safeParseLink(c.image_link) !== "")!} />
 
           <ScrollShadow orientation={"horizontal"} className="w-full overflow-y-auto pb-3">
             <div className="flex flex-row items-center gap-4 w-fit">
