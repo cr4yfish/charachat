@@ -85,12 +85,17 @@ const chatFormatter = async (db: any): Promise<Chat> => {
         }
     } as Chat;
 
+    if(chat.story) {
+        chat.story.character = chat.character;
+    }
+
     const decryptedChat = await decryptChat(chat, key);
 
     if(decryptedChat.character.is_private) {
         try {
             const key = await getKeyServerSide();
             decryptedChat.character = await decryptCharacter(decryptedChat.character, key);
+            decryptedChat.story?.character && (decryptedChat.story.character = await decryptCharacter(decryptedChat.story.character, key));
         } catch (error) {
             console.error("Error decrypting character", error);
             return decryptedChat;
