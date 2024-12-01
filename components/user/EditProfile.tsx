@@ -179,20 +179,6 @@ export default function EditProfile(props: Props) {
                 <h3>Configure AIs</h3>
                 <p className="text-sm dark:text-zinc-400">All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to select any AI for which you provide an API key in chats - in addition to free models.</p>
             </div>
-            <Card>
-                <CardHeader>
-                    <CardDescription>Configure your Ollama API LLMs</CardDescription>
-                    <CardTitle>Ollama type LLM</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                    <Input label="Base URL" description="Your API Link" 
-                        value={profile.ollama_base_url} onValueChange={(value) => handleUpdateValue("ollama_base_url", value)}
-                    />
-                    <Input label="API Key" description="You API Key" type="text" 
-                        value={profile.ollama_encrypted_api_key} onValueChange={(value) => handleUpdateValue("ollama_encrypted_api_key", value)}
-                    />
-                </CardContent>
-            </Card>
 
             <Card>
                 <CardHeader>
@@ -248,9 +234,30 @@ export default function EditProfile(props: Props) {
                 </CardContent>
             </Card>
 
+            <div className="prose dark:prose-invert">
+                <h3>Self hosted AI</h3>
+                <p className="text-sm dark:text-zinc-400">If you have a self hosted version of an AI, you can configure it here. For example, you can host <a href="https://ollama.com/" target="_blank" className="text-blue-500 underline">Ollama</a> yourself.
+                </p>
+            </div>
+            
             <Card>
                 <CardHeader>
-                    <CardDescription>Select which model to use for writing help (e.g. creating stories)</CardDescription>
+                    <CardDescription>Configure your self hosted Ollama</CardDescription>
+                    <CardTitle>Ollama API compatible LLMs</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                    <Input label="URL" description="Where you host Ollama. Most likely http://localhost:somePort" 
+                        value={profile.ollama_base_url} onValueChange={(value) => handleUpdateValue("ollama_base_url", value)}
+                    />
+                    <Input label="API Key" description="You API Key. Leave empty of your self host doesn't need it." type="text" 
+                        value={profile.ollama_encrypted_api_key} onValueChange={(value) => handleUpdateValue("ollama_encrypted_api_key", value)}
+                    />
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardDescription>Select which model to use for writing help (e.g. generating descriptions, summarizing text)</CardDescription>
                     <CardTitle>Choose Author Model</CardTitle>
                 </CardHeader>
                 <CardContent>
