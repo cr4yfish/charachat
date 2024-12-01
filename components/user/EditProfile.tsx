@@ -17,6 +17,7 @@ import { decryptMessage, encryptMessage } from "@/lib/crypto";
 import { LLMsWithAPIKeys } from "@/lib/ai";
 import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
+import { Separator } from "../ui/separator";
 
 type Props = {
     profile: Profile
@@ -174,6 +175,25 @@ export default function EditProfile(props: Props) {
                 profile={profile}
                 setImageLink={(value) => handleUpdateValue('avatar_link', value)}
             />
+
+            <div className="w-fit max-md:w-full">
+                <Button
+                    size="lg" color="primary"
+                    fullWidth
+                    startContent={<Icon filled>save</Icon>}
+                    onClick={handleUpdate}
+                    isLoading={isSaving}
+                    isDisabled={isDeleting}
+                >
+                    Save
+                </Button>
+            </div>
+            
+            <Separator className="mt-4" />
+
+            <div className="prose dark:prose-invert prose-h2:text-3xl">
+                <h2>Settings</h2>
+            </div>
 
             <div className="prose dark:prose-invert">
                 <h3>Configure AIs</h3>
