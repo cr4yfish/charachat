@@ -31,19 +31,17 @@ export default function Navbar(props: Props) {
             </div>
 
             <LoginButton isLoggedIn={props.profile !== undefined} isSmall />
-            
+
+            {props.profile !== undefined &&
             <div className="flex items-center gap-2">
-                { props.profile !== undefined &&
-                    <>
-                    <FeedbackButton source={pathname} />
-                    <Link href={`/c/new`}>
-                        <Button radius="full" color="primary" startContent={<Icon filled>add</Icon>}>
-                            Character
-                        </Button>
-                    </Link>
-                    </>
-                }
+                <FeedbackButton source={pathname} />
+                <Link href={`/c/new`}>
+                    <Button radius="full" color="primary" startContent={<Icon filled>add</Icon>}>
+                        Character
+                    </Button>
+                </Link>
             </div>
+            }
         </div>
 
         <Spacer y={12} />
