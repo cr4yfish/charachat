@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardBody } from "@nextui-org/card";
-import { motion } from "motion/react"
 import { usePathname } from "next/navigation";
 
 import { Chat } from "@/types/db";
@@ -52,14 +51,9 @@ export default function ChatCardSmall(props: Props) {
                         </div>
                         
                         
-                        <motion.p 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className={`single-line text-sm ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`}
-                        >
-                            {truncateText(props.data.last_message ?? "", 20)}
-                        </motion.p>
+                        <p className={`single-line text-sm ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
+                            {truncateText(props.data.last_message ?? "", 15)}
+                        </p>
                         
                     </div>
 
