@@ -20,7 +20,7 @@ export default function FeedbackButton(props: Props) {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        if(isLoading) return;
+        if(isLoading || feedback.length == 0) return;
 
         setIsLoading(true);
         setIsError(false);
