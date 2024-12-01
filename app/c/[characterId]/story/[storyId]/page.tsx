@@ -11,6 +11,7 @@ import { Profile } from "@/types/db";
 import Icon from "@/components/utils/Icon";
 
 import { Metadata } from "next";
+import { safeParseLink } from "@/lib/utils";
 
 
 export async function generateMetadata(
@@ -55,11 +56,11 @@ export default async function Story({ params: { storyId, characterId } }: { para
         <div className="flex flex-col gap-2 relative px-4 py-6 pb-32">
 
             <div className="absolute -z-10 left-0 -top-12 w-full h-[66vh]">
-                <Image src={story.image_link} layout="fill" className="object-cover" alt={story.title} />
+                <Image src={safeParseLink(story.image_link)} layout="fill" className="object-cover" alt={story.title} />
             </div>
             
             <div className="absolute -z-20 left-0 w-full h-full blur-3xl opacity-50">
-                <Image src={story.image_link} layout="fill" className="object-cover" alt={story.title} />
+                <Image src={safeParseLink(story.image_link)} layout="fill" className="object-cover" alt={story.title} />
             </div>
 
             <div className="flex flex-col gap-2 pt-[45vh]">

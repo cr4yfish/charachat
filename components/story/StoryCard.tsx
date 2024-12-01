@@ -5,7 +5,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react";
 import { Story } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
-import { truncateText } from "@/lib/utils";
+import { safeParseLink, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
 
 type Props = {
@@ -41,7 +41,7 @@ export default function StoryCard(props: Props) {
 
                         <div className="flex items-center justify-center">
                             <div className="relative h-[100%] w-[70px] overflow-hidden rounded-2xl">
-                                <Image className="relative object-cover" layout="fill" src={props.data.image_link ?? ""} alt={props.data.title} />
+                                <Image className="relative object-cover" layout="fill" src={safeParseLink(props.data.image_link)} alt={props.data.title} />
                             </div>
                             
                         </div>

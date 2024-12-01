@@ -11,7 +11,7 @@ import { addMessage } from "@/functions/db/messages";
 import { Chat, Profile, Message } from "@/types/db";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/utils/Button";
-import { isValidURL } from "@/lib/utils";
+import { isValidURL, safeParseLink } from "@/lib/utils";
 
 type Props = {
     toolInvocation: ToolInvocation,
@@ -143,7 +143,7 @@ export default function GenerateImageTool(props: Props) {
         return (
             <div key={props.toolInvocation.toolCallId} className="w-full h-full">
                 <div className="flex flex-col items-center gap-2">
-                    <Image src={props.toolInvocation.result} alt="" width={200} height={200} className=" rounded-xl" />
+                    <Image src={safeParseLink(props.toolInvocation.result)} alt="" width={200} height={200} className=" rounded-xl" />
                     {videoLink && <video src={videoLink} controls className="rounded-xl" width={200} />}
                     <div className="flex flex-col gap-2">
                         <p className="dark:text-zinc-400 text-xs max-w-xs">{props.toolInvocation.args.text}</p>

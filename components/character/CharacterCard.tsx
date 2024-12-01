@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Card, CardBody } from "@nextui-org/card";
 import { Character } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
-import { truncateText } from "@/lib/utils";
+import { safeParseLink, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
 import Markdown from "react-markdown";
 
@@ -40,7 +40,7 @@ export default function CharacterCard(props: Props) {
                         
                         <div className="flex items-center justify-center">
                             <div className="relative h-[100%] w-[100px] overflow-hidden rounded-2xl">
-                                <Image className="relative object-cover" layout="fill" src={props.data?.image_link ?? ""} alt={props.data.name} />
+                                <Image className="relative object-cover" layout="fill" src={safeParseLink(props.data.image_link)} alt={props.data.name} />
                             </div>
                         </div>
 

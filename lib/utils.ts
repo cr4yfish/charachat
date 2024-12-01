@@ -86,4 +86,11 @@ export function isValidURL(string: string) {
   } 
 }
 
+export function safeParseLink(link: string | undefined): string {
+  if(link && isValidURL(link) && link.includes("https://")) {
+    return link;
+  }
+  return "";
+}
+
 export const _INTRO_MESSAGE = "Introduce yourself and if there is a story: Recap the story in your message.";
