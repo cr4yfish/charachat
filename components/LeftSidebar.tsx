@@ -10,24 +10,22 @@ import {
     SidebarHeader,
     SidebarMenu,
   } from "@/components/ui/sidebar"
-import { getChats } from "@/functions/db/chat";
-import ChatCardSmall from "./chat/ChatCardSmall";
 import ProfileCard from "./user/ProfileCard";
 import { getCurrentUser } from "@/functions/db/auth";
-import { Chat, Profile } from "@/types/db";
+import { Profile } from "@/types/db";
 
 import SidebarLink from "./SidebarLink";
 import Logo from "./Logo";
 import Link from "next/link";
-import InfiniteListLoader from "./InfiniteListLoader";
 import LoginButton from "./auth/LoginButton";
+import SidebarChatListLoader from "./sidebar/SidebarChatListLoader";
+import { Suspense } from "react";
+import SidebarChatListFallback from "./sidebar/SidebarChatListFallback";
 
 
 export async function LeftSidebar() {
-  let chats: Chat[] = [];
   let profile: Profile | undefined = undefined;
   try {
-    chats = await getChats({ cursor: 0, limit: 15 });
     profile = await getCurrentUser();
   } catch (e) {
     const err = e as Error;
@@ -67,13 +65,9 @@ export async function LeftSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">Chats</SidebarGroupLabel>
           <SidebarGroupContent>
-            <InfiniteListLoader 
-              initialData={chats}
-              loadMore={getChats}
-              limit={5}
-              component={ChatCardSmall}
-              componentProps={{hasLink: true}}
-            />
+            <Suspense fallback={<SidebarChatListFallback />}>
+              <SidebarChatListLoader />
+            </Suspense>
           </SidebarGroupContent>
         </SidebarGroup>
         }
