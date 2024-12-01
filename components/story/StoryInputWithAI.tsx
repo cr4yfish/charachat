@@ -43,7 +43,8 @@ export default function StoryInputWithAI(props: Props) {
         body: {
             profile: props.profile,
             character: props.character,
-            story: props.story
+            story: props.story,
+            field: props.name
         },
         onFinish: (message) => {
             props.setValue(message.content);

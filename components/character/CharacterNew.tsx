@@ -107,7 +107,7 @@ export default function CharacterNew(props: Props) {
                 character={newCharacter}
                 profile={props.profile}
                 buttonLabel="Generate Description"
-                api="/api/author/character/description"
+                api="/api/author/character"
             />
             <StoryInputWithAI 
                 name="personality"
@@ -121,7 +121,7 @@ export default function CharacterNew(props: Props) {
                 character={newCharacter}
                 profile={props.profile}
                 buttonLabel="Generate Personality"
-                api="/api/author/character/personality"
+                api="/api/author/character"
             />
             <StoryInputWithAI 
                 name="bio" 
@@ -133,19 +133,15 @@ export default function CharacterNew(props: Props) {
                 initValue={newCharacter.bio}
                 profile={props.profile}
                 buttonLabel="Generate Bio"
-                api="/api/author/character/bio"
+                api="/api/author/character"
                 character={newCharacter}
                 setValue={(value) => updateValue("bio", value)}
-            />
-            <ImageInputWithAI
-                character={newCharacter} 
-                setImageLink={(link) => updateValue("image_link", link)} 
             />
             <StoryInputWithAI 
                 name="intro" 
                 label="Character Intro"
                 buttonLabel="Generate Intro"
-                api="/api/author/character/intro"
+                api="/api/author/character"
                 profile={props.profile}
                 isRequired
                 placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
@@ -164,34 +160,52 @@ export default function CharacterNew(props: Props) {
                 maxLength={_CHARACTER_MAX_LENGTH.book} 
                 isRequired
                 buttonLabel="Generate Book"
-                api="/api/author/character/book"
+                api="/api/author/character"
                 profile={props.profile}
                 character={newCharacter}
             />
-            <TextareaWithCounter
+            <StoryInputWithAI
                 name="first_message"
-                value={newCharacter.first_message}
-                onValueChange={(value) => updateValue("first_message", value)}
+                initValue={newCharacter.first_message}
+                setValue={(value) => updateValue("first_message", value)}
                 label="First Message"
                 description="The first message the character sends when the user starts the conversation (will be overriden by Story->First Message if in a Story) "
                 maxLength={_CHARACTER_MAX_LENGTH.first_message}
+                api="/api/author/character"
+                profile={props.profile}
+                character={newCharacter}
+                buttonLabel="Generate First Message"
             />
-            <TextareaWithCounter 
+            <StoryInputWithAI 
                 name="system_prompt" 
-                value={newCharacter.system_prompt}
-                onValueChange={(value) => updateValue("system_prompt", value )}
+                initValue={newCharacter.system_prompt}
+                setValue={(value) => updateValue("system_prompt", value )}
                 label="System Prompt addition"
                 description="Gets injected into the system prompt. Useful to set a chat-style." 
                 maxLength={_CHARACTER_MAX_LENGTH.system_prompt} 
+                buttonLabel="Generate System Prompt"
+                api="/api/author/character"
+                profile={props.profile}
+                character={newCharacter}
             />
-            <TextareaWithCounter 
+            <StoryInputWithAI 
                 name="image_prompt" 
-                value={newCharacter.image_prompt}
-                onValueChange={(value) => updateValue("image_prompt", value )}
+                initValue={newCharacter.image_prompt}
+                setValue={(value) => updateValue("image_prompt", value )}
                 label="Image Prompt addition"
                 description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
                 maxLength={_CHARACTER_MAX_LENGTH.image_prompt}
                 maxRows={2} 
+                buttonLabel="Generate Image Prompt"
+                api="/api/author/character"
+                profile={props.profile}
+                character={newCharacter}
+            />
+
+            <ImageInputWithAI
+                contextFields={[newCharacter.image_prompt ?? "", newCharacter.name, newCharacter.description, newCharacter.personality]} 
+                imageLink={newCharacter.image_link}
+                setImageLink={(link) => updateValue("image_link", link)} 
             />
 
             <CategoryAutocomplete 

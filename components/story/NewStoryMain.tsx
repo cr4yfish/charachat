@@ -13,6 +13,7 @@ import Icon from "../utils/Icon";
 import ImageInputWithAI from "../ImageInputWithAI";
 import StoryCard from "./StoryCard";
 import { Switch } from "@nextui-org/switch";
+import { _STORY_MAX_LENGHT } from "@/lib/maxLength";
 
 
 type Props = {
@@ -136,10 +137,10 @@ export default function NewStoryMain(props: Props) {
                 name="title"
                 placeholder="The Great Adventure of the cat"
                 description="Name of the Story" 
-                maxLength={50}
+                maxLength={_STORY_MAX_LENGHT.title}
                 isRequired
                 buttonLabel="Generate Title"
-                api="/api/author/story/title"
+                api="/api/author/story"
                 maxRows={1}
                 minRows={1}
                 isInvalid={errorMessages?.title !== undefined}
@@ -156,10 +157,10 @@ export default function NewStoryMain(props: Props) {
                 name="description"
                 placeholder="The cat is on a journey to find the lost treasure"
                 description="Short Description of the Story. Will be used as a summary."
-                maxLength={350}
+                maxLength={_STORY_MAX_LENGHT.description}
                 isRequired
                 buttonLabel="Generate Description"
-                api="/api/author/story/description"
+                api="/api/author/story"
                 isInvalid={errorMessages?.description !== undefined}
                 errorMessage={errorMessages?.description}
             />
@@ -173,10 +174,10 @@ export default function NewStoryMain(props: Props) {
                 label="Story"
                 name="story"
                 description="The Story itself. Write in Natural Language. Is used as a backstory."
-                maxLength={10000}
+                maxLength={_STORY_MAX_LENGHT.story}
                 isRequired
                 buttonLabel="Generate Story"
-                api="/api/author/story/story"
+                api="/api/author/story"
                 isInvalid={errorMessages?.story !== undefined}
                 errorMessage={errorMessages?.story}
             />
@@ -190,16 +191,17 @@ export default function NewStoryMain(props: Props) {
                 label="First Message"
                 name="first_message"
                 description="The first message in the Story Chat, like a kick-off."
-                maxLength={5000}
+                maxLength={_STORY_MAX_LENGHT.first_message}
                 isRequired
                 buttonLabel="Generate First Message"
-                api="/api/author/story/first_message"
+                api="/api/author/story"
                 isInvalid={errorMessages?.first_message !== undefined}
                 errorMessage={errorMessages?.first_message}
             />
 
             <ImageInputWithAI
-                story={story}
+                contextFields={[story.title, story.description, story.story, story.first_message]}
+                imageLink={story.image_link}
                 setImageLink={(value) => updateValue("image_link", value)}
             />
 
