@@ -38,23 +38,20 @@ export default function ChatCardSmall(props: Props) {
             >
                 <CardBody className="flex flex-row gap-2 items-center justify-start">
 
-                    <Avatar src={props.data.character.image_link} size="md" className="h-[40px] w-[50px]" />
+                    <Avatar src={props.data.character.image_link} className="w-[50px]" />
 
                     <div className="flex flex-col w-full">
-                        <div className="flex flex-row items-center justify-between w-full">
-                            <h3 className="text-md">{props.data.character.name}</h3>
+                        <h3 className="text-sm">{props.data.character.name}</h3>
+                        <div className="flex justify-between items-center">
+                            <p className={`single-line text-xs ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
+                                {truncateText(props.data.last_message ?? "", 10)}
+                            </p>
                             {props.data.last_message_at && 
-                                <span className={`text-xs  ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
-                                    {formatLastMessageTime(new Date(props.data.last_message_at))}
-                                </span>
+                            <span className={`text-xs  ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
+                                {formatLastMessageTime(new Date(props.data.last_message_at))}
+                            </span>
                             }
                         </div>
-                        
-                        
-                        <p className={`single-line text-sm ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
-                            {truncateText(props.data.last_message ?? "", 15)}
-                        </p>
-                        
                     </div>
 
                 </CardBody>
