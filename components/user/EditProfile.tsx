@@ -243,7 +243,7 @@ export default function EditProfile(props: Props) {
                         value={profile.hf_encrypted_api_key} onValueChange={(value) => handleUpdateValue("hf_encrypted_api_key", value)}
                     />
                     <Input 
-                        label="Replicate API Key (fast AI Image)" type="text" 
+                        label="Replicate API Key (Image&Audio)" type="text" 
                         description={<KeyInputDescription url="https://replicate.com/account/api-tokens" />}
                         value={profile.replicate_encrypted_api_key} onValueChange={(value) => handleUpdateValue("replicate_encrypted_api_key", value)}
                     />
