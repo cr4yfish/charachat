@@ -11,7 +11,7 @@ import PersonaCard from "@/components/persona/PersonaCard";
 
 export default async function UserCharacters() {
 
-    const personas = await getUserPersonas({ cursor: 0, limit: 5 });
+    const personas = await getUserPersonas({ cursor: 0, limit: 25 });
 
     return (
         <>

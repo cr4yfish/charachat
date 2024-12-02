@@ -1,14 +1,15 @@
 "use server";
 
 import ChatCard from "@/components/chat/ChatCard";
+import ChatCardSmallSkeleton from "@/components/chat/ChatCardSmallSkeleton";
 import InfiniteListLoader from "@/components/InfiniteListLoader";
 import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
-import { getChats } from "@/functions/db/chat";
+import { getChats } from "@/functions/db/chatList";
 
 export default async function UserChats({ params: {  } } : { params: { userId: string } }) {
 
-    const chats = await getChats({ cursor: 0, limit: 5 });
+    const chats = await getChats({ cursor: 0, limit: 25 });
 
     return (
         <>
@@ -27,6 +28,7 @@ export default async function UserChats({ params: {  } } : { params: { userId: s
                     loadMore={getChats}
                     limit={5}
                     component={ChatCard}
+                    skeleton={<ChatCardSmallSkeleton />}
                     componentProps={{ hasLink: true }}
                 />
             </div>
