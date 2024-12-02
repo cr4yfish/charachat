@@ -21,7 +21,7 @@ export default function PersonaCard(props: Props) {
 
     return (
         <>
-        <ConditionalLink active={props.hasLink} href={`/persona/${props.data.id}`}>
+        <ConditionalLink active={props.hasLink} href={`/persona/${props.data.id}`} fullWidth={props.fullWidth}>
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
