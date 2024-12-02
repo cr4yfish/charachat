@@ -30,6 +30,8 @@ import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
 import Icon from "../utils/Icon";
 import { deleteMessage, updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
+import { Button } from "../utils/Button";
+import { generateAudioTool } from "@/functions/ai/tools";
   
 
 type Props = {
@@ -61,6 +63,10 @@ export default function Messagebubble(props: Props) {
     const [isRegenerating, setIsRegenerating] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const [audioLink, setAudioLink] = useState<string | null>(null);
 
     /* TODO Fix blurrer
     useEffect(() => {
@@ -166,6 +172,48 @@ export default function Messagebubble(props: Props) {
         }, 500);
     }
 
+    const handleGenerateAudio = async () => {
+        if(!props.chat || !props.user) { 
+            throw new Error("No chat or user found. Refresh will probably fix this."); 
+        }
+        setIsLoadingAudio(true);
+        const link = await generateAudioTool({
+            chat: props.chat,
+            profile: props.user,
+            prompt: props.message.content,
+        })
+
+        setAudioLink(link);
+        setIsLoadingAudio(false);
+        return link;
+    }
+
+    const handlePlayAudio = async () => {
+        try {
+            let link = audioLink;
+            if(!link) {
+                link = await handleGenerateAudio();
+            };
+    
+            setIsAudioPlaying(true);
+            const audio = new Audio(link);
+            audio.autoplay = true;
+            audio.play();
+    
+            audio.addEventListener("ended", () => {
+                setIsAudioPlaying(false);
+            })
+        } catch (error) {
+            console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Failed to play audio",
+                description: err.message,
+                variant: "destructive",
+            })
+        }
+    }
+
     return (
         <>
         <div className={`w-fit ${props.message.role === "user" ? "ml-auto" : "mr-auto"}`}>
@@ -247,6 +295,11 @@ export default function Messagebubble(props: Props) {
                                 </p>
                             </CardFooter>
                         </Card>
+                        {props.message.role === "assistant" && 
+                            <Button isLoading={isLoadingAudio || isAudioPlaying} onClick={handlePlayAudio} variant="light" isIconOnly className="mt-1">
+                                <Icon filled>play_arrow</Icon>
+                            </Button>
+                        }
                     </motion.div>
                 </ContextMenuTrigger>
 

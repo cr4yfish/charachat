@@ -47,6 +47,7 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             system_prompt: db.character_system_prompt,
             image_prompt: db.character_image_prompt,
             first_message: db.character_first_message,
+            speaker_link: db.character_speaker_link,
             owner: {
                 user: db.character_owner,
                 username: db.character_owner_username,
@@ -95,7 +96,9 @@ const chatFormatter = async (db: any): Promise<Chat> => {
         try {
             const key = await getKeyServerSide();
             decryptedChat.character = await decryptCharacter(decryptedChat.character, key);
-            decryptedChat.story?.character && (decryptedChat.story.character = await decryptCharacter(decryptedChat.story.character, key));
+            if(decryptedChat.story?.character) {
+                decryptedChat.story.character = await decryptCharacter(decryptedChat.story.character, key)
+            }
         } catch (error) {
             console.error("Error decrypting character", error);
             return decryptedChat;

@@ -7,6 +7,7 @@ import { getCurrentUser } from '../db/auth';
 import { getKeyServerSide } from '../serverHelpers';
 import { decryptMessage } from '@/lib/crypto';
 import { generateImage, generateImageOfCharacter } from './image';
+import { generateAudio } from './audio';
 
 type AddMemoryProps = {
     chat: Chat,
@@ -133,6 +134,37 @@ export const generateImageOfCharacterTool = async (props: GenerateImageToolProps
         // fallback to normal image
         console.error("generateImageOfCharacter error. Fallback to normal. Error:",error);
         return generateImageTool(props);
+    }
+}
+
+type GenerateAudioToolProps = {
+    chat: Chat,
+    profile: Profile,
+    prompt: string,
+}
+
+export const generateAudioTool = async (props: GenerateAudioToolProps) => {
+    try {
+        let replicateApiKey = props.profile.replicate_encrypted_api_key;
+
+        if(!replicateApiKey) {
+            throw Error("Replicate API keys are not available. Please add them to your profile to use this tool.")
+        }
+
+        replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(await getKeyServerSide(), 'hex'));
+
+        const defaultSpeaker = "https://replicate.delivery/pbxt/JqzxMWScZ4O44XwIwWveDoeAE2Ga7gYdnXKb8l18Fv7D3QEx/female.wav"
+
+        return await generateAudio({
+            text: props.prompt,
+            language: "en",
+            speaker: props.chat.character.speaker_link || defaultSpeaker,
+            replicateToken: replicateApiKey
+        })
+    } catch (error) {
+        console.error(error);
+        const err = error as Error;
+        return err.message;
     }
 }
 

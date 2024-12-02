@@ -16,6 +16,7 @@ import { getKeyClientSide } from "@/lib/crypto";
 import { encryptCharacter } from "@/functions/db/character";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
+import { Input } from "@nextui-org/input";
 
 type Props = {
     initCharacter: Character;
@@ -201,7 +202,12 @@ export default function CharacterNew(props: Props) {
                 profile={props.profile}
                 character={newCharacter}
             />
-
+            <Input 
+                label="Speaker link" 
+                description="Link to a .wav that's at least 6 seconds long as reference for voice cloning." 
+                value={newCharacter.speaker_link}
+                onValueChange={(value) => updateValue("speaker_link", value)}
+            />
             <ImageInputWithAI
                 contextFields={[newCharacter.image_prompt ?? "", newCharacter.name, newCharacter.description, newCharacter.personality]} 
                 imageLink={newCharacter.image_link}

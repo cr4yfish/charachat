@@ -26,6 +26,7 @@ export type Character = {
     system_prompt?: string;
     image_prompt?: string;
     first_message?: string;
+    speaker_link?: string;
 }
 
 export type Chat = {

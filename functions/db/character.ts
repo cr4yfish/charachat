@@ -80,6 +80,7 @@ export const decryptCharacter = async (character: Character, key: string): Promi
             system_prompt: decryptMessage(character.system_prompt ?? "", buffer),
             image_prompt: decryptMessage(character.image_prompt ?? "", buffer),
             first_message: decryptMessage(character.first_message ?? "", buffer),
+            speaker_link: decryptMessage(character.speaker_link ?? "", buffer),
         }
     } catch (error) {
         console.error("Error decrypting character", error);
@@ -103,6 +104,7 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         system_prompt: encryptMessage(character.system_prompt ?? "", buffer),
         image_prompt: encryptMessage(character.image_prompt ?? "", buffer),
         first_message: encryptMessage(character.first_message ?? "", buffer),
+        speaker_link: encryptMessage(character.speaker_link ?? "", buffer),
     }
 }
 

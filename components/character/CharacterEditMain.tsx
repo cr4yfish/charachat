@@ -14,6 +14,7 @@ import Icon from "../utils/Icon";
 import ImageInputWithAI from "../ImageInputWithAI";
 import CharacterCard from "./CharacterCard";
 import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
+import { Input } from "@nextui-org/input";
 
 type Props = {
     character: Character
@@ -148,6 +149,13 @@ export default function CharacterEditMain(props: Props) {
                 description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
                 maxLength={_CHARACTER_MAX_LENGTH.image_prompt}
                 maxRows={2} 
+            />
+            <Input 
+                label="Speaker link" 
+                description="Link to a .wav that's at least 6 seconds long as reference for voice cloning." 
+                placeholder="https://example.com/speaker.wav"
+                value={character.speaker_link}
+                onValueChange={(value) => setCharacter({ ...character, speaker_link: value })}
             />
             <ImageInputWithAI
                 contextFields={[character.image_prompt ?? "", character.name, character.description, character.personality, ]}
