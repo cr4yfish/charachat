@@ -20,7 +20,7 @@ export default function CharacterNewMain(props: Props) {
     // 1 - Import
     // 2 - Main
     const [step, setStep] = useState(0);
-    const [initCharacter, setInitCharacter] = useState<Character>({} as Character);
+    const [initCharacter, setInitCharacter] = useState<Character>({ owner: props.profile } as Character);
     
 
     const setImportedCharacter = (character: Character) => {
