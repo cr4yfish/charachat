@@ -41,7 +41,7 @@ export default function ChatCardSmall(props: Props) {
                     <Avatar src={props.data.character.image_link} className="w-[50px]" />
 
                     <div className="flex flex-col w-full">
-                        <h3 className="text-sm">{props.data.character.name}</h3>
+                        <h3 className="text-sm dark:text-zinc-300">{props.data.character.name}</h3>
                         <div className="flex justify-between items-center">
                             <p className={`single-line text-xs ${isActive ? "dark:text-blue-200" : "dark:text-slate-400"}`} >
                                 {truncateText(props.data.last_message ?? "", 10)}
