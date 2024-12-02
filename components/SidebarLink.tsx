@@ -6,7 +6,6 @@ import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
 import React, { useEffect } from "react";
 import { Spinner } from "@nextui-org/spinner";
-import { SidebarMenuItem } from "./ui/sidebar";
 
 type SidebarLinkProps = {
     link: string;
