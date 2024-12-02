@@ -14,7 +14,7 @@ export default async function UserStories({ params: {  } } : { params: { userId:
             <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-col items-start gap-2">
                     <h1 className="text-4xl font-bold">Your Stories</h1>
-                    <p>You can add new ones on Character pages</p>
+                    <p>You can create new Stories on Character Pages.</p>
                 </div>
 
             </div>
