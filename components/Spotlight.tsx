@@ -34,7 +34,15 @@ export default async function Spotlight(props: Props) {
             </Card>
 
             <div className="absolute -z-20 scale-[150%] scale-x-[100%] top-0 left-0 w-full h-full blur-2xl ">
-                <Image className="object-cover z-50" src={safeParseLink(props.character.image_link)} layout="fill" alt="" />
+                <Image 
+                    className="object-cover z-50" 
+                    src={safeParseLink(props.character.image_link)} 
+                    fill
+                    quality={15}
+                    priority={true}
+                    alt="" 
+                    sizes="100vw"
+                />
             </div>
         
         </div>

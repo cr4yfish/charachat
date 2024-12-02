@@ -41,7 +41,13 @@ export default function StoryCard(props: Props) {
 
                         <div className="flex items-center justify-center">
                             <div className="relative h-[100%] w-[70px] overflow-hidden rounded-2xl">
-                                <Image className="relative object-cover" layout="fill" src={safeParseLink(props.data.image_link)} alt={props.data.title} />
+                                <Image 
+                                    className="relative object-cover" 
+                                    fill
+                                    src={safeParseLink(props.data.image_link)} 
+                                    alt={props.data.title} 
+                                    sizes="70px"
+                                />
                             </div>
                             
                         </div>
