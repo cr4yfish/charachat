@@ -35,16 +35,6 @@ export const getCurrentUser = cache(async (): Promise<Profile> => {
     return profile;
 })
 
-export const getSession = cache(async () => {
-    const { data: session, error } = await createClient().auth.getSession();
-
-    if(error) {
-        throw error;
-    }
-
-    return session;
-})
-
 export type LoginResponse = {
     validationError: boolean,
     databaseError: string | false,

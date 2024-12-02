@@ -107,16 +107,16 @@ export const getPersonas = cache(async (props: LoadMoreProps) => {
 })
 
 export const getUserPersonas = cache(async (props: LoadMoreProps) => {
-    const { data: { session } } = await createClient().auth.getSession();
+    const { data: { user } } = await createClient().auth.getUser();
 
-    if(!session?.user.id) {
+    if(!user?.id) {
         throw new Error("User not authenticated");
     }
 
     const { data, error } = await createClient()
         .from(tableName)
         .select(personaMatcher)
-        .eq("creator", session.user.id)
+        .eq("creator", user.id)
         .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {

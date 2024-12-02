@@ -28,10 +28,10 @@ const characterFormatter = async (db: any): Promise<Character> => {
     let is_liked = false;
 
     // quickly check if user is logged in
-    const { data } = await createClient().auth.getSession();
-    if(data.session?.user.id !== undefined) {
+    const { data: { user } } = await createClient().auth.getUser();
+    if(user?.id !== undefined) {
         // check like status
-        is_liked = await isCharacterLiked(db.id, data.session.user.id);
+        is_liked = await isCharacterLiked(db.id, user.id);
     }
 
     const char = {
@@ -289,9 +289,9 @@ export const isCharacterLiked = cache(async(characterId: string, userId: string)
 })
 
 export const likeCharacter = async(characterId: string): Promise<void> => {
-    const { data } = await createClient().auth.getSession();
+    const { data: { user } } = await createClient().auth.getUser();
 
-    if(data.session?.user.id === undefined) {
+    if(user?.id === undefined) {
         throw new Error("User not found");
     }
 
@@ -299,7 +299,7 @@ export const likeCharacter = async(characterId: string): Promise<void> => {
         .from("character_likes")
         .insert({
             character: characterId,
-            user: data.session.user.id
+            user: user.id
         });
 
     if (error) {
@@ -308,9 +308,9 @@ export const likeCharacter = async(characterId: string): Promise<void> => {
 }
 
 export const unlikeCharacter = async(characterId: string): Promise<void> => {
-    const { data } = await createClient().auth.getSession();
+    const { data: { user } } = await createClient().auth.getUser();
 
-    if(data.session?.user.id === undefined) {
+    if(user?.id === undefined) {
         throw new Error("User not found");
     }
 
@@ -318,7 +318,7 @@ export const unlikeCharacter = async(characterId: string): Promise<void> => {
         .from("character_likes")
         .delete()
         .eq("character", characterId)
-        .eq("user", data.session.user.id);
+        .eq("user", user.id);
 
     if (error) {
         throw error;
