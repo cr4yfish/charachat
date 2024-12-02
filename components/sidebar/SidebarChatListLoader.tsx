@@ -1,6 +1,6 @@
 "use server";
 
-import { getChats } from "@/functions/db/chat";
+import { getChats } from "@/functions/db/chatList";
 import ChatCardSmall from "../chat/ChatCardSmall";
 import InfiniteListLoader from "../InfiniteListLoader";
 import ChatCardSmallSkeleton from "../chat/ChatCardSmallSkeleton";
