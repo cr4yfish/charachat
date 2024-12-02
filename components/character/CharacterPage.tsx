@@ -19,6 +19,7 @@ import Image from "next/image";
 import Markdown from "react-markdown";
 import { likeCharacter, unlikeCharacter } from "@/functions/db/character";
 import { safeParseLink } from "@/lib/utils";
+import { Card, CardBody } from "@nextui-org/card";
 
 type Props = {
     character: Character,
@@ -162,8 +163,22 @@ export default function CharacterPage(props: Props) {
                     <div className="prose dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400">
                         <Markdown>{props.character.description}</Markdown>
                     </div>
-
-                    <CategoryCard data={props.character.category} />
+                    
+                    <div className="flex flex-row items-center gap-2">
+                        <CategoryCard data={props.character.category} />
+                        {props.character.speaker_link &&
+                            <Card 
+                                className={`
+                                    w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full dark:bg-zinc-600/40
+                                    backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium
+                                `}
+                                >
+                                <CardBody className="p-0 w-full min-w-max h-full flex flex-row items-center justify-center">
+                                    Has customized Voice
+                                </CardBody>
+                            </Card>
+                        }
+                    </div>
                 </div>
 
 
