@@ -121,7 +121,7 @@ export default function ImageInputWithAI(props: Props) {
                         onValueChange={handleSetImageLink}
                     />
                 </div>
-                <p className="text-xs dark:text-zinc-400">{`Paste an image link (ending on .jpg/.png) ${!props.disableAI ? ", generate one with AI" : ""} or upload one`}</p>
+                <p className="text-xs dark:text-zinc-400">{`Paste an image link (ending on .jpg/.png) ${!props.disableAI ? ", generate an image with AI" : ""} or upload one from your Phone/PC`}</p>
             </div>
             <div className="flex items-center gap-1 flex-wrap">
                 {!props.disableAI &&
@@ -141,7 +141,7 @@ export default function ImageInputWithAI(props: Props) {
                     color="secondary"
                     startContent={<Icon>cloud_upload</Icon>}
                 >
-                    Upload Image
+                    Upload Image from Device
                 </Button>
                 <input hidden type="file" ref={imageInputRef} onChange={handleImageUpload} />
             </div>
