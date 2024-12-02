@@ -1,5 +1,3 @@
-"use server";
-
 import { Skeleton } from "../ui/skeleton";
 
 export default async function ChatCardSmallSkeleton() {

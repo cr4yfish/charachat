@@ -3,7 +3,6 @@
 
 import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import { ScrollArea } from "./ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { Spinner } from "@nextui-org/spinner";
 import { LoadMoreProps } from "@/types/client";
@@ -16,7 +15,7 @@ interface Props {
     component: React.FC<any>;
     scrollerProps?: React.ComponentPropsWithoutRef<typeof InfiniteScroll>
     componentProps?: any;
-    skeleton?: React.FC<any>;
+    skeleton?: any
 }
 
 
@@ -52,20 +51,20 @@ export default function InfiniteListLoader(props: Props) {
     }
 
     return (
-        <>
-        <ScrollArea className="w-full h-full overflow-y-auto" >
+        <div className="h-full overflow-y-scroll">
             <InfiniteScroll
+                className="overflow-hidden h-fit"
+                useWindow={false}
                 pageStart={0}
                 loadMore={async() => await handleLoadMore()}
                 hasMore={hasMore}
-                loader={<div key={0}>{isLoading && (props.skeleton ? <props.skeleton /> : <Spinner />)}</div>}
-                className="flex flex-col gap-2 w-full h-fit"
+                loader={<div key={0}>{ isLoading && (props.skeleton ? props.skeleton : <Spinner />)}</div>}
+                initialLoad={false}
             >
                 {data.map((item, index) => (
                     <props.component key={index} data={item} {...props.componentProps} />
                 ))}
             </InfiniteScroll>
-        </ScrollArea>
-        </>
+        </div>
     )
 }

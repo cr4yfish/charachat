@@ -7,17 +7,17 @@ import ChatCardSmallSkeleton from "../chat/ChatCardSmallSkeleton";
 
 export default async function SidebarChatListLoader() {
 
-    const chats = await getChats({ cursor: 0, limit: 20 });
+    const chats = await getChats({ cursor: 0, limit: 15 });
 
     return (
         <>
         <InfiniteListLoader 
             initialData={chats}
             loadMore={getChats}
-            limit={5}
+            limit={15}
             component={ChatCardSmall}
             componentProps={{hasLink: true}}
-            skeleton={ChatCardSmallSkeleton}
+            skeleton={<ChatCardSmallSkeleton />}
         />
         
         </>

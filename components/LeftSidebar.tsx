@@ -62,9 +62,9 @@ export async function LeftSidebar() {
       <SidebarContent>
 
         {profile !== undefined && 
-        <SidebarGroup>
+        <SidebarGroup className="overflow-y-hidden">
           <SidebarGroupLabel className="text-lg font-bold">Chats</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className=" !overflow-hidden">
             <Suspense fallback={<SidebarChatListFallback />}>
               <SidebarChatListLoader />
             </Suspense>
