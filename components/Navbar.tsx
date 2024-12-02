@@ -35,11 +35,13 @@ export default function Navbar(props: Props) {
             {props.profile !== undefined &&
             <div className="flex items-center gap-2">
                 <FeedbackButton source={pathname} />
+                {pathname !== "/c/new" &&
                 <Link href={`/c/new`}>
                     <Button radius="full" color="primary" startContent={<Icon filled>add</Icon>}>
                         Character
                     </Button>
                 </Link>
+                }
             </div>
             }
         </div>
