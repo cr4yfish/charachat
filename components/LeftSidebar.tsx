@@ -5,10 +5,8 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
-    SidebarMenu,
   } from "@/components/ui/sidebar"
 import ProfileCard from "./user/ProfileCard";
 import { getCurrentUser } from "@/functions/db/auth";
@@ -16,7 +14,6 @@ import { Profile } from "@/types/db";
 
 import SidebarLink from "./SidebarLink";
 import Logo from "./Logo";
-import Link from "next/link";
 import LoginButton from "./auth/LoginButton";
 import SidebarChatListLoader from "./sidebar/SidebarChatListLoader";
 import { Suspense } from "react";

@@ -24,7 +24,7 @@ export default function ConditionalLink(props: Props) {
     } else {
         return (
             <div className={`${props.className}`}>
-            {props.children}
+                {props.children}
             </div>
         )
     }
