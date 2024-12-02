@@ -28,9 +28,7 @@ export default function InfiniteSwiperLoader(props: Props) {
     const [rowsArray, setRowsArray] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-
-
-
+    
     // load more data on scrolling to end
     useEffect(() => {
         const handleScroll = async () => {
@@ -75,7 +73,7 @@ export default function InfiniteSwiperLoader(props: Props) {
             container.addEventListener('scroll', handleScroll);
             return () => container.removeEventListener('scroll', handleScroll);
         }
-    }, [cursor, isLoading, items, props, toast]);
+    }, [canLoadMore, cursor, isLoading, items, props, toast]);
 
     useEffect(() => {
         const rows = props.rows ?? 1;
