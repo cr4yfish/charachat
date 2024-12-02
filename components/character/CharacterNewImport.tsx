@@ -2,10 +2,10 @@
 
 import { Character, Profile } from "@/types/db";
 import {Tabs, Tab} from "@nextui-org/tabs";
-import AnimeImport from "./AnimeImport";
-import WikipediaImport from "./WikipediaImport";
-import FandomImporter from "./FandomImporter";
-import AICharacterCardsImporter from "./AICharacterCardImporter";
+import AnimeImport from "./importers/AnimeImport";
+import AICharacterCardsImporter from "./importers/AICharacterCardImporter";
+import FandomImporter from "./importers/FandomImporter";
+import WikipediaImport from "./importers/WikipediaImport";
 
 
 type Props = {

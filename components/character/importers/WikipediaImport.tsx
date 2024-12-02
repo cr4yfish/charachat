@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Card as NextUICard, CardBody as NextUICardBody } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
-import Icon from "../utils/Icon";
+import Icon from "@/components/utils/Icon";
 import { Spinner } from "@nextui-org/spinner";
 import Markdown from "react-markdown";
 import { Avatar } from "@nextui-org/avatar";
