@@ -58,7 +58,8 @@ export const decryptStory = async (story: Story, key: string): Promise<Story> =>
             story: decryptMessage(story.story, keyBuffer),
             image_link: decryptMessage(story.image_link, keyBuffer),
             first_message: decryptMessage(story.first_message, keyBuffer),
-            character: await decryptCharacter(story.character, key)
+            character: await decryptCharacter(story.character, key),
+            extra_characters: story.extra_characters?.map((charId) => decryptMessage(charId, keyBuffer))
         }
 
     } catch(e) {
@@ -76,7 +77,8 @@ export const encryptStory = async (story: Story, key: string): Promise<Story> =>
         description: encryptMessage(story.description, keyBuffer),
         story: encryptMessage(story.story, keyBuffer),
         image_link: encryptMessage(story.image_link, keyBuffer),
-        first_message: encryptMessage(story.first_message, keyBuffer)
+        first_message: encryptMessage(story.first_message, keyBuffer),
+        extra_characters: story.extra_characters?.map((charId) => encryptMessage(charId, keyBuffer))
     }
 }
 
@@ -175,6 +177,7 @@ type CreateStoryProps = {
     image_link: string;
     first_message: string;
     is_private: boolean;
+    extra_characters: string[];
 }
 
 export const createStory = async (params : CreateStoryProps): Promise<Story> => {
@@ -189,7 +192,8 @@ export const createStory = async (params : CreateStoryProps): Promise<Story> => 
         story: params.story,
         image_link: params.image_link,
         first_message: params.first_message,
-        is_private: params.is_private
+        is_private: params.is_private,
+        extra_characters: params.extra_characters
     })
     .eq("id", params.storyId)
     .select(storyMatcher)

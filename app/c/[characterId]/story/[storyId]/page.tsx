@@ -2,6 +2,7 @@
 
 import CharacterCard from "@/components/character/CharacterCard";
 import { getStory } from "@/functions/db/stories";
+import { Spacer } from "@nextui-org/spacer";
 import Image from "next/image";
 import { Button } from "@/components/utils/Button";
 import { getCurrentUser } from "@/functions/db/auth";
@@ -12,6 +13,7 @@ import Icon from "@/components/utils/Icon";
 
 import { Metadata } from "next";
 import { safeParseLink } from "@/lib/utils";
+import CharacterAvatarButton from "@/components/character/CharacterAvatarButton";
 
 
 export async function generateMetadata(
@@ -78,6 +80,25 @@ export default async function Story({ params: { storyId, characterId } }: { para
 
                 <div className="prose dark:prose-invert">
                     <h2 className="text-2xl font-bold">Story Details</h2>
+                    
+                    {story.extra_characters &&
+                    <>
+                    <h3>Extra Characters</h3>
+                    <div className="w-full overflow-x-auto">
+                        <div className="flex flex-row w-fit items-center">
+                            {story.extra_characters?.map(charId => (
+                                <CharacterAvatarButton 
+                                    key={charId} 
+                                    characterId={charId} 
+                                    disableButton
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    <Spacer y={4} />
+                    </>
+                    }
 
                     <div className="flex flex-row gap-6 text-sm dark:text-zinc-200">
                         <div className="flex items-center gap-2">

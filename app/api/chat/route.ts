@@ -3,7 +3,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
 import { z } from "zod";
-import { Chat, Message, Profile } from '@/types/db';
+import { Character, Chat, Message, Profile } from '@/types/db';
 import { convertToCoreMessages, streamText, Message as AIMessage, tool } from 'ai';
 import { addMessage } from '@/functions/db/messages';
 
@@ -109,6 +109,8 @@ export async function POST(req: Request) {
                         ${chat?.story?.title}
                         ${chat?.story?.description}
                         ${chat?.story?.story}
+                        Other Characters in the story:
+                        ${chat?.story?.extra_characters_client?.map((c: Character) => `${c.name}: ${c.description}`).join("\n")}
                     ` 
                 }
 

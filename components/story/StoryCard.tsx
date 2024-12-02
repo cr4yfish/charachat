@@ -48,7 +48,7 @@ export default function StoryCard(props: Props) {
 
                         <div className="flex flex-col gap-1 justify-start">
                             <h3 className="text-sm">{truncateText(props.data.title,50)}</h3>
-                            <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)}</span>
+                            <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)} {props.data.extra_characters && "and others"}</span>
                        
                             
                             <div className="flex flex-row items-center gap-2">

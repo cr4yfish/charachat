@@ -14,6 +14,8 @@ import ImageInputWithAI from "../ImageInputWithAI";
 import StoryCard from "./StoryCard";
 import { Switch } from "@nextui-org/switch";
 import { _STORY_MAX_LENGHT } from "@/lib/maxLength";
+import ExtraCharacterSelect from "./ExtraCharacterSelect";
+import CharacterAvatarButton from "../character/CharacterAvatarButton";
 
 
 type Props = {
@@ -34,6 +36,7 @@ export default function NewStoryMain(props: Props) {
         first_message: props.story?.first_message || "",
         image_link: props.story?.image_link || "",
         is_private: props.story?.is_private || false,
+        extra_characters: props.story?.extra_characters || [],
     })
 
     const [errorMessages, setErrorMessages] = useState<{
@@ -80,6 +83,7 @@ export default function NewStoryMain(props: Props) {
                     first_message: story.first_message,
                     image_link: story.image_link,
                     is_private: story.is_private,
+                    extra_characters: story.extra_characters ?? []
                 });
 
                 setIsSaved(true);
@@ -110,7 +114,7 @@ export default function NewStoryMain(props: Props) {
         setIsDeleting(false);        
     }
 
-    const updateValue = (key: string, value: string | boolean) => {
+    const updateValue = (key: string, value: string | boolean | Character[] | string[]) => {
         setStory(prevValue => {
             return {
                 ...prevValue,
@@ -205,6 +209,29 @@ export default function NewStoryMain(props: Props) {
                 setImageLink={(value) => updateValue("image_link", value)}
             />
 
+            <div className="flex flex-col">
+                <h3 className="text-lg font-bold">Other Characters</h3>
+                <p className="text-xs dark:text-zinc-400">Add other Characters to your Story using this. For now, they won&apos;t be able to talk themselves in the Chat automatically. You&apos;ll have to force it by calling them by their name.</p>
+                <div className="w-full overflow-x-auto">
+                    <div className="flex flex-row items-center w-fit">
+                        
+                        {story.extra_characters?.map((charId) => (
+                            <CharacterAvatarButton
+                                key={charId + "select"} 
+                                characterId={charId} 
+                                onClick={() => updateValue("extra_characters", story.extra_characters?.filter((id) => id !== charId) ?? [])}
+                            />
+                        ))}
+
+                        <ExtraCharacterSelect 
+                            extraCharacters={story.extra_characters_client ?? []}
+                            setCharacters={(chars) => updateValue("extra_characters", chars)} 
+                        />
+
+                    </div>
+                </div>
+            </div>
+
             <div className="flex flex-col gap-1">
                 <Switch 
                     isSelected={story.is_private} 
@@ -241,6 +268,8 @@ export default function NewStoryMain(props: Props) {
             }
         </form>
         
+        
+
         </>
     )
 }

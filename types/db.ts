@@ -85,6 +85,8 @@ export type Story = {
     chats?: number;
     likes?: number;
     is_private: boolean;
+    extra_characters?: string[];
+    extra_characters_client?: Character[];
 }
 
 export type Message = {

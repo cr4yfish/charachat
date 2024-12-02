@@ -11,7 +11,7 @@ import { Switch } from "@nextui-org/switch";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import { useToast } from "@/hooks/use-toast";
-import { Chat, Message, Profile } from "@/types/db";
+import { Character, Chat, Message, Profile } from "@/types/db";
 import { useRef, useState, useEffect } from "react";
 import { addMessage, getMessages } from "@/functions/db/messages";
 import Messagebubble from "./Messagebubble";
@@ -30,6 +30,7 @@ import PersonaCard from "../persona/PersonaCard";
 import Link from "next/link";
 import PersonaAutocomplete from "../persona/PersonaAutocomplete";
 import ToolMessage from "./ToolMessage";
+import { getCharacter } from "@/functions/db/character";
 
 type Props = {
     chat: Chat;
@@ -225,6 +226,35 @@ export default function ChatMain(props : Props) {
             }
         }
     }, [inputRef.current])
+
+    useEffect(() => {
+        const loadCharacters = async () => {
+            if(!props.chat.story) return;
+            const chars: Character[] = [];
+            await Promise.all(
+                props.chat.story.extra_characters?.map(async (charId) => {
+                    const char = await getCharacter(charId);
+                    chars.push(char);
+                }) || []
+            );
+            setChat((prev) => {
+                if(!prev || !prev.story) return {} as Chat; // this should never actually run
+                return {
+                    ...prev,
+                    story: {
+                        ...prev.story,
+                        extra_characters_client: chars
+                    }
+                }
+            })
+        }
+
+        if(props.chat.story && props.chat.story.extra_characters) {
+            // preload the extras
+            loadCharacters();
+          
+        }
+    }, [props.chat, props.chat.story])
 
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0) || !chat || (chat.llm.length < 1)) return;

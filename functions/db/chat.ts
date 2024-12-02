@@ -12,6 +12,7 @@ import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
 import { summarizeTool } from "../ai/tools";
 import { getCurrentUser } from "./auth";
+import { decryptStory } from "./stories";
 
 const chatMatcher = `
     *
@@ -70,6 +71,7 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             likes: db.story_likes,
             chats: db.story_chats,
             image_link: db.story_image_link,
+            extra_characters: db.story_extra_characters,
         },
         persona: {
             id: db.persona_id,
@@ -101,6 +103,16 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             }
         } catch (error) {
             console.error("Error decrypting character", error);
+            return decryptedChat;
+        }
+    }
+
+    if(decryptedChat.story?.is_private) {
+        try {
+            const key = await getKeyServerSide();
+            decryptedChat.story = await decryptStory(decryptedChat.story, key);
+        } catch (error) {
+            console.error("Error decrypting story", error);
             return decryptedChat;
         }
     }
