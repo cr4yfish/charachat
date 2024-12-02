@@ -53,7 +53,7 @@ export default function InfiniteListLoader(props: Props) {
     return (
         <div className="h-full overflow-y-scroll">
             <InfiniteScroll
-                className="overflow-hidden h-fit"
+                className="overflow-hidden h-fit flex flex-col gap-2"
                 useWindow={false}
                 pageStart={0}
                 loadMore={async() => await handleLoadMore()}
