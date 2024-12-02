@@ -53,9 +53,7 @@ export default function CharacterCard(props: Props) {
                         <div className="flex flex-col justify-between">
                             <div className="flex flex-col gap-2">
                                 <div className="flex flex-col">
-                                    <div className="flex flex-col">
-                                        <h3 className="font-medium">{truncateText(props.data.name,40)}</h3>
-                                    </div>
+                                    <h3 className="font-medium">{truncateText(props.data.name,40)}</h3>
                                     <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
                                 </div>
                                 <Markdown className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</Markdown> 

@@ -39,37 +39,26 @@ export async function LeftSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        
-          <SidebarGroup>
-            <Link href={"/"}><Logo /></Link>
-          </SidebarGroup>
-          
-          <SidebarGroup>
-            <SidebarGroupContent className="flex flex-col gap-2">
-              <SidebarMenu>
-                <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
-                <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
-                <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
-                <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
-                <SidebarLink link={`/user/${profile?.user}/personas`} isLoggedIn={isLoggedIn} icon="comedy_mask" label="Your Personas" />
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        
+      <SidebarHeader className="p-2">
+        <Logo className="p-2" />
+        <SidebarGroup className="flex flex-col gap-2">
+          <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
+          <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
+          <SidebarLink link={`/user/${profile?.user}/characters`} isLoggedIn={isLoggedIn} icon="people" label="Your Characters" />
+          <SidebarLink link={`/user/${profile?.user}/stories`} isLoggedIn={isLoggedIn} icon="book" label="Your Stories" />
+          <SidebarLink link={`/user/${profile?.user}/personas`} isLoggedIn={isLoggedIn} icon="comedy_mask" label="Your Personas" />
+        </SidebarGroup>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="p-2">
 
         {profile !== undefined && 
-        <SidebarGroup className="overflow-y-hidden">
+        <>
           <SidebarGroupLabel className="text-lg font-bold">Chats</SidebarGroupLabel>
-          <SidebarGroupContent className=" !overflow-hidden">
-            <Suspense fallback={<SidebarChatListFallback />}>
-              <SidebarChatListLoader />
-            </Suspense>
-          </SidebarGroupContent>
-        </SidebarGroup>
+          <Suspense fallback={<SidebarChatListFallback />}>
+            <SidebarChatListLoader />
+          </Suspense>
+        </>
         }
 
       </SidebarContent>

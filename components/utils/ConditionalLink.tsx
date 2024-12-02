@@ -7,13 +7,14 @@ type Props = {
     active: boolean;
     target?: string;
     fullWidth?: boolean;
+    className?: string;
 }
 
 export default function ConditionalLink(props: Props) {
     if(props.active) {
         return (
             <Link
-                className={props.fullWidth ? "w-full" : "w-fit"}
+                className={`${props.className} ${props.fullWidth ? "w-full" : "w-fit"}`}
                 href={props.href}
                 target={props.target}
             >
@@ -22,9 +23,9 @@ export default function ConditionalLink(props: Props) {
         )
     } else {
         return (
-            <>
+            <div className={`${props.className}`}>
             {props.children}
-            </>
+            </div>
         )
     }
 }

@@ -31,37 +31,34 @@ export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
     }, [props.link, pathname])
 
     return (
-      <SidebarMenuItem>
-        <ConditionalLink active={props.isLoggedIn || (props.enableAnon ?? false)} href={props.link} target={props.isExternal ? "_blank" : undefined} >
-          
-          <Button 
-            size="lg" 
-            fullWidth
-            isDisabled={!(props.isLoggedIn || props.enableAnon) || isLoading}
-            color={isActive ? "primary" : "default"}
-            onClick={() => {
-              if(props.isExternal) return;
-              setIsLoading(true)
-            }}
-            variant={isActive ? "solid" : "flat"}
-            radius={props.radius || "sm"}
-            className={`
-              dark:bg-zinc-800/50 ${isActive && "dark:bg-primary"}
-            `}
-          >
-              <div className="flex flex-row justify-between gap-2 w-full items-center">
-                  <div className={`
-                    flex flex-row justify-start gap-2 w-full items-center
-                    ${!isActive && "text-zinc-400"}  
-                  `}>
-                    <Icon filled={isActive}>{props.icon}</Icon>
-                    {props.label}
-                  </div>
-                  {isLoading && <Spinner size="sm" color="primary" />}
-            </div>
-          </Button>
-        </ConditionalLink>
-      </SidebarMenuItem>
+      <ConditionalLink fullWidth active={props.isLoggedIn || (props.enableAnon ?? false)} href={props.link} target={props.isExternal ? "_blank" : undefined} >
+        <Button 
+          size="lg" 
+          fullWidth
+          isDisabled={!(props.isLoggedIn || props.enableAnon) || isLoading}
+          color={isActive ? "primary" : "default"}
+          onClick={() => {
+            if(props.isExternal) return;
+            setIsLoading(true)
+          }}
+          variant={isActive ? "solid" : "flat"}
+          radius={props.radius || "sm"}
+          className={`
+            dark:bg-zinc-800/50 ${isActive && "dark:bg-primary"}
+          `}
+        >
+            <div className="flex flex-row justify-between gap-2 w-full items-center">
+                <div className={`
+                  flex flex-row justify-start gap-2 w-full items-center
+                  ${!isActive && "text-zinc-400"}  
+                `}>
+                  <Icon filled={isActive}>{props.icon}</Icon>
+                  {props.label}
+                </div>
+                {isLoading && <Spinner size="sm" color="primary" />}
+          </div>
+        </Button>
+      </ConditionalLink>
     )
     
   }
