@@ -26,6 +26,8 @@ export type Character = {
     first_message?: string;
     speaker_link?: string;
     scenario?: string;
+    tags?: string[];
+    tags_full?: Tag[];
 }
 
 export type Chat = {
@@ -111,7 +113,6 @@ export type Message = {
 export type Tag = {
     id: string;
     created_at?: string;
-    creator: Profile;
     name: string;
     description: string;
 }

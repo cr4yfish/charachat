@@ -9,6 +9,7 @@ import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
 import { safeParseLink } from "@/lib/utils";
+import { decryptTag, encryptTag } from "./tags";
 
 const characterMatcher = `
     *,
@@ -38,7 +39,8 @@ const characterFormatter = async (db: any): Promise<Character> => {
         ...db,
         owner: owner,
         category: category,
-        is_liked: is_liked
+        is_liked: is_liked,
+        tags_full: JSON.stringify(db.tags_full) === "[null]" ? undefined : db.tags_full
     } as Character;
 
     if(char.is_private) {
@@ -82,6 +84,7 @@ export const decryptCharacter = async (character: Character, key: string): Promi
             first_message: decryptMessage(character.first_message ?? " ", buffer),
             speaker_link: decryptMessage(character.speaker_link ?? " ", buffer),
             scenario: decryptMessage(character.scenario ?? " ", buffer),
+            tags_full: (character.tags_full) ? await Promise.all(character.tags_full.map(t => decryptTag(t))) : []
         }
     } catch (error) {
         console.error("Error decrypting character", error);
@@ -107,6 +110,7 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         first_message: encryptMessage(character.first_message ?? " ", buffer),
         speaker_link: encryptMessage(character.speaker_link ?? " ", buffer),
         scenario: encryptMessage(character.scenario ?? " ", buffer),
+        tags_full: character.tags_full ? await Promise.all(character.tags_full.map(t => encryptTag(t))) : []
     }
 }
 
@@ -241,16 +245,19 @@ export const updateCharacter = async (character: Character): Promise<void> => {
         character = await encryptCharacter(character, key);
     }
 
+    character.tags = character.tags_full?.map(t => t.id);
+
     delete character.chats;
     delete character.likes;
     delete character.is_liked;
+    delete character.tags_full;
 
     const { error } = await createClient()
         .from("characters")
         .update({
             ...character,
             owner: character.owner.user,
-            category: character.category?.id
+            category: character.category?.id,
         })
         .eq("id", character.id);
 

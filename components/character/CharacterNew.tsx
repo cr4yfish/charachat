@@ -9,7 +9,7 @@ import CategoryAutocomplete from "./CategoryAutocomplete";
 import { useState } from "react";
 import { saveCharacter } from "@/app/c/new/actions";
 import { Button } from "../utils/Button";
-import { Character, Profile } from "@/types/db";
+import { Character, Profile, Tag } from "@/types/db";
 import InputWithAI from "../story/InputWithAI";
 import CharacterCard from "./CharacterCard";
 import { getKeyClientSide } from "@/lib/crypto";
@@ -20,6 +20,8 @@ import { Input } from "@nextui-org/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
+import TagsSelect from "../TagsSelect";
+import { Chip } from "@nextui-org/chip";
 
 type Props = {
     initCharacter: Character;
@@ -138,7 +140,7 @@ export default function CharacterNew(props: Props) {
         }
     }
 
-    const updateValue = (name: string, value: string | boolean) => {
+    const updateValue = (name: string, value: string | boolean | Tag[]) => {
         setNewCharacter({
             ...newCharacter,
             [name]: value
@@ -148,13 +150,14 @@ export default function CharacterNew(props: Props) {
     return (
         <>
         <form className="flex flex-col gap-4 h-full pb-20" onSubmit={handleSubmit}>
-            <div className="flex absolute bottom-0 left-0 z-20 w-full p-4">
+            <div className="flex justify-center absolute bottom-0 left-0 z-20 w-full p-4 pb-6">
                 <Button
                     type="submit" 
                     isLoading={isLoading || isDone}
                     isDisabled={isDone}
                     startContent={props.editMode ? <Icon filled>save</Icon> : <Icon>add</Icon>}
                     fullWidth
+                    className="max-w-lg shadow-xl py-8"
                     radius="full"
                     color={isDone ? "success" : "primary"}
                     size="lg" 
@@ -202,8 +205,20 @@ export default function CharacterNew(props: Props) {
                         api="/api/author/character"
                     />
                     <CategoryAutocomplete 
+                        defaultCategory={newCharacter.category}
                         setCategory={(category) => updateValue("category", category.id)}
                     />
+                    <div className="p-2 rounded-xl bg-zinc-800 flex flex-col gap-2">
+                        <h3 className="font-medium">Tags</h3>
+                        <p className="text-xs dark:text-zinc-400">Tags are used to categorize the Character and make it easier to find.</p>
+                        <div className="flex flex-row flex-wrap gap-2">
+                            {newCharacter.tags_full?.map(tag => (
+                                <Chip>{tag?.name}</Chip>
+                            ))}
+                        </div>
+                        <TagsSelect selectedTags={newCharacter.tags_full ?? []} onSelect={(tags) => updateValue("tags_full", tags)} />
+                    </div>
+
                     <div className="flex flex-col gap-1">
                         <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
                         <p className="text-xs dark:text-zinc-400">When set to Private, the <b>Character gets encrypted and only you will be able to see and interact with it</b>. Note that it might still appear on the front page, but only you will see it. Please avoid this if possible to contribute to the Project.</p>

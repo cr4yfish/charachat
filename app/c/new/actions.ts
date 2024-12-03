@@ -16,8 +16,11 @@ export const saveCharacter = async (char: Character): Promise<{ data: Character,
     const newChar = {
         ...char,
         id: uuidV4(),
-        owner: user.id
+        owner: user.id,
+        tags: char.tags_full?.map(t => t.id)
     }
+
+    delete newChar.tags_full;
 
     const { data, error } = await createClient()
         .from("characters")

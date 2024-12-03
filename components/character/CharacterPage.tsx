@@ -165,7 +165,7 @@ export default function CharacterPage(props: Props) {
                         <Markdown>{props.character.description}</Markdown>
                     </div>
                     
-                    <div className="flex flex-row items-center gap-2">
+                    <div className="flex flex-row flex-wrap items-center gap-2">
                         <CategoryCard data={props.character.category} />
                         {props.character.speaker_link &&
                             <Card 
@@ -179,6 +179,18 @@ export default function CharacterPage(props: Props) {
                                 </CardBody>
                             </Card>
                         }
+                        {props.character.tags_full?.map(tag => (
+                        <Card 
+                            className={`
+                                w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full dark:bg-zinc-600/40
+                                backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium
+                            `}
+                        >
+                            <CardBody className="p-0 w-full min-w-max h-full flex flex-row items-center justify-center">
+                                {tag.name}
+                            </CardBody>
+                        </Card>
+                        ))}
                     </div>
                 </div>
 
