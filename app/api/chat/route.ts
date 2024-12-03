@@ -1,6 +1,4 @@
 "use server";
-
-import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
 import { z } from "zod";
 import { Character, Chat, Message, Profile } from '@/types/db';
