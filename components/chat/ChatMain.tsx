@@ -492,6 +492,7 @@ export default function ChatMain(props : Props) {
                         </div>
                         <PersonaCard 
                             fullWidth
+                            isSmall
                             data={ chat?.persona?.id ? chat.persona :
                                 {
                                     id: props.user.user,
