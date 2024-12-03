@@ -123,7 +123,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
         <>
         <SharedChatProvider>
             <div className="absolute top-0 left-0 z-50 w-full flex items-center justify-center">
-                <div className="p-6 bg-content2/50 backdrop-blur-xl rounded-b-xl w-full flex flex-row items-center justify-evenly max-w-lg">
+                <div className="p-6 bg-zinc-800/5 backdrop-blur-3xl rounded-b-xl w-full flex flex-row items-center justify-evenly max-w-lg">
                     <SidebarTrigger><></></SidebarTrigger>
                     <span className="text-medium w-full text-center font-bold">{chat.character.name}</span>
                     <ChatSettingsDrawer user={profile} />
