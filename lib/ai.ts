@@ -5,7 +5,10 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
         case "genma-2-9b-it":
-            return profile.groq_encrypted_api_key;
+            if(profile.groq_encrypted_api_key && profile.groq_encrypted_api_key.length > 0) {
+                return profile.groq_encrypted_api_key;
+            }
+            return process.env.GROQ_API_KEY;
 
         case 'ollama':
             return profile.ollama_encrypted_api_key;
@@ -117,6 +120,9 @@ export const isFreeModel = (modelId: ModelId) => {
     switch(modelId) {
         case "open-mistral-nemo":
         case "grok-beta":
+        case "llama-3.2-90b-vision-preview":
+        case "llama3-groq-70b-8192-tool-use-preview":
+        case "genma-2-9b-it":
             return true;
     }
     return false;

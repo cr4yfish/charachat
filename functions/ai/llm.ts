@@ -18,7 +18,7 @@ import { getCurrentUser } from '../db/auth';
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
         baseURL: baseURL || "https://api.groq.com/openai/v1",
-        apiKey: apiKey
+        apiKey: apiKey || process.env.GROQ_API_KEY
     })
 
     return groq(modelId);
