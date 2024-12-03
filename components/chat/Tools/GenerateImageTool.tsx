@@ -12,6 +12,7 @@ import { Chat, Profile, Message } from "@/types/db";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/utils/Button";
 import { isValidURL, safeParseLink } from "@/lib/utils";
+import { uploadImageToImgur } from "@/functions/ai/image";
 
 type Props = {
     toolInvocation: ToolInvocation,
@@ -24,6 +25,7 @@ export default function GenerateImageTool(props: Props) {
     const [isVideoGenerating, setIsVideoGenerating] = useState(false);
     const [videoLink, setVideoLink] = useState<string | undefined>(undefined);
     const [isAddedToChat, setIsAddedToChat] = useState(false);
+    const [isAddingImageToChat, setIsAddingImageToChat] = useState(false);
     const { toast } = useToast();
     
     if(isAddedToChat) return null;
@@ -57,7 +59,30 @@ export default function GenerateImageTool(props: Props) {
 
         const handleAddMessage = async () => {
             if(!props.chat || !props.user) return;
+            if(!("result" in props.toolInvocation)) return;
 
+            setIsAddingImageToChat(true);
+        
+            // we need to download the image from replicate
+            // and upload it to imgur, then save the imgur link
+            // in the message content
+            const res = await fetch(props.toolInvocation.result)
+
+            if(!res.ok) {
+                toast({
+                    title: "Failed to download image",
+                    description: "Failed to download image from replicate",
+                    variant: "destructive",
+                })
+                return;
+            }
+
+            const blob = await res.blob();
+            const base64 =  (await blob.arrayBuffer().then((buffer) => Buffer.from(buffer).toString("base64")));
+            const link = await uploadImageToImgur(base64);
+
+            // update the message in the chat
+            newMessage.content = `![Generated Image](${link})`;
             props.setMessages((messages) => [...messages, newMessage]);
 
             const message: Message = {
@@ -66,14 +91,16 @@ export default function GenerateImageTool(props: Props) {
                 character: props.chat.character,
                 user: props.user,
                 from_ai: true,
-                content: newMessage.content,
+                content: `![Generated Image](${link})`,
                 is_edited: false,
                 is_deleted: false,
             }
 
+            // save the message to DB
             const key = getKeyClientSide();
             await addMessage(message ,key);
             setIsAddedToChat(true);
+            setIsAddingImageToChat(false);
         }
 
         const handleGenerateVideo = async () => {
@@ -147,7 +174,7 @@ export default function GenerateImageTool(props: Props) {
                     {videoLink && <video src={videoLink} controls className="rounded-xl" width={200} />}
                     <div className="flex flex-col gap-2">
                         <p className="dark:text-zinc-400 text-xs max-w-xs">{props.toolInvocation.args.text}</p>
-                        <Button variant="flat" color="secondary" onClick={handleAddMessage}>Save in chat</Button>
+                        <Button isLoading={isAddingImageToChat} variant="flat" color="secondary" onClick={handleAddMessage}>Save in chat</Button>
                         {!videoLink && <Button isLoading={isVideoGenerating} variant="flat" color="secondary" onClick={handleGenerateVideo}>Generate Video</Button>}
                         {videoLink && <Button variant="flat" color="secondary" onClick={handleSaveVideo}>Save Video</Button>}
                     </div>
