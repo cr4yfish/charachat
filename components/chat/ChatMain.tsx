@@ -422,7 +422,7 @@ export default function ChatMain(props : Props) {
                         <div key={message.id + "_wrapper"} className={``}>
                             {(index !== 0) && (messages[index - 1].role !== message.role) && <Spacer y={6} />}
                             {((index == 0) || !isSameDay(new Date(message.createdAt!), new Date(messages[index - 1]?.createdAt ?? ""))) && (
-                                <div className="text-center text-sm dark:text-slate-400 my-2">
+                                <div className="text-center text-sm dark:text-zinc-400 my-2">
                                     { isToday(new Date(message.createdAt!)) 
                                         ? "Today" :
                                         isYesterday(new Date(message.createdAt!)) 
