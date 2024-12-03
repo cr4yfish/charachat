@@ -13,27 +13,40 @@ import { Character, Profile } from "@/types/db";
 import InputWithAI from "../story/InputWithAI";
 import CharacterCard from "./CharacterCard";
 import { getKeyClientSide } from "@/lib/crypto";
-import { encryptCharacter } from "@/functions/db/character";
+import { deleteCharacter, encryptCharacter, updateCharacter } from "@/functions/db/character";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
 import { Input } from "@nextui-org/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import SaveDeleteButton from "../utils/SaveDeleteButton";
 
 type Props = {
     initCharacter: Character;
-    profile: Profile
+    profile: Profile,
+    editMode?: boolean
 }
 
 export default function CharacterNew(props: Props) {
     const [isLoading, setIsLoading] = useState(false);
     const [isDone, setIsDone] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [newCharacter, setNewCharacter] = useState<Character>(props.initCharacter);
     const { toast } = useToast();
     const router = useRouter();
 
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if(props.editMode) {
+            handleUpdateCharacter();
+        } else {
+            handleCreateCharacter();
+        }
+
+    }
+
+    const handleCreateCharacter = async () => {
         if(
             !newCharacter.name ||
             !newCharacter.description ||
@@ -89,11 +102,70 @@ export default function CharacterNew(props: Props) {
         setIsLoading(false);
     }
 
+    const handleUpdateCharacter = async () => {
+        if(isDeleting) return;
+        
+        setIsLoading(true);
+        try {
+            await updateCharacter(newCharacter);
+            toast({
+                title: "Saved Character",
+                variant: "success"
+            });
+        } catch {
+            toast({
+                title: "Could not update character",
+                description: "Some error occured while updating the character",
+                variant: "destructive"
+            });
+        }
+ 
+        setIsLoading(false);
+    }
+
+    const handleDeleteCharacter = async () => {
+        try {
+            await deleteCharacter(newCharacter.id);
+            router.replace("/");
+        } catch {
+            toast({
+                title: "Could not delete character",
+                description: "Some error occured while deleting the character",
+                variant: "destructive"
+            });
+            setIsDeleting(false);
+        }
+    }
+
     const updateValue = (name: string, value: string | boolean) => {
         setNewCharacter({
             ...newCharacter,
             [name]: value
         })
+    }
+
+    const SaveButtons = () => {
+        return (
+            <div className="flex items-center gap-4 max-w-md max-md:max-w-full ">
+                <Button
+                    type="submit" 
+                    isLoading={isLoading || isDone}
+                    isDisabled={isDone}
+                    fullWidth
+                    color={isDone ? "success" : "primary"}
+                    size="lg" 
+                >
+                    {!props.editMode && (isDone ? "Redirecting" : "Create Character")}
+                    {props.editMode && (isDone ? "Saved" : "Save Character")}
+                </Button>
+                {props.editMode &&
+                <SaveDeleteButton 
+                    isLoading={isDeleting}
+                    onDelete={handleDeleteCharacter}
+                />
+                }
+            </div>
+        )
     }
 
     return (
@@ -152,18 +224,7 @@ export default function CharacterNew(props: Props) {
                 <CharacterCard fullWidth data={newCharacter} hasLink={false} />
             </div>
 
-            <div className=" max-w-xs max-md:max-w-full ">
-                <Button
-                    type="submit" 
-                    isLoading={isLoading || isDone}
-                    isDisabled={isDone}
-                    fullWidth
-                    color={isDone ? "success" : "primary"}
-                    size="lg" 
-                >
-                    {isDone ? "Redirecting" : "Save Character"}
-                </Button>
-            </div>
+            <SaveButtons />
 
             <Separator className="my-6" />
 
@@ -283,6 +344,7 @@ export default function CharacterNew(props: Props) {
                 </CardContent>
             </Card>
 
+            <SaveButtons />
 
         </form>
         </>
