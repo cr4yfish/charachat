@@ -5,7 +5,7 @@ import { Spacer } from "@nextui-org/spacer";
 import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import { Chip } from "@nextui-org/chip";
 import { Button } from "@/components/utils/Button";
 import Icon from "../utils/Icon";
 import { Profile } from "@/types/db";
@@ -14,14 +14,32 @@ import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { deleteUser, updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
-import { LLMsWithAPIKeys } from "@/lib/ai";
+import { LLMs, LLMsWithAPIKeys, ProviderId } from "@/lib/ai";
 import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { Separator } from "../ui/separator";
 
-type Props = {
-    profile: Profile
+type KeyInputProps = {
+    url: string,
+    hasFreeTier?: boolean,
+    value?: string | undefined,
+    onValueChange: (value: string) => void,
+    label: string;
+    provider: ProviderId;
 }
+
+const KeyInput = (props: KeyInputProps) => (
+    <div className="flex flex-col gap-2">
+        <div className="flex flex-row flex-wrap items-center gap-2">
+            {LLMs.filter(llm => llm.provider === props.provider).map(llm => (<Chip key={llm.key} size="sm" color={props.value ? "success" : "default"}>{llm.name}</Chip>))}
+        </div>
+        <Input 
+            label={props.label} type="text" color={props.value ? "success" : "default"}
+            description={<KeyInputDescription url={props.url} hasFreeTier={props.hasFreeTier} />}
+            value={props.value} onValueChange={props.onValueChange}
+        />
+    </div>
+)
 
 const KeyInputDescription = ({url, hasFreeTier}: {url: string, hasFreeTier?: boolean}) => (
     <div className="flex flex-row items-center gap-1">
@@ -35,6 +53,10 @@ const KeyInputDescription = ({url, hasFreeTier}: {url: string, hasFreeTier?: boo
         {hasFreeTier && <span className="text-green-500">Free Tier Available</span>}
     </div>
 )
+
+type Props = {
+    profile: Profile
+}
 
 export default function EditProfile(props: Props) {
     const [profile, setProfile] = useState<Profile>(props.profile);
@@ -198,7 +220,7 @@ export default function EditProfile(props: Props) {
 
             <div className="prose dark:prose-invert">
                 <h3>Configure AIs</h3>
-                <p className="text-sm dark:text-zinc-400">All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to select any AI for which you provide an API key in chats - in addition to free models.</p>
+                <p className="text-sm dark:text-zinc-400">All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to use any AI for which you provide an API key - in addition to free models.</p>
             </div>
 
             <Card>
@@ -206,51 +228,90 @@ export default function EditProfile(props: Props) {
                     <CardDescription>Configure hosted LLMs</CardDescription>
                     <CardTitle>API Keys</CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                    <Input 
-                        label="Openai API Key" type="text" 
-                        description={<KeyInputDescription url="https://platform.openai.com/account/api-keys" />}
-                        value={profile.openai_encrypted_api_key} onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
+                <CardContent className="flex flex-col gap-3">
+                    <h3>Free models</h3>
+                    <div className="flex items-center gap-2">
+                        <Chip color="success">Mistral Nemo</Chip>
+                        <Chip color="success">xAI Grok</Chip>
+                    </div>
+                    <Separator className="my-2" />
+                    
+                    <h3>LLMs (Text)</h3>
+                    
+                    <KeyInput 
+                        url="https://platform.openai.com/account/api-keys" 
+                        label="OpenAI"
+                        provider={"OpenAI"}
+                        value={profile.openai_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Gemini API Key" type="text" 
-                        description={<KeyInputDescription url="https://aistudio.google.com/apikey" hasFreeTier />}
-                        value={profile.gemini_encrypted_api_key} onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
+                    <KeyInput 
+                        url="https://aistudio.google.com/apikey" 
+                        hasFreeTier
+                        label="Gemini"
+                        provider={"Gemini"}
+                        value={profile.gemini_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Mistral API Key" type="text"
-                        description={<KeyInputDescription url="https://console.mistral.ai/api-keys/" hasFreeTier />}
-                        value={profile.mistral_encrypted_api_key} onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
+                    <KeyInput 
+                        url="https://console.mistral.ai/api-keys" 
+                        hasFreeTier
+                        label="Mistral"
+                        provider={"Mistral"}
+                        value={profile.mistral_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Anthropic API Key" type="text"
-                        description={<KeyInputDescription url="https://console.anthropic.com/settings/keys" />}
-                        value={profile.anthropic_encrypted_api_key} onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
+                    <KeyInput 
+                        url="https://console.anthropic.com/settings/keys" 
+                        label="Anthropic"
+                        provider={"Anthropic"}
+                        value={profile.anthropic_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Groq API Key" type="text" 
-                        description={<KeyInputDescription url="https://console.groq.com/keys" hasFreeTier />}
-                        value={profile.groq_encrypted_api_key} onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
+                    <KeyInput 
+                        url="https://console.groq.com/keys" 
+                        label="Groq"
+                        hasFreeTier
+                        provider={"Groq"}
+                        value={profile.groq_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Cohere API Key" type="text" 
-                        description={<KeyInputDescription url="https://dashboard.cohere.com/api-keys" hasFreeTier />}
-                        value={profile.cohere_encrypted_api_key} onValueChange={(value) => handleUpdateValue("cohere_encrypted_api_key", value)}
+                    <KeyInput 
+                        url="https://dashboard.cohere.com/api-keys" 
+                        label="Cohere"
+                        provider={"Cohere"}
+                        value={profile.cohere_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("cohere_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Huggingface Inference API Key (AI Image)" type="text" 
-                        description={<KeyInputDescription url="https://huggingface.co/settings/tokens/new?tokenType=fineGrained" hasFreeTier />}
-                        value={profile.hf_encrypted_api_key} onValueChange={(value) => handleUpdateValue("hf_encrypted_api_key", value)}
+                    <Separator className="my-2" />
+                    <h3>Images</h3>
+                    <KeyInput 
+                        url="https://huggingface.co/settings/tokens/new?tokenType=fineGrained" 
+                        hasFreeTier
+                        label="Huggingface"
+                        provider={"Huggingface"}
+                        value={profile.hf_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("hf_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="Replicate API Key (Image&Audio)" type="text" 
-                        description={<KeyInputDescription url="https://replicate.com/account/api-tokens" />}
-                        value={profile.replicate_encrypted_api_key} onValueChange={(value) => handleUpdateValue("replicate_encrypted_api_key", value)}
+                    <Separator className="my-2" />
+                    <h3>Images & Voice</h3>
+                    <KeyInput 
+                        url="https://replicate.com/account/api-tokens" 
+                        hasFreeTier
+                        label="Replicate"
+                        provider={"Replicate"}
+                        value={profile.replicate_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("replicate_encrypted_api_key", value)}
                     />
-                    <Input 
-                        label="FAL API Key (AI Video)" type="text" 
-                        description={<KeyInputDescription url="https://fal.ai/dashboard/keys" hasFreeTier />}
-                        value={profile.fal_gpt_encrypted_api_key} onValueChange={(value) => handleUpdateValue("fal_gpt_encrypted_api_key", value)}
+                    <Separator className="my-2" />
+                    <h3>Videos</h3>
+                    <KeyInput 
+                        url="https://fal.ai/dashboard/keys" 
+                        hasFreeTier
+                        label="FAL AI"
+                        provider={"FAL"}
+                        value={profile.fal_gpt_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("fal_gpt_encrypted_api_key", value)}
                     />
                 </CardContent>
             </Card>
