@@ -10,9 +10,9 @@ import { createCohere } from "@ai-sdk/cohere";
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
 import { Profile } from '@/types/db';
-import { cookies } from 'next/headers';
 import { getProfileAPIKey, isFreeModel, ModelId } from '@/lib/ai';
-import { decryptMessage } from '@/lib/crypto';
+import { checkIsEncrypted, decryptMessage } from '@/lib/crypto';
+import { getKeyServerSide } from '../serverHelpers';
 
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
@@ -143,28 +143,28 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
 
 export async function getModelApiKey(profile: Profile, model?: ModelId): Promise<string> {
+    const selectedModel = model || profile.default_llm as ModelId;
 
-    const cookiesStore = cookies();
+    // This can be undefined if user has no API key for this model
+    const encryptedAPIKey = getProfileAPIKey(selectedModel, profile);
 
-    // Generate the story field in a Story
-    // based on Title and Description
-    const key = cookiesStore.get("key")?.value;
-
-    if(!key) {
-        throw new Error("No key cookie");
+    // User doesnt have one and also no env variable set
+    if(!encryptedAPIKey) {
+        throw new Error("You do not have access to this model: " + selectedModel);
     }
 
-    let decryptedAPIKey: string | undefined = undefined;
-    const encryptedAPIKey = getProfileAPIKey(model || profile.default_llm as ModelId, profile);
-    if(!encryptedAPIKey && !isFreeModel(model || profile.default_llm as ModelId)) {
-        throw new Error("No API key found");
-    } else if(encryptedAPIKey) {
-        decryptedAPIKey = decryptMessage(encryptedAPIKey, Buffer.from(key, 'hex'));
+    // encryptedApiKey is set and model is free
+    // key is also not encrypted -> env variable
+    if(isFreeModel(selectedModel) && !checkIsEncrypted(encryptedAPIKey)) {
+        return encryptedAPIKey;
     }
 
-    if(!decryptedAPIKey) {
-        throw new Error("You do not have access to this model");   
-    }
-
-    return decryptedAPIKey;
+    // encryptedAPikey is set, model is not free
+    // key is also encrypted -> key from user
+    if(encryptedAPIKey && checkIsEncrypted(encryptedAPIKey)) {
+        const key = await getKeyServerSide();
+        const keyBuffer = Buffer.from(key, 'hex');
+        return decryptMessage(encryptedAPIKey, keyBuffer);
+    } 
+    throw new Error("Could not get API Key for this model: " + selectedModel);
 }
