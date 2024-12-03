@@ -29,6 +29,7 @@ import Link from "next/link";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { _CHAT_MAX_LENGTH } from "@/lib/maxLength";
 import StoryCard from "../story/StoryCard";
+import CharacterCard from "../character/CharacterCard";
 
 
 export default function ChatSettingsDrawer() {
@@ -196,6 +197,7 @@ export default function ChatSettingsDrawer() {
                             />
                         </div>
 
+                        {chat?.character && <CharacterCard data={chat.character} hasLink fullWidth />}
                         {chat?.story && <StoryCard fullWidth data={chat?.story} hasLink />}
                         
                     </div>

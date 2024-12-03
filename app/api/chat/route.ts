@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
         if(
             latestMessage.role === "user" && 
-            (latestMessage.content !== _INTRO_MESSAGE) && 
+            (latestMessage.content !== _INTRO_MESSAGE(chat.character)) && 
             !selfDestruct) 
         {
           
@@ -102,8 +102,7 @@ export async function POST(req: Request) {
                 This is background information about you:
                 ${chat?.character?.book}
                 
-                ${chat?.story 
-                    && `
+                ${chat?.story?.id && chat.story.id.length > 0 && `
                         This chat is based on a story. These are the details of the story (replace {{user}} with the user's name):
                         ${chat?.story?.title}
                         ${chat?.story?.description}

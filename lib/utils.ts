@@ -1,3 +1,4 @@
+import { Character } from "@/types/db";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -93,4 +94,13 @@ export function safeParseLink(link: string | undefined): string {
   return "";
 }
 
-export const _INTRO_MESSAGE = "Introduce yourself and if there is a story: Recap the story in your message.";
+export const _INTRO_MESSAGE = (character: Character): string => {
+  return `
+    This is the first message you should respond with:
+    ${character.first_message}
+
+    ${character.scenario && `
+      This is the scenario you are in: ${character.scenario}  
+    `}
+  `
+};

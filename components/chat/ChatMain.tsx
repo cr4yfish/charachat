@@ -264,7 +264,7 @@ export default function ChatMain(props : Props) {
         await syncDb(chat);
         
         // Works for both, normal chats and story chats
-        append({ content: _INTRO_MESSAGE, role: "user", createdAt: new Date() });
+        append({ content: _INTRO_MESSAGE(props.chat.character), role: "user", createdAt: new Date() });
 
         // if this is a story chat, add the first message from the story
         if(props.chat.story?.first_message && props.chat.story.first_message.length > 0) {
@@ -418,7 +418,7 @@ export default function ChatMain(props : Props) {
                 className="flex flex-col gap-2 pb-32 pt-28 px-4 h-fit min-h-full w-full max-w-6xl justify-self-center"
             >
                 {messages.map((message, index) => (
-                    (message.content !== _INTRO_MESSAGE) &&
+                    (message.content !== _INTRO_MESSAGE(props.chat.character)) &&
                     (
                         <div key={message.id + "_wrapper"} className={``}>
                             {(index !== 0) && (messages[index - 1].role !== message.role) && <Spacer y={6} />}
