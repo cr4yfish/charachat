@@ -106,6 +106,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
+        case "genma-2-9b-it":
             return getGroq(modelId, baseURL, apiKey);
 
         case 'ollama':
@@ -113,9 +114,13 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
         case "gpt-4o-mini":
         case "gpt-4o":
+        case "gpt-4-turbo":
+        case "o1-preview":
+        case "o1-mini":
             return getOpenAI(modelId, apiKey);
         
         case "gemini-1.5-flash":
+        case "gemini-1.5-pro":
             return getGemini(modelId, apiKey);
 
         case "open-mistral-nemo":
