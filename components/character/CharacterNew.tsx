@@ -315,6 +315,7 @@ export default function CharacterNew(props: Props) {
                         initValue={newCharacter.system_prompt}
                         setValue={(value) => updateValue("system_prompt", value )}
                         label="System Prompt addition"
+                        placeholder="Always respond to the user with a question to keep the conversation going."
                         description="Gets injected into the system prompt. Useful to set a chat-style." 
                         maxLength={_CHARACTER_MAX_LENGTH.system_prompt} 
                         buttonLabel="Generate System Prompt"
@@ -327,6 +328,7 @@ export default function CharacterNew(props: Props) {
                         initValue={newCharacter.image_prompt}
                         setValue={(value) => updateValue("image_prompt", value )}
                         label="Image Prompt Prefix"
+                        placeholder="Photorealistic, picture, black and white, high quality"
                         description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
                         maxLength={_CHARACTER_MAX_LENGTH.image_prompt}
                         maxRows={2} 
@@ -337,6 +339,7 @@ export default function CharacterNew(props: Props) {
                     />
                     <Input 
                         label="Voice Cloning Speaker link" 
+                        placeholder="https://link.to/speaker.wav"
                         description="Link to a .wav that's at least 6 seconds long as reference for voice cloning. You can leave it empty. There is a default voice if you don't provide one." 
                         value={newCharacter.speaker_link}
                         onValueChange={(value) => updateValue("speaker_link", value)}
