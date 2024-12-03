@@ -32,7 +32,9 @@ export async function POST(req: Request) {
         let input = "";
 
         contextFields.forEach((field) => {
-            input += field.slice(0, 100) + " ";
+            if(field && field.length > 0) {
+              input += field.slice(0, 100) + " ";  
+            }
         });
 
         const link = await generateImage({
