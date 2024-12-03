@@ -231,10 +231,14 @@ export default function CharacterPage(props: Props) {
                                     }}>
                                         <p>{props.character.book}</p>
                                     </AccordionItem>
-                                    <AccordionItem title="System Prompt">
+                                    <AccordionItem title="System Prompt" className="prose-h2:m-0 prose-p:m-0" classNames={{
+                                        title: "m-0 prose-h2:m-0"
+                                    }}>
                                         <p>{props.character.system_prompt}</p>
                                     </AccordionItem>
-                                    <AccordionItem title="Image Prompt">
+                                    <AccordionItem title="Image Prompt" className="prose-h2:m-0 prose-p:m-0" classNames={{
+                                        title: "m-0 prose-h2:m-0"
+                                    }}>
                                         <p>{props.character.image_prompt}</p>
                                     </AccordionItem>
                                 </Accordion>
