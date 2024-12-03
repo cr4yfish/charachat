@@ -7,6 +7,7 @@ import { useAsyncList } from "@react-stately/data";
 
 import { Persona } from "@/types/db";
 import { searchPersonas } from "@/functions/db/personas";
+import PersonaCard from "./PersonaCard";
 
 type Props = {
     setPersona?: (persona: Persona | undefined) => void;
@@ -21,6 +22,9 @@ export default function PersonaAutocomplete(props: Props) {
         async load({filterText}) {
             const res = await searchPersonas(filterText || "");
 
+            // sort so is_private comes first
+            res.sort((a, b) => a.is_private === b.is_private ? 0 : a.is_private ? -1 : 1);
+
             return {
                 items: res
             }
@@ -30,7 +34,7 @@ export default function PersonaAutocomplete(props: Props) {
 
     return (
         <Autocomplete 
-            label="Pick a Persona"
+            label="Change Persona"
             placeholder="Search for a Persona"
             name="persona"
             isLoading={list.isLoading}
@@ -46,8 +50,8 @@ export default function PersonaAutocomplete(props: Props) {
             }}
         >
             {(item) => (
-                <AutocompleteItem key={item.id} className="capitalize">
-                    {item.full_name}
+                <AutocompleteItem key={item.id} textValue={item.full_name}>
+                    <PersonaCard data={item} hasLink={false} fullWidth isSmall noBg />
                 </AutocompleteItem>
             )}
         </Autocomplete>
