@@ -3,7 +3,7 @@
 import { Persona, Profile } from "@/types/db";
 import {Tabs, Tab} from "@nextui-org/tabs";
 
-import AnimeImport from "../character/AnimeImport";
+import AnimeImport from "../character/importers/AnimeImport";
 
 type Props = {
     persona: Persona;
