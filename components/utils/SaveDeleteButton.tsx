@@ -9,6 +9,7 @@ type Props = {
     onDelete: () => void;
     isLoading?: boolean;
     isDisabled?: boolean;
+    label?: string;
 }
 
 export default function SaveDeleteButton(props: Props) {
@@ -31,7 +32,7 @@ export default function SaveDeleteButton(props: Props) {
                 startContent={<Icon filled>delete</Icon>}
                 size="lg"
             >
-                {isSure ? "Are you sure?" : "Delete"}
+                {isSure ? "Are you sure?" : (props.label ? props.label : "Delete")}
             </Button>
         </>
     )
