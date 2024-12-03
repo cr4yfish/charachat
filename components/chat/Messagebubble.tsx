@@ -36,6 +36,7 @@ import { generateAudioTool } from "@/functions/ai/tools";
 
 type Props = {
     message: AIMessage,
+    messages: AIMessage[],
     index: number,
     chat: Chat | null,
     user: Profile | null,
@@ -97,15 +98,15 @@ export default function Messagebubble(props: Props) {
         })
     }
 
-    const handleDelete = async () => {
+    const handleDelete = async (idToDelete: string) => {
         setIsDeleteLoading(true);
         try {
 
             if(!id) {  throw new Error("No id found. Refresh will probably fix this."); }
 
-            await deleteMessage(id);
+            await deleteMessage(idToDelete);
 
-            props.setMessages((messages) => messages.filter((message) => message.id !== props.message.id));
+            props.setMessages((messages) => messages.filter((message) => message.id !== idToDelete));
 
         } catch (error) {
             console.error(error);
@@ -116,6 +117,10 @@ export default function Messagebubble(props: Props) {
                 variant: "destructive",
             })
         }
+    }
+
+    const handleDeleteThisMessage = async () => {
+        handleDelete(props.message.id);
     }
 
     const handleSaveMessage = async () => {
@@ -149,7 +154,15 @@ export default function Messagebubble(props: Props) {
 
         try {
 
-            await handleDelete();
+            // Delete this message (AI)
+            await handleDelete(props.message.id);
+
+            // Delete last message (User)
+            const lastMessages = props.messages[props.messages.length - 2];
+            if(lastMessages.role === "user") {
+                await deleteMessage(lastMessages.id); // just delete from db, not from log
+            }
+
             await props.reloadMessages();
 
         } catch (error) {
@@ -319,7 +332,7 @@ export default function Messagebubble(props: Props) {
                             </CardFooter>
                         </Card>
                         <div className="flex flex-row items-center gap-1 dark:text-zinc-400 mt-1">
-                            <Button onClick={handleDelete} variant="light" isIconOnly size="sm">
+                            <Button onClick={handleDeleteThisMessage} variant="light" isIconOnly size="sm">
                                 <Icon downscale color="zinc-400" >delete</Icon>
                             </Button>
                             <Button onClick={handleSetEditMode} variant="light" isIconOnly size="sm">
@@ -370,7 +383,7 @@ export default function Messagebubble(props: Props) {
                         {!isRegenerating ? <Icon>refresh</Icon> : <Spinner size="sm" color="primary" />}
                     </ContextMenuItem>
                     }
-                    <ContextMenuItem onClick={handleDelete} disabled={isDeleteLoading} className="dark:text-red-400" >
+                    <ContextMenuItem onClick={handleDeleteThisMessage} disabled={isDeleteLoading} className="dark:text-red-400" >
                         Delete
                         {!isDeleteLoading ? <Icon>delete</Icon> : <Spinner size="sm" color="danger" />}
                     </ContextMenuItem>

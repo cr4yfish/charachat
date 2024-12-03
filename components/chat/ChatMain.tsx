@@ -59,6 +59,7 @@ export default function ChatMain(props : Props) {
             } as AIMessage
         }),
         initialInput: "",
+        sendExtraMessageFields: true,
         maxSteps: 3,
         keepLastMessageOnError: true,
         generateId: () => uuidv4(),
@@ -72,7 +73,6 @@ export default function ChatMain(props : Props) {
             if (inputRef.current) {
                 inputRef.current.focus();
             }
-
             if(!chat) {
                 console.error("No chat found");
                 toast({
@@ -108,7 +108,7 @@ export default function ChatMain(props : Props) {
             }
 
             // add message to db
-            const newMessage: Message = {
+            const newAIMessage: Message = {
                 id: message.id,
                 chat: chat,
                 character: props.chat.character,
@@ -128,7 +128,7 @@ export default function ChatMain(props : Props) {
 
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content
-            if(newMessage.content !== "") {
+            if(newAIMessage.content !== "") {
                 
                 const key = sessionStorage.getItem("key");
 
@@ -142,20 +142,7 @@ export default function ChatMain(props : Props) {
                     return;
                 }
 
-                await addMessage(newMessage, key);
-
-                /* add correct id to message payload
-                const newMessages = messages.map((m) => {
-                    if(m.id === message.id) {
-                        return {
-                            ...m,
-                            id: newMessage.id
-                        }
-                    }
-                    return m;
-                })*/
-
-                //setMessages(newMessages);
+                await addMessage(newAIMessage, key);
             }
 
         },
@@ -171,7 +158,7 @@ export default function ChatMain(props : Props) {
                 description: err.message,
                 variant: "destructive"
             });
-        }
+        },
     });
 
     const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -393,6 +380,7 @@ export default function ChatMain(props : Props) {
         if(isLoading) {
             stop();
         } else {
+            const uuid = uuidv4();
             handleSubmit(e, {
                 allowEmptySubmit: true
             });
@@ -442,6 +430,7 @@ export default function ChatMain(props : Props) {
                             <Messagebubble 
                                 key={message.id} 
                                 message={message} 
+                                messages={messages}
                                 setMessages={setMessages}
                                 index={index} 
                                 chat={chat} 

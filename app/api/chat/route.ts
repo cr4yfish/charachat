@@ -41,14 +41,13 @@ export async function POST(req: Request) {
             (latestMessage.content !== _INTRO_MESSAGE(chat.character)) && 
             !selfDestruct) 
         {
-          
             const message: Message = {
-                id: uuidv4(),
+                id: latestMessage.id,
                 chat: chat,
                 character: chat.character,
                 user: profile,
                 from_ai: false,
-                content: messages[messages.length - 1].content,
+                content: latestMessage.content,
                 is_edited: false,
                 is_deleted: false,
             }
