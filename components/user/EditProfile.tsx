@@ -256,6 +256,9 @@ export default function EditProfile(props: Props) {
                     <div className="flex items-center gap-2">
                         <Chip color="success">Mistral Nemo</Chip>
                         <Chip color="success">xAI Grok</Chip>
+                        <Chip color="success">Llama 3.2 90b</Chip>
+                        <Chip color="success">Llama 3 70b</Chip>
+                        <Chip color="success">Genma 2</Chip>
                     </div>
                     <Separator className="my-2" />
                     
