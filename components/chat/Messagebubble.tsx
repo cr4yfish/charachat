@@ -176,16 +176,37 @@ export default function Messagebubble(props: Props) {
         if(!props.chat || !props.user) { 
             throw new Error("No chat or user found. Refresh will probably fix this."); 
         }
-        setIsLoadingAudio(true);
-        const link = await generateAudioTool({
-            chat: props.chat,
-            profile: props.user,
-            prompt: props.message.content,
-        })
+        try {
+            setIsLoadingAudio(true);
+            const { link, error } = await generateAudioTool({
+                chat: props.chat,
+                profile: props.user,
+                prompt: props.message.content,
+            })
 
-        setAudioLink(link);
-        setIsLoadingAudio(false);
-        return link;
+            if(error) {
+                throw new Error(error);
+            }
+
+            if(!link) {
+                throw new Error("Could not generate Audio. Unknown Error.");
+            }
+
+        
+            setIsLoadingAudio(false);
+            return link;
+        } catch (error) {
+            console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Failed to generate audio",
+                description: err.message,
+                variant: "destructive",
+            })
+        } finally {
+            setIsLoadingAudio(false);
+        }
+        return null;
     }
 
     const handlePlayAudio = async () => {
@@ -194,6 +215,8 @@ export default function Messagebubble(props: Props) {
             if(!link) {
                 link = await handleGenerateAudio();
             };
+
+            if(link === null) { return; }
     
             setIsAudioPlaying(true);
             const audio = new Audio(link);
@@ -242,7 +265,7 @@ export default function Messagebubble(props: Props) {
                             id={props.message.id}
                             className={`
                                 relative rounded-3xl w-fit max-w-3/4  !select-none
-                                ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-800/50" : "mr-auto rounded-bl dark:bg-zinc-900"}
+                                ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-600/20" : "mr-auto rounded-bl dark:bg-zinc-900/0"}
                                 ${isEditMode ? "border-1 dark:border-amber-400" : "border-none"}
                                 `}
                         >
@@ -290,15 +313,23 @@ export default function Messagebubble(props: Props) {
                                 }
                             </CardContent>
                             <CardFooter className=" py-1 pb-3">
-                                <p className={` text-xs text-gray-500 ${props.message.role == "user" ? "dark:text-slate-400" : "dark:text-zinc-400"} `}>
+                                <p className={` text-xs text-gray-500 ${props.message.role == "user" ? "dark:text-zinc-400" : "dark:text-zinc-400"} `}>
                                     {new Date((props.message.createdAt ?? "") as string).toLocaleTimeString("de-DE", { timeStyle: "short" })}
                                 </p>
                             </CardFooter>
                         </Card>
                         {props.message.role === "assistant" && 
-                            <Button isLoading={isLoadingAudio || isAudioPlaying} onClick={handlePlayAudio} variant="light" isIconOnly className="mt-1">
-                                <Icon filled>play_arrow</Icon>
+                        <div className="flex flex-row items-center gap-1 dark:text-zinc-400 mt-1">
+                            <Button isLoading={isLoadingAudio || isAudioPlaying} onClick={handlePlayAudio} variant="light" isIconOnly size="sm">
+                                <Icon color="zinc-400" >play_arrow</Icon>
                             </Button>
+                            <Button isDisabled variant="light" isIconOnly size="sm">
+                                <Icon downscale color="zinc-400" >thumb_up</Icon>
+                            </Button>
+                            <Button isDisabled variant="light" isIconOnly size="sm">
+                                <Icon downscale color="zinc-400" >thumb_down</Icon>
+                            </Button>
+                        </div>
                         }
                     </motion.div>
                 </ContextMenuTrigger>
