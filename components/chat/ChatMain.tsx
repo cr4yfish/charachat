@@ -506,7 +506,6 @@ export default function ChatMain(props : Props) {
                         />
                         <div className="flex flex-row flex-wrap gap-1">
                             <PersonaAutocomplete setPersona={(persona) => chat && setChat({...chat, persona: persona })} />
-                            <Button onClick={() => alert("Coming soon")} variant="flat" color="secondary" startContent={<Icon filled>comedy_mask</Icon>}>Change Persona</Button>
                             <Link href={"/persona/new"}>
                                 <Button variant="flat" color="secondary" startContent={<Icon>add</Icon>}>Create new</Button>
                             </Link>
