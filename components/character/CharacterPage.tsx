@@ -181,6 +181,7 @@ export default function CharacterPage(props: Props) {
                         }
                         {props.character.tags_full?.map(tag => (
                         <Card 
+                            key={tag.id}
                             className={`
                                 w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full dark:bg-zinc-600/40
                                 backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium

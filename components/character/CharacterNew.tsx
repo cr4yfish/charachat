@@ -213,7 +213,7 @@ export default function CharacterNew(props: Props) {
                         <p className="text-xs dark:text-zinc-400">Tags are used to categorize the Character and make it easier to find.</p>
                         <div className="flex flex-row flex-wrap gap-2">
                             {newCharacter.tags_full?.map(tag => (
-                                <Chip>{tag?.name}</Chip>
+                                <Chip key={tag.id}>{tag?.name}</Chip>
                             ))}
                         </div>
                         <TagsSelect selectedTags={newCharacter.tags_full ?? []} onSelect={(tags) => updateValue("tags_full", tags)} />

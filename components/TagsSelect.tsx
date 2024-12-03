@@ -15,6 +15,7 @@ import { Button } from "./utils/Button";
 import { useEffect, useState } from "react";
 import { getTags } from "@/functions/db/tags";
 import { Chip } from "@nextui-org/chip";
+import { Spinner } from "@nextui-org/spinner";
 
 type Props = {
     selectedTags: Tag[]
@@ -36,10 +37,6 @@ export default function TagsSelect(props: Props) {
             fetchTags();
         }
     }, [])
-
-    useEffect(() => {
-        console.log(props.selectedTags)
-    }, [props.selectedTags])
 
     const handleUpdateValue = (tag: Tag) => {
         if(!props.selectedTags || props.selectedTags.length === 0) {
@@ -71,6 +68,7 @@ export default function TagsSelect(props: Props) {
                 </DrawerHeader>
 
                 <div className="p-4 flex flex-row flex-wrap gap-3">
+                    {isLoading && <Spinner />}
                     {availableTags.map(tag => (
                         <Chip 
                             key={tag?.id} 
