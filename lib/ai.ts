@@ -149,17 +149,17 @@ export const LLMs: LLMType[] = [
     
     {
         "key": "llama3-groq-70b-8192-tool-use-preview",
-        "name": "llama3 70b",
+        "name": "llama3 70b (free)",
         "provider": "Groq"
     },
     {
         "key": "llama-3.2-90b-vision-preview",
-        "name": "Llama 3.2 90b",
+        "name": "Llama 3.2 90b (free)",
         "provider": "Groq"
     },
     {
         "key": "genma-2-9b-it",
-        "name": "Genma 2 9b",
+        "name": "Genma 2 9b (free)",
         "provider": "Groq"
     },
 
