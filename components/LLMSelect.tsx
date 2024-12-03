@@ -11,7 +11,7 @@ type Props = {
     user: Profile | undefined,
 }
 
-const LLMCard = (llm: LLMType) => (
+const LLMCard = ({llm} : { llm: LLMType }) => (
     <Card className="h-[60px] p-0 m-0 w-full dark:bg-transparent dark:border-none">
         <CardHeader className=" m-0 p-0 w-full flex flex-col items-start justify-center h-full bg-transparent">
             <CardDescription>{llm.provider}</CardDescription>
@@ -33,7 +33,7 @@ export default function LLMSelect(props: Props) {
             <SelectContent>
                 {LLMsWithAPIKeys(props.user).map((llm) => (
                     <SelectItem key={llm.key} value={llm.key}>
-                        <LLMCard {...llm} />
+                        <LLMCard llm={llm} />
                     </SelectItem>
                 ))}
             </SelectContent>
