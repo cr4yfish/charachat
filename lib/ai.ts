@@ -36,6 +36,13 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
     }
 }
 
+export const checkUserHasImageAPIKey = (profile: Profile): boolean => {
+    if(profile.hf_encrypted_api_key || profile.hf_encrypted_api_key) {
+        return true;
+    }
+    return false;
+}
+
 export const LLMsWithAPIKeys = (profile: Profile) => {
     return LLMs.filter((llm) => {
         if(
