@@ -14,12 +14,12 @@ export type Character = {
     avatar?: string;
     avatarUrl?: string;
     image_link?: string;
-    bio: string;
-    intro: string;
-    book: string;
+    bio?: string;
+    intro?: string;
+    book?: string;
     category?: Category;
     is_private: boolean;
-    personality: string;
+    personality?: string;
     chats?: number;
     likes?: number;
     is_liked?: boolean;
