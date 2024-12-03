@@ -6,6 +6,7 @@ import AnimeImport from "./importers/AnimeImport";
 import AICharacterCardsImporter from "./importers/AICharacterCardImporter";
 import FandomImporter from "./importers/FandomImporter";
 import WikipediaImport from "./importers/WikipediaImport";
+import JanitorImporter from "./importers/JanitorImporter";
 
 
 type Props = {
@@ -24,7 +25,7 @@ export default function CharacterNewImport(props: Props) {
             <h1 className="text-xl font-bold">Import</h1>
             
             <Tabs className="w-full">
-                <Tab title="Anime & Manga" className="w-full">
+                <Tab title="Anime" className="w-full">
                     <AnimeImport 
                         setCharacter={props.setCharacter}
                         profile={props.profile}
@@ -36,6 +37,13 @@ export default function CharacterNewImport(props: Props) {
                         profile={props.profile}
                     />
                 </Tab>
+                <Tab title="JanitorAI">
+                    <JanitorImporter
+                        setCharacter={props.setCharacter}
+                        profile={props.profile}
+                    />
+                </Tab>
+
                 <Tab title="Fandom">
                     <FandomImporter
                         setCharacter={props.setCharacter}

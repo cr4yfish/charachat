@@ -40,3 +40,13 @@ export async function getAICharacterCard(url: string) {
     const res = await fetch(url);
     return res.text();
 }
+
+export async function searchJanitor(search: string) {
+    const res = await fetch("https://jannyai.com/?query=" + search)
+    return res.text();
+}
+
+export async function getJanitor(url: string, options: RequestInit = {}) {
+    const res = await fetch(url, options);
+    return res.text();
+}
