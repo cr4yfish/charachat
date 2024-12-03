@@ -96,8 +96,15 @@ export function safeParseLink(link: string | undefined): string {
 
 export const _INTRO_MESSAGE = (character: Character): string => {
   return `
-    This is the first message you should respond with:
-    ${character.first_message}
+    ${character.first_message && `
+      This is the first message you should respond with:
+      ${character.first_message}  
+    `}
+
+    ${character.intro && `
+      This is how you would introduce yourself. Use this to create a first message:
+      ${character.intro}
+    `}
 
     ${character.scenario && `
       This is the scenario you are in: ${character.scenario}  
