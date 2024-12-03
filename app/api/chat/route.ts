@@ -99,9 +99,6 @@ export async function POST(req: Request) {
             
                 Actively memorize important keywords and facts in the following conversation and use them.
 
-                This is the intro (might be how a character introduces themselves or intro to the chat):
-                ${chat?.character?.intro}
-
                 This is background information about you:
                 ${chat?.character?.book}
                 
