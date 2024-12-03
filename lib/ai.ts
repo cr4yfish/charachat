@@ -1,7 +1,7 @@
 import { Profile } from "@/types/db";
 
 export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): string | undefined => {
-    switch(modelId) {
+    switch(modelId as ModelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
         case "genma-2-9b-it":
@@ -40,7 +40,6 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
             return process.env.MISTRAL_API_KEY;
 
         default:
-            console.error("user requested model not found in selection", modelId);
             return undefined;
     }
 }
@@ -85,8 +84,9 @@ export type ModelId =
     "command-r" |
     "c4ai-aya-expanse-32b" |
     "black-forest-labs/flux-schnell" |
+    "black-forest-labs/FLUX.1-schnell" |
     "xtts-v2" |
-    "zsxkib/pulid" |
+    "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0" |
     "fal-ai/ltx-video/image-to-video"
 
 export type ProviderId = 
@@ -224,11 +224,15 @@ export const LLMs: LLMType[] = [
         "name": "Your openAI model",
         "provider": "You"
     },
-
+    {
+        "key": "black-forest-labs/FLUX.1-schnell",
+        "name": "Flux Schnell",
+        "provider": "Huggingface"
+    },
     {
         "key": "black-forest-labs/flux-schnell",
         "name": "Flux Schnell",
-        "provider": "Huggingface"
+        "provider": "Replicate"
     },
     {
         "key": "xtts-v2",
@@ -236,7 +240,7 @@ export const LLMs: LLMType[] = [
         "provider": "Replicate"
     },
     {
-        "key": "zsxkib/pulid",
+        "key": "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0",
         "name": "Pulid",
         "provider": "Replicate"
     },
