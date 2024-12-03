@@ -65,6 +65,8 @@ export async function POST(req: Request) {
         });
 
         const result = await streamText({
+            temperature: chat.temperature,
+            frequencyPenalty: chat.frequency_penalty,
             model: model,
             system: `
                 ${chat?.character?.system_prompt}

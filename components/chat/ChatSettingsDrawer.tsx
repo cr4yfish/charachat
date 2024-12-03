@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Avatar } from "@nextui-org/avatar";
-import { Slider } from "@nextui-org/slider";
+import { Slider, SliderValue } from "@nextui-org/slider";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
@@ -34,7 +34,6 @@ import StoryCard from "../story/StoryCard";
 export default function ChatSettingsDrawer() {
 
     const { chat, setChat } = useSharedChat()
-
     const [isDeleting, setIsDeleting] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
 
@@ -72,7 +71,7 @@ export default function ChatSettingsDrawer() {
                     <Avatar src={chat?.character.image_link} />
                 </Button>
             </SheetTrigger>
-            <SheetContent className="flex flex-col gap-4">
+            <SheetContent className="flex flex-col gap-4 w-full">
                 <SheetHeader className=" w-full items-start">
                     <SheetDescription>Chat with {chat?.character.name}</SheetDescription>
                     <SheetTitle>Chat Settings</SheetTitle>
@@ -129,13 +128,13 @@ export default function ChatSettingsDrawer() {
                         />
 
                         <div className="flex flex-col gap-2 w-full relative max-w-full">
-                            <span className="text-sm dark:text-zinc-400">Change average response length</span>
+                            <span className="text-sm dark:text-zinc-400">Adjust the AI</span>
                             <Slider 
                                 showSteps 
                                 step={1} 
                                 hideValue
                                 className="max-w-[95%] self-center"
-                                value={[chat?.response_length ?? 0]}
+                                value={[chat?.response_length ?? 0] as SliderValue}
                                 onChange={(e) => {
                                     if (chat) {
                                         setChat({...chat, response_length: (e as Array<number>)[0]});
@@ -151,9 +150,53 @@ export default function ChatSettingsDrawer() {
                                     { value: 3, label: "Novel" }
                                 ]}
                             />
+
+                            <Slider 
+                                showSteps 
+                                step={.1} 
+                                minValue={.6}
+                                maxValue={.8} 
+                                hideValue
+                                className="max-w-[95%] self-center"
+                                value={[chat?.temperature] as SliderValue}
+                                onChange={(e) => {
+                                    if (chat) {
+                                        setChat({...chat, temperature: (e as Array<number>)[0]});
+                                    }
+                                }}
+                                label="Randomness"
+                                size="lg"
+                                marks={[
+                                    { value: 0.6, label: "Low" },
+                                    { value: 0.7, label: "Medium" },
+                                    { value: 0.8, label: "High" }
+                                ]}
+                            />
+
+                            <Slider 
+                                showSteps 
+                                step={.1} 
+                                minValue={0}
+                                maxValue={1} 
+                                hideValue
+                                className="max-w-[95%] self-center"
+                                value={[chat?.frequency_penalty] as SliderValue}
+                                onChange={(e) => {
+                                    if (chat) {
+                                        setChat({...chat, frequency_penalty: (e as Array<number>)[0]});
+                                    }
+                                }}
+                                label="Repetition reduction"
+                                size="lg"
+                                marks={[
+                                    { value: 0, label: "None" },
+                                    { value: 0.5, label: "Medium" },
+                                    { value: 0.9, label: "Extreme" }
+                                ]}
+                            />
                         </div>
 
-                        {chat?.story && <StoryCard data={chat?.story} hasLink />}
+                        {chat?.story && <StoryCard fullWidth data={chat?.story} hasLink />}
                         
                     </div>
 
@@ -161,8 +204,8 @@ export default function ChatSettingsDrawer() {
                         { (chat?.character.owner.user == chat?.user.user) && (
                             <Link href={`/c/${chat?.character.id}/edit`}>
                                 <Button
-                                    size="lg" fullWidth
-                                    startContent={<Icon filled>edit</Icon>}
+                                    size="lg" fullWidth variant="flat"
+                                    startContent={<Icon filled>open_in_new</Icon>}
                                     color="warning"
                                 >
                                     Edit Character
@@ -178,12 +221,13 @@ export default function ChatSettingsDrawer() {
                             variant="solid" 
                             startContent={<Icon filled>save</Icon>}
                         >
-                            Save
+                            Save Chat Settings
                         </Button>
                         <SaveDeleteButton 
                             onDelete={handleDelete}
                             isLoading={isDeleting}
                             isDisabled={isSaving}
+                            label="Delete Chat"
                         /> 
                     </div>
                 </div>

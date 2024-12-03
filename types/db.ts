@@ -43,6 +43,8 @@ export type Chat = {
     persona?: Persona;
     negative_prompt?: string;
     response_length: number;
+    temperature: number;
+    frequency_penalty: number;
 }
 
 export type Profile = {
