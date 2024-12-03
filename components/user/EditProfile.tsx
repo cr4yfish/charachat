@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Spacer } from "@nextui-org/spacer";
 import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Chip } from "@nextui-org/chip";
 import { Button } from "@/components/utils/Button";
 import Icon from "../utils/Icon";
@@ -14,10 +13,11 @@ import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { deleteUser, updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
-import { LLMs, LLMsWithAPIKeys, ProviderId } from "@/lib/ai";
+import { LLMs, ProviderId } from "@/lib/ai";
 import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { Separator } from "../ui/separator";
+import LLMSelect from "../LLMSelect";
 
 type KeyInputProps = {
     url: string,
@@ -360,19 +360,11 @@ export default function EditProfile(props: Props) {
                     <CardTitle>Choose Author Model</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Select 
-                        onValueChange={(value) =>  profile && handleUpdateValue('default_llm', value)}
-                        defaultValue={profile.default_llm}
-                    >
-                        <SelectTrigger className="w-[250px]">
-                            <SelectValue placeholder="Select an AI" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {LLMsWithAPIKeys(profile).map((llm) => (
-                                <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <LLMSelect  
+                        default={profile.default_llm}
+                        onSelect={(value) => handleUpdateValue('default_llm', value)}
+                        user={profile}
+                    />
                 </CardContent>
             </Card>
 
