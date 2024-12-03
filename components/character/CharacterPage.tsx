@@ -229,17 +229,17 @@ export default function CharacterPage(props: Props) {
                                     <AccordionItem title="Character Book" className="prose-h2:m-0 prose-p:m-0" classNames={{
                                         title: "m-0 prose-h2:m-0"
                                     }}>
-                                        <p>{props.character.book}</p>
+                                        <p>{props.character.book ?? "This character has no character book."}</p>
                                     </AccordionItem>
                                     <AccordionItem title="System Prompt" className="prose-h2:m-0 prose-p:m-0" classNames={{
                                         title: "m-0 prose-h2:m-0"
                                     }}>
-                                        <p>{props.character.system_prompt}</p>
+                                        <p>{props.character.system_prompt ?? "This character has no customized system prompt."}</p>
                                     </AccordionItem>
                                     <AccordionItem title="Image Prompt" className="prose-h2:m-0 prose-p:m-0" classNames={{
                                         title: "m-0 prose-h2:m-0"
                                     }}>
-                                        <p>{props.character.image_prompt}</p>
+                                        <p>{props.character.image_prompt ?? "This character has no customized image prompt."}</p>
                                     </AccordionItem>
                                 </Accordion>
                                 
