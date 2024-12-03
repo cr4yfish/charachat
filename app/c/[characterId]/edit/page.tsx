@@ -2,8 +2,9 @@
 
 import { getCharacter } from "@/functions/db/character";
 
-import CharacterEditMain from "@/components/character/CharacterEditMain";
 import { Metadata } from "next";
+import CharacterNew from "@/components/character/CharacterNew";
+import { getCurrentUser } from "@/functions/db/auth";
 
 
 export async function generateMetadata(
@@ -29,6 +30,7 @@ export async function generateMetadata(
 export default async function CharacterView({ params: { characterId } } : { params: { characterId: string } }) {
 
     const character = await getCharacter(characterId);
+    const profile = await getCurrentUser();
 
     return (
         <>
@@ -36,7 +38,7 @@ export default async function CharacterView({ params: { characterId } } : { para
             <h2 className="font-bold text-2xl">Edit {character.name}</h2>
         </div>
         
-        <CharacterEditMain character={character} />
+        <CharacterNew editMode initCharacter={character} profile={profile} />
         </>
     )
 }
