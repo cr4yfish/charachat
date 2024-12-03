@@ -253,7 +253,7 @@ export default function EditProfile(props: Props) {
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
                     <h3>Free models</h3>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                         <Chip color="success">Mistral Nemo</Chip>
                         <Chip color="success">xAI Grok</Chip>
                         <Chip color="success">Llama 3.2 90b</Chip>
