@@ -318,19 +318,29 @@ export default function Messagebubble(props: Props) {
                                 </p>
                             </CardFooter>
                         </Card>
-                        {props.message.role === "assistant" && 
                         <div className="flex flex-row items-center gap-1 dark:text-zinc-400 mt-1">
-                            <Button isLoading={isLoadingAudio || isAudioPlaying} onClick={handlePlayAudio} variant="light" isIconOnly size="sm">
-                                <Icon color="zinc-400" >play_arrow</Icon>
+                            <Button onClick={handleDelete} variant="light" isIconOnly size="sm">
+                                <Icon downscale color="zinc-400" >delete</Icon>
                             </Button>
-                            <Button isDisabled variant="light" isIconOnly size="sm">
-                                <Icon downscale color="zinc-400" >thumb_up</Icon>
+                            <Button onClick={handleSetEditMode} variant="light" isIconOnly size="sm">
+                                <Icon downscale color="zinc-400" >edit</Icon>
                             </Button>
-                            <Button isDisabled variant="light" isIconOnly size="sm">
-                                <Icon downscale color="zinc-400" >thumb_down</Icon>
-                            </Button>
+                            <Button onClick={handleCopyToClipboard} variant="light" isIconOnly size="sm">
+                                <Icon downscale color="zinc-400" >content_copy</Icon>
+                            </Button>                            
+                            {props.isLatestMessage &&  props.message.role === "assistant" &&
+                                <Button onClick={handleRegenerate} variant="light" isIconOnly size="sm">
+                                    <Icon downscale color="zinc-400" >refresh</Icon>
+                                </Button>
+                            }
+                            {props.message.role === "assistant" &&
+                                <Button isLoading={isLoadingAudio || isAudioPlaying} onClick={handlePlayAudio} variant="light" isIconOnly size="sm">
+                                    <Icon color="zinc-400" >play_arrow</Icon>
+                                </Button>
+                            }
+
                         </div>
-                        }
+                        
                     </motion.div>
                 </ContextMenuTrigger>
 
