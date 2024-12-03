@@ -149,12 +149,7 @@ export default function WikipediaImport(props: Props) {
         }
 
         searchTimeout.current = setTimeout(() => {
-            if(search.length == 0) {
-                // reset results
-                setWikiPages([]);
-            } else {
-                handleSearch(search);
-            }
+            handleSearch(search);
         }, 500);
 
         return () => {

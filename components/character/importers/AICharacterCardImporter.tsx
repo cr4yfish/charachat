@@ -179,12 +179,7 @@ export default function AICharacterCardsImporter(props: Props) {
         }
 
         searchTimeout.current = setTimeout(() => {
-            if(search.length == 0) {
-                // reset results
-                setCharacterPage([]);
-            } else {
-                handleSearch(search);
-            }
+            handleSearch(search);
         }, 500);
 
         return () => {

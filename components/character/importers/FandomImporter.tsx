@@ -164,12 +164,7 @@ export default function FandomImporter(props: Props) {
         }
 
         searchTimeout.current = setTimeout(() => {
-            if(search.length == 0) {
-                // reset results
-                setFandomPages([]);
-            } else {
-                handleSearch(search);
-            }
+            handleSearch(search);
         }, 500);
 
         return () => {
