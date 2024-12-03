@@ -25,7 +25,6 @@ type Props = {
 
 const KeyInputDescription = ({url, hasFreeTier}: {url: string, hasFreeTier?: boolean}) => (
     <div className="flex flex-row items-center gap-1">
-        {hasFreeTier && <span className="text-green-500">Free Tier Available</span>}
         <a
             href={url}
             target="_blank"
@@ -33,6 +32,7 @@ const KeyInputDescription = ({url, hasFreeTier}: {url: string, hasFreeTier?: boo
         >
             Get the key here
         </a>
+        {hasFreeTier && <span className="text-green-500">Free Tier Available</span>}
     </div>
 )
 
