@@ -7,12 +7,13 @@ import { createOllama } from 'ollama-ai-provider';
 import { createAnthropic  } from '@ai-sdk/anthropic';
 import { createXai } from "@ai-sdk/xai";
 import { createCohere } from "@ai-sdk/cohere";
-
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { LanguageModelV1 } from '@ai-sdk/provider';
 import { Profile } from '@/types/db';
 import { getProfileAPIKey, isFreeModel, ModelId } from '@/lib/ai';
 import { checkIsEncrypted, decryptMessage } from '@/lib/crypto';
 import { getKeyServerSide } from '../serverHelpers';
+import { getCurrentUser } from '../db/auth';
 
 async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createOpenAI({
@@ -75,6 +76,14 @@ async function getCohere(modelId: string, apiKey?: string): Promise<LanguageMode
     return cohere(modelId);
 }
 
+async function getOpenRouter(modelName: string, apiKey?: string): Promise<LanguageModelV1> {
+    const openRouter = createOpenRouter({
+        apiKey: apiKey,
+    });
+
+    return openRouter(modelName);
+}
+
 async function getOpenAICompatible(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const openAICompatible = createOpenAI({
         baseURL: baseURL,
@@ -102,7 +111,7 @@ type GetLanguageModelProps = {
 
 export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguageModelProps): Promise<LanguageModelV1> {
     
-    switch(modelId) {
+    switch(modelId as ModelId) {
 
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
@@ -140,6 +149,17 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "command-r":
         case "c4ai-aya-expanse-32b":
             return getCohere(modelId, apiKey);
+
+        case "openrouter":
+            const profile = await getCurrentUser();
+            const model = profile.openrouter_model;
+            if(!model) {
+                throw new Error("OpenRouter Model not found");
+            }
+            const key = await getKeyServerSide();
+            const decryptedModel = decryptMessage(model, Buffer.from(key, 'hex'));
+            return getOpenRouter(decryptedModel, apiKey);
+
             
         default:
             throw new Error("Model not found");

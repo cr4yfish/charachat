@@ -71,6 +71,8 @@ export type Profile = {
     cohere_encrypted_api_key?: string;
     fal_gpt_encrypted_api_key?: string;
     x_ai_encrypted_api_key?: string;
+    openrouter_model?: string;
+    openrouter_encrypted_api_key?: string;
 }
 
 export type Story = {

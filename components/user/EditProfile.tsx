@@ -103,6 +103,8 @@ export default function EditProfile(props: Props) {
                 cohere_encrypted_api_key: props.profile.cohere_encrypted_api_key && decryptMessage(props.profile.cohere_encrypted_api_key, keyBuffer),
                 fal_gpt_encrypted_api_key: props.profile.fal_gpt_encrypted_api_key && decryptMessage(props.profile.fal_gpt_encrypted_api_key, keyBuffer),
                 x_ai_encrypted_api_key: props.profile.x_ai_encrypted_api_key && decryptMessage(props.profile.x_ai_encrypted_api_key, keyBuffer),
+                openrouter_encrypted_api_key: props.profile.openrouter_encrypted_api_key && decryptMessage(props.profile.openrouter_encrypted_api_key, keyBuffer),
+                openrouter_model: props.profile.openrouter_model && decryptMessage(props.profile.openrouter_model, keyBuffer),
             }
 
             setProfile(profileToEdit);
@@ -143,6 +145,8 @@ export default function EditProfile(props: Props) {
                 cohere_encrypted_api_key: profile.cohere_encrypted_api_key && encryptMessage(profile.cohere_encrypted_api_key, keyBuffer),
                 fal_gpt_encrypted_api_key: profile.fal_gpt_encrypted_api_key && encryptMessage(profile.fal_gpt_encrypted_api_key, keyBuffer),
                 x_ai_encrypted_api_key: profile.x_ai_encrypted_api_key && encryptMessage(profile.x_ai_encrypted_api_key, keyBuffer),
+                openrouter_encrypted_api_key: profile.openrouter_encrypted_api_key && encryptMessage(profile.openrouter_encrypted_api_key, keyBuffer),
+                openrouter_model: profile.openrouter_model && encryptMessage(profile.openrouter_model, keyBuffer),
             }
 
             await updateProfile(profileToSave);
@@ -344,11 +348,31 @@ export default function EditProfile(props: Props) {
             </Card>
 
             <div className="prose dark:prose-invert">
-                <h3>Self hosted AI</h3>
-                <p className="text-sm dark:text-zinc-400">If you have a self hosted version of an AI, you can configure it here. For example, you can host <a href="https://ollama.com/" target="_blank" className="text-blue-500 underline">Ollama</a> yourself.
+                <h3>Advanced AI</h3>
+                <p className="text-sm dark:text-zinc-400">If you have a self hosted version of an AI, or want to integrate any model from somewhere else, you can configure it here. For example, you can use any Model from <a href="https://openrouter.ai" target="_blank" className="text-blue-500 underline">Open Router</a> or even host <a href="https://ollama.com/" target="_blank" className="text-blue-500 underline">Ollama</a> yourself.
                 </p>
             </div>
             
+            <Card>
+                <CardHeader>
+                    <CardDescription>Configure any Model hosted on Open Router</CardDescription>
+                    <CardTitle>Open Router</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                    <Input label="Model Name" description="The complete Model string. You can copy this directly from the Model page on Open Router" 
+                        placeholder="nousresearch/hermes-3-llama-3.1-405b"
+                        value={profile.openrouter_model} onValueChange={(value) => handleUpdateValue("openrouter_model", value)}
+                    />
+                    <KeyInput 
+                        url="https://openrouter.ai/settings/keys" 
+                        label="Open Router API Key"
+                        provider={"OpenRouter"}
+                        value={profile.openrouter_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("openrouter_encrypted_api_key", value)}
+                    />
+                </CardContent>
+            </Card>
+
             <Card>
                 <CardHeader>
                     <CardDescription>Configure your self hosted Ollama</CardDescription>

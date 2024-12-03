@@ -116,7 +116,7 @@ export async function POST(req: Request) {
                 ${chat?.dynamic_book}
             `,
             messages: convertToCoreMessages(messages),
-            tools: {
+            tools: chat.llm == "openrouter" ? undefined : {
                 addNewMemory: tool({
                     description: "Add a new memory to the character's knowledge.",
                     parameters: z.object({ memory: z.string() }),

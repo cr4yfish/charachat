@@ -53,6 +53,7 @@
     "@nextui-org/theme": "^2.2.11",
     "@nextui-org/tooltip": "^2.0.41",
     "@nextui-org/user": "^2.0.34",
+    "@openrouter/ai-sdk-provider": "^0.0.6",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-context-menu": "^2.2.2",
     "@radix-ui/react-dialog": "^1.1.2",

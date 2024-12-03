@@ -42,6 +42,9 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
             }
             return process.env.MISTRAL_API_KEY;
 
+        case "openrouter":
+            return profile.openrouter_encrypted_api_key;
+
         default:
             return undefined;
     }
@@ -90,7 +93,8 @@ export type ModelId =
     "black-forest-labs/FLUX.1-schnell" |
     "xtts-v2" |
     "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0" |
-    "fal-ai/ltx-video/image-to-video"
+    "fal-ai/ltx-video/image-to-video" |
+    "openrouter"
 
 export type ProviderId = 
     "OpenAI" |
@@ -103,7 +107,8 @@ export type ProviderId =
     "You" |
     "Huggingface" |
     "Replicate" |
-    "FAL"
+    "FAL" |
+    "OpenRouter"
 
 export type ImageModelId = 
     "black-forest-labs/FLUX.1-schnell"
@@ -199,7 +204,11 @@ export const LLMs: LLMType[] = [
         "name": "Claude 3.5 Haiku",
         "provider": "Anthropic"
     },
-
+    {
+        "key": "openrouter",
+        "name": "Your OpenRouter Model",
+        "provider": "OpenRouter"
+    },
 
     {
         "key": "command-r-plus",
