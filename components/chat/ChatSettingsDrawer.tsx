@@ -7,7 +7,6 @@ import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
-import { LLMs } from "@/lib/ai";
 import {
     Sheet,
     SheetContent,
@@ -16,23 +15,20 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { useSharedChat } from "@/context/SharedChatSettings";
 import Link from "next/link";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { _CHAT_MAX_LENGTH } from "@/lib/maxLength";
 import StoryCard from "../story/StoryCard";
 import CharacterCard from "../character/CharacterCard";
+import LLMSelect from "../LLMSelect";
+import { Profile } from "@/types/db";
 
+type Props = {
+    user: Profile
+}
 
-export default function ChatSettingsDrawer() {
+export default function ChatSettingsDrawer(props: Props) {
 
     const { chat, setChat } = useSharedChat()
     const [isDeleting, setIsDeleting] = useState(false)
@@ -82,19 +78,10 @@ export default function ChatSettingsDrawer() {
     
                         <div className="flex flex-col gap-1">
                             <span className="text-sm dark:text-zinc-400">Select the LLM to use</span>
-                            <Select 
-                                onValueChange={(value) => chat && setChat({...chat, llm: value})}
-                                defaultValue={chat?.llm}
-                            >
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Select an AI" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {LLMs.map((llm) => (
-                                        <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <LLMSelect 
+                                user={props.user}
+                                onSelect={(llm) => chat && setChat({...chat, llm: llm})}
+                            />
                         </div>
 
                         <TextareaWithCounter 

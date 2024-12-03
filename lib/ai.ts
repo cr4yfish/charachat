@@ -43,13 +43,12 @@ export const checkUserHasImageAPIKey = (profile: Profile): boolean => {
     return false;
 }
 
-export const LLMsWithAPIKeys = (profile: Profile) => {
+export const LLMsWithAPIKeys = (profile: Profile | undefined): LLMType[] => {
     return LLMs.filter((llm) => {
+
         if(
-            getProfileAPIKey(llm.key, profile) || 
-
-            isFreeModel(llm.key)
-
+            isFreeModel(llm.key) ||
+            (profile && getProfileAPIKey(llm.key, profile)) 
         ) {
             return llm;
         }
@@ -84,66 +83,89 @@ export const isFreeModel = (modelId: ModelId) => {
     }
 }
 
-type LLMType = {
+export type LLMType = {
     key: ModelId,
     name: string,
+    provider: string,
 }
 
 export const LLMs: LLMType[] = [
     {
+        "key": "open-mistral-nemo",
+        "name": "Nemo (free)",
+        "provider": "Mistral"
+    },
+    {
+        "key": "grok-beta",
+        "name": "Grok (free)",
+        "provider": "xAI"
+    },
+    
+    {
         "key": "llama3-groq-70b-8192-tool-use-preview",
         "name": "llama3 70b",
+        "provider": "Groq"
     },
     {
         "key": "llama-3.2-90b-vision-preview",
         "name": "Llama 3.2 90b",
+        "provider": "Groq"
     },
-    {
-        "key": "ollama",
-        "name": "Ollama",
-    },
+
     {
         "key": "gpt-4o-mini",
         "name": "GPT-4o Mini",
+        "provider": "OpenAI"
     },
     {
         "key": "gpt-4o",
         "name": "GPT-4o",
+        "provider": "OpenAI"
     },
+
     {
         "key": "gemini-1.5-flash",
         "name": "Gemini 1.5 Flash",
+        "provider": "Google"
     },
-    {
-        "key": "open-mistral-nemo",
-        "name": "Nemo (free)",
-    },
+
     {
         "key": "claude-3-5-sonnet-latest",
-        "name": "Claude 3.5 Sonnet"
+        "name": "Claude 3.5 Sonnet",
+        "provider": "Anthropic"
     },
     {
         "key": "claude-3-5-haiku-latest",
-        "name": "Claude 3.5 Haiku"
+        "name": "Claude 3.5 Haiku",
+        "provider": "Anthropic"
     },
-    {
-        "key": "openai-compatible",
-        "name": "Your openAI model"
-    },
-    {
-        "key": "grok-beta",
-        "name": "Grok (free)"
-    },
+
+
     {
         "key": "command-r-plus",
-        "name": "Command R Plus"
+        "name": "Command R Plus",
+        "provider": "Cohere"
     },
     {
         "key": "command-r",
-        "name": "Command R"
+        "name": "Command R",
+        "provider": "Cohere"
     },
     {
         "key": "c4ai-aya-expanse-32b",
-        "name": "C4AI Aya Expanse 32b"
-    }
+        "name": "C4AI Aya Expanse 32b",
+        "provider": "Cohere"
+    },
+
+    {
+        "key": "ollama",
+        "name": "Ollama",
+        "provider": "You"
+    },
+    {
+        "key": "openai-compatible",
+        "name": "Your openAI model",
+        "provider": "You"
+    },
+
 ]

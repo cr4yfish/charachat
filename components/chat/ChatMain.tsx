@@ -22,8 +22,6 @@ import { isSameDay, isToday, isYesterday } from "@/lib/utils";
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { addTokens as updateTokens } from "@/functions/db/profiles";
 import { Avatar } from "@nextui-org/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { LLMsWithAPIKeys } from "@/lib/ai";
 import { useSharedChat } from "@/context/SharedChatSettings";
 import ConditionalLink from "../utils/ConditionalLink";
 import PersonaCard from "../persona/PersonaCard";
@@ -31,6 +29,7 @@ import Link from "next/link";
 import PersonaAutocomplete from "../persona/PersonaAutocomplete";
 import ToolMessage from "./ToolMessage";
 import { getCharacter } from "@/functions/db/character";
+import LLMSelect from "../LLMSelect";
 
 type Props = {
     chat: Chat;
@@ -471,19 +470,10 @@ export default function ChatMain(props : Props) {
                         </ul>
                     </div>
                     
-                    <Select 
-                        onValueChange={(value) =>  chat && setChat({...chat, llm: value})}
-                        defaultValue={props.chat.llm}
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Select an AI" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {LLMsWithAPIKeys(props.user).map((llm) => (
-                                <SelectItem key={llm.key} value={llm.key}>{llm.name}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <LLMSelect 
+                        user={props.user} 
+                        onSelect={(modelId) => chat && setChat({...chat, llm: modelId})}
+                    />
 
                     <div className="flex flex-col gap-2 w-full max-w-sm">
                         <div className="prose dark:prose-invert prose-p:m-0 prose-h3:m-0">

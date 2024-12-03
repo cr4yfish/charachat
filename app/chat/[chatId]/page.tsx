@@ -126,7 +126,7 @@ export default async function Chat({ params: { chatId } } : { params: { chatId: 
                 <div className="p-6 bg-content2/50 backdrop-blur-xl rounded-b-xl w-full flex flex-row items-center justify-evenly max-w-lg">
                     <SidebarTrigger><></></SidebarTrigger>
                     <span className="text-medium w-full text-center font-bold">{chat.character.name}</span>
-                    <ChatSettingsDrawer />
+                    <ChatSettingsDrawer user={profile} />
                 </div>
             </div>
 
