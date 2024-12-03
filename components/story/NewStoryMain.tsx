@@ -36,7 +36,7 @@ export default function NewStoryMain(props: Props) {
         first_message: props.story?.first_message || "",
         image_link: props.story?.image_link || "",
         is_private: props.story?.is_private || false,
-        extra_characters: props.story?.extra_characters || [],
+        extra_characters_client: props.story?.extra_characters_client || [],
     })
 
     const [errorMessages, setErrorMessages] = useState<{
@@ -83,7 +83,7 @@ export default function NewStoryMain(props: Props) {
                     first_message: story.first_message,
                     image_link: story.image_link,
                     is_private: story.is_private,
-                    extra_characters: story.extra_characters ?? []
+                    extra_characters: story.extra_characters_client?.map((char) => char.id) ?? [],
                 });
 
                 setIsSaved(true);
@@ -215,17 +215,17 @@ export default function NewStoryMain(props: Props) {
                 <div className="w-full overflow-x-auto">
                     <div className="flex flex-row items-center w-fit">
                         
-                        {story.extra_characters?.map((charId) => (
+                        {story.extra_characters_client?.map((char) => (
                             <CharacterAvatarButton
-                                key={charId + "select"} 
-                                characterId={charId} 
-                                onClick={() => updateValue("extra_characters", story.extra_characters?.filter((id) => id !== charId) ?? [])}
+                                key={char + "select"} 
+                                character={char} 
+                                onClick={() => updateValue("extra_characters_client", story.extra_characters_client?.filter((char) => char.id !== char.id) ?? [])}
                             />
                         ))}
 
                         <ExtraCharacterSelect 
                             extraCharacters={story.extra_characters_client ?? []}
-                            setCharacters={(chars) => updateValue("extra_characters", chars)} 
+                            setCharacters={(chars) => updateValue("extra_characters_client", chars)} 
                         />
 
                     </div>
