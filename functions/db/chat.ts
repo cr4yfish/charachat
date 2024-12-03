@@ -259,7 +259,8 @@ export const updateChat = async (chat: Chat): Promise<void> => {
             llm: chat.llm,
             negative_prompt: chat.negative_prompt,
             response_length: chat.response_length,
-            temperature: chat.temperature
+            temperature: chat.temperature,
+            frequency_penalty: chat.frequency_penalty
         })
         .eq("id", chat.id)
 
