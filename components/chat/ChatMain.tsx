@@ -467,8 +467,8 @@ export default function ChatMain(props : Props) {
                         <ul>
                             <li>Nemo (messages used by Mistral for training)</li>
                             <li>Grok (recommended, unrestricted)</li>
-                            <li>LLama 3.2 90b (unrestricted)</li>
-                            <li>Llama 3 70b</li>
+                            <li>LLama 3.2 90b</li>
+                            <li>Llama 3 70b (unrestricted)</li>
                             <li>Genma 2 9b</li>
                         </ul>
                     </div>
