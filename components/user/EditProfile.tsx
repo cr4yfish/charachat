@@ -425,6 +425,7 @@ export default function EditProfile(props: Props) {
                         onDelete={handleDelete}
                         isLoading={isDeleting}
                         isDisabled={isSaving}
+                        label="Delete Account"
                     />
                 </div>
                 <div className="w-fit max-md:w-full">
