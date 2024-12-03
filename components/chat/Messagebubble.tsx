@@ -254,7 +254,7 @@ export default function Messagebubble(props: Props) {
                             <div className="pl-3 pb-1 flex flex-row items-center gap-2">
                                 <span className=" text-sm select-none">{props.chat?.character.name}</span>
                                 {props.chat &&
-                                    <div className="flex flex-row items-center gap-1 px-2 py-1 border border-zinc-700 w-fit rounded-full text-xs dark:text-zinc-400">
+                                    <div className="flex flex-row items-center gap-1 px-2 py-1  w-fit rounded-full text-xs dark:text-zinc-400">
                                         <Icon downscale filled>auto_awesome</Icon>
                                         <div className="w-full">{props.chat.llm}</div>
                                     </div>
