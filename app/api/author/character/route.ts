@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const { character, profile, field } = (await req.json()) as RequestBody;
 
     // list of valid fields in Character type
-    const validFields = ["description", "bio", "personality", "intro", "book", "system_prompt", "image_prompt", "scenario"];
+    const validFields = ["description", "bio", "personality", "intro", "book", "system_prompt", "image_prompt", "scenario", "first_message"];
     
     // check if field name is in validFields
     if (!validFields.includes(field)) {
