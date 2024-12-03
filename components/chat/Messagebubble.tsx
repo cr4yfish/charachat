@@ -192,7 +192,7 @@ export default function Messagebubble(props: Props) {
                 throw new Error("Could not generate Audio. Unknown Error.");
             }
 
-        
+            setAudioLink(link);
             setIsLoadingAudio(false);
             return link;
         } catch (error) {
