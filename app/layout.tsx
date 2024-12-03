@@ -10,6 +10,8 @@ import { Toaster } from "@/components/ui/toaster"
 import NavbarServerWrapper from "@/components/NavbarServerWrapper";
 import Blurrer from "@/components/utils/Blurrer";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import SessionStorageManager from "@/components/SessionStorageManager";
+import { cookies } from "next/headers";
 
 
 const montserrat = Montserrat({
@@ -68,6 +70,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const cookieStore = cookies();
+  const keyCookie = cookieStore.get("key")?.value;
+
   return (
     <html lang="en" className="bg-black dark h-screen w-screen overflow-hidden">
       <body
@@ -88,6 +94,7 @@ export default function RootLayout({
                   showSpinner={false}
                 />
                 <NavbarServerWrapper />
+                <SessionStorageManager keyCookie={keyCookie} />
                 <Toaster />
                 <Blurrer />
                 {children}
