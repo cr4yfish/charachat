@@ -6,12 +6,14 @@ import { Character } from "@/types/db";
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody } from "@nextui-org/card";
 import { useEffect, useState } from "react";
+import ConditionalLink from "../utils/ConditionalLink";
 
 type Props = {
     characterId?: string | undefined;
     character?: Character | undefined;
     onClick?: () => void;
     disableButton?: boolean;
+    hasLink?: boolean;
 }
 
 export default function CharacterAvatarButton(props: Props) {
@@ -38,6 +40,7 @@ export default function CharacterAvatarButton(props: Props) {
 
     return (
         <>
+        <ConditionalLink active={props.hasLink ?? false} href={`/c/${character?.id}`}>
         <Card 
             key={props.characterId + "select"} 
             className="p-0 bg-transparent shadow-none hover:bg-zinc-700 w-[100px]" 
@@ -50,6 +53,7 @@ export default function CharacterAvatarButton(props: Props) {
                 <span className="text-xs text-center w-full">{truncateText(character.name, 15)}</span>
             </CardBody>
         </Card>
+        </ConditionalLink>
         </>
     )
 }
