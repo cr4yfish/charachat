@@ -83,7 +83,7 @@ export default async function Story({ params: { storyId, characterId } }: { para
                     
                     {story.extra_characters &&
                     <>
-                    <h3>Extra Characters</h3>
+                    <h3>Other Characters in this Story</h3>
                     <div className="w-full overflow-x-auto">
                         <div className="flex flex-row w-fit items-center">
                             {story.extra_characters?.map(charId => (
@@ -91,6 +91,7 @@ export default async function Story({ params: { storyId, characterId } }: { para
                                     key={charId} 
                                     characterId={charId} 
                                     disableButton
+                                    hasLink
                                 />
                             ))}
                         </div>
