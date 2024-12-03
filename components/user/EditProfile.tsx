@@ -28,18 +28,35 @@ type KeyInputProps = {
     provider: ProviderId;
 }
 
-const KeyInput = (props: KeyInputProps) => (
-    <div className="flex flex-col gap-2">
-        <div className="flex flex-row flex-wrap items-center gap-2">
-            {LLMs.filter(llm => llm.provider === props.provider).map(llm => (<Chip key={llm.key} size="sm" color={props.value ? "success" : "default"}>{llm.name}</Chip>))}
+const KeyInput = (props: KeyInputProps) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    return (
+        <div className="flex flex-col gap-2">
+            <div className="flex flex-row flex-wrap items-center gap-2">
+                {LLMs.filter(llm => llm.provider === props.provider).map(llm => (<Chip key={llm.key} size="sm" color={props.value ? "success" : "default"}>{llm.name}</Chip>))}
+            </div>
+            <Input 
+                label={props.label} 
+                type={isVisible ? "text" : "password"} 
+                color={props.value ? "success" : "default"}
+                description={<KeyInputDescription url={props.url} hasFreeTier={props.hasFreeTier} />}
+                value={props.value} onValueChange={props.onValueChange}
+                endContent={
+                    <Button 
+                        onClick={() => setIsVisible(!isVisible)} 
+                        isIconOnly 
+                        variant="light"
+                        >
+                        <Icon color="zinc-400">
+                            {isVisible ? "visibility" : "visibility_off"}
+                        </Icon>
+                    </Button>
+                }
+            />
         </div>
-        <Input 
-            label={props.label} type="text" color={props.value ? "success" : "default"}
-            description={<KeyInputDescription url={props.url} hasFreeTier={props.hasFreeTier} />}
-            value={props.value} onValueChange={props.onValueChange}
-        />
-    </div>
-)
+    )
+}
 
 const KeyInputDescription = ({url, hasFreeTier}: {url: string, hasFreeTier?: boolean}) => (
     <div className="flex flex-row items-center gap-1">
