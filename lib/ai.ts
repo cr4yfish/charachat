@@ -28,10 +28,14 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case "grok-beta":
             return process.env.X_AI_API_KEY;
 
-        case "open-nemo-mistral":
+        case "open-mistral-nemo":
+            if(profile.mistral_encrypted_api_key && profile.mistral_encrypted_api_key.length > 0) {
+                return profile.mistral_encrypted_api_key;
+            }
             return process.env.MISTRAL_API_KEY;
 
         default:
+            console.error("user requested model not found in selection", modelId);
             return undefined;
     }
 }
@@ -81,6 +85,7 @@ export const isFreeModel = (modelId: ModelId) => {
         case "grok-beta":
             return true;
     }
+    return false;
 }
 
 export type LLMType = {
