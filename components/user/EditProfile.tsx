@@ -101,7 +101,8 @@ export default function EditProfile(props: Props) {
                 hf_encrypted_api_key: props.profile.hf_encrypted_api_key && decryptMessage(props.profile.hf_encrypted_api_key, keyBuffer),
                 replicate_encrypted_api_key: props.profile.replicate_encrypted_api_key && decryptMessage(props.profile.replicate_encrypted_api_key, keyBuffer),
                 cohere_encrypted_api_key: props.profile.cohere_encrypted_api_key && decryptMessage(props.profile.cohere_encrypted_api_key, keyBuffer),
-                fal_gpt_encrypted_api_key: props.profile.fal_gpt_encrypted_api_key && decryptMessage(props.profile.fal_gpt_encrypted_api_key, keyBuffer)
+                fal_gpt_encrypted_api_key: props.profile.fal_gpt_encrypted_api_key && decryptMessage(props.profile.fal_gpt_encrypted_api_key, keyBuffer),
+                x_ai_encrypted_api_key: props.profile.x_ai_encrypted_api_key && decryptMessage(props.profile.x_ai_encrypted_api_key, keyBuffer),
             }
 
             setProfile(profileToEdit);
@@ -140,7 +141,8 @@ export default function EditProfile(props: Props) {
                 hf_encrypted_api_key: profile.hf_encrypted_api_key && encryptMessage(profile.hf_encrypted_api_key, keyBuffer),
                 replicate_encrypted_api_key: profile.replicate_encrypted_api_key && encryptMessage(profile.replicate_encrypted_api_key, keyBuffer),
                 cohere_encrypted_api_key: profile.cohere_encrypted_api_key && encryptMessage(profile.cohere_encrypted_api_key, keyBuffer),
-                fal_gpt_encrypted_api_key: profile.fal_gpt_encrypted_api_key && encryptMessage(profile.fal_gpt_encrypted_api_key, keyBuffer)
+                fal_gpt_encrypted_api_key: profile.fal_gpt_encrypted_api_key && encryptMessage(profile.fal_gpt_encrypted_api_key, keyBuffer),
+                x_ai_encrypted_api_key: profile.x_ai_encrypted_api_key && encryptMessage(profile.x_ai_encrypted_api_key, keyBuffer),
             }
 
             await updateProfile(profileToSave);
@@ -277,6 +279,14 @@ export default function EditProfile(props: Props) {
                         provider={"Mistral"}
                         value={profile.mistral_encrypted_api_key} 
                         onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
+                    />
+                    <KeyInput 
+                        url="https://console.x.ai" 
+                        hasFreeTier
+                        label="Grok"
+                        provider={"xAI"}
+                        value={profile.x_ai_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("x_ai_encrypted_api_key", value)}
                     />
                     <KeyInput 
                         url="https://console.anthropic.com/settings/keys" 

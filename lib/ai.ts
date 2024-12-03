@@ -31,6 +31,9 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
             return profile.cohere_encrypted_api_key;
 
         case "grok-beta":
+            if(profile.x_ai_encrypted_api_key && profile.x_ai_encrypted_api_key.length > 0) {
+                return profile.x_ai_encrypted_api_key;
+            }
             return process.env.X_AI_API_KEY;
 
         case "open-mistral-nemo":
