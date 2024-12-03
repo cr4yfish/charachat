@@ -160,6 +160,7 @@ export default function ChatSettingsDrawer(props: Props) {
                                     { value: 0.8, label: "High" }
                                 ]}
                             />
+                            <p className="text-xs dark:text-zinc-400">Increase this if you wan&apos;t a more wild experience - or decrease it for something chill.</p>
 
                             <Slider 
                                 showSteps 
@@ -182,6 +183,7 @@ export default function ChatSettingsDrawer(props: Props) {
                                     { value: 0.9, label: "Extreme" }
                                 ]}
                             />
+                            <p className="text-xs dark:text-zinc-400">Increase this if the Character starts to repeat things or doesn&apos;t move on with the conversation..</p>
                         </div>
 
                         {chat?.character && <CharacterCard data={chat.character} hasLink fullWidth />}
