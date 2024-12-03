@@ -37,7 +37,7 @@ export async function LeftSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-2">
-        <Logo className="p-2" />
+        <Logo hasLink className="p-2" />
         <SidebarGroup className="flex flex-col gap-2">
           <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
           <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
