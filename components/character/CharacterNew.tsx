@@ -106,7 +106,7 @@ export default function CharacterNew(props: Props) {
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
                     <ImageInputWithAI
-                        contextFields={[newCharacter.image_prompt ?? "", newCharacter.name, newCharacter.description, newCharacter.personality]} 
+                        contextFields={[newCharacter.image_prompt ?? "", newCharacter.name, newCharacter.description, newCharacter.personality ?? " "]} 
                         imageLink={newCharacter.image_link}
                         setImageLink={(link) => updateValue("image_link", link)} 
                     />
