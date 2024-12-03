@@ -4,6 +4,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@nextui-org/avatar";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import Link from "next/link";
 import { Profile, Story } from "@/types/db";
@@ -181,9 +182,6 @@ export default function CharacterPage(props: Props) {
                     </div>
                 </div>
 
-
-
-
                 <div className="flex flex-col max-md:w-full">
                     <Tabs variant="underlined"
                         classNames={{
@@ -191,12 +189,57 @@ export default function CharacterPage(props: Props) {
                         }}
                     >
                         <Tab key="about" title="About">
-                            <div className="w-full flex justify-start items-start flex-col prose dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0">
-                                <h2>About</h2>
+                            <div className="w-full flex justify-start items-start flex-col prose dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0">
+                                {(props.character.intro) && 
+                                <>
                                 <h3>Introduction</h3>
-                                <p>{props.character.intro || "No Introduction"}</p>
+                                <p>{props.character.intro}</p>
+                                </>
+                                }
+
+                                {( props.character.first_message) && 
+                                <>
+                                <h3>Greeting / First message</h3>
+                                <p>{props.character.first_message}</p>
+                                </>
+                                }
+
+                                {props.character.bio &&
+                                <>
                                 <h3>Bio</h3>
                                 <p>{props.character.bio}</p>
+                                </>
+                                }
+
+                                {props.character.personality &&
+                                <>
+                                <h3>Personality</h3>
+                                <p>{props.character.personality}</p>
+                                </>
+                                }
+
+                                {props.character.scenario &&
+                                <>
+                                <h3>Scenario</h3>
+                                <p>{props.character.scenario}</p>
+                                </>
+                                }
+
+                                <Accordion className=" prose-h2:m-0">
+                                    <AccordionItem title="Character Book" className="prose-h2:m-0 prose-p:m-0" classNames={{
+                                        title: "m-0 prose-h2:m-0"
+                                    }}>
+                                        <p>{props.character.book}</p>
+                                    </AccordionItem>
+                                    <AccordionItem title="System Prompt">
+                                        <p>{props.character.system_prompt}</p>
+                                    </AccordionItem>
+                                    <AccordionItem title="Image Prompt">
+                                        <p>{props.character.image_prompt}</p>
+                                    </AccordionItem>
+                                </Accordion>
+                                
+
                             </div>
                         </Tab>
                         <Tab key="stories" title="Stories">
