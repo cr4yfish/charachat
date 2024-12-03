@@ -19,6 +19,7 @@ import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
 import { Input } from "@nextui-org/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
+import Icon from "../utils/Icon";
 
 type Props = {
     initCharacter: Character;
@@ -144,33 +145,25 @@ export default function CharacterNew(props: Props) {
         })
     }
 
-    const SaveButtons = () => {
-        return (
-            <div className="flex items-center gap-4 max-w-md max-md:max-w-full ">
+    return (
+        <>
+        <form className="flex flex-col gap-4 h-full pb-20" onSubmit={handleSubmit}>
+            <div className="flex absolute bottom-0 left-0 z-20 w-full p-4">
                 <Button
                     type="submit" 
                     isLoading={isLoading || isDone}
                     isDisabled={isDone}
+                    startContent={props.editMode ? <Icon filled>save</Icon> : <Icon>add</Icon>}
                     fullWidth
+                    radius="full"
                     color={isDone ? "success" : "primary"}
                     size="lg" 
                 >
                     {!props.editMode && (isDone ? "Redirecting" : "Create Character")}
                     {props.editMode && (isDone ? "Saved" : "Save Character")}
                 </Button>
-                {props.editMode &&
-                <SaveDeleteButton 
-                    isLoading={isDeleting}
-                    onDelete={handleDeleteCharacter}
-                />
-                }
             </div>
-        )
-    }
-
-    return (
-        <>
-        <form className="flex flex-col gap-4 h-full" onSubmit={handleSubmit}>
+            
             <Card>
                 <CardHeader>
                     <CardDescription>This is basic information and needed to get the Character to work</CardDescription>
@@ -223,8 +216,16 @@ export default function CharacterNew(props: Props) {
                 <h3 className="text-lg font-bold">Preview</h3>
                 <CharacterCard fullWidth data={newCharacter} hasLink={false} />
             </div>
-
-            <SaveButtons />
+            
+            <div>
+                {props.editMode &&
+                <SaveDeleteButton 
+                    isLoading={isDeleting}
+                    onDelete={handleDeleteCharacter}
+                    label="Delete Character"
+                />
+                }
+            </div>
 
             <Separator className="my-6" />
 
@@ -346,8 +347,6 @@ export default function CharacterNew(props: Props) {
                     />
                 </CardContent>
             </Card>
-
-            <SaveButtons />
 
         </form>
         </>
