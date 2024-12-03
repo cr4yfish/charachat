@@ -112,7 +112,7 @@ export default function ImageInputWithAI(props: Props) {
         <div>
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                    <Avatar className="min-w-[50px] h-[50px]" src={safeParseLink(props.imageLink)} alt="" />
+                    <Avatar className="min-w-[50px] h-[50px]" src={safeParseLink(props.imageLink)} alt="avatar" />
                     <Input 
                         name="image_link"
                         label="Image Link" 
