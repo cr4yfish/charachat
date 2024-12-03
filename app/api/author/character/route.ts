@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const { character, profile, field } = (await req.json()) as RequestBody;
 
     // list of valid fields in Character type
-    const validFields = ["description", "bio", "personality", "intro", "book", "system_prompt", "image_prompt"];
+    const validFields = ["description", "bio", "personality", "intro", "book", "system_prompt", "image_prompt", "scenario"];
     
     // check if field name is in validFields
     if (!validFields.includes(field)) {
@@ -36,6 +36,7 @@ export async function POST(req: Request) {
             Character Background information: ${_CHARACTER_MAX_LENGTH.book-500}
             System Prompt addition: ${_CHARACTER_MAX_LENGTH.system_prompt-500}
             Image Prompt: ${_CHARACTER_MAX_LENGTH.image_prompt-500}
+            Simple Scenario: ${_CHARACTER_MAX_LENGTH.scenario-500}
 
         `,
         prompt: `
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
             Character Background information: ${character.book}
             System Prompt addition: ${character.system_prompt}
             Image Prompt: ${character.image_prompt}
+            Simple Scenario: ${character.scenario}
         `
     })
 

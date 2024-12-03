@@ -11,8 +11,6 @@ export type Character = {
     owner: Profile;
     name: string;
     description: string;
-    avatar?: string;
-    avatarUrl?: string;
     image_link?: string;
     bio?: string;
     intro?: string;
@@ -27,6 +25,7 @@ export type Character = {
     image_prompt?: string;
     first_message?: string;
     speaker_link?: string;
+    scenario?: string;
 }
 
 export type Chat = {

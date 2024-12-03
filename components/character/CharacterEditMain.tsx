@@ -107,15 +107,14 @@ export default function CharacterEditMain(props: Props) {
                 description="Facts about the character. Who are they? What do they do? Where do they come from?" 
                 maxLength={_CHARACTER_MAX_LENGTH.bio} 
             />
-            <TextareaWithCounter 
-                name="intro" 
-                label="Character Intro"
-                isRequired
-                value={character.intro}
-                onValueChange={(value) => setCharacter({ ...character, intro: value })}
-                placeholder="Hello, I'm Albert Einstein. I'm a physicist, mathematician, and author. I developed the theory of relativity, one of the two pillars of modern physics."
-                description="Introduction of the character. Describe how the character would introduce themselves." 
-                maxLength={_CHARACTER_MAX_LENGTH.intro} 
+            <TextareaWithCounter
+                name="scenario"
+                value={character.scenario}
+                onValueChange={(value) => setCharacter({ ...character, scenario: value })}
+                label="Simple Scenario"
+                placeholder="You walk into a room and see Albert Einstein sitting at a table, writing on a piece of paper. What do you do?"
+                description="A simple scenario to get the conversation started. Use this to set the scene for the user. For longer and/or complex scenarios, create a seperate Story for this Character."
+                maxLength={_CHARACTER_MAX_LENGTH.scenario}
             />
             <TextareaWithCounter 
                 name="book" 
@@ -158,7 +157,7 @@ export default function CharacterEditMain(props: Props) {
                 onValueChange={(value) => setCharacter({ ...character, speaker_link: value })}
             />
             <ImageInputWithAI
-                contextFields={[character.image_prompt ?? "", character.name, character.description, character.personality, ]}
+                contextFields={[character.image_prompt ?? "", character.name, character.description, character.personality ?? " ", ]}
                 imageLink={character.image_link}
                 setImageLink={(image_link) => setCharacter({ ...character, image_link })}
             />

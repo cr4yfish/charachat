@@ -216,6 +216,19 @@ export default function CharacterNew(props: Props) {
                         character={newCharacter}
                         buttonLabel="Generate First Message"
                     />
+                    <InputWithAI
+                        name="scenario"
+                        initValue={newCharacter.scenario}
+                        setValue={(value) => updateValue("scenario", value)}
+                        label="Simple Scenario"
+                        placeholder="You walk into a room and see Albert Einstein sitting at a table, writing on a piece of paper. What do you do?"
+                        description="A simple scenario to get the conversation started. Use this to set the scene for the user. For longer and/or complex scenarios, create a seperate Story for this Character."
+                        maxLength={_CHARACTER_MAX_LENGTH.scenario}
+                        api="/api/author/character"
+                        profile={props.profile}
+                        character={newCharacter}
+                        buttonLabel="Generate Scenario"
+                    />
                     <InputWithAI 
                         name="book" 
                         label="All other information"

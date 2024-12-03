@@ -14,6 +14,7 @@ export const _CHARACTER_MAX_LENGTH: MaxLength = {
     system_protmp: 2000,
     image_prompt: 1000,
     system_prompt: 2000,
+    scenario: 1000,
 }
 
 export const _CHAT_MAX_LENGTH: MaxLength = {
