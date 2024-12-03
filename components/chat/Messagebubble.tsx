@@ -264,7 +264,7 @@ export default function Messagebubble(props: Props) {
                         <Card 
                             id={props.message.id}
                             className={`
-                                relative rounded-3xl w-fit max-w-3/4  !select-none
+                                relative rounded-3xl w-fit max-w-3/4  !select-none shadow-none
                                 ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-600/20" : "mr-auto rounded-bl dark:bg-zinc-900/0"}
                                 ${isEditMode ? "border-1 dark:border-amber-400" : "border-none"}
                                 `}
