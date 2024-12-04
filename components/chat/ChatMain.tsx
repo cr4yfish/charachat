@@ -252,6 +252,8 @@ export default function ChatMain(props : Props) {
         setIsSetupLoading(true);
 
         await syncDb(chat);
+
+        const idForNewMessage = uuidv4();
         
         // Works for both, normal chats and story chats
         append({ content: _INTRO_MESSAGE(props.chat.character), role: "user", createdAt: new Date() });
@@ -260,8 +262,8 @@ export default function ChatMain(props : Props) {
         if(props.chat.story?.first_message && props.chat.story.first_message.length > 0) {
             setMessages([
                 {
-                    id: uuidv4(),
-                    content: props.chat.story.first_message?.replace("{{ user }}", props.user.first_name),
+                    id: idForNewMessage,
+                    content: props.chat.story.first_message?.replace("{{user}}", props.user.first_name),
                     role: "assistant",
                     createdAt: new Date()
                 }
@@ -279,20 +281,20 @@ export default function ChatMain(props : Props) {
             }
 
             await addMessage({
-                id: uuidv4(),
+                id: idForNewMessage,
                 chat: props.chat,
                 character: props.chat.character,
                 user: props.user,
                 from_ai: true,
-                content: props.chat.story.first_message.replace("{{ user }}", props.user.first_name),
+                content: props.chat.story.first_message.replace("{{user}}", props.user.first_name),
                 is_edited: false,
                 is_deleted: false,
             }, key);
         } else if(props.chat.character.first_message && props.chat.character.first_message.length > 0) {
             setMessages([
                 {
-                    id: uuidv4(),
-                    content: props.chat.character.first_message?.replace("{{ user }}", props.user.first_name),
+                    id: idForNewMessage,
+                    content: props.chat.character.first_message?.replace("{{user}}", props.user.first_name),
                     role: "assistant",
                     createdAt: new Date()
                 }
@@ -310,12 +312,12 @@ export default function ChatMain(props : Props) {
             }
 
             await addMessage({
-                id: uuidv4(),
+                id: idForNewMessage,
                 chat: props.chat,
                 character: props.chat.character,
                 user: props.user,
                 from_ai: true,
-                content: props.chat.character.first_message.replace("{{ user }}", props.user.first_name),
+                content: props.chat.character.first_message.replace("{{user}}", props.user.first_name),
                 is_edited: false,
                 is_deleted: false,
             }, key);
