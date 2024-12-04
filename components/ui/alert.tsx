@@ -11,7 +11,7 @@ const alertVariants = cva(
         default: "bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50",
         destructive:
           "border-red-500/50 text-red-500 dark:border-red-500 [&>svg]:text-red-500 dark:border-red-900/50 dark:dark:border-red-900 dark:[&>svg]:text-red-900",
-        blur: "dark:bg-zinc-900/20 backdrop-blur-xl",
+        blur: "bg-zinc-50 border border-zinc-400 dark:border-none dark:bg-zinc-900/20 backdrop-blur-xl",
         },
     },
     defaultVariants: {

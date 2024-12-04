@@ -28,7 +28,7 @@ const SearchResult = (props: SearchResultProps) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}    
         >
-            <Link href={props.link} className="flex flex-row items-center gap-2 dark:hover:bg-zinc-700 w-full rounded-lg p-2">
+            <Link href={props.link} className="flex flex-row items-center gap-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 w-full rounded-lg p-2">
                 <Avatar src={props.imageLink} size="lg" />
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex flex-col">
@@ -123,7 +123,7 @@ export default function Searchbar() {
                 { hasResults &&
                 <motion.div 
                     className={`
-                        z-40 w-full h-fit bg-zinc-800/80 backdrop-blur-xl px-4 py-3 border border-zinc-600
+                        z-40 w-full h-fit dark:bg-zinc-800/80 backdrop-blur-xl px-4 py-3 border border-zinc-300 dark:border-zinc-600
                         rounded-lg absolute top-[130%] left-0 flex flex-col gap-2 max-h-[50svh] overflow-y-auto
                     `}
                     initial={{ opacity: 0, y: 10 }}

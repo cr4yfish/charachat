@@ -208,7 +208,7 @@ export default function CharacterNew(props: Props) {
                         defaultCategory={newCharacter.category}
                         setCategory={(category) => updateValue("category", category.id)}
                     />
-                    <div className="p-2 rounded-xl bg-zinc-800 flex flex-col gap-2">
+                    <div className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex flex-col gap-2">
                         <h3 className="font-medium">Tags</h3>
                         <p className="text-xs dark:text-zinc-400">Tags are used to categorize the Character and make it easier to find.</p>
                         <div className="flex flex-row flex-wrap gap-2">

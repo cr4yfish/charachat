@@ -43,7 +43,7 @@ export default function CharacterAvatarButton(props: Props) {
         <ConditionalLink active={props.hasLink ?? false} href={`/c/${character?.id}`}>
         <Card 
             key={props.characterId + "select"} 
-            className="p-0 bg-transparent shadow-none hover:bg-zinc-700 w-[100px]" 
+            className="p-0 bg-transparent shadow-none hover:bg-zinc-200 dark:hover:bg-zinc-700 w-[100px]" 
             isPressable={props.disableButton ? false : true}
             isDisabled={isLoading}
             onClick={props.onClick}

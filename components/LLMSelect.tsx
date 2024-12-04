@@ -12,7 +12,7 @@ type Props = {
 }
 
 const LLMCard = ({llm} : { llm: LLMType }) => (
-    <Card className="h-[60px] p-0 m-0 w-full dark:bg-transparent dark:border-none">
+    <Card className="h-[60px] p-0 m-0 w-full bg-transparent dark:bg-transparent border-none shadow-none dark:border-none">
         <CardHeader className=" m-0 p-0 w-full flex flex-col items-start justify-center h-full bg-transparent">
             <CardDescription>{llm.provider}</CardDescription>
             <CardTitle>{llm.name}</CardTitle>

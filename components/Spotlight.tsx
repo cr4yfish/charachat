@@ -18,7 +18,7 @@ export default async function Spotlight(props: Props) {
         <div className="w-full h-[320px] relative overflow-visible">
             <Card 
                 className={`
-                    dark:bg-zinc-600/10 relative overflow-hidden rounded-3xl
+                    bg-zinc-50/70 dark:bg-zinc-600/10 relative overflow-hidden rounded-3xl
                 `}
             >
                 <CardHeader>

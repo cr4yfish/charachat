@@ -44,7 +44,6 @@ export const decryptProfile = async (profile: Profile, key: string): Promise<Pro
 
 const profileFormatter = async (db: any): Promise<Profile> => {
     const { data: { user } } = await (await createClient()).auth.getUser();
-
     if((user?.id === db.user) && !checkIsEncrypted(db.first_name)) {
         console.error("Profile is not encrypted. Fixing...");
         const key = await getKeyServerSide();

@@ -75,6 +75,7 @@ export type Profile = {
     x_ai_encrypted_api_key?: string;
     openrouter_model?: string;
     openrouter_encrypted_api_key?: string;
+    theme?: string;
 }
 
 export type Story = {

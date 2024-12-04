@@ -170,7 +170,7 @@ export default function CharacterPage(props: Props) {
                         {props.character.speaker_link &&
                             <Card 
                                 className={`
-                                    w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full dark:bg-zinc-600/40
+                                    w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full bg-zinc-200/70 dark:bg-zinc-600/40
                                     backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium
                                 `}
                                 >
@@ -183,7 +183,7 @@ export default function CharacterPage(props: Props) {
                         <Card 
                             key={tag.id}
                             className={`
-                                w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full dark:bg-zinc-600/40
+                                w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full bg-zinc-200/70 dark:bg-zinc-600/40
                                 backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium
                             `}
                         >

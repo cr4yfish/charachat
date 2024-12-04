@@ -18,6 +18,8 @@ import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { Separator } from "../ui/separator";
 import LLMSelect from "../LLMSelect";
+import { Switch } from "@nextui-org/switch";
+import { useTheme } from "next-themes";
 
 type KeyInputProps = {
     url: string,
@@ -80,6 +82,7 @@ export default function EditProfile(props: Props) {
     const {toast} = useToast();
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const { setTheme } = useTheme();
 
     useEffect(() => {
         // decrypt API Keys
@@ -144,6 +147,9 @@ export default function EditProfile(props: Props) {
 
             const profileToSave: Profile = {
                 ...profile,
+                first_name: profile.first_name && encryptMessage(profile.first_name, keyBuffer),
+                last_name: profile.last_name && encryptMessage(profile.last_name, keyBuffer),
+                bio: profile.bio && encryptMessage(profile.bio, keyBuffer),
                 groq_encrypted_api_key: profile.groq_encrypted_api_key && encryptMessage(profile.groq_encrypted_api_key, keyBuffer),
                 ollama_encrypted_api_key: profile.ollama_encrypted_api_key && encryptMessage(profile.ollama_encrypted_api_key, keyBuffer),
                 openai_encrypted_api_key: profile.openai_encrypted_api_key && encryptMessage(profile.openai_encrypted_api_key, keyBuffer),
@@ -193,6 +199,11 @@ export default function EditProfile(props: Props) {
 
     const handleUpdateValue = (key: string, value: string) => {
         setProfile({...profile, [key]: value});
+    }
+
+    const handleChangeTheme = (value: boolean) => {
+        setProfile({...profile, theme: value ? "dark" : "light"});
+        setTheme(value ? "dark" : "light");
     }
 
     return (
@@ -249,6 +260,15 @@ export default function EditProfile(props: Props) {
 
             <div className="prose dark:prose-invert prose-h2:text-3xl">
                 <h2>Settings</h2>
+            </div>
+
+            <div>
+                <Switch 
+                    isSelected={profile.theme === "dark" || !profile.theme}
+                    onValueChange={handleChangeTheme}
+                >
+                    Dark Mode
+                </Switch>
             </div>
 
             <div className="prose dark:prose-invert" id="api">

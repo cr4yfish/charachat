@@ -79,7 +79,7 @@ export default function ExtraCharacterSelect(props: Props) {
             <DrawerTrigger asChild>
         <       Card isPressable className="p-0 bg-transparent shadow-none w-[100px]" >
                     <CardBody className="p-2 flex items-center flex-col gap-2">
-                        <div className="min-w-[60px] min-h-[60px] flex items-center justify-center bg-zinc-700 rounded-full">
+                        <div className="min-w-[60px] min-h-[60px] flex items-center justify-center bg-zinc-100 dark:bg-zinc-700 rounded-full">
                             <Icon upscale>add</Icon>
                         </div>
                         <span className="text-xs">Add more</span>

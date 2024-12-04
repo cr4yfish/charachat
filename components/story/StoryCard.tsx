@@ -32,8 +32,8 @@ export default function StoryCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-[125px] w-[300px] dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
-                        dark:hover:bg-zinc-700/40
+                        h-[125px] w-[300px] bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
+                        hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"}
                         ${props.noBg && "dark:bg-transparent"} 
                     `}>

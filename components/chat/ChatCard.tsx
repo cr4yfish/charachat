@@ -55,7 +55,7 @@ export default function ChatCard(props: Props) {
             <Card 
                 className={`
                     w-full bg-transparent x shadow-none
-                    hover:bg-zinc-800
+                    hover:bg-zinc-100 dark:hover:bg-zinc-800
                 `}
             >
                 <CardBody className="flex flex-row gap-2 items-center justify-start w-full">

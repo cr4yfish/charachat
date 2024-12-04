@@ -75,15 +75,12 @@ export default async function RootLayout({
   const keyCookie = cookieStore.get("key")?.value;
 
   return (
-    <html lang="en" className="bg-black h-screen w-screen overflow-hidden dark" style={{ colorScheme: "dark"}}>
-      <body
-        className={`${montserrat.className} h-screen w-screen overflow-hidden antialiased bg-neutral-900/75`}
-        style={{ colorScheme: "dark"}}
-      >
+    <html suppressHydrationWarning lang="en" className="h-screen w-screen overflow-hidden">
+      <body className={`${montserrat.className} h-screen w-screen overflow-hidden antialiased bg-zinc-50/75 dark:bg-neutral-900/75`} >
         <ThemeProvider
           attribute={"class"}
-          defaultTheme={"dark"}
-          enableSystem
+          defaultTheme={"light"}
+          enableColorScheme
           disableTransitionOnChange
         >
           <NextUIProvider>
@@ -99,7 +96,7 @@ export default async function RootLayout({
                 <Toaster />
                 <Blurrer />
                 {children}
-                  <svg viewBox="0 0 200 200" className=" fill-stone-700 absolute bottom-[75vh] scale-[300%] blur-3xl -z-10" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 200 200" className=" fill-zinc-50 dark:fill-stone-700 absolute bottom-[75vh] scale-[300%] blur-3xl -z-10" xmlns="http://www.w3.org/2000/svg">
                     <path fill="inherit" opacity={.5} d="M33.5,-24.5C44.3,-13.3,54.3,0.7,55.7,19.8C57,39,49.6,63.3,33.3,72.2C17.1,81.2,-7.9,74.8,-24.4,62.4C-40.9,49.9,-48.9,31.5,-54.9,10.9C-61,-9.7,-65.1,-32.5,-55.6,-43.4C-46.1,-54.3,-23.1,-53.4,-5.8,-48.8C11.4,-44.1,22.8,-35.7,33.5,-24.5Z" transform="translate(100 100)" />
                 </svg>
               </main>

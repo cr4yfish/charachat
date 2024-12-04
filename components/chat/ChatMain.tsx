@@ -462,7 +462,7 @@ export default function ChatMain(props : Props) {
                                     <Card 
                                         key={llm.key} 
                                         isPressable
-                                        className={`w-[150px] hover:bg-zinc-700 border dark:border-zinc-800 ${chat?.llm == llm.key && "dark:border-green-400"}`}
+                                        className={`w-[150px] hover:bg-zinc-100 shadow-none dark:hover:bg-zinc-700 border dark:border-zinc-800 ${chat?.llm == llm.key && "border-green-400 dark:border-green-400"}`}
                                         onClick={() => chat && setChat({...chat, llm: llm.key})}
                                     >
                                         <CardHeader className="pb-0 flex flex-col">
@@ -476,7 +476,7 @@ export default function ChatMain(props : Props) {
                                                     <Chip 
                                                         size="sm" 
                                                         key={index}
-                                                        className={`${t == "Free" ? "bg-green-700 dark:text-green-100" : "bg-zinc-400 dark:bg-zinc-800"} `}
+                                                        className={`${t == "Free" ? "bg-green-300 dark:bg-green-700 text-green-900  dark:text-green-100" : "bg-zinc-100 dark:bg-zinc-800"} `}
                                                     >
                                                         {t}
                                                     </Chip>
