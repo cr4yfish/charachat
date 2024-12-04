@@ -29,7 +29,11 @@ import Link from "next/link";
 import PersonaAutocomplete from "../persona/PersonaAutocomplete";
 import ToolMessage from "./ToolMessage";
 import { getCharacter } from "@/functions/db/character";
-import LLMSelect from "../LLMSelect";
+import { LLMsWithAPIKeys } from "@/lib/ai";
+import { CardBody, Card, CardHeader } from "@nextui-org/card";
+import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import { Chip } from "@nextui-org/chip";
+
 
 type Props = {
     chat: Chat;
@@ -380,7 +384,6 @@ export default function ChatMain(props : Props) {
         if(isLoading) {
             stop();
         } else {
-            const uuid = uuidv4();
             handleSubmit(e, {
                 allowEmptySubmit: true
             });
@@ -451,25 +454,51 @@ export default function ChatMain(props : Props) {
                 <div className="relative h-fit w-full flex flex-col gap-4 items-start justify-center">
                     <div className="prose dark:prose-invert prose-h1:text-xl prose-h1:mb-2 prose-p:mt-0">
                         <h1>Chat setup</h1>
-                        <p>Only AIs for which you have a key are displayed.</p>
-                        <span>The following models are available for free currently:</span>
-                        <ul>
-                            <li>Nemo (messages used by Mistral for training)</li>
-                            <li>Grok (recommended, unrestricted)</li>
-                            <li>LLama 3.2 90b</li>
-                            <li>Llama 3 70b (unrestricted)</li>
-                            <li>Genma 2 9b</li>
-                        </ul>
+                        <h2>1. Select an AI</h2>
+                        <p>Only free AIs and ones for which you have a key are displayed.</p>
+                        <ScrollShadow className="w-full overflow-x-auto py-2 max-h-[400px]">
+                            <div className="flex flex-row flex-wrap gap-2 w-fit">
+                                {LLMsWithAPIKeys(props.user).map((llm) => (
+                                    <Card 
+                                        key={llm.key} 
+                                        isPressable
+                                        className={`w-[150px] hover:bg-zinc-700 border dark:border-zinc-800 ${chat?.llm == llm.key && "dark:border-green-400"}`}
+                                        onClick={() => chat && setChat({...chat, llm: llm.key})}
+                                    >
+                                        <CardHeader className="pb-0 flex flex-col">
+                                            <span className="text-xs dark:text-zinc-400">{llm.provider}</span>
+                                            {llm.name}
+                                        </CardHeader>
+                                        <CardBody className="text-xs pt-0 dark:text-zinc-400 flex flex-col gap-1">
+                                            {llm.usecase}
+                                            <div className="flex flex-row flex-wrap gap-1">
+                                                {llm.tags?.map((t, index) => (
+                                                    <Chip 
+                                                        size="sm" 
+                                                        key={index}
+                                                        className={`${t == "Free" ? "bg-green-700 dark:text-green-100" : "bg-zinc-400 dark:bg-zinc-800"} `}
+                                                    >
+                                                        {t}
+                                                    </Chip>
+                                                ))}
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                                ))}
+                                <Link href={`/user/${props.user.user}/edit#api`} className="no-underline">
+                                    <Card isPressable className="w-[150px] h-[120px] p-0">
+                                        <CardBody className="p-0 w-full h-full flex items-center justify-center">
+                                                <Icon>add</Icon>
+                                        </CardBody>
+                                    </Card>
+                                </Link>
+                            </div>
+                        </ScrollShadow>
                     </div>
-                    
-                    <LLMSelect 
-                        user={props.user} 
-                        onSelect={(modelId) => chat && setChat({...chat, llm: modelId})}
-                    />
 
                     <div className="flex flex-col gap-2 w-full max-w-sm">
                         <div className="prose dark:prose-invert prose-p:m-0 prose-h3:m-0">
-                            <h3>Selected Persona</h3>
+                            <h2>2. Select a Persona</h2>
                             <p>This is who the AI will think is you. Default is your User Profile.</p>
                         </div>
                         <PersonaCard 
@@ -497,6 +526,7 @@ export default function ChatMain(props : Props) {
                     </div>
                     
                     <div className="flex flex-col gap-1 prose dark:prose-invert prose-p:m-0">
+                        <h2>3. Privacy</h2>
                         <Switch isSelected={isSelfDestruct} onValueChange={setIsSelfDestruct}>Don&apos;t save messages</Switch>
                         <p className="text-xs max-w-md">If turned on, messages won&apos;t be saved and <b className="text-red-400">will be gone</b> once you leave this page or refresh the browser. <b className="text-green-400">Encryption is turned on regardless of this option.</b></p>
                     </div>

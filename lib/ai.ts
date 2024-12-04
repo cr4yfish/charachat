@@ -4,7 +4,7 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
     switch(modelId as ModelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
-        case "genma-2-9b-it":
+        case "gemma2-9b-it":
             if(profile.groq_encrypted_api_key && profile.groq_encrypted_api_key.length > 0) {
                 return profile.groq_encrypted_api_key;
             }
@@ -75,7 +75,7 @@ export const LLMsWithAPIKeys = (profile: Profile | undefined): LLMType[] => {
 export type ModelId = 
     "llama3-groq-70b-8192-tool-use-preview" |
     "llama-3.2-90b-vision-preview" |
-    "genma-2-9b-it" |
+    "gemma2-9b-it" |
     "ollama" |
     "gpt-4o-mini" |
     "gpt-4o" |
@@ -122,7 +122,7 @@ export const isFreeModel = (modelId: ModelId) => {
         case "grok-beta":
         case "llama-3.2-90b-vision-preview":
         case "llama3-groq-70b-8192-tool-use-preview":
-        case "genma-2-9b-it":
+        case "gemma2-9b-it":
             return true;
     }
     return false;
@@ -132,116 +132,152 @@ export const isFreeModel = (modelId: ModelId) => {
 export type LLMType = {
     key: ModelId,
     name: string,
+    usecase?: string
     provider: ProviderId,
+    tags?: string[]
 }
 
 export const LLMs: LLMType[] = [
     {
-        "key": "open-mistral-nemo",
-        "name": "Nemo (free)",
-        "provider": "Mistral"
+        "key": "llama-3.2-90b-vision-preview",
+        "name": "Llama 3.2 90b",
+        "usecase": "One of the best, censors some things",
+        "provider": "Groq",
+        "tags": ["Free", "Fast", "Quality"]
+    },
+    {
+        "key": "llama3-groq-70b-8192-tool-use-preview",
+        "name": "Llama3 70b",
+        "usecase": "Good quality, sometimes stupid",
+        "provider": "Groq",
+        "tags": ["Free", "Fast", "Kinda Uncensored"]
     },
     {
         "key": "grok-beta",
-        "name": "Grok (free)",
-        "provider": "xAI"
-    },
-    
-    {
-        "key": "llama3-groq-70b-8192-tool-use-preview",
-        "name": "llama3 70b (free)",
-        "provider": "Groq"
+        "name": "Grok",
+        "usecase": "Allrounder, low quality sometimes",
+        "provider": "xAI",
+        "tags": ["Free", "Fast", "Uncensored"]
     },
     {
-        "key": "llama-3.2-90b-vision-preview",
-        "name": "Llama 3.2 90b (free)",
-        "provider": "Groq"
+        "key": "open-mistral-nemo",
+        "name": "Nemo",
+        "usecase": "Fast",
+        "provider": "Mistral",
+        "tags": ["Free", "Fast"]
     },
     {
-        "key": "genma-2-9b-it",
-        "name": "Genma 2 9b (free)",
-        "provider": "Groq"
+        "key": "gemma2-9b-it",
+        "name": "Gemma 2 9b",
+        "usecase": "Experimental",
+        "provider": "Groq",
+        "tags": ["Free", "New", "Fast"]
     },
-
+    {
+        "key": "claude-3-5-sonnet-latest",
+        "name": "Claude Sonnet",
+        "provider": "Anthropic",
+        "usecase": "Best model out there, expensive",
+        "tags": ["Quality", "Uncensored"]
+    },
+    {
+        "key": "claude-3-5-haiku-latest",
+        "name": "Claude Haiku",
+        "provider": "Anthropic",
+        "usecase": "Much cheaper than Sonnet, still good",
+        "tags": ["Quality", "Fast", "Uncensored"]
+    },
     {
         "key": "gpt-4o-mini",
         "name": "GPT-4o Mini",
-        "provider": "OpenAI"
+        "usecase": "Unbeatable price, Incredibly accurate",
+        "provider": "OpenAI",
+        "tags": ["Quality", "Fast"]
     },
     {
         "key": "gpt-4o",
         "name": "GPT-4o",
-        "provider": "OpenAI"
+        "usecase": "Incredibly accurate",
+        "provider": "OpenAI",
+        "tags": ["Quality", "Fast"]
     },
     {
         "key": "gpt-4-turbo",
         "name": "GPT-4 Turbo",
-        "provider": "OpenAI"
+        "provider": "OpenAI",
+        "usecase": "Has some working Jailbreaks",
+        "tags": ["Quality", "Fast"]
     },
     {
         "key": "o1-preview",
-        "name": "o1 Preview",
-        "provider": "OpenAI"
+        "name": "o1",
+        "provider": "OpenAI",
+        "usecase": "Unbelievable quality",
+        "tags": ["Quality", "Fast"]
     },
     {
         "key": "o1-mini",
         "name": "o1 Mini",
-        "provider": "OpenAI"
+        "provider": "OpenAI",
+        "usecase": "Very good quality for lower cost",
+        "tags": ["Quality", "Fast"]
     },
 
     {
         "key": "gemini-1.5-flash",
-        "name": "Gemini 1.5 Flash",
-        "provider": "Gemini"
+        "name": "Gemini Flash",
+        "provider": "Gemini",
+        "usecase": "Very fast, free",
+        "tags": ["Quality", "Fast"]
     },
     {
         "key": "gemini-1.5-pro",
-        "name": "Gemini 1.5 Pro",
-        "provider": "Gemini"
+        "name": "Gemini Pro",
+        "provider": "Gemini",
+        "usecase": "Fast, high quality",
+        "tags": ["Fast"]
     },
-
-    {
-        "key": "claude-3-5-sonnet-latest",
-        "name": "Claude 3.5 Sonnet",
-        "provider": "Anthropic"
-    },
-    {
-        "key": "claude-3-5-haiku-latest",
-        "name": "Claude 3.5 Haiku",
-        "provider": "Anthropic"
-    },
-    {
-        "key": "openrouter",
-        "name": "Your OpenRouter Model",
-        "provider": "OpenRouter"
-    },
-
     {
         "key": "command-r-plus",
         "name": "Command R Plus",
-        "provider": "Cohere"
+        "provider": "Cohere",
+        "usecase": "Fast, high quality",
+        "tags": ["Quality"]
     },
     {
         "key": "command-r",
         "name": "Command R",
-        "provider": "Cohere"
+        "provider": "Cohere",
+        "usecase": "",
+        "tags": ["Cheap", "Fast"]
     },
     {
         "key": "c4ai-aya-expanse-32b",
-        "name": "C4AI Aya Expanse 32b",
-        "provider": "Cohere"
+        "name": "Aya Expanse 32b",
+        "provider": "Cohere",
+        "usecase": "",
+        "tags": ["Fast", "Old"]
     },
-
     {
         "key": "ollama",
         "name": "Ollama",
-        "provider": "You"
+        "provider": "You",
+        "usecase": "Best privacy, since you control it"
+    },
+    {
+        "key": "openrouter",
+        "name": "OpenRouter",
+        "provider": "OpenRouter",
+        "usecase": "Depends on your model"
     },
     {
         "key": "openai-compatible",
         "name": "Your openAI model",
-        "provider": "You"
+        "provider": "You",
+        "usecase": "Depends on your model"
     },
+
+    // non-text models
     {
         "key": "black-forest-labs/FLUX.1-schnell",
         "name": "Flux Schnell",

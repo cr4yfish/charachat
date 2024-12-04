@@ -115,7 +115,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
-        case "genma-2-9b-it":
+        case "gemma2-9b-it":
             return getGroq(modelId, baseURL, apiKey);
 
         case 'ollama':
