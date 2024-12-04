@@ -17,10 +17,12 @@ import { SharedChatProvider } from "@/context/SharedChatSettings";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Metadata } from "next";
 
+type Params = Promise<{ chatId: string }>
+
 export async function generateMetadata(
-    { params: { chatId } } : { params: { chatId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
-    
+    const { chatId } = await params;
     try {
         const chat = await getChat(chatId);
 
@@ -37,8 +39,9 @@ export async function generateMetadata(
 
 }
 
-export default async function Chat({ params: { chatId } } : { params: { chatId: string } }) {
-    const cookieStore = cookies();
+export default async function Chat({ params } : { params: Params }) {
+    const { chatId } = await params;
+    const cookieStore = await cookies();
 
     let chat: ChatType | null = null;
 

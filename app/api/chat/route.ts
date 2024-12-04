@@ -20,7 +20,7 @@ const responseLengthToPrompt = {
 export async function POST(req: Request) {
     try {
         const { messages, profile: initProfile, chat: initChat, selfDestruct } = await req.json();
-        const cookiesStore = cookies();
+        const cookiesStore = await cookies();
 
         const profile: Profile = initProfile as Profile;
         const chat: Chat = initChat as Chat;

@@ -8,12 +8,14 @@ import CharacterPage from "@/components/character/CharacterPage";
 import DeleteCharacterButton from "@/components/character/DeleteCharacterButton";
 import { Metadata } from "next";
 
+type Params = Promise<{ characterId: string }>
 
 export async function generateMetadata(
-    { params: { characterId } } : { params: { characterId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
     
     try {
+        const { characterId } = await params;
         const character = await getCharacter(characterId);
 
         return {
@@ -30,10 +32,11 @@ export async function generateMetadata(
 }
 
 
-export default async function CharacterView({ params: { characterId } }: { params: { characterId: string } }) {
+export default async function CharacterView({ params }: { params: Params }) {
 
     let character: Character | null = null;
     let profile: Profile | undefined = undefined;
+    const { characterId } = await params;
 
     try {
         character = await getCharacter(characterId);

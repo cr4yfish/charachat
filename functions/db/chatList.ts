@@ -38,7 +38,7 @@ const chatFormatter = async (db: any): Promise<Chat> => {
 }
 
 export const getChats = cache(async (props: LoadMoreProps): Promise<Chat[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(chatMatcher)
         .order("last_message_at", { ascending: false })

@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 
 export const getKeyServerSide = async (): Promise<string> => {
-    const cookiesStore = cookies();
+    const cookiesStore = await cookies();
     const key = cookiesStore.get('key')?.value;
 
     if(!key) {

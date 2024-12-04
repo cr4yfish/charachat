@@ -66,7 +66,7 @@ type Props = {
 export default function WikipediaImport(props: Props) {
     const [search, setSearch] = useState<string>("");
     const [wikiPages, setWikiPages] = useState<WikiPage[]>([]);
-    const searchTimeout = useRef<NodeJS.Timeout>();
+    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isImporting, setIsImporting] = useState<boolean>(false);
 

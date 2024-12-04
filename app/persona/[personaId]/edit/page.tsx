@@ -4,11 +4,13 @@ import PersonaEdit from "@/components/persona/PersonaEdit";
 import { getPersona } from "@/functions/db/personas";
 import { Metadata } from "next";
 
+type Params = Promise<{ personaId: string }>
 
 export async function generateMetadata(
-    { params: { personaId } } : { params: { personaId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
     
+    const { personaId } = await params;
     try {
         const persona = await getPersona(personaId);
 
@@ -25,8 +27,8 @@ export async function generateMetadata(
 
 }
 
-export default async function PersonaEditView({ params: { personaId } } : { params: { personaId: string } }) {
-
+export default async function PersonaEditView({ params } : { params: Params }) {
+    const { personaId } = await params
     const persona = await getPersona(personaId);
 
     return (

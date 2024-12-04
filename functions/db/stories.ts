@@ -83,7 +83,7 @@ export const encryptStory = async (story: Story, key: string): Promise<Story> =>
 }
 
 export const getStory = cache(async (storyId: string): Promise<Story> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(storyTableName)
         .select(storyMatcher)
         .eq("id", storyId)
@@ -98,7 +98,7 @@ export const getStory = cache(async (storyId: string): Promise<Story> => {
 })
 
 export const searchStories = cache(async (search: string): Promise<Story[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(storyTableName)
         .select(storyMatcher)
         .or(`title.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
@@ -113,7 +113,7 @@ export const searchStories = cache(async (search: string): Promise<Story[]> => {
 })
 
 export const getCharacterStories = cache(async (characterId: string): Promise<Story[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(storyTableName)
         .select(storyMatcher)
         .eq("character", characterId)
@@ -128,7 +128,7 @@ export const getCharacterStories = cache(async (characterId: string): Promise<St
 })
 
 export const getStories = cache(async (props: LoadMoreProps): Promise<Story[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(storyTableName)
         .select(storyMatcher)
         .order("created_at", { ascending: false })
@@ -145,13 +145,13 @@ export const getStories = cache(async (props: LoadMoreProps): Promise<Story[]> =
 
 export const getUserStories = cache(async (props: LoadMoreProps): Promise<Story[]> => {
 
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
         throw new Error("No user session found");
     }
 
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(storyTableName)
         .select(storyMatcher)
         .eq("creator", user.id)
@@ -181,7 +181,7 @@ type CreateStoryProps = {
 }
 
 export const createStory = async (params : CreateStoryProps): Promise<Story> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
     .from("stories")
     .upsert({
         id: params.storyId,
@@ -214,7 +214,7 @@ export const updateStory = async (story: Story): Promise<void> => {
         story = await encryptStory(story, key);
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("stories")
         .update({
             title: story.title,
@@ -232,7 +232,7 @@ export const updateStory = async (story: Story): Promise<void> => {
 }
 
 export const deleteStory = async (storyId: string): Promise<void> => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("stories")
         .delete()
         .eq("id", storyId);

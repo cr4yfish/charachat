@@ -23,7 +23,7 @@ export default function BlurModal({
     updateOpen: (isOpen: boolean) => void,
 }) {
     const { isOpen: internalIsOpen, onOpen: internalOnOpen, onClose: internalOnClose, onOpenChange } = useDisclosure()
-    const contentRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if(isOpen) {

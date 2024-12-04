@@ -43,7 +43,7 @@ export const decryptProfile = async (profile: Profile, key: string): Promise<Pro
 }
 
 const profileFormatter = async (db: any): Promise<Profile> => {
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if((user?.id === db.user) && !checkIsEncrypted(db.first_name)) {
         console.error("Profile is not encrypted. Fixing...");
@@ -59,7 +59,7 @@ const profileFormatter = async (db: any): Promise<Profile> => {
 
 
 export const getProfile = cache(async (userId: string) => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("profiles")
         .select(`*`)
         .eq("user", userId)
@@ -74,7 +74,7 @@ export const getProfile = cache(async (userId: string) => {
 })
 
 export const updateProfile = async (profile: Profile) => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("profiles")
         .upsert(profile);
 
@@ -85,7 +85,7 @@ export const updateProfile = async (profile: Profile) => {
 }
 
 export const addTokens = async (userId: string, tokens: number) => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("profiles")
         .upsert({
             user: userId,
@@ -99,7 +99,7 @@ export const addTokens = async (userId: string, tokens: number) => {
 }
 
 export const getTokens = async (userId: string): Promise<number> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("profiles")
         .select("tokens")
         .eq("user", userId)
@@ -114,7 +114,7 @@ export const getTokens = async (userId: string): Promise<number> => {
 }
 
 export const getUserTier = cache(async (userId: string) => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("user_tier")
         .select("tier")
         .eq("user", userId)
@@ -129,13 +129,13 @@ export const getUserTier = cache(async (userId: string) => {
 })
 
 export const deleteUser = async () => {
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
         throw new Error("User not found");
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("profiles")
         .delete()
         .eq("user", user.id);

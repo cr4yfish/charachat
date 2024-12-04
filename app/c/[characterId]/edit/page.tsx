@@ -6,11 +6,12 @@ import { Metadata } from "next";
 import CharacterNew from "@/components/character/CharacterNew";
 import { getCurrentUser } from "@/functions/db/auth";
 
+type Params = Promise<{ characterId: string }>
 
 export async function generateMetadata(
-    { params: { characterId } } : { params: { characterId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
-    
+    const { characterId } = await params;
     try {
         const character = await getCharacter(characterId);
 
@@ -27,8 +28,8 @@ export async function generateMetadata(
 
 }
 
-export default async function CharacterView({ params: { characterId } } : { params: { characterId: string } }) {
-
+export default async function CharacterView({ params } : { params: Params }) {
+    const { characterId } = await params;
     const character = await getCharacter(characterId);
     const profile = await getCurrentUser();
 

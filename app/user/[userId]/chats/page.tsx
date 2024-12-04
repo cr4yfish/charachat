@@ -7,7 +7,7 @@ import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
 import { getChats } from "@/functions/db/chatList";
 
-export default async function UserChats({ params: {  } } : { params: { userId: string } }) {
+export default async function UserChats() {
 
     const chats = await getChats({ cursor: 0, limit: 25 });
 

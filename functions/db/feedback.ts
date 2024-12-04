@@ -11,7 +11,7 @@ type SendFeedbackProps = {
 }
 
 export async function sendFeedback(props: SendFeedbackProps) {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from(tableName)
         .insert({
             content: props.feedback,

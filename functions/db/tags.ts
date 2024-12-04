@@ -34,7 +34,7 @@ export async function encryptTag(tag: Tag): Promise<Tag> {
 }
 
 export const getTags = cache(async (): Promise<Tag[]> => {
-    const { data, error } = await createClient().from(tableName).select("*");
+    const { data, error } = await (await createClient()).from(tableName).select("*");
     if (error) {
         console.error(error);
         return [];

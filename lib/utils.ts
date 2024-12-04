@@ -91,7 +91,7 @@ export function safeParseLink(link: string | undefined): string {
   if(link && isValidURL(link) && link.includes("https://")) {
     return link;
   }
-  return "";
+  return "https://placehold.co/600x400";
 }
 
 export const _INTRO_MESSAGE = (character: Character): string => {

@@ -165,7 +165,7 @@ export default function ChatMain(props : Props) {
         },
     });
 
-    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
     useEffect(() => {
         scrollToBottom();

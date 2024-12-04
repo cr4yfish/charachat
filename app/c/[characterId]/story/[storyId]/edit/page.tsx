@@ -8,10 +8,12 @@ import { Profile } from "@/types/db";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+type Params = Promise<{ storyId: string, characterId: string }>
+
 export async function generateMetadata(
-    { params: { storyId } } : { params: { storyId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
-    
+    const { storyId } = await params;
     try {
         const story = await getStory(storyId);
 
@@ -29,8 +31,8 @@ export async function generateMetadata(
 }
 
 
-export default async function EditStory({ params: { characterId, storyId } }: { params: { characterId: string, storyId: string } }) {
-
+export default async function EditStory({ params }: { params: Params }) {
+    const { characterId, storyId } = await params;
     let profile: Profile | undefined = undefined;
     try {
         profile = await getCurrentUser();

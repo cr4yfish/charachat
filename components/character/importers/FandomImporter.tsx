@@ -65,7 +65,7 @@ type Props = {
 export default function FandomImporter(props: Props) {
     const [search, setSearch] = useState<string>("");
     const [fandomPages, setFandomPages] = useState<FandomPage[]>([]);
-    const searchTimeout = useRef<NodeJS.Timeout>();
+    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isImporting, setIsImporting] = useState<boolean>(false);
 

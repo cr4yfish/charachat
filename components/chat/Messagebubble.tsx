@@ -63,7 +63,7 @@ export default function Messagebubble(props: Props) {
     
     const [isRegenerating, setIsRegenerating] = useState(false);
 
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const [isLoadingAudio, setIsLoadingAudio] = useState(false);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);

@@ -108,7 +108,7 @@ type Props = {
 export default function AnimeImport(props: Props) {
     const [search, setSearch] = useState<string>("");
     const [animeCharacters, setAnimeCharacters] = useState<AnimeChar[]>([]);
-    const searchTimeout = useRef<NodeJS.Timeout>();
+    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
 

@@ -16,7 +16,7 @@ type getMessagesProps = {
 }
 
 export const getMessages = cache(async ({ chatId, from, limit, key } : getMessagesProps): Promise<Message[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("messages")
         .select("*")
         .eq("chat", chatId)
@@ -36,7 +36,7 @@ export const getMessages = cache(async ({ chatId, from, limit, key } : getMessag
 })
 
 export const getLatestChatMessage = cache(async (chatId: string, key: string): Promise<Message | null> => {    
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("messages")
         .select("*")
         .eq("chat", chatId)
@@ -58,7 +58,7 @@ export const getLatestChatMessage = cache(async (chatId: string, key: string): P
 export const addMessage = async (message: Message, key: string): Promise<Message> => {
     const encryptedContent = encryptMessage(message.content, Buffer.from(key, "hex"));
 
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("messages")
         .insert([{
             ...message,
@@ -79,7 +79,7 @@ export const addMessage = async (message: Message, key: string): Promise<Message
 }
 
 export const deleteMessage = async (messageId: string): Promise<void> => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("messages")
         .delete()
         .eq("id", messageId);
@@ -99,7 +99,7 @@ export const updateMessage = async (props: UpdateMessageProps): Promise<void> =>
     const key = await getKeyServerSide();
     const encryptedContent = encryptMessage(props.content, Buffer.from(key, "hex"));
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("messages")
         .update({
             content: encryptedContent,

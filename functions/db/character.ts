@@ -29,7 +29,7 @@ const characterFormatter = async (db: any): Promise<Character> => {
     let is_liked = false;
 
     // quickly check if user is logged in
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
     if(user?.id !== undefined) {
         // check like status
         is_liked = await isCharacterLiked(db.id, user.id);
@@ -115,7 +115,7 @@ export const encryptCharacter = async (character: Character, key: string): Promi
 }
 
 export const getCharacter = cache(async (characterId: string): Promise<Character> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .eq("id", characterId)
@@ -130,7 +130,7 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
 })
 
 export const getCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
@@ -149,7 +149,7 @@ export const getCharacters = cache(async (props: LoadMoreProps): Promise<Charact
  * Gets the latest 2 characters and returns the first one with a working image link
  */
 export const getNewestCharacter = cache(async (): Promise<Character> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
@@ -163,7 +163,7 @@ export const getNewestCharacter = cache(async (): Promise<Character> => {
 })
 
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .order("chats", { ascending: false })
@@ -184,7 +184,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
         throw new Error("Category ID not found");
     }
 
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .eq("category", props.args.categoryId)
@@ -201,7 +201,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
 })
 
 export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .or(`name.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
@@ -216,13 +216,13 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
 })
 
 export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data: { user }} = await createClient().auth.getUser();
+    const { data: { user }} = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
         throw new Error("User not found");
     }
 
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .eq("owner", user.id)
@@ -252,7 +252,7 @@ export const updateCharacter = async (character: Character): Promise<void> => {
     delete character.is_liked;
     delete character.tags_full;
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("characters")
         .update({
             ...character,
@@ -267,7 +267,7 @@ export const updateCharacter = async (character: Character): Promise<void> => {
 }
 
 export const deleteCharacter = async (characterId: string): Promise<void> => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("characters")
         .delete()
         .eq("id", characterId);
@@ -284,7 +284,7 @@ export const deleteCharacter = async (characterId: string): Promise<void> => {
  * @param userId 
  */
 export const isCharacterLiked = cache(async(characterId: string, userId: string): Promise<boolean> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("character_likes")
         .select("character")
         .eq("character", characterId)
@@ -298,13 +298,13 @@ export const isCharacterLiked = cache(async(characterId: string, userId: string)
 })
 
 export const likeCharacter = async(characterId: string): Promise<void> => {
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(user?.id === undefined) {
         throw new Error("User not found");
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("character_likes")
         .insert({
             character: characterId,
@@ -317,13 +317,13 @@ export const likeCharacter = async(characterId: string): Promise<void> => {
 }
 
 export const unlikeCharacter = async(characterId: string): Promise<void> => {
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(user?.id === undefined) {
         throw new Error("User not found");
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("character_likes")
         .delete()
         .eq("character", characterId)

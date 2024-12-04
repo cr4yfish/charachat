@@ -6,8 +6,9 @@ import { createClient } from "@/utils/supabase/supabase";
 import { Character } from "@/types/db";
 
 export const saveCharacter = async (char: Character): Promise<{ data: Character, error: string }> => {
+    const client = await createClient();
 
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await client.auth.getUser();
 
     if(!user) {
         throw new Error("Only authenticated users can create characters");
@@ -22,7 +23,8 @@ export const saveCharacter = async (char: Character): Promise<{ data: Character,
 
     delete newChar.tags_full;
 
-    const { data, error } = await createClient()
+    
+    const { data, error } = await client
         .from("characters")
         .insert(newChar)
         .eq("id", newChar.id)

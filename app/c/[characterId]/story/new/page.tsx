@@ -6,8 +6,10 @@ import { getCharacter } from "@/functions/db/character";
 import { Profile } from "@/types/db";
 import { redirect } from "next/navigation";
 
-export default async function NewStory({ params: { characterId } }: { params: { characterId: string } }) {
+type Params = Promise<{ characterId: string }>
 
+export default async function NewStory({ params }: { params: Params }) {
+    const { characterId } = await params;
     let profile: Profile | undefined = undefined;
     
     try {

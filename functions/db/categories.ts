@@ -8,7 +8,7 @@ import { Category } from "@/types/db";
 import { LoadMoreProps } from "@/types/client";
 
 export const searchCategories = cache(async (search: string): Promise<Category[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("categories")
         .select("*")
         .ilike("title", `%${search}%`);
@@ -21,7 +21,7 @@ export const searchCategories = cache(async (search: string): Promise<Category[]
 })
 
 export const getCategories = cache(async (props: LoadMoreProps): Promise<Category[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from("categories")
         .select("*")
         .order("created_at", { ascending: true })

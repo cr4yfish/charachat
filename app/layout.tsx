@@ -65,23 +65,24 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const keyCookie = cookieStore.get("key")?.value;
 
   return (
-    <html lang="en" className="bg-black dark h-screen w-screen overflow-hidden">
+    <html lang="en" className="bg-black h-screen w-screen overflow-hidden dark" style={{ colorScheme: "dark"}}>
       <body
         className={`${montserrat.className} h-screen w-screen overflow-hidden antialiased bg-neutral-900/75`}
+        style={{ colorScheme: "dark"}}
       >
         <ThemeProvider
           attribute={"class"}
-          defaultTheme={"system"}
+          defaultTheme={"dark"}
           enableSystem
           disableTransitionOnChange
         >

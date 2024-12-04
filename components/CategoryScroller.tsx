@@ -20,7 +20,7 @@ const limit = 4;
 
 export default function CategoryScroller(props: Props) {
     const { currentCategory, setCurrentCategory } = useCurrentCategory();
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const [characters, setCharacters] = useState<Character[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);

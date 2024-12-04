@@ -4,7 +4,7 @@ import StoryCard from "@/components/story/StoryCard";
 import { getUserStories } from "@/functions/db/stories";
 import InfiniteListLoader from "@/components/InfiniteListLoader";
 
-export default async function UserStories({ params: {  } } : { params: { userId: string } }) {
+export default async function UserStories() {
 
     const stories = await getUserStories({ cursor: 0, limit: 25 });
 

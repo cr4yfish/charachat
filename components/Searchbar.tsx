@@ -58,7 +58,7 @@ export default function Searchbar() {
     const [characters, setCharacters] = React.useState<Character[]>([]);
     const [stories, setStories] = React.useState<Story[]>([]);
     const [hasResults, setHasResults] = React.useState<boolean>(false);
-    const searchTimeout = React.useRef<NodeJS.Timeout>();
+    const searchTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
     React.useEffect(() => {
         const handleSearch = async () => {
@@ -122,10 +122,10 @@ export default function Searchbar() {
                 <AnimatePresence>
                 { hasResults &&
                 <motion.div 
-                    className="
+                    className={`
                         z-40 w-full h-fit bg-zinc-800/80 backdrop-blur-xl px-4 py-3 border border-zinc-600
                         rounded-lg absolute top-[130%] left-0 flex flex-col gap-2 max-h-[50svh] overflow-y-auto
-                    "
+                    `}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}

@@ -6,11 +6,12 @@ import { Metadata } from "next";
 import { getPersona } from "@/functions/db/personas";
 import PersonaPage from "@/components/persona/PersonaPage";
 
+type Params = Promise<{ personaId: string }>
 
 export async function generateMetadata(
-    { params: { personaId } } : { params: { personaId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
-    
+    const { personaId } = await params;
     try {
         const persona = await getPersona(personaId);
 
@@ -28,8 +29,8 @@ export async function generateMetadata(
 }
 
 
-export default async function PersonaView({ params: { personaId } }: { params: { personaId: string } }) {
-
+export default async function PersonaView({ params }: { params: Params }) {
+    const { personaId } = await params;
     let persona: Persona | null = null;
     let profile: Profile | undefined = undefined;
 

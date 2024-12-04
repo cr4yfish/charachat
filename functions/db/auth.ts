@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 import { encryptMessage, generateKey } from "@/lib/crypto";
 
 export const checkIsLoggedIn = async () => {
-    const { data: { user }, error } = await createClient().auth.getUser();
+    const { data: { user }, error } = await (await createClient()).auth.getUser();
 
     if(user == null || error) {
         return false;
@@ -24,7 +24,7 @@ export const checkIsLoggedIn = async () => {
 }
 
 export const getCurrentUser = cache(async (): Promise<Profile> => {
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(!user) {
         throw new Error("No user found");
@@ -61,7 +61,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
         }
     }
 
-    const { error } = await createClient().auth.signInWithPassword(data)
+    const { error } = await (await createClient()).auth.signInWithPassword(data)
 
     if (error) {
         console.error(error)
@@ -75,7 +75,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     // set cookie with key
     const keyBuffer = generateKey(password, email);
 
-    cookies().set("key", keyBuffer.toString("hex"), { secure: true });
+    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true });
 
     return {
         success: true,
@@ -119,7 +119,7 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
         }
     }
 
-    const { data: { user }, error } = await createClient().auth.signUp(data)
+    const { data: { user }, error } = await (await createClient()).auth.signUp(data)
 
     if (error || !user?.id) {
         console.error(error)
@@ -133,9 +133,9 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
     // set cookie with key
     const keyBuffer = generateKey(data.password, data.email);
 
-    cookies().set("key", keyBuffer.toString("hex"), { secure: true });
+    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true });
 
-    const { error: profilesError } = await createClient().from("profiles").insert({
+    const { error: profilesError } = await (await createClient()).from("profiles").insert({
         user: user.id,
         username: props.username,
         first_name: encryptMessage(props.firstName, keyBuffer),
@@ -163,9 +163,9 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
 }
 
 export const logout = async () => {
-    await createClient().auth.signOut();
+    await await (await createClient()).auth.signOut();
 
-    cookies().set("key", "", { secure: true });
+    (await cookies()).set("key", "", { secure: true });
 
     revalidatePath("/");
 }
@@ -173,12 +173,12 @@ export const logout = async () => {
 export async function deleteAccount() {
 
     // cross check
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
         throw new Error("User not found");
     }
 
     // delete user
-    return await createAdminClient().auth.admin.deleteUser(user.id)
+    return await (await createAdminClient()).auth.admin.deleteUser(user.id)
 }

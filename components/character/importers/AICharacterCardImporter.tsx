@@ -65,7 +65,7 @@ type Props = {
 export default function AICharacterCardsImporter(props: Props) {
     const [search, setSearch] = useState<string>("");
     const [characterPage, setCharacterPage] = useState<CharaterPage[]>([]);
-    const searchTimeout = useRef<NodeJS.Timeout>();
+    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isImporting, setIsImporting] = useState<boolean>(false);
 

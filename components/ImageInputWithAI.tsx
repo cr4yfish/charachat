@@ -21,7 +21,7 @@ export default function ImageInputWithAI(props: Props) {
     const [isUploadLoading, setIsUploadLoading] = useState(false);
     const { toast } = useToast();
 
-    const imageInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleGenerateImage = async () =>  {
         setIsGenerateLoading(true);

@@ -78,7 +78,7 @@ export const encryptPersona = async (persona: Persona, key: string): Promise<Per
 }
 
 export const getPersona = cache(async (personaId: string) => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(personaMatcher)
         .eq("id", personaId)
@@ -93,7 +93,7 @@ export const getPersona = cache(async (personaId: string) => {
 })
 
 export const getPersonas = cache(async (props: LoadMoreProps) => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(personaMatcher)
         .range(props.cursor, props.cursor + props.limit - 1);
@@ -107,13 +107,13 @@ export const getPersonas = cache(async (props: LoadMoreProps) => {
 })
 
 export const getUserPersonas = cache(async (props: LoadMoreProps) => {
-    const { data: { user } } = await createClient().auth.getUser();
+    const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
         throw new Error("User not authenticated");
     }
 
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(personaMatcher)
         .eq("creator", user.id)
@@ -128,7 +128,7 @@ export const getUserPersonas = cache(async (props: LoadMoreProps) => {
 })
 
 export const searchPersonas = cache(async (search: string) => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(personaMatcher)
         .ilike("full_name", `%${search}%`);
@@ -147,7 +147,7 @@ export const updatePersona = async (persona: Persona) => {
         persona = await encryptPersona(persona, key);
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from(tableName)
         .update({
             full_name: persona.full_name,
@@ -171,7 +171,7 @@ export const createPersona = async (persona: Persona): Promise<void> => {
         persona = await encryptPersona(persona, key);
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from(tableName)
         .insert({
             ...persona,
@@ -185,7 +185,7 @@ export const createPersona = async (persona: Persona): Promise<void> => {
 }
 
 export const deletePersona = async (personaId: string): Promise<void> => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from(tableName)
         .delete()
         .eq("id", personaId);

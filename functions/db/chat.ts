@@ -21,7 +21,7 @@ const chatMatcher = `
 const tableName = "chats_overview";
 
 const chatFormatter = async (db: any): Promise<Chat> => {
-    const cookiesStore = cookies();
+    const cookiesStore = await cookies();
 
     const key = cookiesStore.get("key")?.value;
 
@@ -156,7 +156,7 @@ export const decryptChat = async(chat: Chat, key: string): Promise<Chat> => {
 }
 
 export const getChat = cache(async (chatId: string): Promise<Chat> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(chatMatcher)
         .eq("id", chatId)
@@ -171,7 +171,7 @@ export const getChat = cache(async (chatId: string): Promise<Chat> => {
 })
 
 export const getCharacterChats = cache(async (characterId: string): Promise<Chat[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(chatMatcher)
         .eq("character", characterId)
@@ -187,7 +187,7 @@ export const getCharacterChats = cache(async (characterId: string): Promise<Chat
 })
 
 export const getChats = cache(async (props: LoadMoreProps): Promise<Chat[]> => {
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
         .from(tableName)
         .select(chatMatcher)
         .order("last_message_at", { ascending: false })
@@ -218,7 +218,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
     const key = await getKeyServerSide();
     const keyBuffer = Buffer.from(key, "hex");
 
-    const { data, error } = await createClient()
+    const { data, error } = await (await createClient())
     .from("chats")
     .insert([{
         id: chatId,
@@ -249,7 +249,7 @@ export const updateChat = async (chat: Chat): Promise<void> => {
         chat = await encryptChat(chat, key)
     }
 
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("chats")
         .update({
             dynamic_book: chat.dynamic_book,
@@ -287,7 +287,7 @@ export const updateDynamicMemory = async (chatId: string, memory: string): Promi
 
     const encryptedMemory = encryptMessage(summarizedBook, Buffer.from(key, "hex"));
     
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("chats")
         .update({
             dynamic_book: encryptedMemory
@@ -303,7 +303,7 @@ export const updateDynamicMemory = async (chatId: string, memory: string): Promi
 }
 
 export const deleteChat = async (chatId: string): Promise<void> => {
-    const { error } = await createClient()
+    const { error } = await (await createClient())
         .from("chats")
         .delete()
         .eq("id", chatId);

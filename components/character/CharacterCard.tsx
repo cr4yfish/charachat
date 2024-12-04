@@ -44,7 +44,7 @@ export default function CharacterCard(props: Props) {
                                     className="relative object-cover" 
                                     fill
                                     src={safeParseLink(props.data.image_link)} 
-                                    alt={props.data.name} 
+                                    alt={props.data.name ?? "avatar"} 
                                     sizes="100px"
                                 />
                             </div>

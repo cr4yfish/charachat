@@ -28,7 +28,7 @@ export default function ExtraCharacterSelect(props: Props) {
     const [open, setOpen] = useState(false);
     const [characters, setCharacters] = useState<Character[]>([]);
     const [search, setSearch] = useState<string>("");
-    const searchTimeout = useRef<NodeJS.Timeout>();
+    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const {toast} = useToast();
 

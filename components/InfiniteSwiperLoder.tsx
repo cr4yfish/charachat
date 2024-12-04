@@ -27,7 +27,7 @@ export default function InfiniteSwiperLoader(props: Props) {
     const [canLoadMore, setCanLoadMore] = useState(true);
     const [rowsArray, setRowsArray] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     
     // load more data on scrolling to end
     useEffect(() => {

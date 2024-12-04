@@ -15,11 +15,12 @@ import { Metadata } from "next";
 import { safeParseLink } from "@/lib/utils";
 import CharacterAvatarButton from "@/components/character/CharacterAvatarButton";
 
+type Params = Promise<{ storyId: string, characterId: string }>
 
 export async function generateMetadata(
-    { params: { storyId } } : { params: { storyId: string } }
+    { params } : { params: Params }
 ) : Promise<Metadata> {
-    
+    const {storyId} = await params;
     try {
         const story = await getStory(storyId);
 
@@ -37,8 +38,8 @@ export async function generateMetadata(
 }
 
 
-export default async function Story({ params: { storyId, characterId } }: { params: { storyId: string, characterId: string } }) {
-
+export default async function Story({ params }: { params: Params }) {
+    const { characterId, storyId } = await params;
     let profile: Profile | undefined = undefined;
 
     try {
