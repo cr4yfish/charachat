@@ -293,21 +293,21 @@ export default function EditProfile(props: Props) {
                     <Separator className="my-2" />
                     
                     <h3>LLMs (Text)</h3>
-                    
                     <KeyInput 
-                        url="https://platform.openai.com/account/api-keys" 
-                        label="OpenAI"
-                        provider={"OpenAI"}
-                        value={profile.openai_encrypted_api_key} 
-                        onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
+                        url="https://console.x.ai" 
+                        hasFreeTier
+                        label="Grok"
+                        provider={"xAI"}
+                        value={profile.x_ai_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("x_ai_encrypted_api_key", value)}
                     />
                     <KeyInput 
-                        url="https://aistudio.google.com/apikey" 
+                        url="https://console.groq.com/keys" 
+                        label="Groq"
                         hasFreeTier
-                        label="Gemini"
-                        provider={"Gemini"}
-                        value={profile.gemini_encrypted_api_key} 
-                        onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
+                        provider={"Groq"}
+                        value={profile.groq_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
                     <KeyInput 
                         url="https://console.mistral.ai/api-keys" 
@@ -318,12 +318,19 @@ export default function EditProfile(props: Props) {
                         onValueChange={(value) => handleUpdateValue("mistral_encrypted_api_key", value)}
                     />
                     <KeyInput 
-                        url="https://console.x.ai" 
+                        url="https://aistudio.google.com/apikey" 
                         hasFreeTier
-                        label="Grok"
-                        provider={"xAI"}
-                        value={profile.x_ai_encrypted_api_key} 
-                        onValueChange={(value) => handleUpdateValue("x_ai_encrypted_api_key", value)}
+                        label="Gemini"
+                        provider={"Gemini"}
+                        value={profile.gemini_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("gemini_encrypted_api_key", value)}
+                    />
+                    <KeyInput 
+                        url="https://platform.openai.com/account/api-keys" 
+                        label="OpenAI"
+                        provider={"OpenAI"}
+                        value={profile.openai_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("openai_encrypted_api_key", value)}
                     />
                     <KeyInput 
                         url="https://console.anthropic.com/settings/keys" 
@@ -331,14 +338,6 @@ export default function EditProfile(props: Props) {
                         provider={"Anthropic"}
                         value={profile.anthropic_encrypted_api_key} 
                         onValueChange={(value) => handleUpdateValue("anthropic_encrypted_api_key", value)}
-                    />
-                    <KeyInput 
-                        url="https://console.groq.com/keys" 
-                        label="Groq"
-                        hasFreeTier
-                        provider={"Groq"}
-                        value={profile.groq_encrypted_api_key} 
-                        onValueChange={(value) => handleUpdateValue("groq_encrypted_api_key", value)}
                     />
                     <KeyInput 
                         url="https://dashboard.cohere.com/api-keys" 
