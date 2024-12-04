@@ -84,6 +84,16 @@ export default function EditProfile(props: Props) {
     useEffect(() => {
         // decrypt API Keys
         try {
+
+            // scroll to # in pathname
+            if(window.location.hash) {
+                const id = window.location.hash.substring(1);
+                const element = document.getElementById(id);
+                if(element) {
+                    element.scrollIntoView({behavior: "smooth"});
+                }
+            }
+
             const key = sessionStorage.getItem('key');
 
             if(!key) { throw new Error("No key found in session storage. Log out and back in to fix this.");  }
@@ -241,7 +251,7 @@ export default function EditProfile(props: Props) {
                 <h2>Settings</h2>
             </div>
 
-            <div className="prose dark:prose-invert">
+            <div className="prose dark:prose-invert" id="api">
                 <h3>Configure AIs</h3>
                 <p className="text-sm dark:text-zinc-400">All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to use any AI for which you provide an API key - in addition to free models.</p>
             </div>
@@ -258,7 +268,7 @@ export default function EditProfile(props: Props) {
                         <Chip color="success">xAI Grok</Chip>
                         <Chip color="success">Llama 3.2 90b</Chip>
                         <Chip color="success">Llama 3 70b</Chip>
-                        <Chip color="success">Genma 2</Chip>
+                        <Chip color="success">Gemma 2</Chip>
                     </div>
                     <Separator className="my-2" />
                     
