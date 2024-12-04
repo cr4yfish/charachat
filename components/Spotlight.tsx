@@ -2,7 +2,7 @@
 
 import { Character } from "@/types/db";
 import CharacterCard from "./character/CharacterCard";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import Image from "next/image";
 import { safeParseLink } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ export default async function Spotlight(props: Props) {
 
     return (
         <>
-        <div className="w-full h-fit relative overflow-visible">
+        <div className="w-full h-[320px] relative overflow-visible">
             <Card 
                 className={`
                     dark:bg-zinc-600/10 relative overflow-hidden rounded-3xl
@@ -28,9 +28,6 @@ export default async function Spotlight(props: Props) {
                 <CardContent>
                     <CharacterCard data={props.character} hasLink noBg fullWidth />
                 </CardContent>
-                <CardFooter>
-                    
-                </CardFooter>
             </Card>
 
             <div className="absolute -z-20 scale-[150%] scale-x-[100%] top-0 left-0 w-full h-full blur-2xl ">
