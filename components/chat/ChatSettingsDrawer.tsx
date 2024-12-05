@@ -82,6 +82,7 @@ export default function ChatSettingsDrawer(props: Props) {
                             <LLMSelect 
                                 user={props.user}
                                 onSelect={(llm) => chat && setChat({...chat, llm: llm})}
+                                default={chat?.llm}
                             />
                         </div>
 
