@@ -32,6 +32,7 @@ import { deleteMessage, updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
 import { generateAudioTool } from "@/functions/ai/tools";
+import { Avatar } from "@nextui-org/avatar";
   
 
 type Props = {
@@ -263,10 +264,16 @@ export default function Messagebubble(props: Props) {
                         
                         className={`!select-none relative w-fit ${isEditMode && "z-50"} `}
                     >
-                        {props.message.role == "assistant" &&  props.showName &&
+                        {props.showName &&
                             <div className="pl-3 pb-1 flex flex-row items-center gap-2">
-                                <span className=" text-sm select-none">{props.chat?.character.name}</span>
-                                {props.chat &&
+                                <span className={`text-sm select-none flex items-center gap-2 ${props.message.role === "user" && "flex-row-reverse"}`}>
+                                    <Avatar 
+                                        size="sm" 
+                                        src={props.message.role === "user" ? (props.chat?.persona?.avatar_link || props.chat?.user.avatar_link) : props.chat?.character.image_link} 
+                                    />
+                                    {props.message.role === "user" ? (props.chat?.persona?.full_name || props.chat?.user.username) : props.chat?.character.name}
+                                </span>
+                                {props.chat && props.message.role === "assistant" &&
                                     <div className="flex flex-row items-center gap-1 px-2 py-1  w-fit rounded-full text-xs dark:text-zinc-400">
                                         <Icon downscale filled>auto_awesome</Icon>
                                         <div className="w-full">{props.chat.llm}</div>
