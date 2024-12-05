@@ -7,7 +7,7 @@ import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { framerListAnimationProps } from "@/lib/utils";
+import { framerListAnimationProps, sleep } from "@/lib/utils";
 
 import {
     Card,
@@ -33,7 +33,28 @@ import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
 import { Avatar } from "@nextui-org/avatar";
 import { decryptMessage, getKeyClientSide } from "@/lib/crypto";
-  
+
+type Prediction = {
+    id: string;
+    model: string;
+    input : {
+        language: string;
+        speaker: string;
+        text: string;
+    },
+    logs: string;
+    output: string;
+    data_removed: boolean;
+    error: string | null;
+    status: string;
+    created_at: string;
+    started_at: string;
+    urls: {
+        cancel: string;
+        get: string;
+        stream: string
+    }
+}
 
 type Props = {
     message: AIMessage,
@@ -70,6 +91,8 @@ export default function Messagebubble(props: Props) {
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
     const [audioLink, setAudioLink] = useState<string | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [audioPrediction, setAudioPrediction] = useState<Prediction | null>(null);
 
     /* TODO Fix blurrer
     useEffect(() => {
@@ -206,6 +229,7 @@ export default function Messagebubble(props: Props) {
             }
 
             const decryptedSpeakerLink = decryptMessage(props.chat.character.speaker_link, keyBuffer);
+            const decryptedReplicateKey = decryptMessage(encryptedReplicateKey, keyBuffer);
 
             toast({
                 title: "Generating audio",
@@ -220,18 +244,39 @@ export default function Messagebubble(props: Props) {
                 body: JSON.stringify({
                     prompt: props.message.content,
                     speakerLink: decryptedSpeakerLink,
+                    replicateToken: decryptedReplicateKey,
                 }),
             });
 
-            if(!res.ok) {
+            if(res.status !== 201) {
                 throw new Error("Failed to generate audio");
             }
+            
+            let prediction = await res.json();
+            setAudioPrediction(prediction);
 
-            const { link } = await res.json();
-
-            setAudioLink(link);
-            setIsLoadingAudio(false);
-            return link;
+            while(
+                prediction.status !== "succeeded" &&
+                prediction.status !== "failed"
+            ) {
+                await sleep(1000);
+                const response = await fetch(`/api/audio/${prediction.id}`, {
+                    headers: {
+                        Authorization: decryptedReplicateKey
+                    }
+                });
+               prediction = await response.json();
+               if(response.status !== 200) {
+                    throw new Error("Failed to get audio prediction");
+               }
+               console.log({ prediction})
+               if(prediction.output && prediction.output.length > 0) {
+                setAudioLink(prediction.output);
+                setIsLoadingAudio(false);
+               }
+               setAudioPrediction(prediction);
+            }
+            
         } catch (error) {
             console.error(error);
             const err = error as Error;
@@ -394,10 +439,15 @@ export default function Messagebubble(props: Props) {
                                         }
                                     }} 
                                     variant="light" 
-                                    isIconOnly 
+                                    isIconOnly={false} 
                                     size="sm"
+                                    className=" dark:text-zinc-400 px-2"
                                 >
-                                    <Icon color="zinc-400" >{!isAudioPlaying ? "play_arrow" : "stop"}</Icon>
+                                    {<Icon color="zinc-400" >{!isAudioPlaying ? "play_arrow" : "stop"}</Icon>}
+                                    {audioPrediction?.status == "starting" && "Starting"}
+                                    {audioPrediction?.status == "processing" && "Generating"}
+                                    {audioPrediction?.status == "succeeded" && "Play"}
+                                    {audioPrediction == null && "Generate"}
                                 </Button>
                             }
 
