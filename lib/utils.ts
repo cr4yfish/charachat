@@ -111,3 +111,11 @@ export const _INTRO_MESSAGE = (character: Character): string => {
     `}
   `
 };
+
+export async function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(async () => {
+        resolve();
+    }, ms);
+  })
+}
