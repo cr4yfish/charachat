@@ -36,9 +36,9 @@ export const storySchema = z.object({
 export const personaSchema = z.object({
     fullName: z.string()
         .min(5, { message: "Name must be at least 5 characters long" })
-        .max(_PERSONA_MAX_LENGTH.fullName, { message: "Name must be at most 50 characters long" }),
+        .max(_PERSONA_MAX_LENGTH.fullName, { message: "Name is too long" }),
     bio: z.string()
-        .max(_PERSONA_MAX_LENGTH.bio, { message: "Description must be at most 350 characters long" }),
+        .max(_PERSONA_MAX_LENGTH.bio, { message: "Description is too long" }),
     avatarLink: z.string()
         .min(5, { message: "Image Link must be at least 5 characters long" })
         .url({ message: "Invalid URL" }),
