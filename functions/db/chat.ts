@@ -113,7 +113,7 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             const key = await getKeyServerSide();
             decryptedChat.story = await decryptStory(decryptedChat.story, key);
         } catch (error) {
-            console.error("Error decrypting story", error);
+            console.error("Error decrypting story in chat", error);
             return decryptedChat;
         }
     }
@@ -260,7 +260,8 @@ export const updateChat = async (chat: Chat): Promise<void> => {
             negative_prompt: chat.negative_prompt,
             response_length: chat.response_length,
             temperature: chat.temperature,
-            frequency_penalty: chat.frequency_penalty
+            frequency_penalty: chat.frequency_penalty,
+            persona: chat.persona?.id,
         })
         .eq("id", chat.id)
 
