@@ -86,7 +86,6 @@ export type Story = {
     character: Character;
     title: string;
     description: string;
-    image?: string;
     image_link: string;
     story: string;
     first_message: string;
