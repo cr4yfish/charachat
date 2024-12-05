@@ -81,11 +81,12 @@ export default function PersonaEdit(props: Props) {
                 throw new Error("Validation failed");
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error saving persona:",error);
             setIsSaved(false);
+            const err = error as Error;
             toast({
                 title: "Error",
-                description: "Failed to save the Persona",
+                description: "Failed to save the Persona. Error message: " + err.message,
                 variant: "destructive"
             })
         }
