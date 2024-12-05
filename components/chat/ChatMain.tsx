@@ -119,8 +119,6 @@ export default function ChatMain(props : Props) {
                 user: props.user,
                 from_ai: true,
                 content: message.content,
-                is_edited: false,
-                is_deleted: false,
             }
 
             try {
@@ -287,8 +285,6 @@ export default function ChatMain(props : Props) {
                 user: props.user,
                 from_ai: true,
                 content: props.chat.story.first_message.replace("{{user}}", props.user.first_name),
-                is_edited: false,
-                is_deleted: false,
             }, key);
         } else if(props.chat.character.first_message && props.chat.character.first_message.length > 0) {
             setMessages([
@@ -318,8 +314,6 @@ export default function ChatMain(props : Props) {
                 user: props.user,
                 from_ai: true,
                 content: props.chat.character.first_message.replace("{{user}}", props.user.first_name),
-                is_edited: false,
-                is_deleted: false,
             }, key);
 
         }

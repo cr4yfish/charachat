@@ -106,10 +106,6 @@ export type Message = {
     from_ai: boolean;
     image?: string;
     content: string;
-    is_edited: boolean;
-    last_edited_at?: string;
-    is_deleted: boolean;
-    deleted_at?: string;
 }
 
 export type Tag = {

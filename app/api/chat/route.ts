@@ -46,8 +46,6 @@ export async function POST(req: Request) {
                 user: profile,
                 from_ai: false,
                 content: latestMessage.content,
-                is_edited: false,
-                is_deleted: false,
             }
 
             const key = cookiesStore.get("key")?.value;
