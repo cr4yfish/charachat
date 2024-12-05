@@ -127,6 +127,26 @@ export const getUserPersonas = cache(async (props: LoadMoreProps) => {
     return await Promise.all(data.map(personaFormatter));
 })
 
+export const getPublicUserPersonas = cache(async (props: LoadMoreProps) => {
+    if(!props.args?.userId) {
+        throw new Error("No user id provided");
+    }
+
+    const { data, error } = await (await createClient())
+        .from(tableName)
+        .select(personaMatcher)
+        .eq("creator", props.args.userId)
+        .eq("is_private", false)
+        .range(props.cursor, props.cursor + props.limit - 1);
+
+    if (error) {
+        console.error("Error fetching public user personas", error);
+        throw error;
+    }
+
+    return await Promise.all(data.map(personaFormatter));
+})
+
 export const searchPersonas = cache(async (search: string) => {
     const { data, error } = await (await createClient())
         .from(tableName)

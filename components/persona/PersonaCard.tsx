@@ -9,6 +9,7 @@ import { safeParseLink, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
 import Markdown from "react-markdown";
 import { Avatar } from "@nextui-org/avatar";
+import Username from "../user/Username";
 
 type Props = {
     data: Persona,
@@ -53,7 +54,7 @@ export default function PersonaCard(props: Props) {
                             <div className="flex flex-col gap-2">
                                 <div className="flex flex-col">
                                     <h3 className="font-medium">{truncateText(props.data.full_name,40)}</h3>
-                                    <p className=" text-xs dark:text-zinc-400">By @{props.data.creator?.username}</p>
+                                    <Username profile={props.data.creator} />
                                 </div>
                                 {!props.isSmall && <Markdown className="text-xs max-w-md">{truncateText(props.data.bio ?? "", props.fullWidth ? 80 : 40)}</Markdown> }
                             </div>

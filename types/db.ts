@@ -56,6 +56,7 @@ export type Profile = {
     first_name: string;
     last_name?: string;
     bio?: string;
+    public_bio?: string;
     avatar_link?: string;
     tokens: number;
     default_llm: string;

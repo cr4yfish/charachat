@@ -237,6 +237,14 @@ export default function EditProfile(props: Props) {
                 onValueChange={(value) => handleUpdateValue('bio', value)} 
                 maxLength={2000} 
             />
+            <TextareaWithCounter 
+                label="Public Bio"
+                isRequired
+                description="Public Bio. This will be visible to other users. You can use Markdown here." 
+                value={profile.public_bio} 
+                onValueChange={(value) => handleUpdateValue('public_bio', value)} 
+                maxLength={2000} 
+            />
             <ImageInputWithAI
                 contextFields={[profile.first_name, profile.last_name ?? "", profile.bio ?? ""]}
                 imageLink={profile.avatar_link}

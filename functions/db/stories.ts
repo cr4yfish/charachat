@@ -168,6 +168,29 @@ export const getUserStories = cache(async (props: LoadMoreProps): Promise<Story[
     }))
 })
 
+export const getPublicUserStories = cache(async (props: LoadMoreProps): Promise<Story[]> => {
+    
+    if(!props.args?.userId) {
+        throw new Error("No user id provided");
+    }
+
+    const { data, error } = await (await createClient())
+        .from(storyTableName)
+        .select(storyMatcher)
+        .eq("creator", props.args.userId)
+        .eq("is_private", false)
+        .order("created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1);
+    
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async(db: any) => {
+        return await storyReturnFormat(db);
+    }))
+});
+
 type CreateStoryProps = {
     storyId: string;
     userId: string;

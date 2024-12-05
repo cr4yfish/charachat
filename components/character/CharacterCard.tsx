@@ -8,6 +8,7 @@ import ConditionalLink from "../utils/ConditionalLink";
 import { safeParseLink, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
 import Markdown from "react-markdown";
+import Username from "../user/Username";
 
 type Props = {
     data: Character,
@@ -54,7 +55,7 @@ export default function CharacterCard(props: Props) {
                             <div className="flex flex-col gap-2">
                                 <div className="flex flex-col">
                                     <h3 className="font-medium">{truncateText(props.data.name,40)}</h3>
-                                    <p className=" text-xs dark:text-zinc-400">By @{props.data.owner?.username}</p>
+                                    <Username profile={props.data.owner} />
                                 </div>
                                 <Markdown className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</Markdown> 
                             </div>

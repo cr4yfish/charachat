@@ -240,6 +240,27 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
     }));
 })
 
+export const getPublicUserCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+    if(!props.args?.userId) {
+        throw new Error("User ID not found");   
+    }
+
+    const { data, error } = await (await createClient())
+        .from(publicTableName)
+        .select(characterMatcher)
+        .eq("owner", props.args.userId)
+        .order("created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1);
+    
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
+})
+
 export const updateCharacter = async (character: Character): Promise<void> => {
 
     if(character.is_private && !checkIsEncrypted(character.name)) {

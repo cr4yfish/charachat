@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../utils/Button";
 import { safeParseLink } from "@/lib/utils";
+import Username from "../user/Username";
 
 type Props = {
     persona: Persona,
@@ -31,7 +32,7 @@ export default function PersonaPage(props: Props) {
                     <div className="flex flex-col gap-2 items-center justify-center">
                         <Avatar src={props.persona.avatar_link} className="w-32 h-32 text-large"/>
                         <h1 className="text-xl font-bold">{props.persona.full_name}</h1>
-                        <p className="text-sm dark:text-neutral-400">By @{props.persona.creator.username}</p>
+                        <Username profile={props.persona.creator} textSize="sm" />
                     </div>
 
 

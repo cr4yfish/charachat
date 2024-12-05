@@ -9,6 +9,8 @@ import { getKeyServerSide } from "../serverHelpers";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { deleteAccount } from "./auth";
 
+const publicTableName = "profiles_view";
+
 export const encryptProfile = async (profile: Profile, key: string): Promise<Profile> => {
     try {
         const keyBuffer = Buffer.from(key, "hex");
@@ -70,6 +72,21 @@ export const getProfile = cache(async (userId: string) => {
     }
 
     return await profileFormatter(data);
+})
+
+export const getPublicProfile = cache(async (userId: string): Promise<Profile> => {
+    const { data, error } = await (await createClient())
+        .from(publicTableName)
+        .select(`*`)
+        .eq("user", userId)
+        .single();
+
+    if (error) {
+        console.error("Error fetching single profile", error);
+        throw error;
+    }
+
+    return data;
 })
 
 export const updateProfile = async (profile: Profile) => {

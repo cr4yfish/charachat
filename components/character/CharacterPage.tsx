@@ -21,6 +21,7 @@ import Markdown from "react-markdown";
 import { likeCharacter, unlikeCharacter } from "@/functions/db/character";
 import { safeParseLink } from "@/lib/utils";
 import { Card, CardBody } from "@nextui-org/card";
+import Username from "../user/Username";
 
 type Props = {
     character: Character,
@@ -100,7 +101,7 @@ export default function CharacterPage(props: Props) {
                     <div className="flex flex-col gap-2 items-center justify-center">
                         <Avatar src={props.character.image_link} className="w-32 h-32 text-large"/>
                         <h1 className="text-xl font-bold">{props.character.name}</h1>
-                        <p className="text-sm dark:text-neutral-400">By @{props.character.owner.username}</p>
+                        <Username profile={props.character.owner} hasLink textSize="sm" />
                     </div>
 
                     <div className="w-full flex items-center justify-center gap-2">
