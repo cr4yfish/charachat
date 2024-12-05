@@ -69,6 +69,7 @@ export default function Messagebubble(props: Props) {
     const [isLoadingAudio, setIsLoadingAudio] = useState(false);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
     const [audioLink, setAudioLink] = useState<string | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     /* TODO Fix blurrer
     useEffect(() => {
@@ -223,6 +224,13 @@ export default function Messagebubble(props: Props) {
         return null;
     }
 
+    const handleStopAudio = () => {
+        if(audioRef.current) {
+            audioRef.current.pause();
+            setIsAudioPlaying(false);
+        }
+    }
+
     const handlePlayAudio = async () => {
         try {
             let link = audioLink;
@@ -234,7 +242,7 @@ export default function Messagebubble(props: Props) {
     
             setIsAudioPlaying(true);
             const audio = new Audio(link);
-            audio.autoplay = true;
+            audioRef.current = audio;
             audio.play();
     
             audio.addEventListener("ended", () => {
@@ -265,7 +273,7 @@ export default function Messagebubble(props: Props) {
                         className={`!select-none relative w-fit ${isEditMode && "z-50"} `}
                     >
                         {props.showName &&
-                            <div className="pl-3 pb-1 flex flex-row items-center gap-2">
+                            <div className={`pl-3 pb-1 flex flex-row items-center gap-2 ${props.message.role === "user" && "justify-end"}`}>
                                 <span className={`text-sm select-none flex items-center gap-2 ${props.message.role === "user" && "flex-row-reverse"}`}>
                                     <Avatar 
                                         size="sm" 
@@ -354,8 +362,20 @@ export default function Messagebubble(props: Props) {
                                 </Button>
                             }
                             {props.message.role === "assistant" &&
-                                <Button isLoading={isLoadingAudio || isAudioPlaying} onClick={handlePlayAudio} variant="light" isIconOnly size="sm">
-                                    <Icon color="zinc-400" >play_arrow</Icon>
+                                <Button 
+                                    isLoading={isLoadingAudio} 
+                                    onClick={() => {
+                                        if(isAudioPlaying) {
+                                            handleStopAudio();
+                                        } else {
+                                            handlePlayAudio();
+                                        }
+                                    }} 
+                                    variant="light" 
+                                    isIconOnly 
+                                    size="sm"
+                                >
+                                    <Icon color="zinc-400" >{!isAudioPlaying ? "play_arrow" : "stop"}</Icon>
                                 </Button>
                             }
 
