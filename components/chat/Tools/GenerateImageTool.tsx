@@ -92,8 +92,6 @@ export default function GenerateImageTool(props: Props) {
                 user: props.user,
                 from_ai: true,
                 content: `![Generated Image](${link})`,
-                is_edited: false,
-                is_deleted: false,
             }
 
             // save the message to DB
@@ -159,8 +157,6 @@ export default function GenerateImageTool(props: Props) {
                 user: props.user,
                 from_ai: true,
                 content: newMessage.content,
-                is_edited: false,
-                is_deleted: false,
             }
 
             const key = getKeyClientSide();
