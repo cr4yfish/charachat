@@ -13,6 +13,7 @@ import { LoadMoreProps } from "@/types/client";
 import { summarizeTool } from "../ai/tools";
 import { getCurrentUser } from "./auth";
 import { decryptStory } from "./stories";
+import { decryptPersona } from "./personas";
 
 const chatMatcher = `
     *
@@ -114,6 +115,16 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             decryptedChat.story = await decryptStory(decryptedChat.story, key);
         } catch (error) {
             console.error("Error decrypting story in chat", error);
+            return decryptedChat;
+        }
+    }
+
+    if(decryptedChat.persona?.is_private) {
+        try {
+            const key = await getKeyServerSide();
+            decryptedChat.persona = await decryptPersona(decryptedChat.persona, key);
+        } catch (error) {
+            console.error("Error decrypting persona in chat", error);
             return decryptedChat;
         }
     }
