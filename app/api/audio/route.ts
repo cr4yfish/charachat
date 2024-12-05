@@ -1,9 +1,9 @@
 "use server";
 
-import { generateAudio } from "@/functions/ai/audio";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { decryptMessage } from "@/lib/crypto";
+import Replicate from "replicate";
 
 type RequestBody = {
     prompt: string;
@@ -29,12 +29,20 @@ export async function POST(req: Request) {
             return new Response("No API keys found", { status: 400 });
         }
 
-        const link = await generateAudio({
-            replicateToken,
-            text: prompt,
-            speaker: speakerLink,
-            language: "en"
-        })
+        const replicate = new Replicate({
+            auth: replicateToken
+        });
+        const result = await replicate.run(
+            "lucataco/xtts-v2:684bc3855b37866c0c65add2ff39c78f3dea3f4ff103a436465326e0f438d55e", 
+            { 
+                input: {
+                    text: prompt,
+                    speaker: speakerLink,
+                    language: "en"
+                } 
+            }
+        );
+        const link = result as unknown as string;
 
         return new Response(JSON.stringify({ link: link }), { status: 200 });
         
