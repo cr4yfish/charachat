@@ -31,8 +31,9 @@ import Icon from "../utils/Icon";
 import { deleteMessage, updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
-import { generateAudioTool } from "@/functions/ai/tools";
 import { Avatar } from "@nextui-org/avatar";
+import { generateAudio } from "@/functions/ai/audio";
+import { decryptMessage, getKeyClientSide } from "@/lib/crypto";
   
 
 type Props = {
@@ -193,19 +194,32 @@ export default function Messagebubble(props: Props) {
         }
         try {
             setIsLoadingAudio(true);
-            const { link, error } = await generateAudioTool({
-                chat: props.chat,
-                profile: props.user,
-                prompt: props.message.content,
+            
+            if(!props.chat.character.speaker_link) {
+                throw new Error("Speaker link is not available. Please add it to your character to use this tool.")
+            }
+
+            const key = getKeyClientSide();
+            const keyBuffer = Buffer.from(key, "hex");
+            const encryptedReplicateKey = props.user.replicate_encrypted_api_key;
+            if(!encryptedReplicateKey) {
+                throw new Error("Replicate API keys are not available. Please add them to your profile to use this tool.")
+            }
+
+            const replicateApiKey = decryptMessage(encryptedReplicateKey, keyBuffer);
+            const decryptedSpeakerLink = decryptMessage(props.chat.character.speaker_link, keyBuffer);
+
+            toast({
+                title: "Generating audio",
+                description: "This may take a few seconds"
             })
 
-            if(error) {
-                throw new Error(error);
-            }
-
-            if(!link) {
-                throw new Error("Could not generate Audio. Unknown Error.");
-            }
+            const link = await generateAudio({
+                replicateToken: replicateApiKey,
+                text: props.message.content,
+                language: "en",
+                speaker: decryptedSpeakerLink
+            })
 
             setAudioLink(link);
             setIsLoadingAudio(false);

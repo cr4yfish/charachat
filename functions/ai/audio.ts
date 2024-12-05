@@ -1,3 +1,5 @@
+"use server";
+
 import Replicate from "replicate";
 
 interface GenerateAudioProps {
@@ -8,7 +10,7 @@ interface GenerateAudioProps {
     language: string;
 }
 
-type AudioResult = string;
+export type AudioResult = string;
 
 export async function generateAudio(props: GenerateAudioProps): Promise<string> {
     const replicate = new Replicate({
