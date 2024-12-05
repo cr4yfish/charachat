@@ -5,7 +5,7 @@ import { Chat, Profile } from '@/types/db';
 import { authorNoStream } from './author';
 import { getCurrentUser } from '../db/auth';
 import { getKeyServerSide } from '../serverHelpers';
-import { decryptMessage } from '@/lib/crypto';
+import { checkIsEncrypted, decryptMessage } from '@/lib/crypto';
 import { generateImage, generateImageOfCharacter } from './image';
 import { generateAudio } from './audio';
 
@@ -150,18 +150,38 @@ export const generateAudioTool = async (props: GenerateAudioToolProps): Promise<
             return { error: "Replicate API key is not available. Please add it to your profile to use this tool." };
         }
 
-        replicateApiKey = decryptMessage(replicateApiKey, Buffer.from(await getKeyServerSide(), 'hex'));
+        const keyBuffer = Buffer.from(await getKeyServerSide(), 'hex');
+
+        if(!keyBuffer) {
+            return { error: "Failed to get key from server" };
+        }
+
+        replicateApiKey = decryptMessage(replicateApiKey, keyBuffer);
+
+        if(checkIsEncrypted(replicateApiKey)) {
+            return { error: "Failed to decrypt API key" };
+        }
 
         const defaultSpeaker = "https://replicate.delivery/pbxt/JqzxMWScZ4O44XwIwWveDoeAE2Ga7gYdnXKb8l18Fv7D3QEx/female.wav"
 
-        return {
-                link: (await generateAudio({
-                    text: props.prompt,
-                    language: "en",
-                    speaker: props.chat.character.speaker_link || defaultSpeaker,
-                    replicateToken: replicateApiKey
-                }))
+        const link = await generateAudio({
+            text: props.prompt,
+            language: "en",
+            speaker: props.chat.character.speaker_link || defaultSpeaker,
+            replicateToken: replicateApiKey
+        })
+
+        if(!link) {
+            return { error: "Failed to generate audio. Got no link" }
         }
+
+        if(!(typeof link === "string")) {
+            return { error: `Return object is not a string: ${JSON.stringify(link)}` }
+        }
+            
+
+        return { link }
+
     } catch (error) {
         console.error(error);
         const err = error as Error;
