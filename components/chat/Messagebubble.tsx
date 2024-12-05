@@ -269,7 +269,7 @@ export default function Messagebubble(props: Props) {
                if(response.status !== 200) {
                     throw new Error("Failed to get audio prediction");
                }
-               console.log({ prediction})
+               
                if(prediction.output && prediction.output.length > 0) {
                 setAudioLink(prediction.output);
                 setIsLoadingAudio(false);
