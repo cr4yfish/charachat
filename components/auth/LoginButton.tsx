@@ -66,10 +66,8 @@ export default function LoginButton(props: Props) {
                 }
                 <DialogContent className="dark:bg-transparent dark:border-none">
                     <DialogHeader>
-                        <DialogTitle>test</DialogTitle>
-                        <DialogDescription>
-                            test
-                        </DialogDescription>
+                        <DialogTitle></DialogTitle>
+                        <DialogDescription></DialogDescription>
                     </DialogHeader>
                     <LoginCard callback={() => {setDialogOpen(false); setIsLoggedIn(true)}} />
                 </DialogContent>
