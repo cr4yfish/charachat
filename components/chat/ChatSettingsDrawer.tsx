@@ -23,6 +23,7 @@ import StoryCard from "../story/StoryCard";
 import CharacterCard from "../character/CharacterCard";
 import LLMSelect from "../LLMSelect";
 import { Profile } from "@/types/db";
+import PersonaCard from "../persona/PersonaCard";
 
 type Props = {
     user: Profile
@@ -186,8 +187,24 @@ export default function ChatSettingsDrawer(props: Props) {
                             <p className="text-xs dark:text-zinc-400">Increase this if the Character starts to repeat things or doesn&apos;t move on with the conversation..</p>
                         </div>
 
-                        {chat?.character && <CharacterCard data={chat.character} hasLink fullWidth />}
-                        {chat?.story && <StoryCard fullWidth data={chat?.story} hasLink />}
+                        {chat?.character && chat.character.id &&
+                            <div>
+                                <span>Character</span>
+                                <CharacterCard data={chat.character} hasLink fullWidth />
+                            </div>
+                        }
+                        {chat?.story &&  chat.story.id &&
+                            <div>
+                                <span>Story</span>
+                                <StoryCard fullWidth data={chat?.story} hasLink />
+                            </div>
+                        }
+                        {chat?.persona && chat.persona.id &&
+                            <div className="flex flex-col gap-1">
+                                <span>Persona</span>
+                                <PersonaCard fullWidth data={chat?.persona} hasLink />
+                            </div>
+                        }
                         
                     </div>
 
