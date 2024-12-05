@@ -104,7 +104,6 @@ export type Message = {
     character: Character;
     user: Profile;
     from_ai: boolean;
-    image?: string;
     content: string;
 }
 
