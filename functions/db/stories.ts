@@ -131,6 +131,7 @@ export const getStories = cache(async (props: LoadMoreProps): Promise<Story[]> =
     const { data, error } = await (await createClient())
         .from(storyTableName)
         .select(storyMatcher)
+        .eq("is_private", false)
         .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
 

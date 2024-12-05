@@ -18,6 +18,7 @@ const characterMatcher = `
 `
 
 const characterTableName = "character_overview"
+const publicTableName = "character_overview_public"
 
 const characterFormatter = async (db: any): Promise<Character> => {
     const owner = db.profiles;
@@ -131,7 +132,7 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
 
 export const getCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await (await createClient())
-        .from(characterTableName)
+        .from(publicTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
@@ -150,7 +151,7 @@ export const getCharacters = cache(async (props: LoadMoreProps): Promise<Charact
  */
 export const getNewestCharacter = cache(async (): Promise<Character> => {
     const { data, error } = await (await createClient())
-        .from(characterTableName)
+        .from(publicTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
         .range(0, 2);
@@ -164,7 +165,7 @@ export const getNewestCharacter = cache(async (): Promise<Character> => {
 
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await (await createClient())
-        .from(characterTableName)
+        .from(publicTableName)
         .select(characterMatcher)
         .order("chats", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
@@ -188,6 +189,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
         .from(characterTableName)
         .select(characterMatcher)
         .eq("category", props.args.categoryId)
+        .eq("is_private", false)
         .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
 
