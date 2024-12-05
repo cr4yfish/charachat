@@ -75,7 +75,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     // set cookie with key
     const keyBuffer = generateKey(password, email);
 
-    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true });
+    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true, sameSite: "strict", priority: "high", maxAge: 60 * 60 * 24 * 365 });
 
     return {
         success: true,
@@ -163,7 +163,7 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
 }
 
 export const logout = async () => {
-    await await (await createClient()).auth.signOut();
+    await (await createClient()).auth.signOut();
 
     (await cookies()).set("key", "", { secure: true });
 
