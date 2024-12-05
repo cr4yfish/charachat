@@ -32,7 +32,6 @@ import { deleteMessage, updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
 import { Avatar } from "@nextui-org/avatar";
-import { generateAudio } from "@/functions/ai/audio";
 import { decryptMessage, getKeyClientSide } from "@/lib/crypto";
   
 
@@ -206,7 +205,6 @@ export default function Messagebubble(props: Props) {
                 throw new Error("Replicate API keys are not available. Please add them to your profile to use this tool.")
             }
 
-            const replicateApiKey = decryptMessage(encryptedReplicateKey, keyBuffer);
             const decryptedSpeakerLink = decryptMessage(props.chat.character.speaker_link, keyBuffer);
 
             toast({
@@ -214,12 +212,22 @@ export default function Messagebubble(props: Props) {
                 description: "This may take a few seconds"
             })
 
-            const link = await generateAudio({
-                replicateToken: replicateApiKey,
-                text: props.message.content,
-                language: "en",
-                speaker: decryptedSpeakerLink
-            })
+            const res = await fetch("/api/audio", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    prompt: props.message.content,
+                    speakerLink: decryptedSpeakerLink,
+                }),
+            });
+
+            if(!res.ok) {
+                throw new Error("Failed to generate audio");
+            }
+
+            const { link } = await res.json();
 
             setAudioLink(link);
             setIsLoadingAudio(false);
