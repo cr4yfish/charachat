@@ -8,7 +8,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 
 
 export default function RedditPopup() {
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(true);
     
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function RedditPopup() {
                 <DialogHeader>
                     <DialogTitle>Join the Subreddit</DialogTitle>
                     <DialogDescription>Don&apos;t miss important updates and information</DialogDescription>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 justify-center items-center">
                         <Link href={`https://www.reddit.com/r/charachat`} target="_blank">
                             <Button 
                                 color="primary" 
