@@ -78,6 +78,18 @@ export default function PersonaEdit(props: Props) {
                     })
                 }
             } else {
+                if(fullNameResult.error) {
+                    throw new Error("Full name: " + fullNameResult.error.message);
+                }
+
+                if(bioResult.error) {
+                    throw new Error("Bio: " + bioResult.error.message);
+                }
+
+                if(avatarLinkResult.error) {
+                    throw new Error("Avatar Link: " + avatarLinkResult.error.message);
+                }
+
                 throw new Error("Validation failed");
             }
         } catch (error) {
