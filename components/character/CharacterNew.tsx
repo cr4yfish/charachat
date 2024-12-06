@@ -259,7 +259,7 @@ export default function CharacterNew(props: Props) {
                             <p className="font-bold text-red-500 dark:text-red-500">ATTENTION! Please move the Introduction to the User Greeting. The Intro field will be removed soon.</p>
                             <TextareaWithCounter 
                                 name="intro"
-                                value={newCharacter.intro}
+                                value={newCharacter.intro ?? ""}
                                 onValueChange={(value) => updateValue("intro", value)}
                                 maxLength={_CHARACTER_MAX_LENGTH.intro}
                                 label="Character Introduction"
