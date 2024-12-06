@@ -164,7 +164,7 @@ export const LLMs: LLMType[] = [
         "name": "Nemo",
         "usecase": "Fast",
         "provider": "Mistral",
-        "tags": ["Free", "Fast"]
+        "tags": ["Free", "Fast", "Privacy nightmare"]
     },
     {
         "key": "gemma2-9b-it",
