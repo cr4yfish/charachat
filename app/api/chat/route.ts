@@ -71,6 +71,7 @@ export async function POST(req: Request) {
         const result = await streamText({
             temperature: chat.temperature,
             frequencyPenalty: chat.frequency_penalty,
+            seed: new Date().getTime(),
             model: model,
             system: `
                 ${chat?.character?.system_prompt}

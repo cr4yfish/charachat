@@ -13,7 +13,7 @@ import Icon from "../utils/Icon";
 import { useToast } from "@/hooks/use-toast";
 import { Character, Chat, Message, Profile } from "@/types/db";
 import { useRef, useState, useEffect } from "react";
-import { addMessage, getMessages } from "@/functions/db/messages";
+import { addMessage, deleteMessage, getMessages } from "@/functions/db/messages";
 import Messagebubble from "./Messagebubble";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@nextui-org/spinner";
@@ -33,6 +33,7 @@ import { LLMsWithAPIKeys } from "@/lib/ai";
 import { CardBody, Card, CardHeader } from "@nextui-org/card";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Chip } from "@nextui-org/chip";
+import { getKeyClientSide } from "@/lib/crypto";
 
 
 type Props = {
@@ -51,6 +52,9 @@ export default function ChatMain(props : Props) {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [isSelfDestruct, setIsSelfDestruct] = useState(false);
     const { toast } = useToast();
+
+    const [latestMessageVariants, setLatestMessageVariants] = useState<AIMessage[]>([]);
+    const [currentMessage, setCurrentMessage] = useState<AIMessage | null>(null);
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload, stop } = useChat({
         initialMessages: props.initMessages.map((m) => {
@@ -131,7 +135,10 @@ export default function ChatMain(props : Props) {
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content
             if(newAIMessage.content !== "") {
-                
+
+                setLatestMessageVariants([...latestMessageVariants, message]);
+                setCurrentMessage(message);
+
                 const key = sessionStorage.getItem("key");
 
                 if(!key) {
@@ -387,6 +394,64 @@ export default function ChatMain(props : Props) {
         }
     }
 
+    const handleSaveVariant = async (newMessage: AIMessage, lastMessage: AIMessage) => {
+
+        if(!chat) {
+            return;
+        }
+
+        await deleteMessage(lastMessage.id);
+        const key = getKeyClientSide();
+        await addMessage({
+            id: newMessage.id,
+            chat: chat,
+            character: props.chat.character,
+            user: props.user,
+            from_ai: true,
+            content: newMessage.content,
+        }, key);
+        
+    }
+
+    const handleNextVariant = async () => {
+        if(!currentMessage) return;
+
+        const index = latestMessageVariants.findIndex((m) => m.id === currentMessage.id);
+        const nextIndex = index + 1;
+
+        if(latestMessageVariants[nextIndex]) {
+            setCurrentMessage(latestMessageVariants[nextIndex]);
+            handleSaveVariant(latestMessageVariants[nextIndex], currentMessage);
+        } else {
+            // step 1: remove latest message from db
+            await deleteMessage(currentMessage.id);
+
+            // step 1: remove latest message from messages array
+            setMessages(messages.filter((m) => m.id !== currentMessage.id));
+
+            // step 2: reload messages to generate a new, fresh one
+            reload();
+
+            
+        }
+    }
+
+    const handlePrevVariant = async () => {
+        if(!currentMessage) return;
+
+        const index = latestMessageVariants.findIndex((m) => m.id === currentMessage.id);
+        const prevIndex = index - 1;
+
+        const nextMessage = latestMessageVariants[prevIndex];
+
+        if(!nextMessage) { return; }
+
+        if(latestMessageVariants[prevIndex]) {
+            setCurrentMessage(latestMessageVariants[prevIndex]);
+            handleSaveVariant(nextMessage, currentMessage);
+        }
+    }
+
     return (
         <>
         <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll w-full " >
@@ -428,7 +493,7 @@ export default function ChatMain(props : Props) {
                             />
                             <Messagebubble 
                                 key={message.id} 
-                                message={message} 
+                                message={((index == messages.length - 1) && currentMessage) ? currentMessage : message} 
                                 messages={messages}
                                 setMessages={setMessages}
                                 index={index} 
@@ -439,6 +504,33 @@ export default function ChatMain(props : Props) {
                                 showName={index == 0 || (messages[index - 1].role !== message.role) || (messages[index-1].toolInvocations?.some((t) => t.state == "result") || false )}
                                 reloadMessages={reload}
                             />
+                            { index === messages.length - 1 && currentMessage &&
+                            <>
+                            <div className="mt-1 flex flex-row items-center gap-2 max-w-xl">
+                                <Button isIconOnly variant="light" onClick={handlePrevVariant}>
+                                    <Icon>arrow_left_alt</Icon>
+                                </Button>
+                                <div className="max-w-[220px] overflow-x-auto">
+                                    <div className="w-fit flex items-center gap-1">
+                                        {latestMessageVariants.map((lm) => (
+                                            <Button isIconOnly variant="light" key={lm.id}>
+                                                <span 
+                                                    className={`
+                                                    w-[10px] h-[10px] rounded-full
+                                                    ${lm.content == currentMessage?.content ? "bg-green-400 dark:bg-green-400" : "bg-gray-700 dark:bg-gray-700"}
+                                                    `}
+                                                    >    
+                                                </span>
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <Button isIconOnly variant="light" onClick={handleNextVariant} isLoading={isLoading}>
+                                    <Icon>arrow_right_alt</Icon>
+                                </Button>
+                            </div>
+                            </>
+                            }
                         </div>
                     )
                 ))}

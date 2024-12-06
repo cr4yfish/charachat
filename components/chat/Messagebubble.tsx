@@ -185,7 +185,7 @@ export default function Messagebubble(props: Props) {
             // Delete last message (User)
             const lastMessages = props.messages[props.messages.length - 2];
             if(lastMessages.role === "user") {
-                await deleteMessage(lastMessages.id); // just delete from db, not from log
+                await deleteMessage(lastMessages.id); // just delete from db, not from chat
             }
 
             await props.reloadMessages();
@@ -325,7 +325,7 @@ export default function Messagebubble(props: Props) {
             })
         }
     }
-
+    
     return (
         <>
         <div className={`w-fit ${props.message.role === "user" ? "ml-auto" : "mr-auto"}`}>
@@ -443,7 +443,7 @@ export default function Messagebubble(props: Props) {
                                     size="sm"
                                     className=" dark:text-zinc-400 px-2"
                                 >
-                                    {<Icon color="zinc-400" >{!isAudioPlaying ? "play_arrow" : "stop"}</Icon>}
+                                    {<Icon color="zinc-400" downscale >{!isAudioPlaying ? "mic" : "stop"}</Icon>}
                                     {audioPrediction?.status == "starting" && "Starting"}
                                     {audioPrediction?.status == "processing" && "Generating"}
                                     {audioPrediction?.status == "succeeded" && "Play"}
