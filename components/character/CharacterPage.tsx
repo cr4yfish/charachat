@@ -207,6 +207,7 @@ export default function CharacterPage(props: Props) {
                                 {(props.character.intro) && 
                                 <>
                                 <h3>Introduction</h3>
+                                <p className=" !text-red-500 dark:!text-red-500 !m-0 !p-0">Notice: Character introductions are deprecated and should be moved to the Greeting instead. This will still work, for now.</p>
                                 <p>{props.character.intro}</p>
                                 </>
                                 }
