@@ -254,6 +254,18 @@ export default function CharacterNew(props: Props) {
                     <CardTitle>Recommended</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
+                    { newCharacter.intro && newCharacter.intro.length > 0 &&
+                        <div className="p-2 border border-red-500/50 bg-red-500/5 dark:bg-red-500/5 rounded-lg">
+                            <p className="font-bold text-red-500 dark:text-red-500">ATTENTION! Please move the Introduction to the User Greeting. The Intro field will be removed soon.</p>
+                            <TextareaWithCounter 
+                                name="intro"
+                                value={newCharacter.intro}
+                                onValueChange={(value) => updateValue("intro", value)}
+                                maxLength={_CHARACTER_MAX_LENGTH.intro}
+                                label="Character Introduction"
+                            />
+                        </div>
+                    }
                     <InputWithAI 
                         name="personality"
                         label="Character Personality"
