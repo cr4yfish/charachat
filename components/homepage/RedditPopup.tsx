@@ -8,7 +8,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 
 
 export default function RedditPopup() {
-    const [dialogOpen, setDialogOpen] = useState(true);
+    const [dialogOpen, setDialogOpen] = useState(false);
     
 
     useEffect(() => {
