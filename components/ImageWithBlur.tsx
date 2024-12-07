@@ -25,7 +25,7 @@ export default function ImageWithBlur(props: Props) {
         <Image 
             src={safeParseLink(props.src)}
             alt={props.alt}
-            className={`${props.className} ${props.radius ?? ""} ${isBlurred ? "filter blur-sm" : ""}`}
+            className={`${props.className} ${props.radius ?? ""} ${isBlurred ? "filter blur-lg" : ""}`}
             fill={props.fill}
             onClick={() => setIsBlurred(!isBlurred)}
             sizes={props.sizes}
