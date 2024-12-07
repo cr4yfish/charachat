@@ -82,8 +82,6 @@ export default function Messagebubble(props: Props) {
 
     const [isEditMode, setIsEditMode] = useState(false);
     const [isSavingLoading, setIsSavingLoading] = useState(false);
-    
-    const [isRegenerating, setIsRegenerating] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -171,36 +169,6 @@ export default function Messagebubble(props: Props) {
         }
         setIsEditMode(false);
         setIsSavingLoading(false);
-    }
-
-    const handleRegenerate = async () => {
-        // First delete message and then relaod
-        setIsRegenerating(true);
-
-        try {
-
-            // Delete this message (AI)
-            await handleDelete(props.message.id);
-
-            // Delete last message (User)
-            const lastMessages = props.messages[props.messages.length - 2];
-            if(lastMessages.role === "user") {
-                await deleteMessage(lastMessages.id); // just delete from db, not from chat
-            }
-
-            await props.reloadMessages();
-
-        } catch (error) {
-            console.error(error);
-            const err = error as Error;
-            toast({
-                title: "Failed to regenerate message",
-                description: err.message,
-                variant: "destructive",
-            })
-        }
-
-        setIsRegenerating(false);
     }
 
     const handleSetEditMode = () => {
@@ -423,11 +391,6 @@ export default function Messagebubble(props: Props) {
                             <Button onClick={handleCopyToClipboard} variant="light" isIconOnly size="sm">
                                 <Icon downscale color="zinc-400" >content_copy</Icon>
                             </Button>                            
-                            {props.isLatestMessage &&  props.message.role === "assistant" &&
-                                <Button onClick={handleRegenerate} variant="light" isIconOnly size="sm">
-                                    <Icon downscale color="zinc-400" >refresh</Icon>
-                                </Button>
-                            }
                             {props.message.role === "assistant" &&
                                 <Button 
                                     isLoading={isLoadingAudio} 
@@ -457,10 +420,6 @@ export default function Messagebubble(props: Props) {
                 </ContextMenuTrigger>
 
                 <ContextMenuContent className="w-64 flex flex-col">
-                    <ContextMenuItem disabled >
-                        Reply
-                        <Icon>reply</Icon>
-                    </ContextMenuItem>
                     <ContextMenuSeparator />
                     <ContextMenuItem onClick={handleCopyToClipboard} >
                         Copy
@@ -470,18 +429,6 @@ export default function Messagebubble(props: Props) {
                         Edit
                         <Icon>edit</Icon>
                     </ContextMenuItem>
-                    { props.message.role == "assistant" &&
-                    <ContextMenuItem disabled >
-                        Report
-                        <Icon>report</Icon>
-                    </ContextMenuItem>}
-
-                    { props.message.role == "assistant" &&
-                    <ContextMenuItem disabled={!props.isLatestMessage} onClick={handleRegenerate} className="dark:text-blue-400" >
-                        Regenerate
-                        {!isRegenerating ? <Icon>refresh</Icon> : <Spinner size="sm" color="primary" />}
-                    </ContextMenuItem>
-                    }
                     <ContextMenuItem onClick={handleDeleteThisMessage} disabled={isDeleteLoading} className="dark:text-red-400" >
                         Delete
                         {!isDeleteLoading ? <Icon>delete</Icon> : <Spinner size="sm" color="danger" />}
