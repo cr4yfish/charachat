@@ -119,7 +119,6 @@ export type ImageModelId =
 export const isFreeModel = (modelId: ModelId) => {
     switch(modelId) {
         case "open-mistral-nemo":
-        case "grok-beta":
         case "llama-3.2-90b-vision-preview":
         case "llama3-groq-70b-8192-tool-use-preview":
         case "gemma2-9b-it":
