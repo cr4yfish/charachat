@@ -65,8 +65,8 @@ export default function ChatSettingsDrawer(props: Props) {
         <>             
         <Sheet>
             <SheetTrigger asChild>
-                <Button isIconOnly variant="light" className="justify-start">
-                    <Avatar src={chat?.character.image_link} />
+                <Button isIconOnly variant="light">
+                    <Icon color="zinc-500" filled>settings</Icon>
                 </Button>
             </SheetTrigger>
             <SheetContent className="flex flex-col gap-4 w-full">

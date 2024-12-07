@@ -16,6 +16,7 @@ import { Button } from "@/components/utils/Button";
 import { SharedChatProvider } from "@/context/SharedChatSettings";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Metadata } from "next";
+import { Avatar } from "@nextui-org/avatar";
 
 type Params = Promise<{ chatId: string }>
 
@@ -125,11 +126,17 @@ export default async function Chat({ params } : { params: Params }) {
     return (
         <>
         <SharedChatProvider>
-            <div className="absolute top-0 left-0 z-50 w-full flex items-center justify-center">
-                <div className="p-6 bg-zinc-800/5 backdrop-blur-3xl rounded-b-xl w-full flex flex-row items-center justify-evenly max-w-lg">
-                    <SidebarTrigger><></></SidebarTrigger>
-                    <span className="text-medium w-full text-center font-bold">{chat.character.name}</span>
-                    <ChatSettingsDrawer user={profile} />
+            <div className="absolute top-0 left-0 z-50 w-full flex items-center justify-between">
+                <div className="p-4 bg-zinc-50/75 backdrop-blur-lg border-r border-b border-zinc-200 rounded-b-xl rounded-l-none w-full flex flex-row items-center justify-between gap-2">
+                    
+                    <div className="flex items-center gap-2">
+                        <SidebarTrigger><></></SidebarTrigger>
+                        <Avatar size="sm" src={chat?.character.image_link} />
+                        <span className="text-medium text-center font-bold">{chat.character.name}</span>
+                    </div>
+
+                   <ChatSettingsDrawer user={profile} />
+                    
                 </div>
             </div>
 
