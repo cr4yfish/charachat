@@ -58,7 +58,7 @@ export function StatsCard(props: Props) {
   }, [props.stats])
 
   return (
-    <Card className="w-full max-w-[300px] max-sm:max-w-full !h-[250px] ">
+    <Card className="w-full max-w-[300px] max-sm:max-w-full ">
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>
