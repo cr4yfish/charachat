@@ -317,7 +317,7 @@ export default function Messagebubble(props: Props) {
                                     {props.message.role === "user" ? (props.chat?.persona?.full_name || props.chat?.user.username) : props.chat?.character.name}
                                 </span>
                                 {props.chat && props.message.role === "assistant" &&
-                                    <div className="flex flex-row items-center gap-1 px-2 py-1  w-fit rounded-full text-xs dark:text-zinc-400">
+                                    <div className="flex flex-row items-center gap-1 px-2 py-1  w-fit rounded-full text-xs text-zinc-400  dark:text-zinc-400">
                                         <Icon downscale filled>auto_awesome</Icon>
                                         <div className="w-full">{props.chat.llm}</div>
                                     </div>
@@ -404,7 +404,7 @@ export default function Messagebubble(props: Props) {
                                     variant="light" 
                                     isIconOnly={false} 
                                     size="sm"
-                                    className=" dark:text-zinc-400 px-2"
+                                    className=" text-zinc-400 dark:text-zinc-400 px-2"
                                 >
                                     {<Icon color="zinc-400" downscale >{!isAudioPlaying ? "mic" : "stop"}</Icon>}
                                     {audioPrediction?.status == "starting" && "Starting"}
