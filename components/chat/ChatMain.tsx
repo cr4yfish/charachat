@@ -599,7 +599,7 @@ export default function ChatMain(props : Props) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
                 onSubmit={handleSubmitAdapter} 
-                className="absolute bottom-0 h-[5rem] w-full flex flex-col items-center justify-end px-4 pb-8 gap-2 max-md:pb-2"
+                className={` transition-all absolute bottom-0 ${isInputFocused && "bottom-4 max-sm:bottom-0"} max-sm:bottom-8 h-[5rem] w-full flex flex-col items-center justify-end px-4 pb-8 gap-2 max-md:pb-2`}
             >
                 
                 <AnimatePresence>
@@ -635,7 +635,7 @@ export default function ChatMain(props : Props) {
                     }}
                     className={`max-w-xs max-md:max-w-xs transition-all ${isInputFocused && "max-w-lg max-md:max-w-full"} `}
                     endContent={
-                        <Button id="send-btn" className="self-end" type="submit" color="secondary" radius="full" isIconOnly>
+                        <Button id="send-btn" className="self-end" type="submit" color="primary" radius="full" isIconOnly>
                             <Icon filled>{isLoading ? "stop" : "send"}</Icon>
                         </Button>
                     } 
