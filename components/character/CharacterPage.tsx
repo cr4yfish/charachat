@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
-import { Avatar } from "@nextui-org/avatar";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import Link from "next/link";
@@ -16,12 +15,13 @@ import Icon from "@/components/utils/Icon";
 import { Character } from "@/types/db";
 import { createChat } from "@/functions/db/chat";
 import CategoryCard from "./CategoryCard";
-import Image from "next/image";
 import Markdown from "react-markdown";
 import { likeCharacter, unlikeCharacter } from "@/functions/db/character";
 import { safeParseLink } from "@/lib/utils";
 import { Card, CardBody } from "@nextui-org/card";
 import Username from "../user/Username";
+import ImageWithBlur from "../ImageWithBlur";
+import Image from "next/image";
 
 type Props = {
     character: Character,
@@ -99,7 +99,16 @@ export default function CharacterPage(props: Props) {
 
                 <div className="flex flex-col justify-center gap-4 max-md:w-full">
                     <div className="flex flex-col gap-2 items-center justify-center">
-                        <Avatar src={props.character.image_link} className="w-32 h-32 text-large"/>
+                        <ImageWithBlur 
+                            src={props.character.image_link} 
+                            className="w-32 h-32" 
+                            alt={props.character.name} 
+                            sizes="128px" 
+                            width={128}
+                            height={128}
+                            radius="rounded-full"
+                            is_nsfw={props.character.is_nsfw}
+                        />
                         <h1 className="text-xl font-bold">{props.character.name}</h1>
                         <Username profile={props.character.owner} hasLink textSize="sm" />
                     </div>
@@ -162,7 +171,7 @@ export default function CharacterPage(props: Props) {
                         </div>
                     </div>
 
-                    <div className="prose dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400">
+                    <div className="prose dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400 !select-none">
                         <Markdown>{props.character.description}</Markdown>
                     </div>
                     
@@ -203,7 +212,7 @@ export default function CharacterPage(props: Props) {
                         }}
                     >
                         <Tab key="about" title="About">
-                            <div className="w-full flex justify-start items-start flex-col prose dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0">
+                            <div className="w-full flex justify-start items-start flex-col prose dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0 !select-none">
                                 {(props.character.intro) && 
                                 <>
                                 <h3>Introduction</h3>

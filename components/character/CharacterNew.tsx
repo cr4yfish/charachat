@@ -223,6 +223,11 @@ export default function CharacterNew(props: Props) {
                         <Switch isSelected={newCharacter.is_private} onValueChange={(newValue) => updateValue("is_private", newValue)} >Private</Switch>
                         <p className="text-xs dark:text-zinc-400">When set to Private, the <b>Character gets encrypted and only you will be able to see and interact with it</b>. Note that it might still appear on the front page, but only you will see it. Please avoid this if possible to contribute to the Project.</p>
                     </div>
+
+                    <div className="flex flex-col gap-1">
+                        <Switch isSelected={newCharacter.is_nsfw} onValueChange={(newValue) => updateValue("is_nsfw", newValue)} >NSFW</Switch>
+                        <p className="text-xs dark:text-zinc-400">This will blur the Avatar.</p>
+                    </div>
                 </CardContent>
  
             </Card>

@@ -17,6 +17,7 @@ export type Character = {
     book?: string;
     category?: Category;
     is_private: boolean;
+    is_nsfw?: boolean;
     personality?: string;
     chats?: number;
     likes?: number;
