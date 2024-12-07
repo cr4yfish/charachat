@@ -58,7 +58,7 @@ export default function ChatMain(props : Props) {
     const [isNextMessageVariant, setIsNextMessageVariant] = useState(false);
     const [isSavingVariant, setIsSavingVariant] = useState(false);
 
-    const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload, stop } = useChat({
+    const { messages, setMessages, input, setInput, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload, stop } = useChat({
         initialMessages: props.initMessages.map((m) => {
             return {
                 id: m.id,
@@ -160,6 +160,7 @@ export default function ChatMain(props : Props) {
     });
 
     const inputRef = useRef<HTMLTextAreaElement | null>(null);
+    const formRef = useRef<HTMLFormElement | null>(null);
 
     useEffect(() => {
         scrollToBottom();
@@ -391,6 +392,20 @@ export default function ChatMain(props : Props) {
         handleSaveVariant(variant, currentMessage);
     }
 
+    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement> | KeyboardEvent) => {
+        // only do shortcuts on desktop
+        if(window.innerWidth < 768) return;
+
+        if(e.key === "Enter" && e.ctrlKey) {
+            // add a new line
+            setInput(input + "\n");
+        } else if(e.key === "Enter") {
+            // submit
+            e.preventDefault();
+            formRef.current?.requestSubmit();
+        }
+    }
+
     return (
         <>
         <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll w-full " >
@@ -595,6 +610,7 @@ export default function ChatMain(props : Props) {
             <motion.form 
                 key="form"
                 layout
+                ref={formRef}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
@@ -627,6 +643,7 @@ export default function ChatMain(props : Props) {
                     ref={inputRef}
                     name="prompt"
                     onChange={handleInputChange}
+                    onKeyDown={(e) => handleInputKeyDown(e)}
                     minRows={1}
                     maxRows={15}
                     classNames={{
