@@ -457,6 +457,7 @@ export default function ChatMain(props : Props) {
                                 isLatestMessage={index == messages.length - 1}
                                 showName={index == 0 || (messages[index - 1].role !== message.role) || (messages[index-1].toolInvocations?.some((t) => t.state == "result") || false )}
                                 reloadMessages={reload}
+                                setCurrentMessage={setCurrentMessage}
                             />
                             { index === messages.length - 1 && currentMessage &&
                             <>

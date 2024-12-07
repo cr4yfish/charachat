@@ -70,7 +70,8 @@ type Props = {
     showName: boolean,
     setMessages: (messages: AIMessage[] | ((messages: AIMessage[]) => AIMessage[])) => void,
     isLatestMessage: boolean,
-    reloadMessages: (chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>
+    reloadMessages: (chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>;
+    setCurrentMessage: (message: AIMessage | null) => void;
 }
 
 export default function Messagebubble(props: Props) {
@@ -126,6 +127,7 @@ export default function Messagebubble(props: Props) {
         try {
 
             if(!id) {  throw new Error("No id found. Refresh will probably fix this."); }
+            console.log(props.messages)
 
             await deleteMessage(idToDelete);
 
@@ -143,7 +145,9 @@ export default function Messagebubble(props: Props) {
     }
 
     const handleDeleteThisMessage = async () => {
+        console.log("deleting message", props.message);
         handleDelete(props.message.id);
+        props.setCurrentMessage(null);
     }
 
     const handleSaveMessage = async () => {
