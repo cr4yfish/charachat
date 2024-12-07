@@ -53,11 +53,12 @@ export function StatsCard(props: Props) {
     setData(props.stats.reverse().map((item) => ({
       timeframe: months[new Date(item.timeframe).getMonth()],
       count: item.count,
+      accumulated_count: item.accumulated_count,
     })))
   }, [props.stats])
 
   return (
-    <Card className="max-w-[300px] max-md:max-w-full">
+    <Card className="w-full max-w-[300px] max-sm:max-w-full !h-[250px] ">
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>
@@ -87,7 +88,7 @@ export function StatsCard(props: Props) {
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar
-              dataKey="count"
+              dataKey="accumulated_count"
               fill="var(--charts-1)"
               radius={[8, 8, 0, 0]}
 

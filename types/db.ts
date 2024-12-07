@@ -133,4 +133,5 @@ export type Persona = {
 export type Stats = {
     timeframe: string;
     count: number;
+    accumulated_count: number;
 }

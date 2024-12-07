@@ -9,7 +9,7 @@ export async function Stats() {
 
     return (
         <>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap h-fit">
 
             <StatsCard 
                 stats={messageStats}
@@ -19,8 +19,8 @@ export async function Stats() {
 
             <StatsCard 
                 stats={profileStats}
-                title="New Users"
-                description="New users per month"
+                title="Users"
+                description="Total number of users"
             />
         </div>
         </>
