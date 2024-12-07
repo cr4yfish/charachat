@@ -55,6 +55,8 @@ export default function ChatMain(props : Props) {
 
     const [latestMessageVariants, setLatestMessageVariants] = useState<AIMessage[]>([]);
     const [currentMessage, setCurrentMessage] = useState<AIMessage | null>(null);
+    const [isNextMessageVariant, setIsNextMessageVariant] = useState(false);
+    const [isSavingVariant, setIsSavingVariant] = useState(false);
 
     const { messages, setMessages, input, handleInputChange, handleSubmit, addToolResult, append, isLoading, error, reload, stop } = useChat({
         initialMessages: props.initMessages.map((m) => {
@@ -135,29 +137,16 @@ export default function ChatMain(props : Props) {
             // can be a tool call, which should not be added to the db
             // tool calls dont have a content
             if(newAIMessage.content !== "") {
-
-                setLatestMessageVariants([...latestMessageVariants, message]);
                 setCurrentMessage(message);
 
-                const key = sessionStorage.getItem("key");
-
-                if(!key) {
-                    console.error("No key found in session storage. Log out and back in to fix this.");
-                    return;
-                }
-
-                if(isSelfDestruct) {
-                    // done save message or chat
-                    return;
-                }
-
-                await addMessage(newAIMessage, key);
+                if(isSelfDestruct) { return; }
+                await addMessage(newAIMessage, getKeyClientSide());
             }
 
         },
         onError: async (err) => {
             if(err.message === "Trying to add assistant message as user message") {
-                console.log("Got expected error");
+                console.info("Got expected error");
                 return;
             }
 
@@ -251,79 +240,33 @@ export default function ChatMain(props : Props) {
         }
     }, [props.chat, props.chat.story])
 
+    // handle message variants
+    useEffect(() => {
+        if(isLoading) return;
+
+        const latestMessage = messages[messages.length - 1];
+        if(!latestMessage) return;
+        
+        const messageInVariants = latestMessageVariants.some((m) => m.id === latestMessage.id);
+        if(messageInVariants || latestMessage.role !== "assistant") return;
+
+        if(isNextMessageVariant) {
+            setLatestMessageVariants([...latestMessageVariants, latestMessage]);
+        } else {
+            setLatestMessageVariants([latestMessage]);
+        }
+        
+    }, [latestMessageVariants, currentMessage, messages, isLoading, isNextMessageVariant])
+
     const setup = async () => {
         if((props.initMessages.length > 0) || (messages.length > 0) || !chat || (chat.llm.length < 1)) return;
 
         setIsSetupLoading(true);
 
         await syncDb(chat);
-
-        const idForNewMessage = uuidv4();
         
         // Works for both, normal chats and story chats
         append({ content: _INTRO_MESSAGE(props.chat.character), role: "user", createdAt: new Date() });
-
-        // if this is a story chat, add the first message from the story
-        if(props.chat.story?.first_message && props.chat.story.first_message.length > 0) {
-            setMessages([
-                {
-                    id: idForNewMessage,
-                    content: props.chat.story.first_message?.replace("{{user}}", props.user.first_name),
-                    role: "assistant",
-                    createdAt: new Date()
-                }
-            ])
-
-            if(isSelfDestruct) {
-                return;
-            }
-
-            const key = sessionStorage.getItem("key");
-
-            if(!key) {
-                console.error("No key found in session storage. Log out and back in to fix this.");
-                return;
-            }
-
-            await addMessage({
-                id: idForNewMessage,
-                chat: props.chat,
-                character: props.chat.character,
-                user: props.user,
-                from_ai: true,
-                content: props.chat.story.first_message.replace("{{user}}", props.user.first_name),
-            }, key);
-        } else if(props.chat.character.first_message && props.chat.character.first_message.length > 0) {
-            setMessages([
-                {
-                    id: idForNewMessage,
-                    content: props.chat.character.first_message?.replace("{{user}}", props.user.first_name),
-                    role: "assistant",
-                    createdAt: new Date()
-                }
-            ])
-
-            if(isSelfDestruct) {
-                return;
-            }
-
-            const key = sessionStorage.getItem("key");
-
-            if(!key) {
-                console.error("No key found in session storage. Log out and back in to fix this.");
-                return;
-            }
-
-            await addMessage({
-                id: idForNewMessage,
-                chat: props.chat,
-                character: props.chat.character,
-                user: props.user,
-                from_ai: true,
-                content: props.chat.character.first_message.replace("{{user}}", props.user.first_name),
-            }, key);
-
-        }
 
         setIsSetupLoading(false);
         setIsSetupDone(true);
@@ -387,6 +330,9 @@ export default function ChatMain(props : Props) {
         if(isLoading) {
             stop();
         } else {
+            setCurrentMessage(null);
+            setIsNextMessageVariant(false);
+            setLatestMessageVariants([]);
             handleSubmit(e, {
                 allowEmptySubmit: true
             });
@@ -395,61 +341,54 @@ export default function ChatMain(props : Props) {
     }
 
     const handleSaveVariant = async (newMessage: AIMessage, lastMessage: AIMessage) => {
+        if(!chat) { return; }
+        if(newMessage.content == lastMessage.content) { return; }
 
-        if(!chat) {
-            return;
+        setIsSavingVariant(true);
+
+        try {
+            await deleteMessage(lastMessage.id);
+            const key = getKeyClientSide();
+            await addMessage({
+                id: newMessage.id,
+                chat: chat,
+                character: props.chat.character,
+                user: props.user,
+                from_ai: true,
+                content: newMessage.content,
+            }, key);
+        } catch (e) {
+            const err = e as Error;
+            toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive"
+            })
         }
 
-        await deleteMessage(lastMessage.id);
-        const key = getKeyClientSide();
-        await addMessage({
-            id: newMessage.id,
-            chat: chat,
-            character: props.chat.character,
-            user: props.user,
-            from_ai: true,
-            content: newMessage.content,
-        }, key);
-        
+        setIsSavingVariant(false);
     }
 
-    const handleNextVariant = async () => {
+    const handleGenerateVariant = async () => {
         if(!currentMessage) return;
 
-        const index = latestMessageVariants.findIndex((m) => m.id === currentMessage.id);
-        const nextIndex = index + 1;
+        // Generate a new message
+        setIsNextMessageVariant(true);
+        // step 1: remove latest message from db
+        await deleteMessage(currentMessage.id);
 
-        if(latestMessageVariants[nextIndex]) {
-            setCurrentMessage(latestMessageVariants[nextIndex]);
-            handleSaveVariant(latestMessageVariants[nextIndex], currentMessage);
-        } else {
-            // step 1: remove latest message from db
-            await deleteMessage(currentMessage.id);
+        // step 1: remove latest message from messages array
+        setMessages(messages.filter((m) => m.id !== currentMessage.id));
 
-            // step 1: remove latest message from messages array
-            setMessages(messages.filter((m) => m.id !== currentMessage.id));
-
-            // step 2: reload messages to generate a new, fresh one
-            reload();
-
-            
-        }
+        // step 2: reload messages to generate a new, fresh one
+        reload();
     }
 
-    const handlePrevVariant = async () => {
+    const handleSetVariant = async (variant: AIMessage) => {
         if(!currentMessage) return;
 
-        const index = latestMessageVariants.findIndex((m) => m.id === currentMessage.id);
-        const prevIndex = index - 1;
-
-        const nextMessage = latestMessageVariants[prevIndex];
-
-        if(!nextMessage) { return; }
-
-        if(latestMessageVariants[prevIndex]) {
-            setCurrentMessage(latestMessageVariants[prevIndex]);
-            handleSaveVariant(nextMessage, currentMessage);
-        }
+        setCurrentMessage(variant);
+        handleSaveVariant(variant, currentMessage);
     }
 
     return (
@@ -507,27 +446,24 @@ export default function ChatMain(props : Props) {
                             { index === messages.length - 1 && currentMessage &&
                             <>
                             <div className="mt-1 flex flex-row items-center gap-2 max-w-xl">
-                                <Button isIconOnly variant="light" onClick={handlePrevVariant}>
-                                    <Icon>arrow_left_alt</Icon>
-                                </Button>
-                                <div className="max-w-[220px] overflow-x-auto">
+                                <div className="max-w-[300px] pr-4 pb-1 overflow-x-auto">
                                     <div className="w-fit flex items-center gap-1">
                                         {latestMessageVariants.map((lm) => (
-                                            <Button isIconOnly variant="light" key={lm.id}>
+                                            <Button isDisabled={isSavingVariant || isLoading} onClick={() => handleSetVariant(lm)} isIconOnly variant="light" key={lm.id}>
                                                 <span 
                                                     className={`
                                                     w-[10px] h-[10px] rounded-full
-                                                    ${lm.content == currentMessage?.content ? "bg-green-400 dark:bg-green-400" : "bg-gray-700 dark:bg-gray-700"}
+                                                    ${lm.content == currentMessage?.content ? "bg-zinc-700 dark:bg-zinc-400" : "bg-zinc-400 dark:bg-zinc-700"}
                                                     `}
                                                     >    
                                                 </span>
                                             </Button>
                                         ))}
+                                        <Button isLoading={isLoading} isDisabled={isSavingVariant} onClick={handleGenerateVariant} isIconOnly variant="light" className="dark:text-zinc-400">
+                                            <Icon color="text-zinc-400">add</Icon>
+                                        </Button>
                                     </div>
                                 </div>
-                                <Button isIconOnly variant="light" onClick={handleNextVariant} isLoading={isLoading}>
-                                    <Icon>arrow_right_alt</Icon>
-                                </Button>
                             </div>
                             </>
                             }
