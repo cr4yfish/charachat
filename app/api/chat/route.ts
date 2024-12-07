@@ -68,6 +68,13 @@ export async function POST(req: Request) {
             apiKey: await getModelApiKey(profile, chat.llm as ModelId),
         });
 
+        const summarizedCharBook = chat.character.book ?  await summarizeTool({ profile, text: replaceVariables(chat.character.book, variables) }) : "";
+        const summarizedCharDescription = chat.character.description ?  await summarizeTool({ profile, text: replaceVariables(chat.character.description, variables) }) : "";
+        const summarizedCharBio = chat.character.bio ?  await summarizeTool({ profile, text: replaceVariables(chat.character.bio, variables) }) : "";
+        const summarizedMemory = chat.dynamic_book ?  await summarizeTool({ profile, text: replaceVariables(chat.dynamic_book, variables) }) : "";
+        const summarizedStory = chat.story?.story ?  await summarizeTool({ profile, text: replaceVariables(chat.story.story, variables) }) : "";
+        const summarizedPersonaBio = await summarizeTool({ profile, text: replaceVariables(chat?.persona?.bio || profile?.bio || "", variables) });
+        
         const result = await streamText({
             temperature: chat.temperature,
             frequencyPenalty: chat.frequency_penalty,
@@ -95,8 +102,8 @@ export async function POST(req: Request) {
                 NEVER repeat an image. ALWAYS generate a new one using the generateImage tool.
                 Do NOT include the image in the response.
 
-                You are ${chat?.character.name}, ${replaceVariables(chat?.character.description, variables)}, ${replaceVariables(chat?.character.bio ?? "", variables)}.
-                Your are chatting with ${chat?.persona?.full_name ?? (profile?.first_name + " " + profile?.last_name)} with bio: ${chat.persona?.bio ?? profile?.bio}.
+                You are ${chat?.character.name}, ${summarizedCharDescription}, ${summarizedCharBio}.
+                Your are chatting with ${chat?.persona?.full_name ?? (profile?.first_name + " " + profile?.last_name)} with bio: ${summarizedPersonaBio}.
 
                 Your responses have to be in character. Be as authentic as possible. ${responseLengthToPrompt[(chat?.response_length as keyof typeof responseLengthToPrompt) ?? 0]}
                 Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
@@ -105,20 +112,20 @@ export async function POST(req: Request) {
                 Actively memorize important keywords and facts in the following conversation and use them.
 
                 This is background information about you:
-                ${replaceVariables(chat?.character?.book ?? "", variables)}
+                ${summarizedCharBook}
                 
                 ${chat?.story?.id && chat.story.id.length > 0 && `
                         This chat is based on a story. These are the details of the story:
                         ${replaceVariables(chat?.story?.title ?? "", variables)}
                         ${replaceVariables(chat?.story?.description ?? "", variables)}
-                        ${replaceVariables(chat?.story?.story ?? "", variables)}
+                        ${summarizedStory}
                         Other Characters in the story:
                         ${chat?.story?.extra_characters_client?.map((c: Character) => `${c.name}: ${c.description}`).join("\n")}
                     ` 
                 }
 
                 This is all the knowledge you memorized during the conversation up until now:
-                ${chat?.dynamic_book}
+                ${summarizedMemory}
             `,
             messages: convertToCoreMessages(messages),
             tools: chat.llm == "openrouter" ? undefined : {
@@ -140,7 +147,10 @@ export async function POST(req: Request) {
                     description: "Retrieve the Memory to get chat context in order to respond well to a prompt.",
                     parameters: z.object({ }),
                     execute: async() => {
-                        return await getMemory({ chat })
+                        const memory = await getMemory({ chat });
+                        if(!memory) return "Memory is empty.";
+                        const summary = await summarizeTool({ profile, text: memory });
+                        return summary;
                     } 
                 }),
                 
