@@ -60,7 +60,8 @@ export async function POST(req: Request) {
         }
 
         const variables: Record<string, string> = {
-            "{{user}}": profile.username,
+            "{{user}}": chat.persona?.full_name || profile.username,
+            "{{char}}": chat.character.name,
         }
 
         const model = await getLanguageModel({
