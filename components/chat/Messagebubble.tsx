@@ -127,7 +127,6 @@ export default function Messagebubble(props: Props) {
         try {
 
             if(!id) {  throw new Error("No id found. Refresh will probably fix this."); }
-            console.log(props.messages)
 
             await deleteMessage(idToDelete);
 
@@ -145,7 +144,6 @@ export default function Messagebubble(props: Props) {
     }
 
     const handleDeleteThisMessage = async () => {
-        console.log("deleting message", props.message);
         handleDelete(props.message.id);
         props.setCurrentMessage(null);
     }
