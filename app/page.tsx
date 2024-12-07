@@ -11,6 +11,7 @@ import SpotlightLoader from "@/components/homepage/SpotlightLoader";
 import News from "@/components/homepage/News";
 import CharactersSwiper from "@/components/homepage/CharactersSwiper";
 import SpotlighFallback from "@/components/homepage/SpotlightFallback";
+import { Stats } from "@/components/homepage/Stats";
 
 export default async function Home() {
   return (
@@ -24,6 +25,8 @@ export default async function Home() {
         </Suspense>
 
         <News />
+
+
         
         <div className="flex flex-col gap-2 w-full relative">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
@@ -35,6 +38,7 @@ export default async function Home() {
           </Suspense>
         </div>
       
+
 
         <div className="flex flex-col gap-2">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
@@ -59,6 +63,16 @@ export default async function Home() {
         <CurrentCategoryProvider>
           <CategoriesLoader />
         </CurrentCategoryProvider>
+
+
+        <div className="flex flex-col gap-2">
+          <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
+            <h2 className="dark:prose-invert text-lg font-bold">Statistics</h2>
+          </div>
+          <Suspense fallback="loading newest stats">
+            <Stats />
+          </Suspense>
+        </div>
 
       </div>
     </div>

@@ -129,3 +129,8 @@ export type Persona = {
     creator: Profile;
     is_private: boolean;
 }
+
+export type Stats = {
+    timeframe: string;
+    count: number;
+}
