@@ -204,7 +204,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
 
 export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
     const { data, error } = await (await createClient())
-        .from(characterTableName)
+        .from(publicTableName)
         .select(characterMatcher)
         .or(`name.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
 

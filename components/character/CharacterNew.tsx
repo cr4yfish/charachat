@@ -228,6 +228,11 @@ export default function CharacterNew(props: Props) {
                         <Switch isSelected={newCharacter.is_nsfw} onValueChange={(newValue) => updateValue("is_nsfw", newValue)} >NSFW</Switch>
                         <p className="text-xs dark:text-zinc-400">This will blur the Avatar.</p>
                     </div>
+                    
+                    <div className="flex flex-col gap-1">
+                        <Switch isSelected={newCharacter.is_unlisted} onValueChange={(newValue) => updateValue("is_unlisted", newValue)} >Unlisted</Switch>
+                        <p className="text-xs dark:text-zinc-400">If checked, this Character won&apos;t appear on the homepage or in searches. Good for sharing Characters with others without making them easily accesible. Don&apos;t set it to private as well, other&apos;t won&apos;t be able to access it then.</p>
+                    </div>
                 </CardContent>
  
             </Card>
