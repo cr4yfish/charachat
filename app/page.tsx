@@ -12,6 +12,8 @@ import News from "@/components/homepage/News";
 import CharactersSwiper from "@/components/homepage/CharactersSwiper";
 import SpotlighFallback from "@/components/homepage/SpotlightFallback";
 import { Stats } from "@/components/homepage/Stats";
+import { SmallStats } from "@/components/homepage/SmallStats";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Home() {
   return (
@@ -26,8 +28,6 @@ export default async function Home() {
 
         <News />
 
-
-        
         <div className="flex flex-col gap-2 w-full relative">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
               <p className="text-xs dark:text-zinc-400">The hot stuff</p>
@@ -37,8 +37,12 @@ export default async function Home() {
             <CharactersSwiper loader={getPopularCharacters} />
           </Suspense>
         </div>
-      
 
+        <div className="flex items-center gap-2 flex-wrap h-fit">
+          <Suspense fallback={<><Skeleton className="w-[240px] h-[155px]" /><Skeleton className="w-[240px] h-[155px]" /></>}>
+            <SmallStats />
+          </Suspense>
+        </div>
 
         <div className="flex flex-col gap-2">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
