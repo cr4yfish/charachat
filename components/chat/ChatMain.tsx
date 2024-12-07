@@ -408,7 +408,7 @@ export default function ChatMain(props : Props) {
 
     return (
         <>
-        <ScrollArea id="scroller" className=" flex-1 overflow-y-scroll w-full " >
+        <ScrollArea id="scroller" className=" flex-1 overflow-y-hidden w-full " >
             <InfiniteScroll 
                 isReverse
                 id="infinitescroll"
