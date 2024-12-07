@@ -396,7 +396,7 @@ export default function ChatMain(props : Props) {
         // only do shortcuts on desktop
         if(window.innerWidth < 768) return;
 
-        if(e.key === "Enter" && e.ctrlKey) {
+        if((e.key === "Enter" && e.ctrlKey) || (e.key === "Enter" && e.shiftKey)) {
             // add a new line
             setInput(input + "\n");
         } else if(e.key === "Enter") {
