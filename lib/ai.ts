@@ -157,7 +157,7 @@ export const LLMs: LLMType[] = [
         "name": "Grok",
         "usecase": "Allrounder, low quality sometimes",
         "provider": "xAI",
-        "tags": ["Free", "Fast", "Uncensored"]
+        "tags": ["Fast", "Uncensored"]
     },
     {
         "key": "open-mistral-nemo",
