@@ -64,7 +64,7 @@ export default function LoginButton(props: Props) {
                         </Button>
                     </DialogTrigger>
                 }
-                <DialogContent className="dark:bg-transparent dark:border-none">
+                <DialogContent className="bg-transparent dark:bg-transparent dark:border-none">
                     <DialogHeader>
                         <DialogTitle></DialogTitle>
                         <DialogDescription></DialogDescription>
