@@ -127,7 +127,7 @@ export default async function Chat({ params } : { params: Params }) {
         <>
         <SharedChatProvider>
             <div className="absolute top-0 left-0 z-50 w-full flex items-center justify-between">
-                <div className="p-4 bg-zinc-50/75 dark:bg-zinc-900/75 backdrop-blur-lg border-r border-b border-zinc-200 dark:border-zinc-800 rounded-b-xl rounded-l-none w-full flex flex-row items-center justify-between gap-2">
+                <div className="p-4 bg-zinc-50/75 dark:bg-zinc-900/75 backdrop-blur-lg border-r border-b border-zinc-200 dark:border-zinc-800 rounded-b-xl rounded-l-none max-md:rounded-l-xl w-full flex flex-row items-center justify-between gap-2">
                     
                     <div className="flex items-center gap-2">
                         <SidebarTrigger><></></SidebarTrigger>
