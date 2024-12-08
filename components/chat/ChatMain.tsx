@@ -51,6 +51,9 @@ export default function ChatMain(props : Props) {
     const [isSetupDone, setIsSetupDone] = useState(false);
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [isSelfDestruct, setIsSelfDestruct] = useState(false);
+    const [isSelectionMode, setIsSelectionMode] = useState(false);
+    const [selectedMessageIDs, setSelectedMessageIDs] = useState<string[]>([]);
+    const [isDeletingMessages, setIsDeletingMessages] = useState(false);
     const { toast } = useToast();
 
     const [latestMessageVariants, setLatestMessageVariants] = useState<AIMessage[]>([]);
@@ -406,8 +409,52 @@ export default function ChatMain(props : Props) {
         }
     }
 
+    const handleDeleteSelectedMessages = async () => {
+        if(selectedMessageIDs.length == 0) return;
+
+        setIsDeletingMessages(true);
+        setIsSelectionMode(false);
+
+        toast({
+            title: "Deleting messages",
+            description: `Deleting ${selectedMessageIDs.length} messages.` 
+        })
+
+        // remove all messages from state
+        setMessages(messages.filter((m) => !selectedMessageIDs.includes(m.id)));
+        if(currentMessage && selectedMessageIDs.includes(currentMessage.id)) {
+            setCurrentMessage(null);
+        }
+
+        await Promise.all(selectedMessageIDs.map(async (id) => {
+            await deleteMessage(id);
+        }))
+
+        toast({
+            title: "Messages deleted",
+            description: "Selected messages have been deleted.",
+            variant: "success"
+        })
+
+        setIsDeletingMessages(false);
+        setSelectedMessageIDs([]);
+        
+    }
+
     return (
         <>
+        <AnimatePresence>
+            {isSelectionMode &&
+            <motion.div 
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                className="w-full flex items-center gap-2 mt-16 left-0 px-6 py-4 absolute z-10"
+            >
+                <Button onClick={handleDeleteSelectedMessages} variant="solid" color="danger" startContent={<Icon filled>delete</Icon>}>Delete selected messages</Button>
+            </motion.div>
+            }
+        </AnimatePresence>
         <ScrollArea id="scroller" className=" flex-1 overflow-y-hidden w-full " >
             <InfiniteScroll 
                 isReverse
@@ -458,6 +505,11 @@ export default function ChatMain(props : Props) {
                                 showName={index == 0 || (messages[index - 1].role !== message.role) || (messages[index-1].toolInvocations?.some((t) => t.state == "result") || false )}
                                 reloadMessages={reload}
                                 setCurrentMessage={setCurrentMessage}
+                                setSelectionMode={setIsSelectionMode}
+                                selectedMessageIDs={selectedMessageIDs}
+                                setSelectedMessageIDs={setSelectedMessageIDs}
+                                selectionMode={isSelectionMode}
+                                isDeleting={isDeletingMessages && selectedMessageIDs.includes(message.id)}
                             />
                             { index === messages.length - 1 && currentMessage &&
                             <>

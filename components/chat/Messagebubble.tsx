@@ -28,7 +28,7 @@ import { Chat,Profile } from "@/types/db";
 import { ChatRequestOptions } from "ai";
 import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
 import Icon from "../utils/Icon";
-import { deleteMessage, updateMessage } from "@/functions/db/messages";
+import { updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
 import { Avatar } from "@nextui-org/avatar";
@@ -72,14 +72,17 @@ type Props = {
     isLatestMessage: boolean,
     reloadMessages: (chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>;
     setCurrentMessage: (message: AIMessage | null) => void;
+    setSelectionMode: (selectionMode: boolean) => void;
+    selectionMode: boolean;
+    selectedMessageIDs: string[];
+    setSelectedMessageIDs: (ids: string[]) => void;
+    isDeleting: boolean;
 }
 
 export default function Messagebubble(props: Props) {
     const { toast } = useToast();
 
     const [id, setId] = useState<string | undefined>(undefined);
-
-    const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
     const [isEditMode, setIsEditMode] = useState(false);
     const [isSavingLoading, setIsSavingLoading] = useState(false);
@@ -113,39 +116,12 @@ export default function Messagebubble(props: Props) {
         }
     }, [props.message.id])
 
-
     const handleCopyToClipboard = () => {
         navigator.clipboard.writeText(props.message.content).then(() => {
             toast({
                 title: "Copied to clipboard",
             })
         })
-    }
-
-    const handleDelete = async (idToDelete: string) => {
-        setIsDeleteLoading(true);
-        try {
-
-            if(!id) {  throw new Error("No id found. Refresh will probably fix this."); }
-
-            await deleteMessage(idToDelete);
-
-            props.setMessages((messages) => messages.filter((message) => message.id !== idToDelete));
-
-        } catch (error) {
-            console.error(error);
-            const err = error as Error;
-            toast({
-                title: "Failed to delete message",
-                description: err.message,
-                variant: "destructive",
-            })
-        }
-    }
-
-    const handleDeleteThisMessage = async () => {
-        handleDelete(props.message.id);
-        props.setCurrentMessage(null);
     }
 
     const handleSaveMessage = async () => {
@@ -295,6 +271,36 @@ export default function Messagebubble(props: Props) {
             })
         }
     }
+
+    const handleOnTap = async () => {
+        if(props.isDeleting) { return; }
+
+        const isSelected = props.selectedMessageIDs.includes(props.message.id);
+
+        const addToSelection = async () => {
+            props.setSelectedMessageIDs([...props.selectedMessageIDs, props.message.id]);
+        }
+
+        const removeFromSelection = async () => {
+            props.setSelectedMessageIDs(props.selectedMessageIDs.filter((id) => id !== props.message.id));
+        }
+
+        if(props.selectionMode) {
+            if(props.selectedMessageIDs.length === 1 && isSelected) {
+                props.setSelectionMode(false);
+                props.setSelectedMessageIDs([]);
+            }
+        } else {
+            props.setSelectionMode(true);
+        }
+
+        if(isSelected) {
+            removeFromSelection();
+        } else {
+            addToSelection();
+        }
+        
+    }
     
     return (
         <>
@@ -305,7 +311,7 @@ export default function Messagebubble(props: Props) {
                         {...framerListAnimationProps}
                         exit={{ opacity: 0 }}
                         custom={props.index}
-                        whileTap={{ scale: 0.95, transition: { duration: .6 } }}
+                        onClick={handleOnTap}
                         
                         className={`!select-none relative w-fit ${isEditMode && "z-50"} `}
                     >
@@ -314,6 +320,7 @@ export default function Messagebubble(props: Props) {
                                 <span className={`text-sm select-none flex items-center gap-2 ${props.message.role === "user" && "flex-row-reverse"}`}>
                                     <Avatar 
                                         size="sm" 
+                                        className="w-[20px] h-[20px]"
                                         src={props.message.role === "user" ? (props.chat?.persona?.avatar_link || props.chat?.user.avatar_link) : props.chat?.character.image_link} 
                                     />
                                     {props.message.role === "user" ? (props.chat?.persona?.full_name || props.chat?.user.username) : props.chat?.character.name}
@@ -331,9 +338,16 @@ export default function Messagebubble(props: Props) {
                             className={`
                                 relative rounded-3xl w-fit max-w-3/4  !select-none shadow-none
                                 ${props.message.role == "user" ? "rounded-br ml-auto dark:bg-slate-600/20" : "mr-auto rounded-bl dark:bg-zinc-900/0"}
-                                ${isEditMode ? "border-1 dark:border-amber-400" : "border-none"}
+                                ${(isEditMode || props.selectedMessageIDs.includes(props.message.id)) && " dark:bg-amber-400/10"}
                                 `}
                         >
+                            {props.isDeleting &&
+                                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                                    <span className="z-10 text-danger text-xs"><Spinner color="danger" size="sm" /></span>
+                                    <div className="absolute top-0 left-0 w-full h-full backdrop-blur-sm rounded-3xl"></div>
+                                </div>
+                            }
+                            
                             { props.message.role !== "user" &&
                                 <CardHeader className=" py-0 pb-1 pt-3">
                                     <CardTitle >
@@ -384,18 +398,16 @@ export default function Messagebubble(props: Props) {
                             </CardFooter>
                         </Card>
                         <div className="flex flex-row items-center gap-1 dark:text-zinc-400 mt-1">
-                            <Button onClick={handleDeleteThisMessage} variant="light" isIconOnly size="sm">
-                                <Icon downscale color="zinc-400" >delete</Icon>
-                            </Button>
-                            <Button onClick={handleSetEditMode} variant="light" isIconOnly size="sm">
+                            <Button onClick={handleSetEditMode} isDisabled={props.isDeleting} variant="light" isIconOnly size="sm">
                                 <Icon downscale color="zinc-400" >edit</Icon>
                             </Button>
-                            <Button onClick={handleCopyToClipboard} variant="light" isIconOnly size="sm">
+                            <Button onClick={handleCopyToClipboard} variant="light" isDisabled={props.isDeleting} isIconOnly size="sm">
                                 <Icon downscale color="zinc-400" >content_copy</Icon>
                             </Button>                            
                             {props.message.role === "assistant" &&
                                 <Button 
                                     isLoading={isLoadingAudio} 
+                                    isDisabled={props.isDeleting}
                                     onClick={() => {
                                         if(isAudioPlaying) {
                                             handleStopAudio();
@@ -430,10 +442,6 @@ export default function Messagebubble(props: Props) {
                         <ContextMenuItem onClick={handleSetEditMode}  className="dark:text-amber-400" >
                         Edit
                         <Icon>edit</Icon>
-                    </ContextMenuItem>
-                    <ContextMenuItem onClick={handleDeleteThisMessage} disabled={isDeleteLoading} className="dark:text-red-400" >
-                        Delete
-                        {!isDeleteLoading ? <Icon>delete</Icon> : <Spinner size="sm" color="danger" />}
                     </ContextMenuItem>
                 </ContextMenuContent>
             </ContextMenu>
