@@ -197,6 +197,11 @@ type SummarizeToolProps = {
     text: string,
 }
 
+/**
+ * Summarizes text over 1000 characters with the Author AI. Returns the summarized text, or original text if (too short | error)
+ * @param props 
+ * @returns 
+ */
 export const summarizeTool = async (props: SummarizeToolProps) => {
     try {
 
@@ -215,8 +220,7 @@ export const summarizeTool = async (props: SummarizeToolProps) => {
 
     } catch (error) {
         console.error(error);
-        const err = error as Error;
-        return err.message;
+        return props.text;
     }
     
 }
