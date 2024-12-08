@@ -35,6 +35,7 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Chip } from "@nextui-org/chip";
 import { getKeyClientSide } from "@/lib/crypto";
 
+const _LIMIT = 30;
 
 type Props = {
     chat: Chat;
@@ -290,7 +291,7 @@ export default function ChatMain(props : Props) {
         const newMessages = await getMessages({
             chatId: props.chat.id,
             from: cursor,
-            limit: 10,
+            limit: _LIMIT,
             key: key
         });
 
@@ -299,7 +300,7 @@ export default function ChatMain(props : Props) {
             return;
         }
 
-        if(newMessages.length < 10) {
+        if(newMessages.length < _LIMIT) {
             setCanLoadMore(false);
         }
 

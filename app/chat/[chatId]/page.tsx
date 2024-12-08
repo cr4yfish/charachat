@@ -106,7 +106,7 @@ export default async function Chat({ params } : { params: Params }) {
         initMessages = await getMessages({
             chatId: chat.id,
             from: 0,
-            limit: 10,
+            limit: 30,
             key: key
         })
         initMessages = initMessages.reverse();
