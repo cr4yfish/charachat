@@ -233,6 +233,11 @@ export default function CharacterNew(props: Props) {
                         <Switch isSelected={newCharacter.is_unlisted} onValueChange={(newValue) => updateValue("is_unlisted", newValue)} >Unlisted</Switch>
                         <p className="text-xs dark:text-zinc-400">If checked, this Character won&apos;t appear on the homepage or in searches. Good for sharing Characters with others without making them easily accesible. Don&apos;t set it to private as well, others won&apos;t be able to access it then.</p>
                     </div>
+                    
+                    <div className="flex flex-col gap-1">
+                        <Switch isSelected={newCharacter.hide_definition} onValueChange={(newValue) => updateValue("hide_definition", newValue)} >Hide definition</Switch>
+                        <p className="text-xs dark:text-zinc-400">If checked, all optional and advanced fields will be hidden from the Character page. People might still be able to access them in a Chat with prompt engineering.</p>
+                    </div>
                 </CardContent>
  
             </Card>

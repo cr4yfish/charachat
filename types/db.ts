@@ -19,6 +19,7 @@ export type Character = {
     is_private: boolean;
     is_nsfw?: boolean;
     is_unlisted?: boolean;
+    hide_definition?: boolean;
     personality?: string;
     chats?: number;
     likes?: number;
