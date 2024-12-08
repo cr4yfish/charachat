@@ -69,12 +69,16 @@ export async function POST(req: Request) {
             apiKey: await getModelApiKey(profile, chat.llm as ModelId),
         });
 
-        const summarizedCharBook = chat.character.book ?  await summarizeTool({ profile, text: replaceVariables(chat.character.book, variables) }) : "";
-        const summarizedCharDescription = chat.character.description ?  await summarizeTool({ profile, text: replaceVariables(chat.character.description, variables) }) : "";
-        const summarizedCharBio = chat.character.bio ?  await summarizeTool({ profile, text: replaceVariables(chat.character.bio, variables) }) : "";
+        // We summarize this with AI (only summarizes >1000 characters)
         const summarizedMemory = chat.dynamic_book ?  await summarizeTool({ profile, text: replaceVariables(chat.dynamic_book, variables) }) : "";
-        const summarizedStory = chat.story?.story ?  await summarizeTool({ profile, text: replaceVariables(chat.story.story, variables) }) : "";
-        const summarizedPersonaBio = await summarizeTool({ profile, text: replaceVariables(chat?.persona?.bio || profile?.bio || "", variables) });
+        const summarizedStory = (chat.story?.story) ?  await summarizeTool({ profile, text: replaceVariables(chat.story.story, variables) }) : "";
+        const summarizedCharBook = chat.character.book ?  await summarizeTool({ profile, text: replaceVariables(chat.character.book, variables) }) : "";
+
+        // just replace variables for these
+        const summarizedCharDescription = replaceVariables(chat.character.description ?? "", variables)
+        const summarizedCharBio = replaceVariables(chat.character.bio ?? "", variables)
+        const summarizedPersonaBio = replaceVariables(chat?.persona?.bio || profile?.bio || "", variables)
+
         
         const result = await streamText({
             temperature: chat.temperature,
