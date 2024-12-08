@@ -1,27 +1,19 @@
-"use client";
+"use server";
 
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/navigation";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Tabs, Tab } from "@nextui-org/tabs";
-import Link from "next/link";
+
 import { Profile, Story } from "@/types/db";
-import StoryCard from "../story/StoryCard";
-import { Button } from "@/components/utils/Button";
-import { useToast } from "@/hooks/use-toast";
 import Icon from "@/components/utils/Icon";
 
 import { Character } from "@/types/db";
-import { createChat } from "@/functions/db/chat";
 import CategoryCard from "./CategoryCard";
 import Markdown from "react-markdown";
-import { likeCharacter, unlikeCharacter } from "@/functions/db/character";
 import { safeParseLink } from "@/lib/utils";
 import { Card, CardBody } from "@nextui-org/card";
 import Username from "../user/Username";
 import ImageWithBlur from "../ImageWithBlur";
 import Image from "next/image";
+import CharacterPageActions from "./CharacterePageActions";
+import CharacterPageTabs from "./CharacterPageTabs";
 
 type Props = {
     character: Character,
@@ -29,62 +21,19 @@ type Props = {
     profile?: Profile
 }
 
-export default function CharacterPage(props: Props) {
-    const router = useRouter();
-    const { toast } = useToast();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isLiking, setIsLiking] = useState<boolean>(false);
-    const [isLiked, setIsLiked] = useState<boolean>(props.character.is_liked ?? false);
+export default async function CharacterPage(props: Props) {
 
-    const handleStartChat = async () => {
-        if(!props.profile) {
-            console.error("No profile found");
-            toast({
-                title: "Error",
-                description: "You need to be logged in to start a chat",
-                variant: "destructive"
-            })
-            return;
-        }
-        setIsLoading(true);
+    const transformedCharacter: Character = props.character;
 
-        const characterId = props.character.id;
-    
-        const chat = await createChat({
-            chatId: uuidv4(),
-            userId: props.profile.user,
-            characterId: characterId,
-            title: "New Chat",
-            description: "This is a new chat"
-        });
-    
-        if(!chat) {
-            throw new Error("Failed to create chat");
-        }
-
-        router.replace(`/chat/${chat.id}`);
-    }
-
-    const handleLike = async () => {
-        setIsLiking(true);
-
-        try {
-            if(isLiked) {
-                await unlikeCharacter(props.character.id);
-            } else {
-                await likeCharacter(props.character.id);
-            }
-            setIsLiked(!isLiked);
-        } catch (error) {
-            console.error("Failed to like character", error);
-            toast({
-                title: "Error",
-                description: "Failed to like character",
-                variant: "destructive"
-            })
-        } finally {
-            setIsLiking(false);
-        }
+    if(props.character.hide_definition) {
+        transformedCharacter.bio = "";
+        transformedCharacter.book = "";
+        transformedCharacter.intro = "";
+        transformedCharacter.first_message = "";
+        transformedCharacter.scenario = "";
+        transformedCharacter.personality = "";
+        transformedCharacter.system_prompt = "";
+        transformedCharacter.image_prompt = "";
     }
 
     return (
@@ -114,38 +63,10 @@ export default function CharacterPage(props: Props) {
                     </div>
 
                     <div className="w-full flex items-center justify-center gap-2">
-                        <Button 
-                            onClick={handleStartChat} 
-                            size="lg" color="primary" 
-                            isLoading={isLoading}
-                            radius="full"
-                        >
-                            Start Chat
-                        </Button>
-                        {props.profile?.user == props.character.owner.user ?
-                            <Link href={`/c/${props.character.id}/edit`}>
-                                <Button
-                                    color="warning" isDisabled={isLoading}
-                                    size="lg" variant="flat" radius="full"                        
-                                >
-                                    Edit
-                                </Button>
-                            </Link>
-                            :
-                            props.profile !== undefined ? 
-                                <Button 
-                                    color="danger" variant="flat" 
-                                    radius="full" size="lg" 
-                                    onClick={handleLike}
-                                    isLoading={isLiking}
-                                    isIconOnly
-                                >
-                                    <Icon filled={isLiked} >
-                                        {isLiked ? "favorite" : "heart_plus"}
-                                    </Icon>
-                                </Button>
-                            : null
-                        }
+                        <CharacterPageActions 
+                            character={props.character}
+                            profile={props.profile}
+                        />
                     </div>
 
                     {props.character.is_private && 
@@ -205,91 +126,12 @@ export default function CharacterPage(props: Props) {
                     </div>
                 </div>
 
-                <div className="flex flex-col max-md:w-full">
-                    <Tabs variant="underlined"
-                        classNames={{
-                            cursor: "dark:bg-zinc-400",
-                        }}
-                    >
-                        <Tab key="about" title="About">
-                            <div className="w-full flex justify-start items-start flex-col prose dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0 !select-none">
-                                {(props.character.intro) && 
-                                <>
-                                <h3>Introduction</h3>
-                                <p className=" !text-red-500 dark:!text-red-500 !m-0 !p-0">Notice: Character introductions are deprecated and should be moved to the Greeting instead. This will still work, for now.</p>
-                                <p>{props.character.intro}</p>
-                                </>
-                                }
-
-                                {( props.character.first_message) && 
-                                <>
-                                <h3>Greeting / First message</h3>
-                                <p>{props.character.first_message}</p>
-                                </>
-                                }
-
-                                {props.character.bio &&
-                                <>
-                                <h3>Bio</h3>
-                                <p>{props.character.bio}</p>
-                                </>
-                                }
-
-                                {props.character.personality &&
-                                <>
-                                <h3>Personality</h3>
-                                <p>{props.character.personality}</p>
-                                </>
-                                }
-
-                                {props.character.scenario &&
-                                <>
-                                <h3>Scenario</h3>
-                                <p>{props.character.scenario}</p>
-                                </>
-                                }
-
-                                <Accordion className=" prose-h2:m-0">
-                                    <AccordionItem title="Character Book" className="prose-h2:m-0 prose-p:m-0" classNames={{
-                                        title: "m-0 prose-h2:m-0"
-                                    }}>
-                                        <p>{props.character.book ?? "This character has no character book."}</p>
-                                    </AccordionItem>
-                                    <AccordionItem title="System Prompt" className="prose-h2:m-0 prose-p:m-0" classNames={{
-                                        title: "m-0 prose-h2:m-0"
-                                    }}>
-                                        <p>{props.character.system_prompt ?? "This character has no customized system prompt."}</p>
-                                    </AccordionItem>
-                                    <AccordionItem title="Image Prompt" className="prose-h2:m-0 prose-p:m-0" classNames={{
-                                        title: "m-0 prose-h2:m-0"
-                                    }}>
-                                        <p>{props.character.image_prompt ?? "This character has no customized image prompt."}</p>
-                                    </AccordionItem>
-                                </Accordion>
-                                
-
-                            </div>
-                        </Tab>
-                        <Tab key="stories" title="Stories">
-                            <div className="flex flex-row items-center justify-between ">
-                                <h2 className="font-bold text-xl">Stories with {props.character.name}</h2>
-                                <Link href={`/c/${props.character.id}/story/new`}>
-                                    <Button variant="light" color="warning" isIconOnly isDisabled={props.profile === undefined}>
-                                        <Icon>add</Icon>
-                                    </Button>
-                                </Link>
-                            </div>
-                            
-                            <div className="flex flex-col gap-2">
-                                {props.stories.map((story: Story) => (
-                                    <StoryCard key={story.id} data={story} hasLink fullWidth />
-                                ))}
-
-                                {props.stories.length == 0 && <p className="text-sm dark:text-neutral-400">No stories found. Want to make the first?</p>}
-                            
-                            </div>
-                        </Tab>
-                    </Tabs>
+                <div className="flex flex-col w-full max-w-xl max-md:max-w-full">
+                 <CharacterPageTabs 
+                    character={transformedCharacter}
+                    stories={props.stories}
+                    profile={props.profile}
+                />
                 </div>
             </div>
                         
