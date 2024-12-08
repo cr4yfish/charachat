@@ -12,8 +12,6 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Stats } from "@/types/db"
 import { useEffect, useState } from "react"
@@ -83,10 +81,6 @@ export function StatsCard(props: Props) {
               axisLine={false}
               tickMargin={8}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
             <Bar
               dataKey="accumulated_count"
               fill="var(--charts-1)"
@@ -96,7 +90,6 @@ export function StatsCard(props: Props) {
               <LabelList 
                 position={"top"}
                 offset={12}
-                className="fill-foreground"
                 fontSize={12}
                 formatter={(value: number) => `${value.toLocaleString()}`}
               />
