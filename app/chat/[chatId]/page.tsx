@@ -131,8 +131,10 @@ export default async function Chat({ params } : { params: Params }) {
                     
                     <div className="flex items-center gap-2">
                         <SidebarTrigger><></></SidebarTrigger>
-                        <Avatar size="sm" src={chat?.character.image_link} />
-                        <span className="text-medium text-center font-bold">{chat.character.name}</span>
+                        <Link href={`/c/${chat.character.id}`} className="flex items-center gap-2" >
+                            <Avatar size="sm" src={chat?.character.image_link} />
+                            <span className="text-medium text-center font-bold">{chat.character.name}</span>
+                        </Link>
                     </div>
 
                    <ChatSettingsDrawer user={profile} />
