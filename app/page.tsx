@@ -38,10 +38,12 @@ export default async function Home() {
           </Suspense>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap h-fit">
-          <Suspense fallback={<><Skeleton className="w-[240px] h-[155px]" /><Skeleton className="w-[240px] h-[155px]" /></>}>
-            <SmallStats />
-          </Suspense>
+        <div className="!h-[160px] w-full overflow-x-auto overflow-y-hidden">
+          <div className="w-fit h-[160px] flex items-center gap-3">
+            <Suspense fallback={<><Skeleton className="w-[240px] h-[155px]" /><Skeleton className="w-[240px] h-[155px]" /></>}>
+              <SmallStats />
+            </Suspense>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -69,7 +71,7 @@ export default async function Home() {
         </CurrentCategoryProvider>
 
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 overflow-x-auto pb-4">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
             <h2 className="dark:prose-invert text-lg font-bold">Statistics</h2>
           </div>
