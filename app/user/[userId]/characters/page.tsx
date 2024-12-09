@@ -15,7 +15,7 @@ export default async function UserCharacters() {
 
     return (
         <>
-        <div className="flex flex-col gap-4 px-4 py-6 h-full w-full pb-20">
+        <div className="flex flex-col gap-4 px-4 py-6 h-full w-full">
             <div className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-2">
                     <h1 className="text-2xl font-bold">Your Characters</h1>

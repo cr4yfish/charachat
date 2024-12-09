@@ -10,7 +10,7 @@ export default async function UserStories() {
 
     return (
         <>
-        <div className="flex flex-col gap-4 px-4 py-6 pb-20 h-full w-full">
+        <div className="flex flex-col gap-4 px-4 py-6 h-full w-full">
             <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-col items-start gap-2">
                     <h1 className="text-4xl font-bold">Your Stories</h1>
