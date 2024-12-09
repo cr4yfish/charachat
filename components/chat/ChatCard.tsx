@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
-import { Chip } from "@nextui-org/chip";
 import { Chat } from "@/types/db";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -54,25 +53,20 @@ export default function ChatCard(props: Props) {
        <Link href={`/chat/${props.data.id}`}>
             <Card 
                 className={`
-                    w-full bg-transparent x shadow-none
+                    bg-transparent x shadow-none max-w-[500px] overflow-x-hidden
                     hover:bg-zinc-100 dark:hover:bg-zinc-800
                 `}
             >
-                <CardBody className="flex flex-row gap-2 items-center justify-start w-full">
+                <CardBody className="flex flex-row gap-2 items-center justify-start w-full relative">
                     
-                    <Avatar src={chat.character.image_link} />
+                    <Avatar src={chat.character.image_link} className="min-w-[50px] h-[50px]" />
                     
-                    <div className="flex flex-row gap-2 items-center justify-between w-full">
+                    <div className="flex flex-row gap-2 items-center justify-between w-full relative overflow-x-hidden">
 
-                        <div className="flex flex-col w-full">
-                            <div className="flex items-center gap-2">
-                                <p className="text-sm text-zinc-400">{chat.title}</p>
-                                {chat.story?.id && <Chip className="text-xs font-medium dark:text-zinc-300 dark:bg-zinc-800">Story</Chip>}
-                            </div>
-                            
+                        <div className="flex flex-col w-full overflow-x-auto">
                             <h3 className="font-bold text-lg">{chat.character.name}</h3>
-                            <div className="w-full max-w-xs max-sm:max-w-xs relative">
-                                <p className={` dark:text-zinc-400 single-line w-full text-xs single-line `} >
+                            <div className="w-full relative overflow-x-hidden">
+                                <p className={` dark:text-zinc-400 single-line text-xs single-line w-full `} >
                                     {props.data.last_message}
                                 </p>
                             </div>
