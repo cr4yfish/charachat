@@ -50,17 +50,17 @@ export default function StoryCard(props: Props) {
                         />
 
                         <div className="flex flex-col gap-1 justify-end">
-                            <h3 className="text-sm">{truncateText(props.data.title,50)}</h3>
-                            <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)} {props.data.extra_characters && "and others"}</span>
+                            <h3 className="text-sm text-zinc-50">{truncateText(props.data.title,50)}</h3>
+                            <span className="text-xs text-zinc-400">with {truncateText(props.data.character.name,40)} {props.data.extra_characters && "and others"}</span>
                             
                             <div className="flex flex-row items-center gap-2">
                                 {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
                                 <>
-                                    <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                    <div className="flex items-center gap-1 text-xs text-zinc-400">
                                         <Icon downscale>chat_bubble</Icon>
                                         <span>{props.data.chats}</span>
                                     </div>
-                                    <div className="flex items-center gap-1 text-xs dark:text-zinc-400">
+                                    <div className="flex items-center gap-1 text-xs  text-zinc-400">
                                         <Icon downscale>favorite</Icon>
                                         <span>{props.data.likes}</span>
                                     </div>
