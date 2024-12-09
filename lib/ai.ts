@@ -143,7 +143,7 @@ export const LLMs: LLMType[] = [
     {
         "key": "llama-3.3-70b-versatile",
         "name": "Llama 3.3 70b",
-        "usecase": "Came out on 9/12",
+        "usecase": "Came out on 9.11",
         "provider": "Groq",
         "tags": ["Free", "New", "Quality"]
     },
