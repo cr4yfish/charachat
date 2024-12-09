@@ -4,6 +4,7 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
     switch(modelId as ModelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
         case "llama-3.2-90b-vision-preview":
+        case "llama-3.3-70b-versatile":
         case "gemma2-9b-it":
             if(profile.groq_encrypted_api_key && profile.groq_encrypted_api_key.length > 0) {
                 return profile.groq_encrypted_api_key;
@@ -75,6 +76,7 @@ export const LLMsWithAPIKeys = (profile: Profile | undefined): LLMType[] => {
 export type ModelId = 
     "llama3-groq-70b-8192-tool-use-preview" |
     "llama-3.2-90b-vision-preview" |
+    "llama-3.3-70b-versatile" |
     "gemma2-9b-it" |
     "ollama" |
     "gpt-4o-mini" |
@@ -121,6 +123,7 @@ export const isFreeModel = (modelId: ModelId) => {
         case "open-mistral-nemo":
         case "llama-3.2-90b-vision-preview":
         case "llama3-groq-70b-8192-tool-use-preview":
+        case "llama-3.3-70b-versatile":
         case "gemma2-9b-it":
             return true;
     }
@@ -137,6 +140,13 @@ export type LLMType = {
 }
 
 export const LLMs: LLMType[] = [
+    {
+        "key": "llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70b",
+        "usecase": "Came out on 9/12",
+        "provider": "Groq",
+        "tags": ["Free", "New", "Quality"]
+    },
     {
         "key": "llama-3.2-90b-vision-preview",
         "name": "Llama 3.2 90b",
