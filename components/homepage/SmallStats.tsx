@@ -12,12 +12,10 @@ export async function SmallStats() {
 
             <SmallStatCard 
                 data={totalCharacters}
-                title="Characters"
                 description="Total number of Characters"
             />
             <SmallStatCard 
                 data={totalStories}
-                title="Stories"
                 description="Total number of Stories"
             />
         </>
