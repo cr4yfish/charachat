@@ -9,7 +9,7 @@ export async function Stats() {
 
     return (
         <>
-        <div className="flex items-center gap-2 flex-wrap h-fit">
+        <div className="flex items-center gap-3 w-fit h-fit">
 
             <StatsCard 
                 stats={messageStats}
