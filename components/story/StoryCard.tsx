@@ -32,26 +32,24 @@ export default function StoryCard(props: Props) {
                 <Card 
                     isPressable={props.hasLink} 
                     className={`
-                        h-[125px] w-[300px] bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
+                        h-[150px] w-[300px] bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"}
                         ${props.noBg && "dark:bg-transparent"} 
                     `}>
-                    <CardBody className="flex flex-row gap-4 ">
+                    <CardBody className="flex flex-row gap-4 relative ">
+                        
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-zinc-900/80 to-zinc-900/10 -z-10"></div>
 
-                        <div className="flex items-center justify-center">
-                            <div className="relative h-[100%] w-[70px] overflow-hidden rounded-2xl">
-                                <Image 
-                                    className="relative object-cover" 
-                                    fill
-                                    src={safeParseLink(props.data.image_link)} 
-                                    alt={props.data.title} 
-                                    sizes="70px"
-                                />
-                            </div>
-                        </div>
+                        <Image 
+                            className="relative object-cover -z-20 brightness-50" 
+                            fill
+                            src={safeParseLink(props.data.image_link)} 
+                            alt={props.data.title} 
+                            sizes="300px"
+                        />
 
-                        <div className="flex flex-col gap-1 justify-start">
+                        <div className="flex flex-col gap-1 justify-end">
                             <h3 className="text-sm">{truncateText(props.data.title,50)}</h3>
                             <span className="text-xs dark:text-zinc-400">with {truncateText(props.data.character.name,40)} {props.data.extra_characters && "and others"}</span>
                             
