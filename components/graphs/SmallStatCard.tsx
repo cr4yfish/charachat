@@ -12,7 +12,7 @@ export default function SmallStatCard(props: Props) {
 
     return (
         <>
-        <Card className="!w-[240px] !h-[120px]">
+        <Card className="!w-[240px] !h-[120px] bg-white/40 dark:bg-zinc-900/20 ">
             <CardHeader className="pb-2">
                 <CardDescription>{props.description}</CardDescription>
             </CardHeader>
