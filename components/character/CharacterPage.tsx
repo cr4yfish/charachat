@@ -44,9 +44,9 @@ export default async function CharacterPage(props: Props) {
                 <Image src={safeParseLink(props.character.image_link)} layout="fill" className="object-cover" alt="" />
             </div>
 
-            <div className="flex flex-row max-md:flex-col gap-6 items-start max-md:items-center justify-center w-full">
+            <div className="flex flex-row max-lg:flex-col gap-6 items-start max-lg:items-center justify-center w-full">
 
-                <div className="flex flex-col justify-center gap-4 max-md:w-full">
+                <div className="flex flex-col justify-center gap-4 max-lg:w-full">
                     <div className="flex flex-col gap-2 items-center justify-center">
                         <ImageWithBlur 
                             src={props.character.image_link} 
@@ -126,7 +126,7 @@ export default async function CharacterPage(props: Props) {
                     </div>
                 </div>
 
-                <div className="flex flex-col w-full max-w-xl max-md:max-w-full">
+                <div className="flex flex-col w-full max-w-xl max-lg:max-w-full">
                  <CharacterPageTabs 
                     character={transformedCharacter}
                     stories={props.stories}
