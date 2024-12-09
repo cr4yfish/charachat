@@ -136,3 +136,8 @@ export type Stats = {
     count: number;
     accumulated_count: number;
 }
+
+export type API_Count = {
+    api_key: string;
+    count: number;
+}

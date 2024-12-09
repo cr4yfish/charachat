@@ -1,11 +1,11 @@
 "use client";
 
-import { Stats } from "@/types/db";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 
 type Props = {
-    data: Stats[];
     description: string;
+    count?: number | string;
+    accumulated_count?: number;
 }
 
 export default function SmallStatCard(props: Props) {
@@ -18,8 +18,8 @@ export default function SmallStatCard(props: Props) {
             </CardHeader>
             <CardContent className="pt-0 pb-0">
                 <div className="flex items-center justify-between gap-2">
-                    <h1 className="text-4xl font-bold">{props.data[0].count?.toLocaleString()}</h1>
-                    <h1 className="text-2xl font-bold text-gray-400">{props.data[0].accumulated_count?.toLocaleString()}</h1>
+                    <h1 className="text-4xl font-bold capitalize">{props.count?.toLocaleString()}</h1>
+                    <h1 className="text-2xl font-bold text-gray-400 ">{props.accumulated_count?.toLocaleString()}</h1>
                 </div>
             </CardContent>
         </Card>
