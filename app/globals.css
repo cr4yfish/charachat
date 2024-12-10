@@ -28,7 +28,7 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
     --charts-fill: rgb(161 161 170);
-    --charts-1:rgb(110, 110, 255);
+    --charts-1:rgb(182, 182, 255);
   }
   .dark {
     --sidebar-background: 240 5.9% 10%;
@@ -40,7 +40,7 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
     --charts-fill: rgb(161 161 170);
-    --charts-1:rgb(110, 110, 255);
+    --charts-1:rgb(99, 99, 193);
   }
 }
 

@@ -56,7 +56,7 @@ export function StatsCard(props: Props) {
   }, [props.stats])
 
   return (
-    <Card className="w-[300px] max-sm:max-w-full ">
+    <Card className="w-[300px] max-sm:max-w-full bg-white/40 dark:bg-zinc-900/20 ">
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>
