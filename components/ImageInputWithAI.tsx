@@ -166,7 +166,7 @@ export default function ImageInputWithAI(props: Props) {
 
                                 <div className="flex flex-col w-full justify-center items-center relative gap-2">
                                     <p className="text-xs dark:text-zinc-400">Select a look</p>
-                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-sm w-full justify-self-center self-center relative pb-2">
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
                                         {imageModels.map((model) => (
                                             <Button
                                                 className="min-w-[100px]"
