@@ -235,14 +235,13 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
 })
 
 export const searchCharactersInfinite = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-
     const { data, error } = await (await createClient())
         .from(publicTableName)
         .select(characterMatcher)
         .eq("is_private", false)
         .eq("is_unlisted", false)
         .or(`name.ilike.*${props.args?.search}*` + "," + `description.ilike.*${props.args?.search}*`)
-        .order((props.args?.sort as string) || "created_at", { ascending: false })
+        .order((props.args?.sort as string) || "created_at", { ascending: props.args?.asc == undefined ? false : props.args?.asc as boolean })
         .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
@@ -265,7 +264,7 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
         .from(characterTableName)
         .select(characterMatcher)
         .eq("owner", user.id)
-        .order("created_at", { ascending: false })
+        .order((props.args?.sort as string) ?? "created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {

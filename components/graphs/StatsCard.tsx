@@ -42,6 +42,7 @@ type Props = {
   stats: Stats[];
   title: string;
   description: string;
+  interval?: "monthly" | "weekly" | "daily";
 }
 
 export function StatsCard(props: Props) {
@@ -49,7 +50,7 @@ export function StatsCard(props: Props) {
 
   useEffect(() => {
     setData(props.stats.reverse().map((item) => ({
-      timeframe: months[new Date(item.timeframe).getMonth()],
+      timeframe: props.interval == "daily" ? new Date(item.timeframe).toLocaleDateString() : months[new Date(item.timeframe).getMonth()],
       count: item.count,
       accumulated_count: item.accumulated_count,
     })))
@@ -82,7 +83,7 @@ export function StatsCard(props: Props) {
               tickMargin={8}
             />
             <Bar
-              dataKey="accumulated_count"
+              dataKey={props.stats[0].accumulated_count ? "accumulated_count" : "count"}
               fill="var(--charts-1)"
               radius={[8, 8, 0, 0]}
 
