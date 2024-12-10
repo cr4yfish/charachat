@@ -17,6 +17,7 @@ type Props = {
     isDisabled?: boolean;
     isInvalid?: boolean;
     errorMessage?: string;
+    className?: string;
 }
 
 export default function TextareaWithCounter(props: Props) {
@@ -50,6 +51,7 @@ export default function TextareaWithCounter(props: Props) {
                     {value.length.toLocaleString()} / {props.maxLength.toLocaleString()}
                 </span>
             }
+            className={props.className}
             classNames={{
                 innerWrapper: "flex flex-col justify-center",
             }}
