@@ -1,6 +1,6 @@
 "use server";
 
-import { getCharacters, getPopularCharacters } from "@/functions/db/character";
+import { getCharacters, getPopularCharacters, getTrendingCharacters } from "@/functions/db/character";
 import Searchbar from "@/components/Searchbar";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 import { Suspense } from "react";
@@ -27,6 +27,16 @@ export default async function Home() {
         </Suspense>
 
         <News />
+
+        <div className="flex flex-col gap-2 w-full relative">
+          <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
+              <p className="text-xs dark:text-zinc-400">Most chats in the last 3 days</p>
+              <h2 className="dark:prose-invert text-lg font-bold">Trending</h2>
+          </div>
+          <Suspense fallback={<InfiniteSwiperLoaderFallback rows={1} />}>
+            <CharactersSwiper loader={getTrendingCharacters} rows={1} />
+          </Suspense>
+        </div>
 
         <div className="flex flex-col gap-2 w-full relative">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">

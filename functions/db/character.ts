@@ -179,6 +179,22 @@ export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<
     }));
 })
 
+export const getTrendingCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+    const { data, error } = await (await createClient())
+        .from("characters_ordered_by_chats")
+        .select(characterMatcher)
+        .order("recent_chat_count", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1);
+        
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
+})
+
 
 export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     if(!props.args?.categoryId) {    
