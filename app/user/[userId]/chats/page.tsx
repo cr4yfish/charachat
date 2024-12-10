@@ -3,8 +3,6 @@
 import ChatCard from "@/components/chat/ChatCard";
 import ChatCardSmallSkeleton from "@/components/chat/ChatCardSmallSkeleton";
 import InfiniteListLoader from "@/components/InfiniteListLoader";
-import { Button } from "@/components/utils/Button";
-import Icon from "@/components/utils/Icon";
 import { getChats } from "@/functions/db/chatList";
 
 export default async function UserChats() {
@@ -20,7 +18,6 @@ export default async function UserChats() {
                     <h1 className="text-4xl font-bold">Your chats</h1>
                 </div>
                 
-                <Button isIconOnly variant="light" color="warning"><Icon>add</Icon></Button>
             </div>
 
             <InfiniteListLoader 

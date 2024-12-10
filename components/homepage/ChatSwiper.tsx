@@ -1,31 +1,31 @@
 "use server";
 
 import { LoadMoreProps } from "@/types/client";
-import { Story } from "@/types/db";
+import { Chat } from "@/types/db";
 import InfiniteSwiperLoader from "../InfiniteSwiperLoder";
-import StoryCard from "../story/StoryCard";
+import ChatCard from "../chat/ChatCard";
 
 type Props = {
-    loader: (props: LoadMoreProps) => Promise<Story[]>;
+    loader: (props: LoadMoreProps) => Promise<Chat[]>;
     rows?: number; 
 }
 
-export default async function StoriesSwiper(props: Props) {
+export default async function ChatSwiper(props: Props) {
         
     const defaultLoad: LoadMoreProps = {
         cursor: 0,
-        limit: 16,
+        limit: 6*(props.rows ?? 3),
     }
 
-    let stories: Story[] = [];
+    let chats: Chat[] = [];
     
     try {
-        stories = await props.loader(defaultLoad);
+        chats = await props.loader(defaultLoad);
     } catch (e) {
         console.error(e);
         return (
             <>
-            <h1>Something went wrong loading popular Characters</h1>
+            <h1>Something went wrong loading Characters</h1>
             </>
         )
     }
@@ -35,9 +35,9 @@ export default async function StoriesSwiper(props: Props) {
         <InfiniteSwiperLoader 
             loadMore={props.loader} 
             limit={15} 
-            rows={2}
-            initialData={stories} 
-            component={StoryCard}
+            rows={props.rows ?? 3}
+            initialData={chats} 
+            component={ChatCard}
             componentProps={{
             hasLink: true,
             }}

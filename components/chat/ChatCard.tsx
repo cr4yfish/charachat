@@ -61,7 +61,7 @@ export default function ChatCard(props: Props) {
                     
                     <Avatar src={chat.character.image_link} className="min-w-[50px] h-[50px]" />
                     
-                    <div className="flex flex-row gap-2 items-center justify-between w-full relative overflow-x-hidden">
+                    <div className="flex flex-row gap-2 items-end justify-between w-full relative overflow-x-hidden">
 
                         <div className="flex flex-col w-full overflow-x-auto">
                             <h3 className="font-bold text-lg">{chat.character.name}</h3>
@@ -72,9 +72,8 @@ export default function ChatCard(props: Props) {
                             </div>
                         </div>
 
-                        <div>
-                            {chat.last_message_at && <p className="dark:text-zinc-400 text-xs">{new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>}
-                        </div>
+                        {chat.last_message_at && <p className="dark:text-zinc-400 text-xs">{new Date((chat.last_message_at ?? "")).toLocaleDateString()}</p>}
+                       
 
                     </div>
 

@@ -1,26 +1,28 @@
 "use server";
 
 import { LoadMoreProps } from "@/types/client";
-import { Story } from "@/types/db";
 import InfiniteSwiperLoader from "../InfiniteSwiperLoder";
-import StoryCard from "../story/StoryCard";
+import { FC } from "react";
 
 type Props = {
-    loader: (props: LoadMoreProps) => Promise<Story[]>;
-    rows?: number; 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    loader: (props: LoadMoreProps) => Promise<any[]>;
+    rows: number; 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    component: FC<any>
 }
 
-export default async function StoriesSwiper(props: Props) {
+export default async function GeneralSwiper(props: Props) {
         
     const defaultLoad: LoadMoreProps = {
         cursor: 0,
         limit: 16,
     }
 
-    let stories: Story[] = [];
+    let initialData = [];
     
     try {
-        stories = await props.loader(defaultLoad);
+        initialData = await props.loader(defaultLoad);
     } catch (e) {
         console.error(e);
         return (
@@ -35,11 +37,11 @@ export default async function StoriesSwiper(props: Props) {
         <InfiniteSwiperLoader 
             loadMore={props.loader} 
             limit={15} 
-            rows={2}
-            initialData={stories} 
-            component={StoryCard}
+            rows={props.rows}
+            initialData={initialData} 
+            component={props.component}
             componentProps={{
-            hasLink: true,
+                hasLink: true,
             }}
         />
         </>
