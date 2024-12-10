@@ -41,7 +41,6 @@ export default function Page() {
         if(newChars.length < _LIMIT) {
             setHasMore(false);
         }
-        console.log(newChars)
         
         const noDupes = newChars.filter(newChar => !characters.find(char => char.id == newChar.id));
 
@@ -60,7 +59,7 @@ export default function Page() {
             if(search.length == 0) {
                 setCharacters([]);
             } else {
-                handleSearch({ cursor: 0 });
+                handleSearch({ cursor: 0, search, sort });
             }
         }, 500);
 
