@@ -91,7 +91,6 @@ export default function Messagebubble(props: Props) {
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    const [isGeneratingImage, setIsGeneratingImage] = useState(false);
     const [imageLink, setImageLink] = useState<string | null>(null);
     const [imagePrompt, setImagePrompt] = useState<string>("");
     const [imagePromptLoading, setImagePromptLoading] = useState(false);
@@ -495,7 +494,6 @@ export default function Messagebubble(props: Props) {
                                 initImagePrompt={imagePrompt}
                                 trigger={
                                     <Button 
-                                        isLoading={isGeneratingImage} 
                                         isDisabled={props.isDeleting}
                                         onClick={handleGenerateImagePrompt} 
                                         variant="light" 
