@@ -7,14 +7,14 @@ import CharacterCard from "../character/CharacterCard";
 
 type Props = {
     loader: (props: LoadMoreProps) => Promise<Character[]>;
-    
+    rows?: number; 
 }
 
 export default async function CharactersSwiper(props: Props) {
         
     const defaultLoad: LoadMoreProps = {
         cursor: 0,
-        limit: 18,
+        limit: 6*(props.rows ?? 3),
     }
 
     let characters: Character[] = [];
@@ -35,7 +35,7 @@ export default async function CharactersSwiper(props: Props) {
         <InfiniteSwiperLoader 
             loadMore={props.loader} 
             limit={15} 
-            rows={3}
+            rows={props.rows ?? 3}
             initialData={characters} 
             component={CharacterCard}
             componentProps={{
