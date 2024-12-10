@@ -1,9 +1,9 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
+import { Input, Textarea } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./utils/Button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink } from "@/lib/utils";
 import { Avatar } from "@nextui-org/avatar";
@@ -26,6 +26,7 @@ export default function ImageInputWithAI(props: Props) {
     const { toast } = useToast();
 
     const imageInputRef = useRef<HTMLInputElement | null>(null);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     const handleGenerateImage = async () =>  {
         if(!imagePrompt) {
@@ -38,14 +39,25 @@ export default function ImageInputWithAI(props: Props) {
         }
 
         setIsGenerateLoading(true);
-        
+        abortControllerRef.current = new AbortController();
+        const { signal } = abortControllerRef.current;
+
         try {
+
+            toast({
+                title: "Generating an image",
+                description: `Using ${imageModel.title} model running on ${imageModel.provider}...`,
+            })
+
             const res = await fetch("/api/image", {
                 method: "POST",
                 body: JSON.stringify({
                     contextFields: props.contextFields,
-                    imagePrompt: imagePrompt
-                })
+                    imagePrompt: imagePrompt,
+                    model: imageModel.id,
+                    provider: imageModel.provider
+                }),
+                signal
             })
     
             if(res.status === 200) {
@@ -120,6 +132,14 @@ export default function ImageInputWithAI(props: Props) {
 
         setIsUploadLoading(false);
     }
+
+    const handleAbort = () => {
+        console.log("aborting");
+        if(abortControllerRef.current) {
+            abortControllerRef.current.abort("Aborted by user");
+            setIsGenerateLoading(false);
+        }
+    }
     
     return (
         <>
@@ -165,9 +185,23 @@ export default function ImageInputWithAI(props: Props) {
                                 </div>
 
                                 <div className="flex flex-col w-full justify-center items-center relative gap-2">
-                                    <p className="text-xs dark:text-zinc-400">Select a look</p>
+                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times)</p>
                                     <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
-                                        {imageModels.map((model) => (
+                                        {imageModels.filter(im => im.provider !== "replicate").map((model) => (
+                                            <Button
+                                                className="min-w-[100px]"
+                                                key={model.id}
+                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                                size="sm"
+                                                onClick={() => setImageModel(model)}
+                                            >
+                                                {model.style}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate</p>
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                        {imageModels.filter(im => im.provider == "replicate").map((model) => (
                                             <Button
                                                 className="min-w-[100px]"
                                                 key={model.id}
@@ -180,21 +214,29 @@ export default function ImageInputWithAI(props: Props) {
                                         ))}
                                     </div>
                                 </div>
-                                <Input 
+                                <Textarea 
                                     label="Prompt" 
                                     description="Describe the image you want to generate. Use keywords for best results. Order matters."
                                     className="w-full max-w-xl"
+                                    autoCorrect="off"
+                                    autoComplete="off"
                                     value={imagePrompt}
                                     onValueChange={setImagePrompt}
                                     endContent={
                                         <Button 
                                             isIconOnly 
-                                            isLoading={isGenerateLoading} 
-                                            onClick={handleGenerateImage}
+                                            onClick={() => {
+                                                if(isGenerateLoading) {
+                                                    console.log("aborting");
+                                                    handleAbort();
+                                                } else {
+                                                    handleGenerateImage();
+                                                }
+                                            }}
                                             radius="full"
                                             color="primary"
                                         >
-                                            <Icon filled>send</Icon>
+                                            <Icon filled>{isGenerateLoading ? "stop" : "send"}</Icon>
                                         </Button>
                                     } 
                                 />
