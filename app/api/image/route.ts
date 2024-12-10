@@ -5,7 +5,7 @@ import { ImageModelId } from "@/lib/ai";
 import { decryptMessage } from "@/lib/crypto";
 
 type RequestBody = {
-    contextFields: string[],
+    contextFields?: string[],
     imagePrompt: string,
     model?: ImageModelId,
     provider?: "hf" | "replicate";
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
         let input = "";
 
-        contextFields.forEach((field) => {
+        contextFields?.forEach((field) => {
             if(field && field.length > 0) {
               input += field.slice(0, 100) + " ";  
             }
