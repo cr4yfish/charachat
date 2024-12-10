@@ -1,5 +1,6 @@
 "use client";
 
+import { v4 as uuidv4 } from "uuid";
 import { Message as AIMessage } from "ai/react";
 import { Spinner } from "@nextui-org/spinner";
 import { motion } from "motion/react";
@@ -25,14 +26,15 @@ import {
 } from "@/components/ui/context-menu"
 
 import { Chat,Profile } from "@/types/db";
-import { ChatRequestOptions } from "ai";
+import { ChatRequestOptions, Message } from "ai";
 import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
 import Icon from "../utils/Icon";
-import { updateMessage } from "@/functions/db/messages";
+import { addMessage, updateMessage } from "@/functions/db/messages";
 import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
 import { Avatar } from "@nextui-org/avatar";
 import { decryptMessage, getKeyClientSide } from "@/lib/crypto";
+import ImagePrompterDrawer from "../ImagePrompterDrawer";
 
 type Prediction = {
     id: string;
@@ -88,6 +90,11 @@ export default function Messagebubble(props: Props) {
     const [isSavingLoading, setIsSavingLoading] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+    const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+    const [imageLink, setImageLink] = useState<string | null>(null);
+    const [imagePrompt, setImagePrompt] = useState<string>("");
+    const [imagePromptLoading, setImagePromptLoading] = useState(false);
 
     const [isLoadingAudio, setIsLoadingAudio] = useState(false);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -301,6 +308,82 @@ export default function Messagebubble(props: Props) {
         }
         
     }
+
+    const handleGenerateImagePrompt = async () => {
+        if(!props.user) return;
+        if(imagePrompt && imagePrompt.length > 0) {
+            return;
+        }
+
+        setImagePromptLoading(true);
+        toast({
+            title: "Generating image Prompt",
+            description: "This may take a few seconds"
+        })
+
+        const res = await fetch("/api/author/image/prompt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                messageContent: props.message.content,
+                characterDescription: props.chat?.character.description,
+                profile: props.user
+            }),
+        })
+
+        if(res.status !== 200) {
+            const err = await res.json();
+            toast({
+                title: "Failed to generate image",
+                description: err.error,
+                variant: "destructive",
+            })
+            return;
+        }
+
+        const data = await res.json();
+
+        setImagePrompt(props.chat?.character.image_prompt + ", " + data.result.text);
+        setImagePromptLoading(false);
+    }
+
+    const handleAddImageToChat = async () => {
+        const newMessage: Message = {
+            id: uuidv4(),
+            content: `![image](${imageLink})`,
+            role: "assistant",
+            createdAt: new Date()
+        }
+
+        props.setMessages((messages) => [...messages, newMessage]);
+
+        try {
+            if(!props.chat || !props.chat.character || !props.user) {
+                return;
+            }
+
+            const key = getKeyClientSide();
+            await addMessage({
+                id: newMessage.id,
+                chat: props.chat,
+                character: props.chat?.character,
+                user: props.user,
+                content: newMessage.content,
+                from_ai: true,
+            }, key)
+            
+        } catch (error) {
+            console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Failed to add image to chat",
+                description: err.message,
+                variant: "destructive",
+            })
+        }
+    }
     
     return (
         <>
@@ -403,7 +486,26 @@ export default function Messagebubble(props: Props) {
                             </Button>
                             <Button onClick={handleCopyToClipboard} variant="light" isDisabled={props.isDeleting} isIconOnly size="sm">
                                 <Icon downscale color="zinc-400" >content_copy</Icon>
-                            </Button>                            
+                            </Button>
+                            <ImagePrompterDrawer 
+                                imageLink={imageLink}
+                                saveImage={handleAddImageToChat}
+                                setImageLink={setImageLink}
+                                initPromptLoading={imagePromptLoading}
+                                initImagePrompt={imagePrompt}
+                                trigger={
+                                    <Button 
+                                        isLoading={isGeneratingImage} 
+                                        isDisabled={props.isDeleting}
+                                        onClick={handleGenerateImagePrompt} 
+                                        variant="light" 
+                                        isIconOnly 
+                                        size="sm"
+                                    >
+                                        <Icon downscale color="zinc-400" >image</Icon>
+                                    </Button>
+                                }
+                            />
                             {props.message.role === "assistant" &&
                                 <Button 
                                     isLoading={isLoadingAudio} 
