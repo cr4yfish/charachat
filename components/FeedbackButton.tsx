@@ -47,7 +47,8 @@ export default function FeedbackButton(props: Props) {
                 <DialogHeader>
                 <DialogTitle>Submit Anonymous Feedback</DialogTitle>
                 <DialogDescription>
-                    Charachat survives on User feedback and suggestions. Feedback submitted here is completely anonymous. Thank you very much for your time!
+                    <p>Charachat survives on User feedback and suggestions. Feedback submitted here is completely anonymous. Thank you very much for your time!</p>
+                    <b>Please contact me on <a className="underline text-blue-500" href="https://www.reddit.com/r/Charachat">Reddit</a> for more specific issues.</b>
                 </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
