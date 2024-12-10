@@ -234,6 +234,26 @@ export const searchCharacters = cache(async (search: string): Promise<Character[
     }));
 })
 
+export const searchCharactersInfinite = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+
+    const { data, error } = await (await createClient())
+        .from(publicTableName)
+        .select(characterMatcher)
+        .eq("is_private", false)
+        .eq("is_unlisted", false)
+        .or(`name.ilike.*${props.args?.search}*` + "," + `description.ilike.*${props.args?.search}*`)
+        .order((props.args?.sort as string) || "created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1);
+
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
+})
+
 export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data: { user }} = await (await createClient()).auth.getUser();
 

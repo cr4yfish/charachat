@@ -40,6 +40,7 @@ export async function LeftSidebar() {
         <Logo hasLink className="p-2" />
         <SidebarGroup className="flex flex-col gap-2">
           <SidebarLink link="/" isLoggedIn={isLoggedIn} icon="explore" label="Explore" enableAnon />
+          <SidebarLink link="/search" isLoggedIn={isLoggedIn} icon="search" label="Search" enableAnon />
           <SidebarLink link="/home" isLoggedIn={isLoggedIn} icon="home" label="Home" />
           <SidebarLink link={`/user/${profile?.user}/chats`} isLoggedIn={isLoggedIn} icon="chat" label="Your Chats" />
         </SidebarGroup>
