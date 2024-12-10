@@ -206,6 +206,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
         .select(characterMatcher)
         .eq("category", props.args.categoryId)
         .eq("is_private", false)
+        .eq("is_unlisted", false)
         .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
 
