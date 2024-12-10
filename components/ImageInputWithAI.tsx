@@ -148,13 +148,13 @@ export default function ImageInputWithAI(props: Props) {
                                 Generate Image
                             </Button>
                         </DrawerTrigger>
-                        <DrawerContent>
+                        <DrawerContent className="!h-fit">
                             <DrawerHeader className="flex flex-col items-center justify-center">
                                 <DrawerTitle>Image Generator</DrawerTitle>
                                 <DrawerDescription>The generated image is used automatically</DrawerDescription>
                             </DrawerHeader>
             
-                            <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3">
+                            <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3 h-fit">
                                 <div className="overflow-hidden rounded-xl">
                                     <img 
                                         src={safeParseLink(props.imageLink)} 
@@ -164,9 +164,9 @@ export default function ImageInputWithAI(props: Props) {
                                     />
                                 </div>
 
-                                <div className="flex flex-col w-full relative gap-2">
+                                <div className="flex flex-col w-full justify-center items-center relative gap-2">
                                     <p className="text-xs dark:text-zinc-400">Select a look</p>
-                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-sm w-full relative pb-2">
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-sm w-full justify-self-center self-center relative pb-2">
                                         {imageModels.map((model) => (
                                             <Button
                                                 className="min-w-[100px]"
