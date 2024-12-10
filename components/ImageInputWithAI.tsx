@@ -7,6 +7,8 @@ import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink } from "@/lib/utils";
 import { Avatar } from "@nextui-org/avatar";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "./ui/drawer";
+import { ImageModel, imageModels } from "@/lib/ai";
 
 
 type Props = {
@@ -19,18 +21,30 @@ type Props = {
 export default function ImageInputWithAI(props: Props) {
     const [isGenerateLoading, setIsGenerateLoading] = useState(false);
     const [isUploadLoading, setIsUploadLoading] = useState(false);
+    const [imagePrompt, setImagePrompt] = useState("");
+    const [imageModel, setImageModel] = useState<ImageModel>(imageModels[0]);
     const { toast } = useToast();
 
     const imageInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleGenerateImage = async () =>  {
-        setIsGenerateLoading(true);
+        if(!imagePrompt) {
+            toast({
+                title: "Error",
+                description: "Prompt is required to generate an image",
+                variant: "destructive"
+            })
+            return;
+        }
 
+        setIsGenerateLoading(true);
+        
         try {
             const res = await fetch("/api/image", {
                 method: "POST",
                 body: JSON.stringify({
-                    contextFields: props.contextFields
+                    contextFields: props.contextFields,
+                    imagePrompt: imagePrompt
                 })
             })
     
@@ -125,14 +139,73 @@ export default function ImageInputWithAI(props: Props) {
             </div>
             <div className="flex items-center gap-1 flex-wrap">
                 {!props.disableAI &&
-                    <Button 
-                        isLoading={isGenerateLoading} 
-                        onClick={handleGenerateImage} 
-                        variant="light" color="primary" 
-                        startContent={<Icon>auto_awesome</Icon>}
-                    >
-                        Generate Image
-                    </Button>
+                    <Drawer>
+                        <DrawerTrigger asChild>
+                            <Button 
+                                variant="light" color="primary" 
+                                startContent={<Icon>auto_awesome</Icon>}
+                            >
+                                Generate Image
+                            </Button>
+                        </DrawerTrigger>
+                        <DrawerContent>
+                            <DrawerHeader className="flex flex-col items-center justify-center">
+                                <DrawerTitle>Image Generator</DrawerTitle>
+                                <DrawerDescription>The generated image is used automatically</DrawerDescription>
+                            </DrawerHeader>
+            
+                            <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3">
+                                <div className="overflow-hidden rounded-xl">
+                                    <img 
+                                        src={safeParseLink(props.imageLink)} 
+                                        alt="" 
+                                        width={512} 
+                                        height={512} 
+                                    />
+                                </div>
+
+                                <div className="flex flex-col w-full relative gap-2">
+                                    <p className="text-xs dark:text-zinc-400">Select a look</p>
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-sm w-full relative pb-2">
+                                        {imageModels.map((model) => (
+                                            <Button
+                                                className="min-w-[100px]"
+                                                key={model.id}
+                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                                size="sm"
+                                                onClick={() => setImageModel(model)}
+                                            >
+                                                {model.style}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <Input 
+                                    label="Prompt" 
+                                    description="Describe the image you want to generate. Use keywords for best results. Order matters."
+                                    className="w-full max-w-xl"
+                                    value={imagePrompt}
+                                    onValueChange={setImagePrompt}
+                                    endContent={
+                                        <Button 
+                                            isIconOnly 
+                                            isLoading={isGenerateLoading} 
+                                            onClick={handleGenerateImage}
+                                            radius="full"
+                                            color="primary"
+                                        >
+                                            <Icon filled>send</Icon>
+                                        </Button>
+                                    } 
+                                />
+                            </div>
+            
+                            <DrawerFooter>
+                                <DrawerClose>
+                                </DrawerClose>
+                            </DrawerFooter>
+                        </DrawerContent>
+                    </Drawer>
                 }
                 <Button
                     onClick={() => imageInputRef.current?.click()}

@@ -5,10 +5,11 @@ import { decryptMessage } from "@/lib/crypto";
 
 type RequestBody = {
     contextFields: string[],
+    imagePrompt: string
 }
 
 export async function POST(req: Request) {
-    const { contextFields } = (await req.json()) as RequestBody;
+    const { contextFields, imagePrompt } = (await req.json()) as RequestBody;
 
     try {
         const profile = await getCurrentUser();
@@ -25,10 +26,6 @@ export async function POST(req: Request) {
             replicateToken = decryptMessage(profile.replicate_encrypted_api_key, keyBuffer);
         } 
 
-        if(!hfToken && !replicateToken) {
-            return new Response("No API keys found", { status: 400 });
-        }
-
         let input = "";
 
         contextFields.forEach((field) => {
@@ -39,7 +36,7 @@ export async function POST(req: Request) {
 
         const link = await generateImage({
             hfToken, replicateToken,
-            inputs: input
+            inputs: imagePrompt ?? input
         })
 
         return new Response(JSON.stringify({ link: link }), { status: 200 });

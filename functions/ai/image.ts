@@ -38,14 +38,14 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
 
         return repOutput[0];
     } else {
+        let hf_token = props.hfToken
 
-        if(!props.hfToken) {
-            throw new Error("No hf token provided");
+        if(!hf_token) {
+            hf_token = process.env.HF_PUBLIC_API_KEY;
         }
 
-        const hf = new HfInference(props.hfToken);
+        const hf = new HfInference(hf_token);
         const model: ImageModelId = "black-forest-labs/FLUX.1-schnell";
-
         const blob = await hf.textToImage({
             model: model,
             inputs: props.inputs,

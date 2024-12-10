@@ -149,7 +149,7 @@ export default function CharacterNew(props: Props) {
 
     return (
         <>
-        <form className="flex flex-col gap-4 h-full pb-20" onSubmit={handleSubmit}>
+        <form id="cnewform" className="flex flex-col gap-4 h-full pb-20" onSubmit={handleSubmit}>
             <div className="flex justify-center absolute bottom-0 left-0 z-20 w-full p-4 pb-6">
                 <Button
                     type="submit" 
@@ -161,6 +161,7 @@ export default function CharacterNew(props: Props) {
                     radius="full"
                     color={isDone ? "success" : "primary"}
                     size="lg" 
+                    form="cnewform"
                 >
                     {!props.editMode && (isDone ? "Redirecting" : "Create Character")}
                     {props.editMode && (isDone ? "Saved" : "Save Character")}

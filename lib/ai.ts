@@ -116,7 +116,63 @@ export type ProviderId =
     "OpenRouter"
 
 export type ImageModelId = 
-    "black-forest-labs/FLUX.1-schnell"
+    "black-forest-labs/FLUX.1-schnell" |
+    "strangerzonehf/Flux-Midjourney-Mix2-LoRA" |
+    "XLabs-AI/flux-RealismLora" |
+    "xey/sldr_flux_nsfw_v2-studio" |
+    "shuttleai/shuttle-3.1-aesthetic" |
+    "Djrango/Qwen2vl-Flux" |
+    "Shakker-Labs/AWPortraitCN" |
+    "stabilityai/sdxl-turbo"
+
+export type ImageModel = {
+    id: ImageModelId;
+    title: string;
+    style: string;
+}
+
+export const imageModels: ImageModel[] = [
+    {
+        id: "black-forest-labs/FLUX.1-schnell",
+        title: "Flux Schnell",
+        style: "Versitile"
+    },
+    {
+        id: "strangerzonehf/Flux-Midjourney-Mix2-LoRA",
+        title: "Midjourney",
+        style: "Midjourney"
+    },
+    {
+        id: "XLabs-AI/flux-RealismLora",
+        title: "Flux Realism",
+        style: "Realistic"
+    },
+    {
+        id: "xey/sldr_flux_nsfw_v2-studio",
+        title: "Flux NSFW v2",
+        style: "Uncensored"
+    },
+    {
+        id: "shuttleai/shuttle-3.1-aesthetic",
+        title: "Shuttle 3.1",
+        style: "Aesthetic"
+    },
+    {
+        id: "Djrango/Qwen2vl-Flux",
+        title: "Qwen x Flux",
+        style: "Easy Prompt"
+    },
+    {
+        id: "Shakker-Labs/AWPortraitCN",
+        title: "Portraits",
+        style: "Portraits"
+    },
+    {
+        id: "stabilityai/sdxl-turbo",
+        title: "SDXL-Turbo",
+        style: "Fast"
+    }
+]
 
 export const isFreeModel = (modelId: ModelId) => {
     switch(modelId) {
