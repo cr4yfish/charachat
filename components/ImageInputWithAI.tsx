@@ -168,13 +168,13 @@ export default function ImageInputWithAI(props: Props) {
                                 Generate Image
                             </Button>
                         </DrawerTrigger>
-                        <DrawerContent className="!h-fit">
+                        <DrawerContent className="h-fit">
                             <DrawerHeader className="flex flex-col items-center justify-center">
                                 <DrawerTitle>Image Generator</DrawerTitle>
                                 <DrawerDescription>The generated image is used automatically</DrawerDescription>
                             </DrawerHeader>
             
-                            <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3 h-fit">
+                            <div className="p-4 flex flex-col max-md:flex-col-reverse items-center justify-center flex-wrap gap-3 h-fit">
                                 <div className="overflow-hidden rounded-xl">
                                     <img 
                                         src={safeParseLink(props.imageLink)} 
@@ -184,7 +184,7 @@ export default function ImageInputWithAI(props: Props) {
                                     />
                                 </div>
 
-                                <div className="flex flex-col w-full justify-center items-center relative gap-2">
+                                <div className="flex flex-col max-md:flex w-full justify-center items-center relative gap-2">
                                     <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times)</p>
                                     <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
                                         {imageModels.filter(im => im.provider !== "replicate").map((model) => (

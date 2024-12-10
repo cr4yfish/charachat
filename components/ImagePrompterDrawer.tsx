@@ -1,7 +1,7 @@
 "use client";
 
 import { Textarea } from "@nextui-org/input";
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "./ui/drawer";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "./ui/drawer";
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink } from "@/lib/utils";
@@ -115,13 +115,12 @@ export default function ImagePrompterDrawer(props: Props) {
             <DrawerTrigger asChild>
                 {props.trigger}
             </DrawerTrigger>
-            <DrawerContent className="!h-fit">
+            <DrawerContent>
                 <DrawerHeader className="flex flex-col items-center justify-center">
                     <DrawerTitle>Image Generator</DrawerTitle>
-                    <DrawerDescription>The generated image is used automatically</DrawerDescription>
                 </DrawerHeader>
 
-                <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3 h-fit">
+                <div className="p-4 flex flex-col max-md:flex-col-reverse items-center justify-center flex-wrap gap-3">
                     <div className="overflow-hidden rounded-xl">
                         <img 
                             src={safeParseLink(props.imageLink ?? "")} 
@@ -191,7 +190,7 @@ export default function ImagePrompterDrawer(props: Props) {
                     />
                 </div>
 
-                <DrawerFooter className="pb-12 flex items-center">
+                <DrawerFooter className="flex items-center">
                     <DrawerClose disabled={!props.imageLink} asChild className="max-w-xl">
                         <Button onClick={props.saveImage} isDisabled={!props.imageLink} color="primary" size="lg" fullWidth>Add to Chat</Button>
                     </DrawerClose>
