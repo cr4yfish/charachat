@@ -5,15 +5,17 @@ import Searchbar from "@/components/Searchbar";
 import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 import { Suspense } from "react";
 import InfiniteSwiperLoaderFallback from "@/components/InfiniteSwiperLoaderFallback";
-import StoriesSwiper from "@/components/homepage/StoriesSwiper";
 import CategoriesLoader from "@/components/homepage/CategoriesLoader";
 import SpotlightLoader from "@/components/homepage/SpotlightLoader";
 import News from "@/components/homepage/News";
-import CharactersSwiper from "@/components/homepage/CharactersSwiper";
 import SpotlighFallback from "@/components/homepage/SpotlightFallback";
 import { Stats } from "@/components/homepage/Stats";
 import { SmallStats } from "@/components/homepage/SmallStats";
 import { Skeleton } from "@/components/ui/skeleton";
+import GeneralSwiper from "@/components/homepage/GeneralSwiper";
+import CharacterCard from "@/components/character/CharacterCard";
+import StoryCard from "@/components/story/StoryCard";
+import { getStories } from "@/functions/db/stories";
 
 export default async function Home() {
   return (
@@ -34,7 +36,7 @@ export default async function Home() {
               <h2 className="dark:prose-invert text-lg font-bold">Trending</h2>
           </div>
           <Suspense fallback={<InfiniteSwiperLoaderFallback rows={1} />}>
-            <CharactersSwiper loader={getTrendingCharacters} rows={1} />
+            <GeneralSwiper loader={getTrendingCharacters} component={CharacterCard} rows={1} />
           </Suspense>
         </div>
 
@@ -44,7 +46,7 @@ export default async function Home() {
               <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
           </div>
           <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
-            <CharactersSwiper loader={getPopularCharacters} />
+            <GeneralSwiper loader={getPopularCharacters} component={CharacterCard} rows={3} />
           </Suspense>
         </div>
 
@@ -62,7 +64,7 @@ export default async function Home() {
             <h2 className="dark:prose-invert text-lg font-bold">Stories</h2>
           </div>
           <Suspense fallback={<InfiniteSwiperLoaderFallback rows={2} />}>
-            <StoriesSwiper />
+            <GeneralSwiper loader={getStories} component={StoryCard} rows={2} />
           </Suspense>
         </div>
 
@@ -72,7 +74,7 @@ export default async function Home() {
             <h2 className="dark:prose-invert text-lg font-bold">New</h2>
           </div>
           <Suspense fallback={<InfiniteSwiperLoaderFallback rows={3} />}>
-            <CharactersSwiper loader={getCharacters} />
+            <GeneralSwiper loader={getCharacters} component={CharacterCard} rows={2} />
           </Suspense>
         </div>
 
