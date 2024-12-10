@@ -94,14 +94,6 @@ export default function ChatSettingsDrawer(props: Props) {
                             onValueChange={(value) => chat && setChat({...chat, title: value})} 
                         />
                         <TextareaWithCounter 
-                            label="Chat Description"
-                            description="A short description of the chat"
-                            maxRows={5}
-                            maxLength={_CHAT_MAX_LENGTH.description}
-                            value={chat?.description} 
-                            onValueChange={(value) => chat && setChat({...chat, description: value})}
-                        />
-                        <TextareaWithCounter 
                             label="Chat Memory"
                             description="Important information the Character remembered"
                             maxLength={_CHAT_MAX_LENGTH.dynamic_book}
