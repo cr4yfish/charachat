@@ -12,12 +12,15 @@ interface GenerateImageProps {
     replicateToken?: string | undefined;
     inputs: string;
     prefix?: string;
+    model?: ImageModelId;
+    provider?: "hf" | "replicate";
 }
 
 type ReplicateOutput = string[];
 
 export async function generateImage(props: GenerateImageProps): Promise<string> {
-    if(props.replicateToken) {
+
+    if(props.replicateToken && props.provider == "replicate") {
         const replicate = new Replicate({
             auth: props.replicateToken
         });
@@ -26,7 +29,10 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
             { 
                 input: {
                     prompt: props.prefix + props.inputs, 
+                    negative_prompt: "bad quality, bad anatomy, worst quality, low quality, low resolutions, extra fingers, blur, blurry, ugly, wrongs proportions, watermark, image artifacts, lowres, ugly, jpeg artifacts, deformed, noisy image",
                     disable_safety_checker: true,
+                    safety_tolerance: 6,
+                    apply_watermark: false,
                     output_format: "jpg",
                     go_fast: true,
                     aspect_ratio: "4:5"
@@ -36,7 +42,9 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
 
         const repOutput: ReplicateOutput = output as ReplicateOutput;
 
-        return repOutput[0];
+        const imgurLink = await uploadLinkToImgur(repOutput[0]);
+
+        return imgurLink;
     } else {
         let hf_token = props.hfToken
 
@@ -45,7 +53,7 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
         }
 
         const hf = new HfInference(hf_token);
-        const model: ImageModelId = "black-forest-labs/FLUX.1-schnell";
+        const model: ImageModelId = props.model ?? "black-forest-labs/FLUX.1-schnell";
         const blob = await hf.textToImage({
             model: model,
             inputs: props.inputs,
@@ -106,6 +114,22 @@ export async function uploadImageToImgur(base64: string): Promise<string> {
     const imgurResponse = await imgur.upload({
         image: base64,
         type: "base64"
+    }).catch((e) => {
+        throw new Error(e);
+    });
+
+    return imgurResponse.data.link
+}
+
+export async function uploadLinkToImgur(link: string): Promise<string> {
+    const imgur = new ImgurClient({
+        clientId: process.env.IMGUR_CLIENT_ID,
+        clientSecret: process.env.IMGUR_CLIENT_SECRET
+    });
+
+    const imgurResponse = await imgur.upload({
+        image: link,
+        type: "url"
     }).catch((e) => {
         throw new Error(e);
     });
