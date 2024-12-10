@@ -423,7 +423,7 @@ export const LLMs: LLMType[] = [
     },
     {
         "key": "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0",
-        "name": "Pulid",
+        "name": "Pulid Image to Image",
         "provider": "Replicate"
     },
     {

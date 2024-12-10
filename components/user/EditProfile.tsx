@@ -13,7 +13,7 @@ import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { deleteUser, updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { decryptMessage, encryptMessage } from "@/lib/crypto";
-import { LLMs, ProviderId } from "@/lib/ai";
+import { imageModels, LLMs, ProviderId } from "@/lib/ai";
 import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { Separator } from "../ui/separator";
@@ -36,7 +36,13 @@ const KeyInput = (props: KeyInputProps) => {
     return (
         <div className="flex flex-col gap-2">
             <div className="flex flex-row flex-wrap items-center gap-2">
-                {LLMs.filter(llm => llm.provider === props.provider).map(llm => (<Chip key={llm.key} size="sm" color={props.value ? "success" : "default"}>{llm.name}</Chip>))}
+                {LLMs.filter(llm => llm.provider === props.provider).map(llm => (
+                    <Chip key={llm.key} size="sm" color={props.value ? "success" : "default"}>{llm.name}</Chip>
+                ))}
+                {imageModels.filter(model => model.provider === props.provider.toLocaleLowerCase()).map(model => (
+                    <Chip key={model.id} size="sm" color={props.value ? "success" : "default"}>{model.title}</Chip>
+                ))}
+
             </div>
             <Input 
                 label={props.label} 
