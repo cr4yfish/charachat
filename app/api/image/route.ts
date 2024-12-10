@@ -1,16 +1,18 @@
 import { generateImage } from "@/functions/ai/image";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
+import { ImageModelId } from "@/lib/ai";
 import { decryptMessage } from "@/lib/crypto";
 
 type RequestBody = {
     contextFields: string[],
-    imagePrompt: string
+    imagePrompt: string,
+    model?: ImageModelId,
+    provider?: "hf" | "replicate";
 }
 
 export async function POST(req: Request) {
-    const { contextFields, imagePrompt } = (await req.json()) as RequestBody;
-
+    const { contextFields, imagePrompt, model, provider } = (await req.json()) as RequestBody;
     try {
         const profile = await getCurrentUser();
 
@@ -36,7 +38,9 @@ export async function POST(req: Request) {
 
         const link = await generateImage({
             hfToken, replicateToken,
-            inputs: imagePrompt ?? input
+            inputs: imagePrompt ?? input,
+            model: model,
+            provider: provider
         })
 
         return new Response(JSON.stringify({ link: link }), { status: 200 });
