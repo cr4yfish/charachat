@@ -11,6 +11,7 @@ import Logo from "./Logo";
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
 import FeedbackButton from "./FeedbackButton";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 type Props = {
     profile?: Profile;
@@ -42,6 +43,7 @@ export default function Navbar(props: Props) {
                     </Button>
                 </Link>
                 }
+                <ThemeSwitcher />
             </div>
             }
         </div>
