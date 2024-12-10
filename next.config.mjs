@@ -16,10 +16,6 @@ export default withPWA({
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "lemmy.**",
-      },
-      {
-        protocol: "https",
         hostname: "**.**", // match everything, is this a good idea? One way to find out I guess
       },
     ],
