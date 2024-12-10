@@ -123,55 +123,118 @@ export type ImageModelId =
     "shuttleai/shuttle-3.1-aesthetic" |
     "Djrango/Qwen2vl-Flux" |
     "Shakker-Labs/AWPortraitCN" |
-    "stabilityai/sdxl-turbo"
+    "stabilityai/sdxl-turbo" |
+    "luma/photon-flash" |
+    "black-forest-labs/flux-schnell" |
+    "nvidia/sana" |
+    "black-forest-labs/flux-1.1-pro-ultra" |
+    "stability-ai/stable-diffusion-3.5-large" |
+    "stability-ai/stable-diffusion-3.5-large-turbo" |
+    "datacte/proteus-v0.3"
+
+export type Provider = 
+    "huggingface" |
+    "replicate"
 
 export type ImageModel = {
     id: ImageModelId;
     title: string;
     style: string;
+    provider: Provider;
 }
 
 export const imageModels: ImageModel[] = [
     {
         id: "black-forest-labs/FLUX.1-schnell",
         title: "Flux Schnell",
-        style: "Versitile"
+        style: "Versitile",
+        provider: "huggingface"
     },
     {
         id: "strangerzonehf/Flux-Midjourney-Mix2-LoRA",
         title: "Midjourney",
-        style: "Midjourney"
+        style: "Midjourney",
+        provider: "huggingface"
     },
     {
         id: "XLabs-AI/flux-RealismLora",
         title: "Flux Realism",
-        style: "Realistic"
+        style: "Realistic",
+        provider: "huggingface"
     },
     {
         id: "xey/sldr_flux_nsfw_v2-studio",
         title: "Flux NSFW v2",
-        style: "Uncensored"
+        style: "Uncensored",
+        provider: "huggingface"
     },
     {
         id: "shuttleai/shuttle-3.1-aesthetic",
         title: "Shuttle 3.1",
-        style: "Aesthetic"
+        style: "Aesthetic",
+        provider: "huggingface"
     },
     {
         id: "Djrango/Qwen2vl-Flux",
         title: "Qwen x Flux",
-        style: "Easy Prompt"
+        style: "Easy Prompt",
+        provider: "huggingface"
     },
     {
         id: "Shakker-Labs/AWPortraitCN",
         title: "Portraits",
-        style: "Portraits"
+        style: "Portraits",
+        provider: "huggingface"
     },
     {
         id: "stabilityai/sdxl-turbo",
         title: "SDXL-Turbo",
-        style: "Fast"
-    }
+        style: "Fast",
+        provider: "huggingface"
+    },
+    {
+        id: "stability-ai/stable-diffusion-3.5-large-turbo",
+        title: "Stable Diffusion 3.5 Large Turbo",
+        style: "RP Turbo",
+        provider: "replicate"
+    },
+    {
+        id: "luma/photon-flash",
+        title: "Photon Flash",
+        style: "RP Photon",
+        provider: "replicate"
+    },
+    {
+        id: "black-forest-labs/flux-schnell",
+        title: "Flux Replicate",
+        style: "RP Flux",
+        provider: "replicate"
+    },
+    {
+        id: "nvidia/sana",
+        title: "NVIDIA Sana",
+        style: "RP Sana",
+        provider: "replicate"
+    },
+    {
+        id: "black-forest-labs/flux-1.1-pro-ultra",
+        title: "Flux Pro Ultra",
+        style: "RP Flux Pro",
+        provider: "replicate"
+    },
+    {
+        id: "stability-ai/stable-diffusion-3.5-large",
+        title: "Stable Diffusion 3.5 Large",
+        style: "RP SD3.5",
+        provider: "replicate"
+    },
+    {
+        id: "datacte/proteus-v0.3",
+        title: "Proteus v0.3",
+        style: "RP Anime",
+        provider: "replicate"
+    },
+
 ]
 
 export const isFreeModel = (modelId: ModelId) => {
