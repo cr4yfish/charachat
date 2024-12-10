@@ -34,7 +34,7 @@ export default async function News() {
             <NewsCard 
               title="🎉 Welcome to Charachat! 🎉"
               description={
-                <p>Charachat: Create, share & chat with AI characters from you & the community. Use the hottest in AI like Video generation and Agents.</p>
+                <p>Charachat: Create, share & chat with AI characters from you & the community.</p>
               }
             />
 
@@ -42,7 +42,7 @@ export default async function News() {
               title="🚀 Join our community!"
               description={
                 <>
-                  <p>🚀 Help shape Charachat - share ideas & report bugs on Reddit & Discord</p>
+                  <p>Help shape Charachat - share ideas & report bugs on Reddit & Discord</p>
                   <div className="flex flex-row items-center gap-2">
                     <Link target="_blank" href={"https://www.reddit.com/r/Charachat"}>
                       <Button variant="light" color="danger">Reddit</Button>
@@ -59,7 +59,6 @@ export default async function News() {
               title="🎨 New stuff"
               description={
                 <>
-                  <p>🎨 New features are added every day</p>
                   <p>Dont miss anything by checking the Dev Updates on <Link href={"https://www.reddit.com/r/Charachat"} target="_blank" className="dark:text-blue-500">Reddit</Link></p>
                 </>
               }
