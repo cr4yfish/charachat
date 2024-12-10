@@ -74,7 +74,7 @@ export function StatsCard(props: Props) {
               top: 20
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={false} stroke="transparent" />
             <XAxis
               dataKey="timeframe"
               tickLine={false}
