@@ -29,7 +29,7 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
             { 
                 input: {
                     prompt: props.prefix + props.inputs, 
-                    negative_prompt: "bad quality, bad anatomy, worst quality, low quality, low resolutions, extra fingers, blur, blurry, ugly, wrongs proportions, watermark, image artifacts, lowres, ugly, jpeg artifacts, deformed, noisy image",
+                    negative_prompt: "score_6, score_5, score_4, ugly, low res, blurry, bad quality, bad anatomy, worst quality, low quality, low resolutions, extra fingers, blur, blurry, ugly, wrongs proportions, watermark, image artifacts, lowres, ugly, jpeg artifacts, deformed, noisy image",
                     disable_safety_checker: true,
                     safety_tolerance: 6,
                     apply_watermark: false,
