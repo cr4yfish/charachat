@@ -3,7 +3,7 @@
 import { Input, Textarea } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./utils/Button";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink } from "@/lib/utils";
 import { Avatar } from "@nextui-org/avatar";
