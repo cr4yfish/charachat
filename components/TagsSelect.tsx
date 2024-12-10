@@ -86,7 +86,7 @@ export default function TagsSelect(props: Props) {
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
-            </Drawer>
+        </Drawer>
 
         </>
     )
