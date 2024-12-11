@@ -25,7 +25,7 @@ export async function generateImage(props: GenerateImageProps): Promise<string> 
             auth: props.replicateToken
         });
         const output = await replicate.run(
-            "black-forest-labs/flux-schnell", 
+            props.model ?? "black-forest-labs/flux-schnell", 
             { 
                 input: {
                     prompt: props.prefix + props.inputs, 

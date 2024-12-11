@@ -126,11 +126,12 @@ export type ImageModelId =
     "stabilityai/sdxl-turbo" |
     "luma/photon-flash" |
     "black-forest-labs/flux-schnell" |
-    "nvidia/sana" |
+    "nvidia/sana:c6b5d2b7459910fec94432e9e1203c3cdce92d6db20f714f1355747990b52fa6" |
     "black-forest-labs/flux-1.1-pro-ultra" |
+    "black-forest-labs/flux-1.1-pro" |
     "stability-ai/stable-diffusion-3.5-large" |
     "stability-ai/stable-diffusion-3.5-large-turbo" |
-    "datacte/proteus-v0.3"
+    "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48"
 
 export type Provider = 
     "huggingface" |
@@ -192,46 +193,53 @@ export const imageModels: ImageModel[] = [
         style: "Fast",
         provider: "huggingface"
     },
-    {
-        id: "stability-ai/stable-diffusion-3.5-large-turbo",
-        title: "Stable Diffusion 3.5 Large Turbo",
-        style: "RP Turbo",
-        provider: "replicate"
-    },
-    {
-        id: "luma/photon-flash",
-        title: "Photon Flash",
-        style: "RP Photon",
-        provider: "replicate"
-    },
+
     {
         id: "black-forest-labs/flux-schnell",
-        title: "Flux Replicate",
-        style: "RP Flux",
-        provider: "replicate"
-    },
-    {
-        id: "nvidia/sana",
-        title: "NVIDIA Sana",
-        style: "RP Sana",
+        title: "Flux Schnell",
+        style: "Flux Fast",
         provider: "replicate"
     },
     {
         id: "black-forest-labs/flux-1.1-pro-ultra",
         title: "Flux Pro Ultra",
-        style: "RP Flux Pro",
+        style: "Flux Ultra",
+        provider: "replicate"
+    },
+    {
+        id: "black-forest-labs/flux-1.1-pro",
+        title: "Flux Pro",
+        style: "Flux Pro",
+        provider: "replicate"
+    },
+    {
+        id: "stability-ai/stable-diffusion-3.5-large-turbo",
+        title: "Stable Diffusion 3.5 Large Turbo",
+        style: "SD Turbo",
         provider: "replicate"
     },
     {
         id: "stability-ai/stable-diffusion-3.5-large",
         title: "Stable Diffusion 3.5 Large",
-        style: "RP SD3.5",
+        style: "SD3.5",
         provider: "replicate"
     },
     {
-        id: "datacte/proteus-v0.3",
+        id: "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48",
         title: "Proteus v0.3",
-        style: "RP Anime",
+        style: "Proteus",
+        provider: "replicate"
+    },
+    {
+        id: "luma/photon-flash",
+        title: "Photon Flash",
+        style: "Photon",
+        provider: "replicate"
+    },
+    {
+        id: "nvidia/sana:c6b5d2b7459910fec94432e9e1203c3cdce92d6db20f714f1355747990b52fa6",
+        title: "NVIDIA Sana",
+        style: "Sana",
         provider: "replicate"
     },
 

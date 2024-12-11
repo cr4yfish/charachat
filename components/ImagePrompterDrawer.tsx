@@ -4,11 +4,12 @@ import { Textarea } from "@nextui-org/input";
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "./ui/drawer";
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
-import { isValidURL, safeParseLink } from "@/lib/utils";
+import { isValidURL, safeParseLink, sleep } from "@/lib/utils";
 import { ImageModel, imageModels } from "@/lib/ai";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, Tab } from "@nextui-org/tabs";
+import { uploadLinkToImgur } from "@/functions/ai/image";
 
 type Props = {
     imageLink: string | null | undefined;
@@ -63,6 +64,53 @@ export default function ImagePrompterDrawer(props: Props) {
                 title: "Generating an image",
                 description: `Using ${imageModel.title} model running on ${imageModel.provider}...`,
             })
+
+            if(imageModel.provider === "replicate") {
+
+                const res = await fetch("/api/image/replicate", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        imagePrompt: imagePrompt,
+                        model: imageModel.id
+                    }),
+                    signal
+                })
+
+                if(res.status !== 201) {
+                    throw new Error("Failed to generate image. Error Message: " + await res.text());
+                }
+
+                let prediction = await res.json();
+
+                while(
+                    prediction.status !== "succeeded" &&
+                    prediction.status !== "failed" 
+                ) {
+                    await sleep(1000);
+                    const response = await fetch("/api/image/" + prediction.id)
+                    if(response.status !== 200) {
+                        throw new Error("Failed to get prediction status. Error Message: " + await response.text());
+                    }
+                    const res = await response.json();
+                    if(res.status === "succeeded") {
+                        prediction = res;
+                        
+                        let link = "";
+                        
+                        // output is sometimes array, sometimes string
+                        if(Array.isArray(prediction.output)) {
+                            link = await uploadLinkToImgur(prediction.output[0]);
+                        } else {
+                            link = await uploadLinkToImgur(prediction.output);
+                        }
+
+                        handleSetImageLink(link);
+                        setSelectedTab("image");
+                    }
+                }
+                setIsGenerateLoading(false);
+                return;
+            }
 
             const res = await fetch("/api/image", {
                 method: "POST",
