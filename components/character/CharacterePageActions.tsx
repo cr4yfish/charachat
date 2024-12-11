@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 import { Button } from "../utils/Button";
@@ -10,11 +10,11 @@ import { likeCharacter, unlikeCharacter } from "@/functions/db/character";
 import { createChat } from "@/functions/db/chat";
 import { useToast } from "@/hooks/use-toast";
 import { Character, Profile } from "@/types/db";
+import { getCurrentUser } from "@/functions/db/auth";
 
 
 type Props = {
     character: Character;
-    profile: Profile | undefined;
 }
 
 export default function CharacterPageActions(props: Props) {
@@ -23,9 +23,23 @@ export default function CharacterPageActions(props: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isLiking, setIsLiking] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(props.character.is_liked ?? false);
+    const [profile, setProfile] = useState<Profile | undefined>(undefined);
+    const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(false);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const tmp = await getCurrentUser();
+            setProfile(tmp);
+            setIsLoadingProfile(false)
+        }
+        if(!profile && !isLoadingProfile) {
+            setIsLoadingProfile(true);
+            fetchProfile();
+        }
+    }, [profile, isLoadingProfile])
 
     const handleStartChat = async () => {
-        if(!props.profile) {
+        if(!profile) {
             console.error("No profile found");
             toast({
                 title: "Error",
@@ -40,7 +54,7 @@ export default function CharacterPageActions(props: Props) {
     
         const chat = await createChat({
             chatId: uuidv4(),
-            userId: props.profile.user,
+            userId: profile.user,
             characterId: characterId,
             title: "New Chat",
             description: "This is a new chat"
@@ -84,7 +98,7 @@ export default function CharacterPageActions(props: Props) {
         >
             Start Chat
         </Button>
-        {props.profile?.user == props.character.owner.user ?
+        {profile?.user == props.character.owner.user ?
             <Link href={`/c/${props.character.id}/edit`}>
                 <Button
                     color="warning" isDisabled={isLoading}
@@ -94,19 +108,17 @@ export default function CharacterPageActions(props: Props) {
                 </Button>
             </Link>
             :
-            props.profile !== undefined ? 
-                <Button 
-                    color="danger" variant="flat" 
-                    radius="full" size="lg" 
-                    onClick={handleLike}
-                    isLoading={isLiking}
-                    isIconOnly
-                >
-                    <Icon filled={isLiked} >
-                        {isLiked ? "favorite" : "heart_plus"}
-                    </Icon>
-                </Button>
-            : null
+            <Button 
+                color="danger" variant="flat" 
+                radius="full" size="lg" 
+                onClick={handleLike}
+                isLoading={isLiking}
+                isIconOnly
+            >
+                <Icon filled={isLiked} >
+                    {isLiked ? "favorite" : "heart_plus"}
+                </Icon>
+            </Button>
         }
         </>
     )

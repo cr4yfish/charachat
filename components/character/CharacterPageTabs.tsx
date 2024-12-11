@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Character, Profile } from "@/types/db";
+import { Character } from "@/types/db";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import Icon from "../utils/Icon";
@@ -13,7 +13,6 @@ import { Button } from "../utils/Button";
 type Props = {
     character: Character;
     stories: Story[];
-    profile?: Profile;
 }
 
 export default function CharacterPageTabs(props: Props) {
@@ -93,7 +92,7 @@ export default function CharacterPageTabs(props: Props) {
                 <div className="flex flex-row items-center justify-between ">
                     <h2 className="font-bold text-xl">Stories with {props.character.name}</h2>
                     <Link href={`/c/${props.character.id}/story/new`}>
-                        <Button variant="light" color="warning" isIconOnly isDisabled={props.profile === undefined}>
+                        <Button variant="light" color="warning" isIconOnly>
                             <Icon>add</Icon>
                         </Button>
                     </Link>
