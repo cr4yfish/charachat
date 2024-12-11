@@ -1,9 +1,11 @@
 "use client";
 
+import { Profile } from "@/types/db";
 import { useEffect } from "react";
 
 type Props = {
     keyCookie?: string | undefined;
+    profile: Profile | undefined
 }
 
 /**
@@ -15,7 +17,12 @@ export default function SessionStorageManager(props: Props) {
 
     useEffect(() => {
         if(window) {
-            window.sessionStorage.setItem("key", props.keyCookie || "");
+            if(props.profile && props.keyCookie) {
+                window.sessionStorage.setItem("key", props.keyCookie);
+            } else {
+                window.sessionStorage.removeItem("key");
+                window.location.reload();
+            }
         }
     }, [])
 
