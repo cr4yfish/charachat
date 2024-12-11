@@ -468,7 +468,7 @@ export default function ChatMain(props : Props) {
                 loader={isMessagesLoading ? <div className=" w-full flex items-center justify-center py-4" key={"loader"}><Spinner size="sm" /></div> : <span key="loaderempty"></span>}
                 useWindow={false}
                 getScrollParent={() => document.querySelector("#scroller > div")}
-                className="flex flex-col gap-2 pb-32 pt-28 px-4 h-fit min-h-full w-full max-w-6xl justify-self-center"
+                className="flex flex-col gap-2 pb-48 pt-28 px-4 h-fit min-h-full w-full max-w-6xl justify-self-center"
             >
                 {messages.map((message, index) => (
                     (message.content !== _INTRO_MESSAGE(props.chat.character)) &&
