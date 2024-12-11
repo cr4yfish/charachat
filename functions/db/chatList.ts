@@ -14,8 +14,6 @@ const tableName = "chats_characters_last_message";
 
 const chatFormatter = async (db: any): Promise<Chat> => {
 
-    const key = await getKeyServerSide();
-    const keyBuffer = Buffer.from(key, "hex");
 
     const chat = {
         ...db,
@@ -27,6 +25,8 @@ const chatFormatter = async (db: any): Promise<Chat> => {
         }
     } as Chat;
 
+    const key = await getKeyServerSide();
+    const keyBuffer = Buffer.from(key, "hex");
     const decryptedChat = await decryptChat(chat, key);
 
     if(decryptedChat.character.is_private) {
