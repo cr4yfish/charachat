@@ -95,7 +95,7 @@ export default async function Chat({ params } : { params: Params }) {
                     <h1>Error: Didnt find an Encryption Key in your session data!</h1>
                     <p>Please report this issue. To fix this, please log out and then back in.</p>
                 </div>
-                <LoginButton showLogout isLoggedIn={true} />
+                <LoginButton showLogout />
             </div>
             
             </>

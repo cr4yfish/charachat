@@ -578,7 +578,7 @@ export default function ChatMain(props : Props) {
                                         </CardBody>
                                     </Card>
                                 ))}
-                                <Link href={`/user/edit#api`} className="no-underline">
+                                <Link href={`/settings#api`} className="no-underline">
                                     <Card isPressable className="w-[150px] h-[120px] p-0">
                                         <CardBody className="p-0 w-full h-full flex items-center justify-center">
                                                 <Icon>add</Icon>
@@ -636,7 +636,7 @@ export default function ChatMain(props : Props) {
                             Start Chat
                         </Button>       
                         <div className="w-fit">
-                            <ConditionalLink active={!isSetupLoading} href={`/user/edit`} >
+                            <ConditionalLink active={!isSetupLoading} href={`/settings`} >
                                 <Button
                                     radius="full"
                                     color="secondary"

@@ -6,8 +6,6 @@ import Logo from "./Logo";
 import { Spacer } from "@nextui-org/spacer";
 import NavbarButtons from "./NavbarButtons";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { Suspense } from "react";
-import LoginButtonServerWrapper from "./auth/LoginButtonServerWraper";
 
 export default async function NavbarServerWrapper() {
 
@@ -20,9 +18,6 @@ export default async function NavbarServerWrapper() {
             </div>
 
             <div className="flex items-center gap-2">
-                <Suspense fallback={<></>}>
-                    <LoginButtonServerWrapper isSmall />
-                </Suspense>
                 <NavbarButtons />
                 <ThemeSwitcher />
             </div>

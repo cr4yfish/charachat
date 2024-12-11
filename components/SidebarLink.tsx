@@ -6,6 +6,7 @@ import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
 import React, { useEffect } from "react";
 import { Spinner } from "@nextui-org/spinner";
+import { useLoginDialog } from "@/context/LoginDialogProvider";
 
 type SidebarLinkProps = {
     link: string;
@@ -19,7 +20,7 @@ type SidebarLinkProps = {
 
 export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
     const pathname = usePathname();
-
+    const { isLoggedIn } = useLoginDialog();
     const [isActive , setIsActive] = React.useState(pathname === props.link);
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -28,11 +29,11 @@ export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
     }, [props.link, pathname])
 
     return (
-      <ConditionalLink fullWidth active={(props.enableAnon ?? false)} href={props.link} target={props.isExternal ? "_blank" : undefined} >
+      <ConditionalLink fullWidth active={((props.enableAnon || isLoggedIn) ?? false)} href={props.link} target={props.isExternal ? "_blank" : undefined} >
         <Button 
           size="lg" 
           fullWidth
-          isDisabled={!(props.enableAnon) || isLoading}
+          isDisabled={!(props.enableAnon || isLoggedIn) || isLoading}
           color={isActive ? "primary" : "default"}
           onClick={() => {
             if(props.isExternal) return;

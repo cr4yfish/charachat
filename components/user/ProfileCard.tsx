@@ -32,7 +32,7 @@ export default async function ProfileCard() {
                     src: profile?.avatar_link,
                 }}
             />
-            <Link href={`/user/edit`}>
+            <Link href={`/settings`}>
                 <Button isIconOnly color="warning" variant="flat"><Icon>edit</Icon></Button>
             </Link>
         </div>

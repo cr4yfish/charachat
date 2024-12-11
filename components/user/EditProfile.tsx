@@ -129,7 +129,7 @@ export default function EditProfile(props: Props) {
             setProfile(profileToEdit);
         } catch (error) {
             const err = error as Error;
-            console.error(err);
+            console.error("Error decrypting stuff in profile",err);
             toast({
                 title: "Error",
                 description: err.message,
@@ -471,10 +471,7 @@ export default function EditProfile(props: Props) {
                     />
                 </div>
                 <div className="w-fit max-md:w-full">
-                    <LoginButton 
-                        isLoggedIn={profile !== undefined}
-                        showLogout
-                    />
+                    <LoginButton showLogout />
                 </div>
             </div>
 

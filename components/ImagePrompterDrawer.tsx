@@ -153,7 +153,7 @@ export default function ImagePrompterDrawer(props: Props) {
                                             </Button>
                                         ))}
                                     </div>
-                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate. <a href={"/user/edit#api"} className="underline text-blue-500">Get API key</a></p>
+                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate. <a href={"/settings#api"} className="underline text-blue-500">Get API key</a></p>
                                     <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
                                         {imageModels.filter(im => im.provider == "replicate").map((model) => (
                                             <Button
