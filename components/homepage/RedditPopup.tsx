@@ -6,13 +6,10 @@ import { useEffect, useState } from "react";
 import { Button } from "../utils/Button";
 import { DialogClose } from "@radix-ui/react-dialog";
 
-
 export default function RedditPopup() {
     const [dialogOpen, setDialogOpen] = useState(false);
     
-
     useEffect(() => {
-
         if(window) {
             const complete = window.localStorage.getItem("redditComplete");
             if(!complete) {
@@ -20,7 +17,6 @@ export default function RedditPopup() {
                 window.localStorage.setItem("redditComplete", "true");
             }
         }
-
     }, [])
 
     return (
