@@ -195,9 +195,15 @@ export default function EditProfile(props: Props) {
 
         try {
             await deleteUser();
-            window.location.reload();
+            window.location.href = "/";
         } catch (error) {
             console.error(error);
+            const err = error as Error;
+            toast({
+                title: "Error deleting Account",
+                description: err.message,
+                variant: "destructive"
+            })
         }
 
         setIsDeleting(false);
