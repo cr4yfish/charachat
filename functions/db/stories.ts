@@ -32,19 +32,21 @@ const storyReturnFormat = async (db: any): Promise<Story> => {
 
     if(story.is_private && !checkIsEncrypted(story.title)) {
         // private but not encrypted
-
         await updateStory(story);
         return story;
     }
 
-    try {
-        const key = await getKeyServerSide();
-        return await decryptStory(story, key);
-    } catch (error) {
-        console.error("Error decrypting story", error);
+    if(story.is_private) {
+        try {
+            const key = await getKeyServerSide();
+            return await decryptStory(story, key);
+        } catch (error) {
+            console.error("Error decrypting story", error);
+            return story;
+        }
+    } else {
         return story;
     }
-   
 }
 
 export const decryptStory = async (story: Story, key: string): Promise<Story> => {
