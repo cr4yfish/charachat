@@ -5,9 +5,21 @@ import Link from "next/link";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import { getCurrentUser } from "@/functions/db/auth";
+import { Profile } from "@/types/db";
 
 export default async function ProfileCard() {
-    const profile = await getCurrentUser();
+    let profile: Profile | undefined = undefined;
+    
+    try {
+        profile = await getCurrentUser();
+    } catch (e) {
+        const err = e as Error;
+        // Anons are allowed here, not an error
+        if(err.message !== "No user found") {
+            console.error("Error in NavbarServerWrapper", e);
+        };
+        return <></>
+    }
 
     return (
         <>
