@@ -108,7 +108,7 @@ export async function POST(req: Request) {
                 Do NOT include the image in the response.
 
                 You are ${chat?.character.name}, ${summarizedCharDescription}, ${summarizedCharBio}.
-                Your are chatting with ${chat?.persona?.full_name ?? (profile?.first_name + " " + profile?.last_name)} with bio: ${summarizedPersonaBio}.
+                Your are conversing with ${chat?.persona?.full_name ?? (profile?.first_name + " " + profile?.last_name)} with bio: ${summarizedPersonaBio}.
 
                 Your responses have to be in character. Be as authentic as possible. ${responseLengthToPrompt[(chat?.response_length as keyof typeof responseLengthToPrompt) ?? 0]}
                 Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
@@ -116,7 +116,7 @@ export async function POST(req: Request) {
             
                 Actively memorize important keywords and facts in the following conversation and use them.
 
-                This is background information about you:
+                This is background information about you (do NOT quote this in your responses):
                 ${summarizedCharBook}
                 
                 ${chat?.story?.id && chat.story.id.length > 0 && `
