@@ -11,8 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, Tab } from "@nextui-org/tabs";
 
 type Props = {
-    imageLink: string | null;
-    setImageLink: (link: string | null) => void;
+    imageLink: string | null | undefined;
+    setImageLink: (link: string) => void;
     saveImage?: () => void;
     trigger: React.ReactNode;
     initImagePrompt?: string;
@@ -125,7 +125,7 @@ export default function ImagePrompterDrawer(props: Props) {
 
                 <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3">
                     <Tabs aria-label="Promptflow" selectedKey={selectedTab} onSelectionChange={key => setSelectedTab(key as string)} >
-                        <Tab title="Prompt" key="prompt" className="w-full">
+                        <Tab title="Prompt" key="prompt" className="w-full flex flex-col items-center">
                                 <Textarea 
                                     label="Prompt" 
                                     description="Describe the image you want to generate. Use keywords for best results. Order matters."
@@ -169,7 +169,7 @@ export default function ImagePrompterDrawer(props: Props) {
                                     </div>
                                 </div>
                         </Tab>
-                        <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full">
+                        <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img 
                                     src={safeParseLink(props.imageLink ?? "")} 
