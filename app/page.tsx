@@ -16,6 +16,7 @@ import GeneralSwiper from "@/components/homepage/GeneralSwiper";
 import CharacterCard from "@/components/character/CharacterCard";
 import StoryCard from "@/components/story/StoryCard";
 import { getStories } from "@/functions/db/stories";
+import CreatorLeaderboard from "@/components/homepage/CreatorLeaderboard";
 
 export default async function Home() {
   return (
@@ -83,13 +84,18 @@ export default async function Home() {
         </CurrentCategoryProvider>
 
 
-        <div className="flex flex-col gap-2 overflow-x-auto pb-4">
+        <div className="flex flex-col gap-2 pb-4">
           <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
             <h2 className="dark:prose-invert text-lg font-bold">Statistics</h2>
           </div>
-          <Suspense fallback="loading newest stats">
-            <Stats />
+          <Suspense fallback="loading the leaderboard">
+            <CreatorLeaderboard />
           </Suspense>
+          <div className="overflow-x-auto">
+            <Suspense fallback="loading newest stats">
+              <Stats />
+            </Suspense>
+          </div>
         </div>
 
       </div>

@@ -9,7 +9,7 @@ import PersonaCard from "@/components/persona/PersonaCard";
 import StoryCard from "@/components/story/StoryCard";
 import { getUserCharacters } from "@/functions/db/character";
 import { getUserPersonas } from "@/functions/db/personas";
-import { getStats } from "@/functions/db/stats";
+import { getOwnLeaderboardPosition, getStats } from "@/functions/db/stats";
 import { getUserStories } from "@/functions/db/stories";
 import { Suspense } from "react";
 
@@ -17,6 +17,7 @@ export default async function Page() {
     
     const stats = await getStats("creator_chat_stats")
     const mostPopularCharacter = await getUserCharacters({limit: 1, cursor: 0, args: {sort: "chats"}})
+    const leaderboardPosition = await getOwnLeaderboardPosition()
 
     return (
         <>
@@ -67,6 +68,10 @@ export default async function Page() {
                     title={mostPopularCharacter[0].name}
                     description={"Most popular Character"}
                     count={mostPopularCharacter[0].chats + " chats"}
+                />
+                <SmallStatCard 
+                    description={"Position in Leaderboard"}
+                    count={leaderboardPosition.position}
                 />
             </div>
 

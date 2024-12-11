@@ -141,3 +141,11 @@ export type API_Count = {
     api_key: string;
     count: number;
 }
+
+export type Leaderboard = {
+    user: string; // id
+    username: string;
+    avatar_link: string;
+    total_chat_count: number;
+    position?: number;
+}
