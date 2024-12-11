@@ -35,7 +35,7 @@ export const getLeaderboard = cache(async (): Promise<Leaderboard[]> => {
         .select('*')
         .neq("total_chat_count", 0)
         .order("total_chat_count", { ascending: false })
-        .range(0, 10)
+        .range(0, 9)
 
     if (error) {
         throw new Error(error.message)
