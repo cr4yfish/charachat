@@ -28,9 +28,15 @@ export default function CharacterPageActions(props: Props) {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const tmp = await getCurrentUser();
-            setProfile(tmp);
-            setIsLoadingProfile(false)
+            try {
+                const tmp = await getCurrentUser();
+                setProfile(tmp);
+            } catch (error) {
+                console.error("Failed to fetch profile", error);
+            } finally {
+                setIsLoadingProfile(false)
+            }
+
         }
         if(!profile && !isLoadingProfile) {
             setIsLoadingProfile(true);
