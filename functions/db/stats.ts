@@ -3,11 +3,11 @@ import { API_Count, Leaderboard, Stats } from "@/types/db";
 import { createClient } from "@/utils/supabase/supabase";
 import { cache } from "react";
 
-export const getStats = cache(async (tableName: string): Promise<Stats[]> => {
+export const getStats = cache(async (tableName: string, limit=30): Promise<Stats[]> => {
     const { data, error } = await (await createClient())
         .from(tableName)
         .select('*')
-        .range(0, 30)
+        .range(0, limit)
 
     if (error) {
         throw new Error(error.message)
