@@ -178,7 +178,7 @@ export default function ImagePrompterDrawer(props: Props) {
                                     height={512} 
                                 />
                             </div>
-                            <p className="text-xs text-zinc-700 dark:text-zinc-400 w-full text-center mt-1">{imagePrompt}</p>
+                            <p className="text-xs text-zinc-700 dark:text-zinc-400 w-full text-center mt-1 max-w-xl max-sm:hidden">{imagePrompt}</p>
                         </Tab>
                     </Tabs>
 
