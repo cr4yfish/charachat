@@ -27,7 +27,7 @@ export default function ImageWithBlur(props: Props) {
             alt={props.alt}
             className={` transition-all object-cover ${props.className} ${props.radius ?? ""} ${isBlurred ? "filter blur-lg" : ""}`}
             fill={props.fill}
-            onClick={() => setIsBlurred(!isBlurred)}
+            onClick={() => setIsBlurred(false)}
             sizes={props.sizes}
             layout={props.layout}
             width={props.width}
