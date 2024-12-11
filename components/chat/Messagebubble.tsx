@@ -357,6 +357,7 @@ export default function Messagebubble(props: Props) {
         }
 
         props.setMessages((messages) => [...messages, newMessage]);
+        props.setCurrentMessage(newMessage);
 
         try {
             if(!props.chat || !props.chat.character || !props.user) {

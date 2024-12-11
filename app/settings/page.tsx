@@ -17,8 +17,7 @@ export default async function EditUserPage() {
             await logout();
             throw new Error("Profile is encrypted. Please log in again to decrypt it.");
         }
-    } catch (error) {
-        console.error(error);
+    } catch {
         redirect("/auth");
     }
 

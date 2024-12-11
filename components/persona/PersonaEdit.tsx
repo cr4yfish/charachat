@@ -110,7 +110,7 @@ export default function PersonaEdit(props: Props) {
         // Delete the Story
         try {
             await deletePersona(persona.id);
-            window.location.href = `/user/personas`;
+            window.location.href = `/personas`;
         } catch (e) {
             console.error(e);
         }

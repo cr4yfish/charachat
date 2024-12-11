@@ -1,12 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
 import FeedbackButton from "./FeedbackButton";
+import ConditionalLink from "./utils/ConditionalLink";
+import { useLoginDialog } from "@/context/LoginDialogProvider";
 
 export default function NavbarButtons() {
+    const { openDialog, isLoggedIn } = useLoginDialog();
     const pathname = usePathname();
 
     // Dont render in a chat page
@@ -15,13 +17,17 @@ export default function NavbarButtons() {
     return (
         <>
         {pathname !== "/c/new" &&
-            <Link href={`/c/new`}>
-                <Button radius="full" color="primary" startContent={<Icon filled>add</Icon>}>
+            <ConditionalLink active={isLoggedIn} href={`/c/new`}>
+                <Button onClick={() => {
+                    if(!isLoggedIn) {
+                        openDialog();
+                    }
+                }} radius="full" color="primary" startContent={<Icon filled>add</Icon>}>
                     Character
                 </Button>
-            </Link>
+            </ConditionalLink>
         }
-         <FeedbackButton source={pathname} />
+        <FeedbackButton source={pathname} />
         </>
     )
 }

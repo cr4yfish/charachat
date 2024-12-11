@@ -23,23 +23,29 @@ export default function CharacterPageActions(props: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isLiking, setIsLiking] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(props.character.is_liked ?? false);
-    const [profile, setProfile] = useState<Profile | undefined>(undefined);
+    const [profile, setProfile] = useState<Profile | undefined | boolean>(undefined);
     const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const tmp = await getCurrentUser();
-            setProfile(tmp);
-            setIsLoadingProfile(false)
+            try {
+                const tmp = await getCurrentUser();
+                setProfile(tmp);
+            } catch {
+                setProfile(false);
+            } finally {
+                setIsLoadingProfile(false)
+            }
+
         }
-        if(!profile && !isLoadingProfile) {
+        if(!profile && !isLoadingProfile && (profile !== false)) {
             setIsLoadingProfile(true);
             fetchProfile();
         }
     }, [profile, isLoadingProfile])
 
     const handleStartChat = async () => {
-        if(!profile) {
+        if(!profile || typeof profile === "boolean") {
             console.error("No profile found");
             toast({
                 title: "Error",
@@ -98,7 +104,7 @@ export default function CharacterPageActions(props: Props) {
         >
             Start Chat
         </Button>
-        {profile?.user == props.character.owner.user ?
+        {typeof profile !== "boolean" && profile?.user == props.character.owner.user ?
             <Link href={`/c/${props.character.id}/edit`}>
                 <Button
                     color="warning" isDisabled={isLoading}
