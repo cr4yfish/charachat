@@ -24,7 +24,7 @@ export default function ProfileCard(props: Props) {
                     src: props.profile?.avatar_link,
                 }}
             />
-            <Link href={`/user/${props.profile?.user}/edit`}>
+            <Link href={`/user/edit`}>
                 <Button isIconOnly color="warning" variant="flat"><Icon>edit</Icon></Button>
             </Link>
         </div>
