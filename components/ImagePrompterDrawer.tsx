@@ -8,6 +8,7 @@ import { isValidURL, safeParseLink } from "@/lib/utils";
 import { ImageModel, imageModels } from "@/lib/ai";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, Tab } from "@nextui-org/tabs";
 
 type Props = {
     imageLink: string | null;
@@ -22,6 +23,7 @@ export default function ImagePrompterDrawer(props: Props) {
     const [imageModel, setImageModel] = useState<ImageModel>(imageModels[0]);
     const [imagePrompt, setImagePrompt] = useState("");
     const [isGenerateLoading, setIsGenerateLoading] = useState(false);
+    const [selectedTab, setSelectedTab] = useState("prompt");
     const { toast } = useToast();
 
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -78,6 +80,7 @@ export default function ImagePrompterDrawer(props: Props) {
                     throw new Error("Got no image link from the server");
                 }
                 handleSetImageLink(link);
+                setSelectedTab("image");
             } else {
                 const text = await res.text();
                 console.error("Text:",text);
@@ -120,79 +123,87 @@ export default function ImagePrompterDrawer(props: Props) {
                     <DrawerTitle>Image Generator</DrawerTitle>
                 </DrawerHeader>
 
-                <div className="p-4 flex flex-col max-md:flex-col-reverse items-center justify-center flex-wrap gap-3">
-                    <div className="overflow-hidden rounded-xl">
-                        <img 
-                            src={safeParseLink(props.imageLink ?? "")} 
-                            alt="" 
-                            width={512} 
-                            height={512} 
-                        />
-                    </div>
+                <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3">
+                    <Tabs aria-label="Promptflow" selectedKey={selectedTab} onSelectionChange={key => setSelectedTab(key as string)} >
+                        <Tab title="Prompt" key="prompt" className="w-full">
+                                <Textarea 
+                                    label="Prompt" 
+                                    description="Describe the image you want to generate. Use keywords for best results. Order matters."
+                                    className="w-full max-w-xl"
+                                    autoCorrect="off"
+                                    autoComplete="off"
+                                    minRows={8}
+                                    value={imagePrompt}
+                                    onValueChange={setImagePrompt}
+                                    isDisabled={props.initPromptLoading}
+                                />
+                                
+                                <div className="flex flex-col w-full justify-center items-center relative gap-2">
+                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times and timeouts)</p>
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                        {imageModels.filter(im => im.provider !== "replicate").map((model) => (
+                                            <Button
+                                                className="min-w-[100px]"
+                                                key={model.id}
+                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                                size="sm"
+                                                onClick={() => setImageModel(model)}
+                                            >
+                                                {model.style}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate. <a href={"/user/edit#api"} className="underline text-blue-500">Get API key</a></p>
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                        {imageModels.filter(im => im.provider == "replicate").map((model) => (
+                                            <Button
+                                                className="min-w-[100px]"
+                                                key={model.id}
+                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                                size="sm"
+                                                onClick={() => setImageModel(model)}
+                                            >
+                                                {model.style}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+                        </Tab>
+                        <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full">
+                            <div className="overflow-hidden rounded-xl">
+                                <img 
+                                    src={safeParseLink(props.imageLink ?? "")} 
+                                    alt="" 
+                                    width={512} 
+                                    height={512} 
+                                />
+                            </div>
+                            <p className="text-xs text-zinc-700 dark:text-zinc-400 w-full text-center mt-1">{imagePrompt}</p>
+                        </Tab>
+                    </Tabs>
 
-                    <div className="flex flex-col w-full justify-center items-center relative gap-2">
-                        <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times and timeouts)</p>
-                        <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
-                            {imageModels.filter(im => im.provider !== "replicate").map((model) => (
-                                <Button
-                                    className="min-w-[100px]"
-                                    key={model.id}
-                                    variant={imageModel.id === model.id ? "solid" : "ghost"}
-                                    size="sm"
-                                    onClick={() => setImageModel(model)}
-                                >
-                                    {model.style}
-                                </Button>
-                            ))}
-                        </div>
-                        <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate</p>
-                        <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
-                            {imageModels.filter(im => im.provider == "replicate").map((model) => (
-                                <Button
-                                    className="min-w-[100px]"
-                                    key={model.id}
-                                    variant={imageModel.id === model.id ? "solid" : "ghost"}
-                                    size="sm"
-                                    onClick={() => setImageModel(model)}
-                                >
-                                    {model.style}
-                                </Button>
-                            ))}
-                        </div>
-                    </div>
-                    <Textarea 
-                        label="Prompt" 
-                        description="Describe the image you want to generate. Use keywords for best results. Order matters."
-                        className="w-full max-w-xl"
-                        autoCorrect="off"
-                        autoComplete="off"
-                        value={imagePrompt}
-                        onValueChange={setImagePrompt}
-                        isDisabled={props.initPromptLoading}
-                        endContent={
-                            <Button 
-                                isLoading={props.initPromptLoading}
-                                isIconOnly 
-                                onClick={() => {
-                                    if(isGenerateLoading) {
-                                        console.log("aborting");
-                                        handleAbort();
-                                    } else {
-                                        handleGenerateImage();
-                                    }
-                                }}
-                                radius="full"
-                                color="primary"
-                            >
-                                <Icon filled>{isGenerateLoading ? "stop" : "send"}</Icon>
-                            </Button>
-                        } 
-                    />
+
                 </div>
 
-                <DrawerFooter className="flex items-center">
-                    <DrawerClose disabled={!props.imageLink} asChild className="max-w-xl">
-                        <Button onClick={props.saveImage} isDisabled={!props.imageLink} color="primary" size="lg" fullWidth>Add to Chat</Button>
+                <DrawerFooter className="flex flex-row justify-center items-center w-full">
+                    <Button 
+                        isLoading={props.initPromptLoading}
+                        onClick={() => {
+                            if(isGenerateLoading) {
+                                console.log("aborting");
+                                handleAbort();
+                            } else {
+                                handleGenerateImage();
+                            }
+                        }}
+                        radius="full"
+                        color={isGenerateLoading ? "danger" : "primary"}
+                        endContent={<Icon filled>{isGenerateLoading ? "stop" : "send"}</Icon>}
+                    >
+                        {isGenerateLoading ? "Abort" : "Generate"}
+                    </Button>
+                    <DrawerClose disabled={!props.imageLink} asChild>
+                        <Button onClick={props.saveImage} isDisabled={!props.imageLink} color="secondary" endContent={<Icon>add</Icon>} radius="full">Add to Chat</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
