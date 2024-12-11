@@ -10,9 +10,9 @@ import { Toaster } from "@/components/ui/toaster"
 import NavbarServerWrapper from "@/components/NavbarServerWrapper";
 import Blurrer from "@/components/utils/Blurrer";
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import SessionStorageManager from "@/components/SessionStorageManager";
-import { cookies } from "next/headers";
 import RedditPopup from "@/components/homepage/RedditPopup";
+import SessionStorageManagerServer from "@/components/SessionStorageManagerServer";
+import { Suspense } from "react";
 
 
 const montserrat = Montserrat({
@@ -72,9 +72,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const cookieStore = await cookies();
-  const keyCookie = cookieStore.get("key")?.value;
-
   return (
     <html suppressHydrationWarning lang="en" className="h-screen w-screen overflow-hidden">
       <body className={`${montserrat.className} h-screen w-screen overflow-hidden antialiased bg-zinc-50/75 dark:bg-neutral-900/75`} >
@@ -93,7 +90,9 @@ export default async function RootLayout({
                   showSpinner={false}
                 />
                 <NavbarServerWrapper />
-                <SessionStorageManager keyCookie={keyCookie} />
+                <Suspense>
+                  <SessionStorageManagerServer />
+                </Suspense>
                 <Toaster />
                 <Blurrer />
                 <RedditPopup />
