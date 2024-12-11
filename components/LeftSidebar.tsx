@@ -41,14 +41,14 @@ export async function LeftSidebar() {
         </SidebarGroup>
       </SidebarHeader>
 
+      {isLoggedIn &&
       <SidebarContent className="p-2">
         <SidebarGroupLabel className="text-lg font-bold">Chats</SidebarGroupLabel>
-        {isLoggedIn &&
         <Suspense fallback={<SidebarChatListFallback />}>
           <SidebarChatListLoader />
         </Suspense>
-        }
       </SidebarContent>
+      }
 
       <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
         <LoginButton />    
