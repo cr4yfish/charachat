@@ -125,7 +125,7 @@ export default function ImagePrompterDrawer(props: Props) {
 
                 <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3">
                     <Tabs aria-label="Promptflow" selectedKey={selectedTab} onSelectionChange={key => setSelectedTab(key as string)} >
-                        <Tab title="Prompt" key="prompt" className="w-full flex flex-col items-center">
+                        <Tab title="Prompt" key="prompt" className="w-full flex flex-col gap-2 items-center">
                                 <Textarea 
                                     label="Prompt" 
                                     description="Describe the image you want to generate. Use keywords for best results. Order matters."
