@@ -131,7 +131,7 @@ export default function ImagePrompterDrawer(props: Props) {
                     </div>
 
                     <div className="flex flex-col w-full justify-center items-center relative gap-2">
-                        <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times)</p>
+                        <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times and timeouts)</p>
                         <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
                             {imageModels.filter(im => im.provider !== "replicate").map((model) => (
                                 <Button
