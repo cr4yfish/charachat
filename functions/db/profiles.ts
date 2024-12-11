@@ -160,5 +160,10 @@ export const deleteUser = async () => {
         throw error;
     }
 
-    await deleteAccount();
+    const { error: deleteError } = await deleteAccount();
+
+    if(deleteError) {
+        console.error("Error deleting account", deleteError);
+        throw new Error("Error deleting account");
+    }
 }
