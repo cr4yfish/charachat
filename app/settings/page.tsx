@@ -18,7 +18,7 @@ export default async function EditUserPage() {
             throw new Error("Profile is encrypted. Please log in again to decrypt it.");
         }
     } catch {
-        redirect("/");
+        redirect("/auth");
     }
 
     return (
