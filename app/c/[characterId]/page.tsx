@@ -57,14 +57,25 @@ export async function generateStaticParams() {
         .from("characters")
         .select("id")
         .order("created_at", { ascending: false })
-        .range(0, 10);   
+        .range(0, 5);   
 
     if(error2) {
         console.error("Error in c/characterId generateStaticParams: ", error2);
         throw new Error("Error fetching newest characters");
     }
 
-    return [...popularCharacters, ...newestCharacters].map((character) => ({ characterId: character.id }));
+    const { data: trendingCharacters, error: error3} = await client
+        .from("characters_ordered_by_chats")
+        .select("id")
+        .order("recent_chat_count", { ascending: false })
+        .range(0, 5);
+
+    if(error3) {
+        console.error("Error in c/characterId generateStaticParams: ", error3);
+        throw new Error("Error fetching trending characters");
+    }
+
+    return [...popularCharacters, ...newestCharacters, ...trendingCharacters].map((character) => ({ characterId: character.id }));
 }
 
 export default async function CharacterView({ params }: { params: Params }) {
