@@ -9,15 +9,13 @@ import { Spinner } from "@nextui-org/spinner";
 
 type SidebarLinkProps = {
     link: string;
-    isLoggedIn: boolean;
     icon: string;
     label: string;
     radius?: "none" | "full" | "sm" | "md" | "lg";
     variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost",
     enableAnon?: boolean;
     isExternal?: boolean;
-  }
-  
+}
 
 export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
     const pathname = usePathname();
@@ -30,11 +28,11 @@ export default function SidebarLink(props: SidebarLinkProps): React.ReactNode {
     }, [props.link, pathname])
 
     return (
-      <ConditionalLink fullWidth active={props.isLoggedIn || (props.enableAnon ?? false)} href={props.link} target={props.isExternal ? "_blank" : undefined} >
+      <ConditionalLink fullWidth active={(props.enableAnon ?? false)} href={props.link} target={props.isExternal ? "_blank" : undefined} >
         <Button 
           size="lg" 
           fullWidth
-          isDisabled={!(props.isLoggedIn || props.enableAnon) || isLoading}
+          isDisabled={!(props.enableAnon) || isLoading}
           color={isActive ? "primary" : "default"}
           onClick={() => {
             if(props.isExternal) return;

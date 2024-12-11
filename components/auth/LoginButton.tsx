@@ -5,7 +5,6 @@ import { logout } from "@/functions/db/auth";
 import { useState } from "react";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
-
 import {
     Dialog,
     DialogContent,
@@ -17,7 +16,7 @@ import {
 import LoginCard from "./LoginCard";
   
 type Props = {
-    isLoggedIn: boolean;
+    isLoggedIn?: boolean;
     showLogout?: boolean;
     isSmall?: boolean;
 }
@@ -32,9 +31,7 @@ export default function LoginButton(props: Props) {
         setIsLoggingOut(true);
         setIsLoggedIn(false);
         await logout();
-
         sessionStorage.removeItem("key");
-
         router.refresh();
     }
 
