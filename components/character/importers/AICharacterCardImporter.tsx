@@ -69,7 +69,6 @@ export default function AICharacterCardsImporter(props: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isImporting, setIsImporting] = useState<boolean>(false);
 
-
     const handleImportCharacter = async (page: CharaterPage) => {
         setIsImporting(true);
 
@@ -179,7 +178,12 @@ export default function AICharacterCardsImporter(props: Props) {
         }
 
         searchTimeout.current = setTimeout(() => {
-            handleSearch(search);
+            try {
+                handleSearch(search);
+            } catch {
+                console.error("Error searching AI Character Cards");
+            }
+           
         }, 500);
 
         return () => {
