@@ -15,7 +15,8 @@ type Props = {
     hasLink: boolean,
     fullWidth?: boolean,
     isSmall?: boolean,
-    noBg?: boolean
+    noBg?: boolean,
+    bgOverwrite?: string,
 }
 
 export default function CharacterCard(props: Props) {
@@ -35,8 +36,10 @@ export default function CharacterCard(props: Props) {
                         hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40
                         ${props.fullWidth && "w-full"} 
                         ${props.isSmall && "h-full"}
-                        ${props.noBg && "dark:bg-transparent"} 
-                    `}>
+                        ${props.noBg && "bg-transparent dark:bg-transparent"} 
+                        ${props.bgOverwrite}
+                    `}
+                    >
                     <CardBody className="flex flex-row gap-4">
                         
                         <div className="flex items-center justify-center">
