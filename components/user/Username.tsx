@@ -17,7 +17,7 @@ export default function Username(props: Props) {
     return (
         <>
         <ConditionalLink active={props.hasLink ?? false} href={`/user/${props.profile.user}`} className={`flex items-center gap-1 ${props.fullWidth && "w-full"}`}>
-            {props.hasImage && <Avatar src={safeParseLink(props.profile.avatar_link)} alt="" className="w-[20px] h-[20px]" />}
+            {props.hasImage && <Avatar imgProps={{ sizes: "20px" }} src={safeParseLink(props.profile.avatar_link)} alt="" className="w-[20px] h-[20px]" />}
             <p className={` dark:text-zinc-400 text-${props.textSize ?? "xs"}`}>{props.onlyName ? "" : "By @"} {props.profile.username}</p>
         </ConditionalLink>
         </>
