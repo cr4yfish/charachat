@@ -6,7 +6,6 @@ import { CurrentCategoryProvider } from "@/context/CurrentCategoryProvider";
 import { Suspense } from "react";
 import InfiniteSwiperLoaderFallback from "@/components/InfiniteSwiperLoaderFallback";
 import CategoriesLoader from "@/components/homepage/CategoriesLoader";
-import SpotlightLoader from "@/components/homepage/SpotlightLoader";
 import News from "@/components/homepage/News";
 import SpotlighFallback from "@/components/homepage/SpotlightFallback";
 import { SmallStats } from "@/components/homepage/SmallStats";
@@ -16,6 +15,7 @@ import CharacterCard from "@/components/character/CharacterCard";
 import StoryCard from "@/components/story/StoryCard";
 import { getStories } from "@/functions/db/stories";
 import dynamic from "next/dynamic";
+import Spotlight from "@/components/Spotlight";
 
 const Stats = dynamic(() => import("@/components/homepage/Stats"), { loading: () => <Skeleton className="w-full h-[758px]" /> });
 
@@ -27,7 +27,7 @@ export default async function Home() {
         <Searchbar />
 
         <Suspense fallback={<SpotlighFallback />}>
-          <SpotlightLoader />
+          <Spotlight />
         </Suspense>
 
         <News />
