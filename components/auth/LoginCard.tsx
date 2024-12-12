@@ -10,7 +10,6 @@ import { FormEvent, useState } from "react";
 import { login, LoginResponse, signUp } from "@/functions/db/auth";
 
 import { loginSchema, signUpSchema } from "@/lib/schemas";
-import { generateKey } from "@/lib/crypto";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import ImageInputWithAI from "../ImageInputWithAI";
 
@@ -79,10 +78,6 @@ export default function LoginCard(props: Props) {
             }
 
             if(success) {
-                const keyBuffer = generateKey(password, email);
-
-                sessionStorage.setItem("key", keyBuffer.toString("hex"));
-
                 if(props.shouldRedirect) {
                     router.replace(props.redirectPath ?? "/");
                 } else {

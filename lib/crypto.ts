@@ -5,11 +5,10 @@ export const checkIsEncrypted = (message: string): boolean => {
 }
 
 export const getKeyClientSide = (): string => {
-    const key = sessionStorage.getItem('key');
-
-    if(!key) {
-        throw new Error("Key not found in session storage");
-    }
+    if(!window) throw new Error("Function was called on server");
+    
+    const key = document.cookie.split(";").map(cookie => cookie.trim()).find(cookie => cookie.startsWith("key="))?.split("=")[1];
+    if(!key) { throw new Error("Key not found in cookies");  }
 
     return key;
 }

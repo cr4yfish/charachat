@@ -22,7 +22,6 @@ export default function LoginButton(props: Props) {
         setIsLoggingOut(true);
         setIsLoggedIn(false);
         await logout();
-        sessionStorage.removeItem("key");
         router.refresh();
     }
 

@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { cookies } from "next/headers";
 import { cache } from "react";
-
 import { createClient } from "@/utils/supabase/supabase";
 import { Chat } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
@@ -22,11 +20,8 @@ const chatMatcher = `
 const tableName = "chats_overview";
 
 const chatFormatter = async (db: any): Promise<Chat> => {
-    const cookiesStore = await cookies();
-
-    const key = cookiesStore.get("key")?.value;
-
-    if(!key) { throw new Error("No key"); }
+    
+    const key = await getKeyServerSide();
 
     const chat = {
         ...db,

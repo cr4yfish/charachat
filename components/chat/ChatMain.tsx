@@ -281,7 +281,7 @@ export default function ChatMain(props : Props) {
     const loadMoreMessages = async () => {
         setIsMessagesLoading(true);
         
-        const key = sessionStorage.getItem("key");
+        const key = getKeyClientSide();
 
         if(!key) {
             console.error("No key found in session storage. Log out and back in to fix this.");
@@ -688,29 +688,33 @@ export default function ChatMain(props : Props) {
                     </motion.div>
                 }
                 </AnimatePresence>
-                
-                <Textarea 
-                    placeholder="Send a message" 
-                    size="lg" 
-                    radius="full" 
-                    value={input}
-                    ref={inputRef}
-                    name="prompt"
-                    onChange={handleInputChange}
-                    onKeyDown={(e) => handleInputKeyDown(e)}
-                    minRows={1}
-                    maxRows={15}
-                    classNames={{
-                        inputWrapper: "pr-1 bg-content2/50 backdrop-blur-xl",
-                        innerWrapper: "flex items-center justify-center",
-                    }}
-                    className={`max-w-xs max-md:max-w-xs transition-all ${isInputFocused && "max-w-lg max-md:max-w-full"} `}
-                    endContent={
-                        <Button id="send-btn" className="self-end" type="submit" color="primary" radius="full" isIconOnly>
-                            <Icon filled>{isLoading ? "stop" : "send"}</Icon>
-                        </Button>
-                    } 
-                />
+                <div className="flex flex-row items-center gap-2 w-full justify-center">
+                    <Button size="lg" isIconOnly radius="full" variant="flat">
+                        <Icon filled>mic</Icon>
+                    </Button>
+                    <Textarea 
+                        placeholder="Send a message" 
+                        size="lg" 
+                        radius="full" 
+                        value={input}
+                        ref={inputRef}
+                        name="prompt"
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => handleInputKeyDown(e)}
+                        minRows={1}
+                        maxRows={15}
+                        classNames={{
+                            inputWrapper: "pr-1 bg-content2/50 backdrop-blur-xl",
+                            innerWrapper: "flex items-center justify-center",
+                        }}
+                        className={`max-w-xs max-md:max-w-xs transition-all ${isInputFocused && "max-w-lg max-md:max-w-full"} `}
+                        endContent={
+                            <Button id="send-btn" className="self-end" type="submit" color="primary" radius="full" isIconOnly>
+                                <Icon filled>{isLoading ? "stop" : "send"}</Icon>
+                            </Button>
+                        } 
+                    />
+                </div>
             </motion.form >
             }
         </AnimatePresence>

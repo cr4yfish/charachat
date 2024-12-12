@@ -11,8 +11,6 @@ import NavbarServerWrapper from "@/components/NavbarServerWrapper";
 import Blurrer from "@/components/utils/Blurrer";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import RedditPopup from "@/components/homepage/RedditPopup";
-import SessionStorageManagerServer from "@/components/SessionStorageManagerServer";
-import { Suspense } from "react";
 import LoginDialog from "@/components/auth/LoginDialog";
 import { LoginDialogProvider } from "@/context/LoginDialogProvider";
 
@@ -93,9 +91,6 @@ export default async function RootLayout({
                     showSpinner={false}
                   />
                   <NavbarServerWrapper />
-                  <Suspense>
-                    <SessionStorageManagerServer />
-                  </Suspense>
                   <Toaster />
                   <LoginDialog />
                   <Blurrer />

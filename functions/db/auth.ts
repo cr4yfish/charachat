@@ -1,15 +1,13 @@
 "use server";
 
-import { cookies } from "next/headers";
-
 import { createAdminClient, createClient } from "@/utils/supabase/supabase";
 import { cache } from "react";
 import { getProfile } from "./profiles";
 import { Profile } from "@/types/db";
-
 import { loginSchema, signUpSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
-import { encryptMessage, generateKey } from "@/lib/crypto";
+import { encryptMessage } from "@/lib/crypto";
+import { removeKeyCookie, setKeyCookie } from "../serverHelpers";
 
 export const checkIsLoggedIn = async () => {
     const { data: { user }, error } = await (await createClient()).auth.getUser();
@@ -73,9 +71,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     }
 
     // set cookie with key
-    const keyBuffer = generateKey(password, email);
-
-    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true, sameSite: "strict", priority: "high", maxAge: 60 * 60 * 24 * 365 });
+    await setKeyCookie(password, email);
 
     return {
         success: true,
@@ -131,9 +127,7 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
     }
 
     // set cookie with key
-    const keyBuffer = generateKey(data.password, data.email);
-
-    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true });
+    const keyBuffer = await setKeyCookie(data.password, data.email);
 
     const { error: profilesError } = await (await createClient()).from("profiles").insert({
         user: user.id,
@@ -165,7 +159,7 @@ export const signUp = async (props: SignUpProps): Promise<LoginResponse> => {
 export const logout = async () => {
     await (await createClient()).auth.signOut();
 
-    (await cookies()).set("key", "", { secure: true });
+    await removeKeyCookie();
 
     revalidatePath("/");
 }

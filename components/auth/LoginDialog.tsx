@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 
 import { useLoginDialog } from "@/context/LoginDialogProvider";
+import { getKeyClientSide } from "@/lib/crypto";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 
@@ -19,7 +20,7 @@ export default function LoginDialog() {
 
     useEffect(() => {
         if(!isLoggedIn) {
-            const key = sessionStorage.getItem("key")
+            const key = getKeyClientSide();
             if(key) {
                 setIsLoggedIn(true);
             }

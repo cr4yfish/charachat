@@ -1,13 +1,10 @@
 "use server";
 
-import { cookies } from "next/headers";
 import ChatMain from "@/components/chat/ChatMain";
 import ChatSettingsDrawer from "@/components/chat/ChatSettingsDrawer";
-
 import { getCurrentUser } from "@/functions/db/auth";
 import { getChat } from "@/functions/db/chat"
 import { getMessages } from "@/functions/db/messages";
-
 import { Chat as ChatType, Message, Profile } from "@/types/db";
 import { redirect } from "next/navigation";
 import LoginButton from "@/components/auth/LoginButton";
@@ -17,6 +14,7 @@ import { SharedChatProvider } from "@/context/SharedChatSettings";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Metadata } from "next";
 import { Avatar } from "@nextui-org/avatar";
+import { getKeyServerSide } from "@/functions/serverHelpers";
 
 type Params = Promise<{ chatId: string }>
 
@@ -42,7 +40,6 @@ export async function generateMetadata(
 
 export default async function Chat({ params } : { params: Params }) {
     const { chatId } = await params;
-    const cookieStore = await cookies();
 
     let chat: ChatType | null = null;
 
@@ -83,11 +80,10 @@ export default async function Chat({ params } : { params: Params }) {
 
     let initMessages: Message[] = [];
 
-    const keyCookie = cookieStore.get("key");
-    const key = keyCookie?.value;
+    const key = await getKeyServerSide();
 
     if (!key) {
-        console.error("No key cookie");
+        console.error("No key");
         return (
             <>
             <div className="px-4 py-6 flex flex-col items-center justify-center">

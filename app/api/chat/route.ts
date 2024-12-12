@@ -1,5 +1,5 @@
 "use server";
-import { cookies } from 'next/headers';
+
 import { z } from "zod";
 import { Character, Chat, Message, Profile } from '@/types/db';
 import { convertToCoreMessages, streamText, Message as AIMessage, tool } from 'ai';
@@ -9,6 +9,7 @@ import { _INTRO_MESSAGE, replaceVariables } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { addMemory, banStringsTool, chatRenameTool, generateImageOfCharacterTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
 import { ModelId } from '@/lib/ai';
+import { getKeyServerSide } from '@/functions/serverHelpers';
 
 // map response length to prompt content
 const responseLengthToPrompt = {
@@ -20,8 +21,6 @@ const responseLengthToPrompt = {
 export async function POST(req: Request) {
     try {
         const { messages, profile: initProfile, chat: initChat, selfDestruct } = await req.json();
-        const cookiesStore = await cookies();
-
         const profile: Profile = initProfile as Profile;
         const chat: Chat = initChat as Chat;
 
@@ -48,8 +47,7 @@ export async function POST(req: Request) {
                 content: latestMessage.content,
             }
 
-            const key = cookiesStore.get("key")?.value;
-            if(!key) { throw new Error("No key cookie"); }
+            const key = await getKeyServerSide();
             
             try {
                 await addMessage(message, key);

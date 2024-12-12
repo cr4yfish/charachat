@@ -12,7 +12,7 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import { deleteUser, updateProfile } from "@/functions/db/profiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { decryptMessage, encryptMessage } from "@/lib/crypto";
+import { decryptMessage, encryptMessage, getKeyClientSide } from "@/lib/crypto";
 import { imageModels, LLMs, ProviderId } from "@/lib/ai";
 import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
@@ -103,8 +103,7 @@ export default function EditProfile(props: Props) {
                 }
             }
 
-            const key = sessionStorage.getItem('key');
-
+            const key = getKeyClientSide();
             if(!key) { throw new Error("No key found in session storage. Log out and back in to fix this.");  }
 
             const keyBuffer = Buffer.from(key, 'hex');
@@ -143,7 +142,7 @@ export default function EditProfile(props: Props) {
         setIsSaving(true);
         try {
             // Encrypt API Keys
-            const key = sessionStorage.getItem('key');
+            const key = getKeyClientSide();
 
             if(!key) {
                 throw new Error("No key found in session storage. Log out and back in to fix this.");

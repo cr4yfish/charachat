@@ -1,5 +1,6 @@
 "use server";
 
+import { generateKey } from '@/lib/crypto';
 import { cookies } from 'next/headers';
 
 export const getKeyServerSide = async (): Promise<string> => {
@@ -13,6 +14,15 @@ export const getKeyServerSide = async (): Promise<string> => {
     return key;
 }
 
+export const setKeyCookie = async (password: string, email: string) => {
+    const keyBuffer = generateKey(password, email);
+    (await cookies()).set("key", keyBuffer.toString("hex"), { secure: true, sameSite: "strict", priority: "high", maxAge: 60 * 60 * 24 * 365 });
+    return keyBuffer;
+}
+
+export const removeKeyCookie = async () => {
+    (await cookies()).set("key", "", { secure: true, sameSite: "strict", priority: "high", maxAge: 0 });
+}
 
 export async function searchFandomPages(search: string) {
     const res = await fetch(`https://community.fandom.com/wiki/Special:Search?query=${search}&scope=cross-wiki`);
