@@ -18,7 +18,7 @@ export default async function Spotlight(props: Props) {
         <div className="w-full h-[320px] relative overflow-visible">
             <Card 
                 className={`
-                    bg-zinc-50/70 dark:bg-zinc-600/10 relative overflow-hidden rounded-3xl
+                    h-full bg-zinc-50/70 dark:bg-zinc-600/10 relative overflow-hidden rounded-3xl
                 `}
             >
                 <CardHeader>
@@ -36,6 +36,7 @@ export default async function Spotlight(props: Props) {
                     src={safeParseLink(props.character.image_link)} 
                     fill
                     quality={1}
+                    priority
                     alt="" 
                     sizes="100vw"
                 />
