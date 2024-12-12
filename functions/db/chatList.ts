@@ -13,28 +13,31 @@ const chatMatcher = `*`
 const tableName = "chats_characters_last_message";
 
 const chatFormatter = async (db: any): Promise<Chat> => {
+    try {
+        const chat = {
+            ...db,
+            character: {
+                id: db.character_id,
+                name: db.character_name,
+                image_link: db.character_image_link,
+                is_private: db.character_is_private
+            }
+        } as Chat;
 
+        const key = await getKeyServerSide();
+        const keyBuffer = Buffer.from(key, "hex");
+        const decryptedChat = await decryptChat(chat, key);
 
-    const chat = {
-        ...db,
-        character: {
-            id: db.character_id,
-            name: db.character_name,
-            image_link: db.character_image_link,
-            is_private: db.character_is_private
+        if(decryptedChat.character.is_private) {
+            decryptedChat.character.name = decryptMessage(decryptedChat.character.name, keyBuffer);
+            decryptedChat.character.image_link = decryptMessage(decryptedChat.character.image_link ?? "", keyBuffer);
         }
-    } as Chat;
 
-    const key = await getKeyServerSide();
-    const keyBuffer = Buffer.from(key, "hex");
-    const decryptedChat = await decryptChat(chat, key);
-
-    if(decryptedChat.character.is_private) {
-        decryptedChat.character.name = decryptMessage(decryptedChat.character.name, keyBuffer);
-        decryptedChat.character.image_link = decryptMessage(decryptedChat.character.image_link ?? "", keyBuffer);
+        return decryptedChat;
+    } catch (error) {
+        console.error("Error formatting chat", error);
+        throw error;
     }
-
-    return decryptedChat;
 }
 
 export const getChats = cache(async (props: LoadMoreProps): Promise<Chat[]> => {
