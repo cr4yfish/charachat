@@ -9,14 +9,15 @@ import CategoriesLoader from "@/components/homepage/CategoriesLoader";
 import SpotlightLoader from "@/components/homepage/SpotlightLoader";
 import News from "@/components/homepage/News";
 import SpotlighFallback from "@/components/homepage/SpotlightFallback";
-import { Stats } from "@/components/homepage/Stats";
 import { SmallStats } from "@/components/homepage/SmallStats";
 import { Skeleton } from "@/components/ui/skeleton";
 import GeneralSwiper from "@/components/homepage/GeneralSwiper";
 import CharacterCard from "@/components/character/CharacterCard";
 import StoryCard from "@/components/story/StoryCard";
 import { getStories } from "@/functions/db/stories";
-import CreatorLeaderboard from "@/components/homepage/CreatorLeaderboard";
+import dynamic from "next/dynamic";
+
+const Stats = dynamic(() => import("@/components/homepage/Stats"), { loading: () => <Skeleton className="w-full h-[758px]" /> });
 
 export default async function Home() {
   return (
@@ -84,19 +85,7 @@ export default async function Home() {
         </CurrentCategoryProvider>
 
 
-        <div className="flex flex-col gap-2 pb-4">
-          <div className="prose dark:prose-invert prose-p:m-0 prose-h2:m-0">
-            <h2 className="dark:prose-invert text-lg font-bold">Statistics</h2>
-          </div>
-          <Suspense fallback="loading the leaderboard">
-            <CreatorLeaderboard />
-          </Suspense>
-          <div className="overflow-x-auto">
-            <Suspense fallback="loading newest stats">
-              <Stats />
-            </Suspense>
-          </div>
-        </div>
+        <Stats />
 
       </div>
     </div>
