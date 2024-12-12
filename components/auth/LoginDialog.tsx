@@ -7,10 +7,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import LoginCard from "./LoginCard";
+
 import { useLoginDialog } from "@/context/LoginDialogProvider";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 
+const LoginCard = dynamic(() => import("./LoginCard"), { ssr: false })
 
 export default function LoginDialog() {
     const { isOpen, setIsOpen, closeDialog, setIsLoggedIn, isLoggedIn } = useLoginDialog();

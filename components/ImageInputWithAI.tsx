@@ -7,8 +7,9 @@ import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink } from "@/lib/utils";
 import { Avatar } from "@nextui-org/avatar";
-import ImagePrompterDrawer from "./ImagePrompterDrawer";
+import dynamic from "next/dynamic";
 
+const ImagePrompterDrawer = dynamic(() => import("./ImagePrompterDrawer"), { ssr: false });
 
 type Props = {
     contextFields: string[];

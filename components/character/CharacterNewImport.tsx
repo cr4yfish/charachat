@@ -2,19 +2,18 @@
 
 import { Character, Profile } from "@/types/db";
 import {Tabs, Tab} from "@nextui-org/tabs";
-import AnimeImport from "./importers/AnimeImport";
-import AICharacterCardsImporter from "./importers/AICharacterCardImporter";
-import FandomImporter from "./importers/FandomImporter";
-import WikipediaImport from "./importers/WikipediaImport";
-import JanitorImporter from "./importers/JanitorImporter";
-
+import dynamic from "next/dynamic";
+const AnimeImport = dynamic(() => import("./importers/AnimeImport"), { ssr: false });
+const AICharacterCardsImporter = dynamic(() => import("./importers/AICharacterCardImporter"), { ssr: false });
+const FandomImporter = dynamic(() => import("./importers/FandomImporter"), { ssr: false });
+const WikipediaImport = dynamic(() => import("./importers/WikipediaImport"), { ssr: false });
+const JanitorImporter = dynamic(() => import("./importers/JanitorImporter"), { ssr: false });
 
 type Props = {
     character: Character;
     setCharacter: (character: Character) => void;
     profile: Profile;
 }
-
 
 export default function CharacterNewImport(props: Props) {
 

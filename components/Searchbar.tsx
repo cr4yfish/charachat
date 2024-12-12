@@ -2,54 +2,15 @@
 
 import { Input } from "@nextui-org/input";
 import { motion, AnimatePresence } from "motion/react";
-
 import Icon from "./utils/Icon";
 import React from "react";
 import { Character, Story } from "@/types/db";
 import { searchCharacters } from "@/functions/db/character";
 import { searchStories } from "@/functions/db/stories";
 import { Spinner } from "@nextui-org/spinner";
-import { Avatar } from "@nextui-org/avatar";
-import { truncateText } from "@/lib/utils";
-import Link from "next/link";
-import Markdown from "react-markdown";
+import dynamic from "next/dynamic";
 
-type SearchResultProps = {
-    title: string;
-    description: string;
-    imageLink: string;
-    owner: string;
-    link: string;
-}
-
-const SearchResult = (props: SearchResultProps) => {
-    return (
-        <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}    
-        >
-            <Link href={props.link} className="flex flex-row items-center gap-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 w-full rounded-lg p-2">
-                <Avatar src={props.imageLink} size="lg" />
-                <div className="flex flex-col justify-between h-full">
-                    <div className="flex flex-col">
-                        <span className="font-medium">{props.title}</span>
-                        <Markdown className="text-xs dark:text-zinc-400">{truncateText(props.description, 50)}</Markdown>
-                    </div>
-                    <div className="flex flex-row items-center gap-2 text-xs dark:text-zinc-400">
-                    <span className="flex items-center gap-1">
-                            <Icon downscale filled>chat_bubble</Icon>
-                            30.0m
-                        </span>
-                        <span className="flex items-center gap-1">
-                            <Icon downscale filled>account_circle</Icon>
-                            {props.owner}
-                        </span>
-                    </div> 
-                </div>
-            </Link>
-        </motion.div>
-    )
-}
+const SearchResult = dynamic(() => import("./SearchResult"), { ssr: false });
 
 export default function Searchbar() {
 

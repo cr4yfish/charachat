@@ -4,10 +4,12 @@ import { AnimatePresence, motion } from "motion/react";
 import { Button } from "../utils/Button";
 import { fadeInFromBottom, fadeOutToTop } from "@/lib/animations";
 import { useState } from "react";
-import CharacterNewImport from "./CharacterNewImport";
-import CharacterNew from "./CharacterNew";
 import { Character, Profile } from "@/types/db";
 import Icon from "../utils/Icon";
+import dynamic from "next/dynamic";
+
+const CharacterNew = dynamic(() => import("./CharacterNew"));
+const CharacterNewImport = dynamic(() => import("./CharacterNewImport"));
 
 type Props = {
     profile: Profile
