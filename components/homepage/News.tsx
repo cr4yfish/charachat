@@ -45,10 +45,10 @@ export default async function News() {
                   <p>Help shape Charachat - share ideas & report bugs on Reddit & Discord</p>
                   <div className="flex flex-row items-center gap-2">
                     <Link target="_blank" href={"https://www.reddit.com/r/Charachat"}>
-                      <Button variant="light" color="danger">Reddit</Button>
+                      <Button variant="flat" color="danger">Reddit</Button>
                     </Link>
                     <Link target="_blank" href={"https://discord.gg/2HqqwcwGCy"}>
-                      <Button variant="light" color="primary">Discord</Button>
+                      <Button variant="flat" color="primary">Discord</Button>
                     </Link>
                   </div>
                 </>
