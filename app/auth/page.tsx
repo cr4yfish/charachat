@@ -1,16 +1,15 @@
 "use server"
 
-import LoginCard from "@/components/auth/LoginCard"
+import dynamic from "next/dynamic"
 import { checkIsLoggedIn } from "@/functions/db/auth"
 import { redirect } from "next/navigation"
+
+const LoginCard = dynamic(() => import("@/components/auth/LoginCard"), { ssr: false })
 
 export default async function Login() {
 
     const isLoggedIn = await checkIsLoggedIn()
-
-    if(isLoggedIn) {
-        redirect("/")
-    }
+    if(isLoggedIn) { redirect("/") }
 
     return (
         <>
