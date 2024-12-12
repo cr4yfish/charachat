@@ -257,7 +257,7 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
     const { data: { user }} = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
-        throw new Error("User not found");
+        throw new Error("getUserChar: User not found");
     }
 
     const { data, error } = await (await createClient())
@@ -360,7 +360,7 @@ export const likeCharacter = async(characterId: string): Promise<void> => {
     const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(user?.id === undefined) {
-        throw new Error("User not found");
+        throw new Error("likeChar: User not found");
     }
 
     const { error } = await (await createClient())
@@ -379,7 +379,7 @@ export const unlikeCharacter = async(characterId: string): Promise<void> => {
     const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(user?.id === undefined) {
-        throw new Error("User not found");
+        throw new Error("unlikeChar: User not found");
     }
 
     const { error } = await (await createClient())

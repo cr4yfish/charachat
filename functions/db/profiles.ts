@@ -152,7 +152,7 @@ export const deleteUser = async () => {
     const { data: { user } } = await (await createClient()).auth.getUser();
 
     if(!user?.id) {
-        throw new Error("User not found");
+        throw new Error("deleteuser: User not found");
     }
 
     const { error } = await (await createClient())

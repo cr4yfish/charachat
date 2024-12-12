@@ -16,7 +16,7 @@ export default async function ProfileCard() {
         const err = e as Error;
         // Anons are allowed here, not an error
         if(err.message !== "No user found") {
-            console.error("Error in NavbarServerWrapper", e);
+            console.error("Error in ProfileCard", e);
         };
         return <></>
     }

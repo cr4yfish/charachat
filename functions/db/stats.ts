@@ -61,7 +61,7 @@ export const getOwnLeaderboardPosition = cache(async (): Promise<Leaderboard> =>
     const client = await createClient();
     const { data: { user }} = await client.auth.getUser();
 
-    if(!user?.id) throw new Error("User not found");
+    if(!user?.id) throw new Error("GetOwnLeaderboardPosition: User not found");
 
     return await getLeaderboardPosition(user.id)
 })
