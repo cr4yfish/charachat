@@ -3,12 +3,10 @@
 import { useRouter } from "next/navigation";
 import { Input } from "@nextui-org/input";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "../utils/Button";
 import { FormEvent, useState } from "react";
 import { login, LoginResponse, signUp } from "@/functions/db/auth";
-
 import { loginSchema, signUpSchema } from "@/lib/schemas";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import ImageInputWithAI from "../ImageInputWithAI";
