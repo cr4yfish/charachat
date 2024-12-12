@@ -95,8 +95,18 @@ export default function GenerateImageTool(props: Props) {
             }
 
             // save the message to DB
-            const key = getKeyClientSide();
-            await addMessage(message ,key);
+            try {
+                const key = getKeyClientSide();
+                await addMessage(message ,key);
+            } catch(e) {
+                console.error(e);
+                toast({
+                    title: "Failed to save image in chat",
+                    description: "Failed to save image in chat",
+                    variant: "destructive",
+                })
+            }
+      
             setIsAddedToChat(true);
             setIsAddingImageToChat(false);
         }
@@ -159,8 +169,18 @@ export default function GenerateImageTool(props: Props) {
                 content: newMessage.content,
             }
 
-            const key = getKeyClientSide();
-            await addMessage(message ,key);
+            try {
+                const key = getKeyClientSide();
+                await addMessage(message ,key);
+            } catch(e) {
+                console.error(e);
+                toast({
+                    title: "Failed to save video in chat",
+                    description: "Failed to save video in chat",
+                    variant: "destructive",
+                })
+            }
+    
         }
 
         return (

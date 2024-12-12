@@ -144,7 +144,17 @@ export default function ChatMain(props : Props) {
                 setCurrentMessage(message);
 
                 if(isSelfDestruct) { return; }
-                await addMessage(newAIMessage, getKeyClientSide());
+                try {
+                    await addMessage(newAIMessage, getKeyClientSide());
+                } catch (e) {
+                    const err = e as Error;
+                    toast({
+                        title: "Error",
+                        description: err.message,
+                        variant: "destructive"
+                    })
+                }
+                
             }
 
         },
@@ -281,48 +291,53 @@ export default function ChatMain(props : Props) {
     const loadMoreMessages = async () => {
         setIsMessagesLoading(true);
         
-        const key = getKeyClientSide();
+        try {
+            const key = getKeyClientSide();
 
-        if(!key) {
-            console.error("No key found in session storage. Log out and back in to fix this.");
-            return;
+            const newMessages = await getMessages({
+                chatId: props.chat.id,
+                from: cursor,
+                limit: _LIMIT,
+                key: key
+            });
+
+            if(newMessages.length === 0) {
+                setCanLoadMore(false);
+                return;
+            }
+
+            if(newMessages.length < _LIMIT) {
+                setCanLoadMore(false);
+            }
+
+            setCursor(cursor + newMessages.length);
+
+            // remove duplicates
+            const noDupes = newMessages.filter((m) => {
+                return !messages.some((msg) => msg.content === m.content)
+            })
+
+            const revMessages = noDupes.reverse();
+            const mappedMessages = revMessages.map((m) => {
+                return {
+                    id: m.id,
+                    createdAt: m.created_at,
+                    content: m.content,
+                    role: m.from_ai ? 'assistant' : 'user',
+                } as AIMessage
+            })
+
+            setMessages(mappedMessages.concat(messages))
+        } catch (e) {
+            const err = e as Error;
+            toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive"
+            })
+        } finally {
+            setIsMessagesLoading(false);
         }
-
-        const newMessages = await getMessages({
-            chatId: props.chat.id,
-            from: cursor,
-            limit: _LIMIT,
-            key: key
-        });
-
-        if(newMessages.length === 0) {
-            setCanLoadMore(false);
-            return;
-        }
-
-        if(newMessages.length < _LIMIT) {
-            setCanLoadMore(false);
-        }
-
-        setCursor(cursor + newMessages.length);
-
-        // remove duplicates
-        const noDupes = newMessages.filter((m) => {
-            return !messages.some((msg) => msg.content === m.content)
-        })
-
-        const revMessages = noDupes.reverse();
-        const mappedMessages = revMessages.map((m) => {
-            return {
-                id: m.id,
-                createdAt: m.created_at,
-                content: m.content,
-                role: m.from_ai ? 'assistant' : 'user',
-            } as AIMessage
-        })
-
-        setMessages(mappedMessages.concat(messages))
-        setIsMessagesLoading(false);
     }
 
     const scrollToBottom = () => {

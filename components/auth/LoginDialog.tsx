@@ -20,10 +20,15 @@ export default function LoginDialog() {
 
     useEffect(() => {
         if(!isLoggedIn) {
-            const key = getKeyClientSide();
-            if(key) {
-                setIsLoggedIn(true);
+            try {
+                const key = getKeyClientSide();
+                if(key) {
+                    setIsLoggedIn(true);
+                }
+            } catch {
+                setIsLoggedIn(false);
             }
+
         }
     }, [isLoggedIn, setIsLoggedIn])
 
