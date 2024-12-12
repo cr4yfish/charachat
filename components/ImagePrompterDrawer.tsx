@@ -166,7 +166,7 @@ export default function ImagePrompterDrawer(props: Props) {
             <DrawerTrigger asChild>
                 {props.trigger}
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent onClick={e => e.stopPropagation()}>
                 <DrawerHeader className="flex flex-col items-center justify-center">
                     <DrawerTitle>Image Generator</DrawerTitle>
                 </DrawerHeader>
