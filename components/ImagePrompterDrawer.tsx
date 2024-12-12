@@ -5,7 +5,7 @@ import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, Drawer
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink, sleep } from "@/lib/utils";
-import { ImageModel, imageModels } from "@/lib/ai";
+import { ImageModel, imageModels, VideoModel, videoModels } from "@/lib/ai";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, Tab } from "@nextui-org/tabs";
@@ -21,10 +21,11 @@ type Props = {
 }
 
 export default function ImagePrompterDrawer(props: Props) {
-    const [imageModel, setImageModel] = useState<ImageModel>(imageModels[0]);
+    const [imageModel, setImageModel] = useState<ImageModel | VideoModel>(imageModels[0]);
     const [imagePrompt, setImagePrompt] = useState("");
     const [isGenerateLoading, setIsGenerateLoading] = useState(false);
     const [selectedTab, setSelectedTab] = useState("prompt");
+    const [currentStatus, setCurrentStatus] = useState<string | undefined>();
     const { toast } = useToast();
 
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -92,9 +93,11 @@ export default function ImagePrompterDrawer(props: Props) {
                         throw new Error("Failed to get prediction status. Error Message: " + await response.text());
                     }
                     const res = await response.json();
+                    setCurrentStatus(res.status);
+                    console.log(res.status)
                     if(res.status === "succeeded") {
                         prediction = res;
-                        
+                        console.log(prediction)
                         let link = "";
                         
                         // output is sometimes array, sometimes string
@@ -103,6 +106,8 @@ export default function ImagePrompterDrawer(props: Props) {
                         } else {
                             link = await uploadLinkToImgur(prediction.output);
                         }
+
+                        sleep(500);
 
                         handleSetImageLink(link);
                         setSelectedTab("image");
@@ -160,6 +165,15 @@ export default function ImagePrompterDrawer(props: Props) {
         }
     }, [props.initImagePrompt])
 
+    useEffect(() => {
+        if(currentStatus) {
+            toast({
+                title: "Status",
+                description: currentStatus
+            })
+        }
+    }, [currentStatus, toast])
+
     return (
         <>
         <Drawer>
@@ -215,17 +229,31 @@ export default function ImagePrompterDrawer(props: Props) {
                                             </Button>
                                         ))}
                                     </div>
+                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">GIF using Replicate <a href={"/settings#api"} className="underline text-blue-500">Get API key</a></p>
+                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                        {videoModels.filter(im => im.provider == "replicate").map((model) => (
+                                            <Button
+                                                className="min-w-[100px]"
+                                                key={model.id}
+                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                                size="sm"
+                                                onClick={() => setImageModel(model)}
+                                            >
+                                                {model.title}
+                                            </Button>
+                                        ))}
+                                    </div>
                                 </div>
                         </Tab>
                         <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
-                                <img 
-                                    src={safeParseLink(props.imageLink ?? "")} 
-                                    alt="" 
-                                    width={512} 
-                                    height={512} 
-                                />
+                                { imageModel.type.includes("-to-image") ?
+                                    <img src={safeParseLink(props.imageLink)} className="w-full h-full object-cover" />
+                                    :
+                                    <video src={safeParseLink(props.imageLink)} className="w-full h-full object-cover" autoPlay controls loop />
+                                }
                             </div>
+                            {imageModel.type.includes("-to-video") && <p className="text-xs text-red-500 max-w-xs mt-1">If the video doesn&apos;t load: Switch back to prompt and then to image tab again.</p>}
                             <p className="text-xs text-zinc-700 dark:text-zinc-400 w-full text-center mt-1 max-w-xl max-sm:hidden">{imagePrompt}</p>
                         </Tab>
                     </Tabs>

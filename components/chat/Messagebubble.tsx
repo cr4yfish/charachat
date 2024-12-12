@@ -344,7 +344,12 @@ export default function Messagebubble(props: Props) {
 
         const data = await res.json();
 
-        setImagePrompt(props.chat?.character.image_prompt + ", " + data.result.text);
+        if(props.chat?.character.image_prompt) {
+            setImagePrompt(props.chat?.character.image_prompt + ", " + data.result.text);
+        } else {
+            setImagePrompt(data.result.text);
+        }
+        
         setImagePromptLoading(false);
     }
 
@@ -354,6 +359,13 @@ export default function Messagebubble(props: Props) {
             content: `![image](${imageLink})`,
             role: "assistant",
             createdAt: new Date()
+        }
+
+        if(imageLink?.includes(".mp4")) {
+            newMessage.content = `<video width="320" height="240" controls>
+                <source src=${imageLink} type="video/mp4">
+                Your browser does not support the video tag.
+            </video>`;
         }
 
         props.setMessages((messages) => [...messages, newMessage]);

@@ -135,114 +135,166 @@ export type ImageModelId =
     "stability-ai/stable-diffusion-3.5-large-turbo" |
     "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48"
 
+export type VideoModelId = 
+    "fofr/ltx-video:983ec70a06fd872ef4c29bb6b728556fc2454125a5b2c68ab51eb8a2a9eaa46a" |
+    "fal-ai/ltx-video/image-to-video"
+
+
 export type Provider = 
     "huggingface" |
-    "replicate"
+    "replicate" |
+    "fal"
+
+export type ModelType = 
+    "text-to-image" |
+    "image-to-image" |
+    "text-to-audio" |
+    "text-to-video" |
+    "image-to-video"
 
 export type ImageModel = {
     id: ImageModelId;
     title: string;
     style: string;
     provider: Provider;
+    type: ModelType;
 }
+
+export type VideoModel = {
+    id: VideoModelId;
+    title: string;
+    provider: Provider;
+    type: ModelType;
+}
+
+export const videoModels: VideoModel[] = [
+    {
+        id: "fal-ai/ltx-video/image-to-video",
+        title: "LTX image to video",
+        provider: "fal",
+        type: "image-to-video"
+    },
+    {
+        id: "fofr/ltx-video:983ec70a06fd872ef4c29bb6b728556fc2454125a5b2c68ab51eb8a2a9eaa46a",
+        title: "LTX video",
+        provider: "replicate",
+        type: "text-to-video"
+    }
+]
 
 export const imageModels: ImageModel[] = [
     {
         id: "black-forest-labs/FLUX.1-schnell",
         title: "Flux Schnell",
         style: "Versitile",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "strangerzonehf/Flux-Midjourney-Mix2-LoRA",
         title: "Midjourney",
         style: "Midjourney",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "XLabs-AI/flux-RealismLora",
         title: "Flux Realism",
         style: "Realistic",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "xey/sldr_flux_nsfw_v2-studio",
         title: "Flux NSFW v2",
         style: "Uncensored",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "shuttleai/shuttle-3.1-aesthetic",
         title: "Shuttle 3.1",
         style: "Aesthetic",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "Djrango/Qwen2vl-Flux",
         title: "Qwen x Flux",
         style: "Easy Prompt",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "Shakker-Labs/AWPortraitCN",
         title: "Portraits",
         style: "Portraits",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
     {
         id: "stabilityai/sdxl-turbo",
         title: "SDXL-Turbo",
         style: "Fast",
-        provider: "huggingface"
+        provider: "huggingface",
+        type: "text-to-image"
     },
 
     {
         id: "black-forest-labs/flux-schnell",
         title: "Flux Schnell",
         style: "Flux Fast",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "black-forest-labs/flux-1.1-pro-ultra",
         title: "Flux Pro Ultra",
         style: "Flux Ultra",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "black-forest-labs/flux-1.1-pro",
         title: "Flux Pro",
         style: "Flux Pro",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "stability-ai/stable-diffusion-3.5-large-turbo",
         title: "Stable Diffusion 3.5 Large Turbo",
         style: "SD Turbo",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "stability-ai/stable-diffusion-3.5-large",
         title: "Stable Diffusion 3.5 Large",
         style: "SD3.5",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48",
         title: "Proteus v0.3",
         style: "Proteus",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "luma/photon-flash",
         title: "Photon Flash",
         style: "Photon",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
     {
         id: "nvidia/sana:c6b5d2b7459910fec94432e9e1203c3cdce92d6db20f714f1355747990b52fa6",
         title: "NVIDIA Sana",
         style: "Sana",
-        provider: "replicate"
+        provider: "replicate",
+        type: "text-to-image"
     },
 
 ]

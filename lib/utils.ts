@@ -87,7 +87,7 @@ export function isValidURL(string: string) {
   } 
 }
 
-export function safeParseLink(link: string | undefined): string {
+export function safeParseLink(link: string | undefined | null): string {
   if(link && isValidURL(link) && link.includes("https://")) {
     return link;
   }
