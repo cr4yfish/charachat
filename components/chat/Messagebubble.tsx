@@ -460,14 +460,16 @@ export default function Messagebubble(props: Props) {
                                     :
                                     <Textarea
                                         ref={textareaRef}
+                                        maxRows={20}
+                                        className="w-full"
                                         classNames={{
-                                            base: "bg-transparent dark:bg-transparent !focus:bg-transparent",
-                                            inputWrapper: "bg-transparent !dark:bg-transparent !focus:bg-transparent group-data-[focus=true]:bg-trasnparent data-[hover=true]:bg-transparent",
+                                            base: "bg-transparent dark:bg-transparent !focus:bg-transparent w-full min-w-[600px] max-lg:min-w-[500px] max-md-min-w-[400px] max-sm:min-w-[300px] relative",
+                                            inputWrapper: "bg-transparent !dark:bg-transparent !focus:bg-transparent group-data-[focus=true]:bg-trasnparent data-[hover=true]:bg-transparent w-full relative",
                                         }}
                                         endContent={
-                                        <div className="absolute right-0 bottom-0">
-                                            {isSavingLoading && <Spinner size="sm" color="warning" />}
-                                        </div>
+                                            <div className="absolute right-0 bottom-0">
+                                                {isSavingLoading && <Spinner size="sm" color="warning" />}
+                                            </div>
                                         }
                                         isDisabled={isSavingLoading}
                                         onBlur={handleSaveMessage}
