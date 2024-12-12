@@ -6,8 +6,6 @@ import { useState } from "react";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import { useLoginDialog } from "@/context/LoginDialogProvider";
-
-  
 type Props = {
     showLogout?: boolean;
     isSmall?: boolean;

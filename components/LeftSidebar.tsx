@@ -9,6 +9,7 @@ import {
 import Logo from "./Logo";
 import dynamic from "next/dynamic";
 import { Skeleton } from "./ui/skeleton";
+import LeftSidebarChats from "./LeftSidebarChats";
 
 const SidebarLink = dynamic(() => import ("./SidebarLink"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
 const LoginButton = dynamic(() => import ("./auth/LoginButton"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
@@ -26,6 +27,8 @@ export async function LeftSidebar() {
           <SidebarLink link={`/chats`} icon="chat" label="Your Chats" />
         </SidebarGroup>
       </SidebarHeader>
+
+      <LeftSidebarChats />
 
       <SidebarFooter className="w-full flex flex-col gap-2 items-start px-4 py-6">
         <LoginButton />    
