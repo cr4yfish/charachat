@@ -21,7 +21,6 @@ export default function SessionStorageManager(props: Props) {
                 window.sessionStorage.setItem("key", props.keyCookie);
             } else {
                 window.sessionStorage.removeItem("key");
-                window.location.reload();
             }
         }
     }, [])
