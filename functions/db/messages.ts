@@ -95,7 +95,6 @@ type UpdateMessageProps = {
 }
 
 export const updateMessage = async (props: UpdateMessageProps): Promise<void> => {
-
     const key = await getKeyServerSide();
     const encryptedContent = encryptMessage(props.content, Buffer.from(key, "hex"));
 
