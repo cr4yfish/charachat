@@ -4,7 +4,7 @@ import dynamic from "next/dynamic"
 import { checkIsLoggedIn } from "@/functions/db/auth"
 import { redirect } from "next/navigation"
 
-const LoginCard = dynamic(() => import("@/components/auth/LoginCard"), { ssr: false })
+const LoginCard = dynamic(() => import("@/components/auth/LoginCard"))
 
 export default async function Login() {
 
