@@ -16,7 +16,6 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
             
         case "gpt-4o-mini":
         case "gpt-4o":
-        case "gpt-4-turbo":
         case "o1-preview":
         case "o1-mini":
             return profile.openai_encrypted_api_key;
@@ -82,7 +81,6 @@ export type ModelId =
     "ollama" |
     "gpt-4o-mini" |
     "gpt-4o" |
-    "gpt-4-turbo" |
     "o1-preview" |
     "o1-mini" |
     "gemini-1.5-flash" |
@@ -389,13 +387,6 @@ export const LLMs: LLMType[] = [
         "name": "GPT-4o",
         "usecase": "Incredibly accurate",
         "provider": "OpenAI",
-        "tags": ["Quality", "Fast"]
-    },
-    {
-        "key": "gpt-4-turbo",
-        "name": "GPT-4 Turbo",
-        "provider": "OpenAI",
-        "usecase": "Has some working Jailbreaks",
         "tags": ["Quality", "Fast"]
     },
     {

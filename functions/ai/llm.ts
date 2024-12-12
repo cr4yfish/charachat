@@ -124,7 +124,6 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
 
         case "gpt-4o-mini":
         case "gpt-4o":
-        case "gpt-4-turbo":
         case "o1-preview":
         case "o1-mini":
             return getOpenAI(modelId, apiKey);
