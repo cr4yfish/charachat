@@ -4,7 +4,6 @@ import EditProfile from "@/components/user/EditProfile";
 import { getCurrentUser, logout } from "@/functions/db/auth";
 import { checkIsEncrypted } from "@/lib/crypto";
 import { Profile } from "@/types/db";
-import { redirect } from "next/navigation";
 
 
 export default async function EditUserPage() {
@@ -18,7 +17,12 @@ export default async function EditUserPage() {
             throw new Error("Profile is encrypted. Please log in again to decrypt it.");
         }
     } catch {
-        redirect("/auth");
+        console.error("Error fetching profile");
+        return (
+            <>
+            <h1>Didnt find a logged in user.</h1>
+            </>
+        )
     }
 
     return (
