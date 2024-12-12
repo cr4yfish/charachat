@@ -54,7 +54,7 @@ export default async function Home() {
 
         <div className="!h-[160px] w-full overflow-x-auto overflow-y-hidden">
           <div className="w-fit h-[160px] flex items-center gap-3">
-            <Suspense fallback={<><Skeleton className="w-[240px] h-[155px]" /><Skeleton className="w-[240px] h-[155px]" /></>}>
+            <Suspense fallback={<><Skeleton className="w-[240px] h-[155px]" /><Skeleton className="w-[240px] h-[155px]" /><Skeleton className="w-[240px] h-[155px]" /></>}>
               <SmallStats />
             </Suspense>
           </div>

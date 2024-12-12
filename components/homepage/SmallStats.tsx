@@ -1,6 +1,7 @@
 import { getAPIKeyCount, getStats } from "@/functions/db/stats"
-import SmallStatCard from "../graphs/SmallStatCard"
+import dynamic from "next/dynamic"
 
+const SmallStatCard = dynamic(() => import("../graphs/SmallStatCard"))
 
 export async function SmallStats() {
 

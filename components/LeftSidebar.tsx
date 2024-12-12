@@ -8,14 +8,15 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import ProfileCard from "./user/ProfileCard";
-import SidebarLink from "./SidebarLink";
 import Logo from "./Logo";
-import SidebarChatListLoader from "./sidebar/SidebarChatListLoader";
-import { Suspense } from "react";
 import SidebarChatListFallback from "./sidebar/SidebarChatListFallback";
-import LoginButton from "./auth/LoginButton";
 import { getCurrentUser } from "@/functions/db/auth";
+import dynamic from "next/dynamic";
+import { Skeleton } from "./ui/skeleton";
+const SidebarChatListLoader = dynamic(() => import("./sidebar/SidebarChatListLoader"), { loading: () => <SidebarChatListFallback /> });
+const SidebarLink = dynamic(() => import ("./SidebarLink"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
+const LoginButton = dynamic(() => import ("./auth/LoginButton"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
+const ProfileCard = dynamic(() => import ("./user/ProfileCard"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
 
 export async function LeftSidebar() {
   let isLoggedIn = false;
@@ -44,9 +45,7 @@ export async function LeftSidebar() {
       {isLoggedIn &&
       <SidebarContent className="p-2">
         <SidebarGroupLabel className="text-lg font-bold">Chats</SidebarGroupLabel>
-        <Suspense fallback={<SidebarChatListFallback />}>
-          <SidebarChatListLoader />
-        </Suspense>
+        <SidebarChatListLoader />
       </SidebarContent>
       }
 
