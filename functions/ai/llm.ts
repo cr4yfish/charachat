@@ -131,6 +131,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         
         case "gemini-1.5-flash":
         case "gemini-1.5-pro":
+        case "gemini-2.0-flash-exp":
             return getGemini(modelId, apiKey);
 
         case "open-mistral-nemo":

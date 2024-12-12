@@ -23,6 +23,7 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         
         case "gemini-1.5-flash":
         case "gemini-1.5-pro":
+        case "gemini-2.0-flash-exp":
             return profile.gemini_encrypted_api_key;
 
         case "claude-3-5-sonnet-latest":
@@ -86,6 +87,7 @@ export type ModelId =
     "o1-mini" |
     "gemini-1.5-flash" |
     "gemini-1.5-pro" |
+    "gemini-2.0-flash-exp" |
     "open-mistral-nemo" |
     "claude-3-5-sonnet-latest" |
     "claude-3-5-haiku-latest" |
