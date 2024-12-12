@@ -376,6 +376,13 @@ export const LLMs: LLMType[] = [
         "tags": ["Fast"]
     },
     {
+        "key": "gemini-2.0-flash-exp",
+        "name": "Gemini 2.0 Flash",
+        "provider": "Gemini",
+        "usecase": "Fast, high quality",
+        "tags": ["Fast", "New"]
+    },
+    {
         "key": "command-r-plus",
         "name": "Command R Plus",
         "provider": "Cohere",

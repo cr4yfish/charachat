@@ -54,10 +54,10 @@ async function getOpenAI(modelId: string, apiKey?: string): Promise<LanguageMode
 
 async function getGemini(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
     const gemini = createGoogleGenerativeAI({
-        apiKey: apiKey
+        apiKey: apiKey,
     });
 
-    return gemini(modelId);
+    return gemini(modelId, { structuredOutputs: false});
 }
 
 async function getMistral(modelId: string, apiKey?: string): Promise<LanguageModelV1> {

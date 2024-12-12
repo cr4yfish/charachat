@@ -150,7 +150,7 @@ export async function POST(req: Request) {
                 }),
                 getMemory: tool({
                     description: "Retrieve the Memory to get chat context in order to respond well to a prompt.",
-                    parameters: z.object({ }),
+                    parameters: z.object({ request: z.string().describe("Which memory to get") }),
                     execute: async() => {
                         const memory = await getMemory({ chat });
                         if(!memory) return "Memory is empty.";
