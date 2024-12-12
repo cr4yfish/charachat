@@ -35,8 +35,8 @@ export default async function Spotlight(props: Props) {
                     className="object-cover z-50" 
                     src={safeParseLink(props.character.image_link)} 
                     fill
-                    quality={15}
-                    priority={true}
+                    quality={5}
+                    loading="lazy"
                     alt="" 
                     sizes="100vw"
                 />
