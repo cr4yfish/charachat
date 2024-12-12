@@ -1,4 +1,3 @@
-import { uploadLinkToImgur } from "@/functions/ai/image";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { decryptMessage } from "@/lib/crypto";

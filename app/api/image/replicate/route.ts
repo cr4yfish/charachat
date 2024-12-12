@@ -1,4 +1,3 @@
-import { authorNoStream } from "@/functions/ai/author";
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 import { ImageModelId } from "@/lib/ai";
