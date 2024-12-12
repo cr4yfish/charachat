@@ -279,7 +279,7 @@ export default function Messagebubble(props: Props) {
     }
 
     const handleOnTap = async () => {
-        if(props.isDeleting) { return; }
+        if(props.isDeleting || isEditMode) { return; }
 
         const isSelected = props.selectedMessageIDs.includes(props.message.id);
 
