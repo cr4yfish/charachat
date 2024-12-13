@@ -32,6 +32,13 @@ export default async function News() {
           <div className="flex flex-row items-center gap-4 w-fit">
 
             <NewsCard 
+                title="⚠️ ATTENTION ⚠️"
+                description={
+                  <p>Charachat recently exceeded the free tier of the Database hosting provider for December and I don&apos;t have the funds to upgrade. Expect outages throughout this month.</p>
+                }
+            />
+
+            <NewsCard 
               title="🎉 Welcome to Charachat! 🎉"
               description={
                 <p>Charachat: Create, share & chat with AI characters from you & the community.</p>
