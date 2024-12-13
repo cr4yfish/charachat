@@ -14,7 +14,6 @@ import Image from "next/image";
 import CharacterPageActions from "@/components/character/CharacterePageActions";
 import CharacterPageTabs from "@/components/character/CharacterPageTabs";
 import { Metadata } from "next";
-import { createClient } from "@supabase/supabase-js";
 
 type Params = Promise<{ characterId: string }>
 
@@ -38,6 +37,7 @@ export async function generateMetadata(
     }
 }
 
+/** makes supabase exceed bandwidth very quickly
 export async function generateStaticParams() {
     const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
@@ -76,7 +76,7 @@ export async function generateStaticParams() {
     }
 
     return [...popularCharacters, ...newestCharacters, ...trendingCharacters].map((character) => ({ characterId: character.id }));
-}
+}*/
 
 export default async function CharacterView({ params }: { params: Params }) {
 
