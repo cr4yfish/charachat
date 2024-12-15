@@ -69,6 +69,7 @@
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.6",
     "@tailwindcss/typography": "^0.5.15",
+    "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.1.0",
     "ai": "^3.4.33",
     "class-variance-authority": "^0.7.0",

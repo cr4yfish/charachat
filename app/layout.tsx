@@ -13,7 +13,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import RedditPopup from "@/components/homepage/RedditPopup";
 import LoginDialog from "@/components/auth/LoginDialog";
 import { LoginDialogProvider } from "@/context/LoginDialogProvider";
-
+import { Analytics } from "@vercel/analytics/react"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -84,6 +84,7 @@ export default async function RootLayout({
           <NextUIProvider>
             <SidebarProvider>
               <SpeedInsights />
+              <Analytics />
               <LoginDialogProvider>
               <LeftSidebar />
                 <main className="relative h-svh overflow-y-hidden overflow-x-hidden w-full ">
