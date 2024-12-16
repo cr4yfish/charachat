@@ -14,13 +14,15 @@ export async function POST(request: Request) {
     const authorResult = await authorNoStream({
         profile,
         systemText: `
-            You rewrite the prompt to be pure dialogue text. Only return the dialogue text in your response.
+            You rewrite the prompt to be pure dialogue, easily readable, text. 
+            Rewrite everything between "_" (actions) to first-person perspective narrations (Example: *moves hand* to "I move my hand"). 
+            Respond in readable letters only, removing all Markdown formatting! Encapsulate dialog with quotation marks (")!
+            Only return the dialogue text in your response.
         `,
         prompt: prompt
     })  
 
-    const newPrompt = authorResult.text;
-
+    const newPrompt = authorResult.text.replaceAll("*", "").replaceAll(/\.(\.+)/g, '.');
 
     const replicate = new Replicate({
         auth: replicateToken
