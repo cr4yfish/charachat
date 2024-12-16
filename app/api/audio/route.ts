@@ -22,7 +22,7 @@ export async function POST(request: Request) {
         prompt: prompt
     })  
 
-    const newPrompt = authorResult.text.replaceAll("*", "").replaceAll(/\.(\.+)/g, '.');
+    const newPrompt = authorResult.text.replaceAll("*", "").replaceAll(/\.(\.+)/g, '.').replace(":", ".");
 
     const replicate = new Replicate({
         auth: replicateToken
