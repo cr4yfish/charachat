@@ -122,6 +122,12 @@ export default function Messagebubble(props: Props) {
         }
     }, [props.message.id])
 
+    useEffect(() => {
+        if(audioLink) {
+            handlePlayAudio();
+        }
+    }, [audioLink])
+
     const handleCopyToClipboard = () => {
         navigator.clipboard.writeText(props.message.content).then(() => {
             toast({
