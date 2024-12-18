@@ -182,8 +182,8 @@ export default function ImagePrompterDrawer(props: Props) {
                     <DrawerTitle>Image Generator</DrawerTitle>
                 </DrawerHeader>
 
-                <div className="p-4 flex flex-col items-center justify-center flex-wrap gap-3">
-                    <Tabs aria-label="Promptflow" selectedKey={selectedTab} onSelectionChange={key => setSelectedTab(key as string)} >
+                <div className="  max-md:h-full p-4 flex flex-col items-center justify-center flex-wrap gap-3">
+                    <Tabs className="flex flex-col" aria-label="Promptflow" selectedKey={selectedTab} onSelectionChange={key => setSelectedTab(key as string)} >
                         <Tab title="Prompt" key="prompt" className="w-full flex flex-col gap-2 items-center">
                                 <Textarea 
                                     label="Prompt" 
@@ -242,8 +242,8 @@ export default function ImagePrompterDrawer(props: Props) {
                                     </div>
                                 </div>
                         </Tab>
-                        <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full flex flex-col items-center">
-                            <div className="overflow-hidden rounded-xl max-w-[1024px]">
+                        <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full max-md:h-full max-md:max-h-[75%] flex flex-col items-center">
+                            <div className="overflow-hidden rounded-xl  max-md:h-full">
                                 { imageModel.type.includes("-to-image") ?
                                     <img src={safeParseLink(props.imageLink)} className="w-full h-full object-cover" />
                                     :
