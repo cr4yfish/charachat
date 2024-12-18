@@ -21,7 +21,7 @@ export default function SmallStatCard(props: Props) {
             <CardContent className="pt-0 pb-0">
                 <div className="flex items-center justify-between gap-2">
                     <h1 className="text-2xl font-bold capitalize">{props.count?.toLocaleString()}</h1>
-                    <h1 className="text-2xl font-bold text-gray-400 ">{props.accumulated_count?.toLocaleString()}</h1>
+                    <h1 className="text-2xl font-bold text-gray-400 ">{props?.accumulated_count?.toLocaleString()}</h1>
                 </div>
             </CardContent>
         </Card>

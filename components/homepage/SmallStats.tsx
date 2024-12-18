@@ -13,13 +13,13 @@ export async function SmallStats() {
         <>
 
             <SmallStatCard 
-                count={totalCharacters[0].count}
-                accumulated_count={totalCharacters[0].accumulated_count}
+                count={totalCharacters[0]?.count}
+                accumulated_count={totalCharacters[0]?.accumulated_count}
                 description="Total number of Characters"
             />
             <SmallStatCard 
                 count={totalStories[0].count}
-                accumulated_count={totalStories[0].accumulated_count}
+                accumulated_count={totalStories[0]?.accumulated_count}
                 description="Total number of Stories"
             />
             <SmallStatCard 
