@@ -246,16 +246,16 @@ export const imageModels: ImageModel[] = [
         type: "text-to-image"
     },
     {
-        id: "black-forest-labs/flux-1.1-pro-ultra",
-        title: "Flux Pro Ultra",
-        style: "Flux Ultra",
+        id: "black-forest-labs/flux-1.1-pro",
+        title: "Flux Pro",
+        style: "Flux Pro",
         provider: "replicate",
         type: "text-to-image"
     },
     {
-        id: "black-forest-labs/flux-1.1-pro",
-        title: "Flux Pro",
-        style: "Flux Pro",
+        id: "black-forest-labs/flux-1.1-pro-ultra",
+        title: "Flux Pro Ultra",
+        style: "Flux Ultra",
         provider: "replicate",
         type: "text-to-image"
     },
