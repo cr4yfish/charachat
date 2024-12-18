@@ -36,7 +36,7 @@ export default function ImagePrompterDrawer(props: Props) {
         if(!isValidURL(imageLink) || !imageLink.includes("https://")) {
             toast({
                 title: "Error",
-                description: "Invalid image link. Make sure it starts with https:// and ends with .jpg/.png or another image extension",
+                description: "Invalid image link. Make sure it starts with https:// and ends with .jpg/.png or another image extension. Link: " + imageLink,
                 variant: "destructive"
             })
             return;
