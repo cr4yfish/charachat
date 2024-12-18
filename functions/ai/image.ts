@@ -134,5 +134,10 @@ export async function uploadLinkToImgur(link: string): Promise<string> {
         throw new Error(e);
     });
 
-    return imgurResponse.data.link
+    if(imgurResponse?.data?.link && imgurResponse.data.link.length > 3) {
+        return imgurResponse.data.link
+    } else {
+        console.error("Error generating Imgur link");
+        return link;
+    }
 }
