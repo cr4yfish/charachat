@@ -24,14 +24,16 @@ export async function POST(req: Request) {
             - Time and weather (Example: Rainy night)
             - The camera (viewers) location and angle (Example: Viewer looking down, far away)
 
-            Your ouput is a stable diffusion prompt to generate an image best describing the input chat message.
-
             About stable diffusion prompts:
             - A stable diffusion prompt consists of short keywords/sentences (Examples: Scarf, coat, Sunny day, jumping in the air, public park)
             - The order matters, keywords coming first are ranked higher, thus are more important to paint an image
             - Let it have some creativity, only provide hard facts to guide the generation to what the User might want to see
             - Keep it as short and concise as possible as too long prompts will have negative effects 
-        `,
+            - For best results keep the length under 30 words and do not repeat yourself
+       
+            The final prompt is a chain of keywords/key sentences (Example: "sunny day, scarf, park") with no extra formatting.
+            Only return the final prompt based on the information above.
+       `,
         prompt: `
             Message: ${messageContent}
             Character Description: ${characterDescription}    
