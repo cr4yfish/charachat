@@ -15,11 +15,20 @@ export async function POST(req: Request) {
     const result = await authorNoStream({
         profile: profile,
         systemText: `
-            You are a helpful and experienced Stable Diffusion Image promp generator. 
-            You help users write Image Prompts based on input chat messages.
-            Make sure to describe the characters appearance, the setting, the characters emotion and action in the image.
+            You are a helpful and experienced Stable Diffusion Image promp generator.
+            You take a context as input and create a prompt based on that, that will generate an image reflecting the situation.
+
+            Always include the following:
+            - Location
+            - Character clothing, action & emotion
+            - Time and weather
+
             Your ouput is a stable diffusion prompt to generate an image best describing the input chat message.
-            Your responst has to be less than 25 words.
+
+            About stable diffusion prompts:
+            - A stable diffusion prompt consists of short keywords/sentences (Examples: Scarf, coat, Sunny day, jumping in the air, public park)
+            - The order matters, keywords coming first are ranked higher, thus are more important to paint an image
+            - Let it have some creativity, only provide hard facts to guide the generation to what the User might want to see
         `,
         prompt: `
             Message: ${messageContent}
