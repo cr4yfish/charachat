@@ -326,13 +326,27 @@ export default function Messagebubble(props: Props) {
             description: "This may take a few seconds"
         })
 
+        const lastMessage = props.messages[props.index-1];
+        const messageBeforeLast = props.messages[props.index-2];
+
+        const context = `
+            2 messages ago:
+            ${messageBeforeLast?.role == "user" ? "User" : "Character"}: ${messageBeforeLast?.content}
+
+            Previous message: 
+            ${lastMessage?.role == "user" ? "User" : "Character"}: ${lastMessage?.content}
+
+            This message:
+            ${props.message.role == "user" ? "User" : "Character"}: ${props.message.content}
+        `;
+
         const res = await fetch("/api/author/image/prompt", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                messageContent: props.message.content,
+                messageContent: context,
                 characterDescription: props.chat?.character.description,
                 profile: props.user
             }),
@@ -348,7 +362,16 @@ export default function Messagebubble(props: Props) {
             return;
         }
 
-        const data = await res.json();
+        type Result = {
+            result: {
+                text: string
+            }
+        }
+
+        const data: Result = await res.json();
+
+        // replace username with "viewer"
+        data.result.text = data.result.text.replaceAll(props.chat?.persona?.full_name ?? props.chat?.user.username ?? "", "viewer")
 
         if(props.chat?.character.image_prompt) {
             setImagePrompt(props.chat?.character.image_prompt + ", " + data.result.text);
