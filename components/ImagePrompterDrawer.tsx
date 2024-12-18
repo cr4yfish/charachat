@@ -246,7 +246,7 @@ export default function ImagePrompterDrawer(props: Props) {
                                 </div>
                         </Tab>
                         <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full flex flex-col items-center">
-                            <div className="overflow-hidden rounded-xl">
+                            <div className="overflow-hidden rounded-xl max-w-[1024px]">
                                 { imageModel.type.includes("-to-image") ?
                                     <img src={safeParseLink(props.imageLink)} className="w-full h-full object-cover" />
                                     :
