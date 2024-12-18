@@ -19,9 +19,10 @@ export async function POST(req: Request) {
             You take a context as input and create a prompt based on that, that will generate an image reflecting the situation.
 
             Always include the following:
-            - Location
-            - Character clothing, action & emotion
-            - Time and weather
+            - Location (Example: Suburban Backyard, white fence)
+            - Character clothing, action & emotion (Example: Green T-Shirt, throwing baseball, smiling)
+            - Time and weather (Example: Rainy night)
+            - The camera (viewers) location and angle (Example: Viewer looking down, far away)
 
             Your ouput is a stable diffusion prompt to generate an image best describing the input chat message.
 
