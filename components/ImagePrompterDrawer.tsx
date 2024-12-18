@@ -94,10 +94,8 @@ export default function ImagePrompterDrawer(props: Props) {
                     }
                     const res = await response.json();
                     setCurrentStatus(res.status);
-                    console.log(res.status)
                     if(res.status === "succeeded") {
                         prediction = res;
-                        console.log(prediction)
                         let link = "";
                         
                         // output is sometimes array, sometimes string
@@ -152,7 +150,6 @@ export default function ImagePrompterDrawer(props: Props) {
     }
 
     const handleAbort = () => {
-        console.log("aborting");
         if(abortControllerRef.current) {
             abortControllerRef.current.abort("Aborted by user");
             setIsGenerateLoading(false);
@@ -266,7 +263,6 @@ export default function ImagePrompterDrawer(props: Props) {
                         isLoading={props.initPromptLoading}
                         onClick={() => {
                             if(isGenerateLoading) {
-                                console.log("aborting");
                                 handleAbort();
                             } else {
                                 handleGenerateImage();

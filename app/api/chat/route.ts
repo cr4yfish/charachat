@@ -141,8 +141,6 @@ export async function POST(req: Request) {
 
         convertedMessages.reverse();
 
-        console.log(convertedMessages)
-
         const result = await streamText({
             temperature: chat.temperature,
             frequencyPenalty: chat.frequency_penalty,
