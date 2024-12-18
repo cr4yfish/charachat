@@ -30,6 +30,7 @@ export async function POST(req: Request) {
             - A stable diffusion prompt consists of short keywords/sentences (Examples: Scarf, coat, Sunny day, jumping in the air, public park)
             - The order matters, keywords coming first are ranked higher, thus are more important to paint an image
             - Let it have some creativity, only provide hard facts to guide the generation to what the User might want to see
+            - Keep it as short and concise as possible as too long prompts will have negative effects 
         `,
         prompt: `
             Message: ${messageContent}
