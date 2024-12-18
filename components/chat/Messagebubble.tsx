@@ -385,7 +385,7 @@ export default function Messagebubble(props: Props) {
     const handleAddImageToChat = async () => {
         const newMessage: Message = {
             id: uuidv4(),
-            content: `![image](${imageLink})`,
+            content: `![${imagePrompt}](${imageLink})`,
             role: "assistant",
             createdAt: new Date()
         }
@@ -534,6 +534,7 @@ export default function Messagebubble(props: Props) {
                                 imageLink={imageLink}
                                 saveImage={handleAddImageToChat}
                                 setImageLink={setImageLink}
+                                setImagePrompt={setImagePrompt}
                                 initPromptLoading={imagePromptLoading}
                                 initImagePrompt={imagePrompt}
                                 trigger={

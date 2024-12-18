@@ -17,6 +17,7 @@ type Props = {
     saveImage?: () => void;
     trigger: React.ReactNode;
     initImagePrompt?: string;
+    setImagePrompt?: (prompt: string) => void;
     initPromptLoading?: boolean;
 }
 
@@ -43,6 +44,9 @@ export default function ImagePrompterDrawer(props: Props) {
         }
 
         props.setImageLink(imageLink);
+        if(props.setImagePrompt) {
+            props.setImagePrompt(imagePrompt)
+        }
     }
 
     const handleGenerateImage = async () =>  {
