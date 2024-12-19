@@ -1,5 +1,6 @@
 import { authorNoStream } from "@/functions/ai/author";
 import { getCurrentUser } from "@/functions/db/auth";
+import { jailbreak } from "@/lib/prompts";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 
@@ -14,6 +15,7 @@ export async function POST(request: Request) {
     const authorResult = await authorNoStream({
         profile,
         systemText: `
+            ${jailbreak}
             You rewrite the prompt to be pure dialogue, easily readable, text. 
             Rewrite everything between "_" (actions) to first-person perspective narrations (Example: *moves hand* to "I move my hand"). 
             Respond in readable letters only, removing all Markdown formatting! Encapsulate dialog with quotation marks (")!

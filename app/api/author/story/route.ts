@@ -2,6 +2,7 @@
 import { Profile, Story } from "@/types/db";
 import { author } from "@/functions/ai/author";
 import { _STORY_MAX_LENGHT } from "@/lib/maxLength";
+import { jailbreak } from "@/lib/prompts";
 
 type RequestBody = {
     story: Story, profile: Profile, field: string
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
     const result = await author({
         profile: profile,
         systemText: `
+            ${jailbreak}
             You are a helpful and experienced Author who helps users write Stories based on Characters and user interaction.
             When refering to the user in the Story, use "{{user}}" as a dynamic placeholder.
             Generate a ${field} for a Story based on all the information in the prompt.

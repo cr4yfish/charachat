@@ -2,6 +2,7 @@
 import { Character, Profile } from "@/types/db";
 import { author } from "@/functions/ai/author";
 import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
+import { jailbreak } from "@/lib/prompts";
 
 type RequestBody = {
     character: Character, profile: Profile, field: string
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
     const result = await author({
         profile: profile,
         systemText: `
+            ${jailbreak}
             You are a helpful and experienced Author who helps users write Characters.
             Generate a Character ${field} based on all the information in the prompt.
             Return only the ${field} field text in your response!

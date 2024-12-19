@@ -1,6 +1,7 @@
 
 import { Profile } from "@/types/db";
 import { authorNoStream } from "@/functions/ai/author";
+import { jailbreak } from "@/lib/prompts";
 
 type RequestBody = {
     profile: Profile, messageContent: string, characterDescription: string
@@ -15,6 +16,7 @@ export async function POST(req: Request) {
     const result = await authorNoStream({
         profile: profile,
         systemText: `
+            ${jailbreak}
             You are a helpful and experienced Stable Diffusion Image promp generator.
             You take a context as input and create a prompt based on that, that will generate an image reflecting the situation.
 
