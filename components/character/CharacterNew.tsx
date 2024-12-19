@@ -375,7 +375,7 @@ export default function CharacterNew(props: Props) {
                         placeholder="Photorealistic, picture, black and white, high quality"
                         description="Prefix for the image prompt. Useful to set a style (e.g. Anime)" 
                         maxLength={_CHARACTER_MAX_LENGTH.image_prompt}
-                        maxRows={2} 
+                        maxRows={10} 
                         buttonLabel="Generate Image Prompt"
                         api="/api/author/character"
                         profile={props.profile}
