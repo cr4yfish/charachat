@@ -121,9 +121,11 @@ export async function POST(req: Request) {
                     ${chat?.story?.extra_characters_client?.map((c: Character) => `${c.name}: ${c.description}`).join("\n")}
                 ` 
             }
+        `
 
+        const dynamicBookMessage = `
             This is all the knowledge you memorized during the conversation up until now:
-            ${summarizedMemory}
+            ${summarizedMemory}.
         `
 
         const anthropicCacheControl = {
@@ -147,10 +149,16 @@ export async function POST(req: Request) {
             frequencyPenalty: chat.frequency_penalty,
             seed: Math.round(Math.random()*1000),
             model: model,
+            experimental_continueSteps: true,
             messages: [
                 {
                     role: "system",
                     content: systemMessage,
+                    experimental_providerMetadata: anthropicCacheControl,
+                },
+                {
+                    role: "system",
+                    content: dynamicBookMessage,
                     experimental_providerMetadata: anthropicCacheControl,
                 },
                 ...convertedMessages
