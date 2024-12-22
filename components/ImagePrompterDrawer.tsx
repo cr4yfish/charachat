@@ -25,7 +25,7 @@ export default function ImagePrompterDrawer(props: Props) {
     const [imageModel, setImageModel] = useState<ImageModel | VideoModel>(imageModels[0]);
     const [imagePrompt, setImagePrompt] = useState("");
     const [isGenerateLoading, setIsGenerateLoading] = useState(false);
-    const [selectedTab, setSelectedTab] = useState("prompt");
+    const [selectedTab, setSelectedTab] = useState<"prompt" | "model" | "image">("prompt");
     const [currentStatus, setCurrentStatus] = useState<string | undefined>();
     const { toast } = useToast();
 
@@ -181,72 +181,81 @@ export default function ImagePrompterDrawer(props: Props) {
             <DrawerTrigger asChild>
                 {props.trigger}
             </DrawerTrigger>
-            <DrawerContent className=" max-md:h-full " onClick={e => e.stopPropagation()}>
+            <DrawerContent className=" max-md:h-full w-full" onClick={e => e.stopPropagation()}>
                 <DrawerHeader className="flex flex-col items-center justify-center">
                     <DrawerTitle>Image Generator</DrawerTitle>
                 </DrawerHeader>
 
-                <div className="  max-md:h-full p-4 flex flex-col items-center justify-center flex-wrap gap-3">
-                    <Tabs className="flex flex-col" aria-label="Promptflow" selectedKey={selectedTab} onSelectionChange={key => setSelectedTab(key as string)} >
-                        <Tab title="Prompt" key="prompt" className="w-full flex flex-col gap-2 items-center">
-                                <Textarea 
-                                    label="Prompt" 
-                                    description="Describe the image you want to generate. Use keywords for best results. Order matters."
-                                    className="w-full max-w-xl"
-                                    autoCorrect="off"
-                                    autoComplete="off"
-                                    minRows={8}
-                                    value={imagePrompt}
-                                    onValueChange={setImagePrompt}
-                                    isDisabled={props.initPromptLoading}
-                                />
-                                
-                                <div className="flex flex-col w-full justify-center items-center relative gap-2">
-                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times and timeouts)</p>
-                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
-                                        {imageModels.filter(im => im.provider !== "replicate").map((model) => (
-                                            <Button
-                                                className="min-w-[100px]"
-                                                key={model.id}
-                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
-                                                size="sm"
-                                                onClick={() => setImageModel(model)}
-                                            >
-                                                {model.style}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate. <a href={"/settings#api"} className="underline text-blue-500">Get API key</a></p>
-                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
-                                        {imageModels.filter(im => im.provider == "replicate").map((model) => (
-                                            <Button
-                                                className="min-w-[100px]"
-                                                key={model.id}
-                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
-                                                size="sm"
-                                                onClick={() => setImageModel(model)}
-                                            >
-                                                {model.style}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                    <p className="text-xs dark:text-zinc-400 w-full max-w-xl">GIF using Replicate <a href={"/settings#api"} className="underline text-blue-500">Get API key</a></p>
-                                    <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
-                                        {videoModels.filter(im => im.provider == "replicate").map((model) => (
-                                            <Button
-                                                className="min-w-[100px]"
-                                                key={model.id}
-                                                variant={imageModel.id === model.id ? "solid" : "ghost"}
-                                                size="sm"
-                                                onClick={() => setImageModel(model)}
-                                            >
-                                                {model.title}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                </div>
+                <div className="max-md:h-full p-4 flex flex-col items-center justify-start flex-wrap gap-3">
+                    <Tabs 
+                        variant="underlined"
+                        color="primary"
+                        radius="full"
+                        aria-label="Promptflow" 
+                        selectedKey={selectedTab} 
+                        onSelectionChange={key => setSelectedTab(key as "prompt" | "model" | "image")}
+                    >
+                        <Tab title={<div className="flex items-center gap-2"><Icon downscale>book</Icon>Prompt</div>} key="prompt" className="w-full flex flex-col gap-2 items-center justify-between">
+                            <Textarea 
+                                label="Prompt" 
+                                description="Describe the image you want to generate. Use keywords for best results. Order matters."
+                                className="w-full max-w-xl"
+                                autoCorrect="off"
+                                autoComplete="off"
+                                minRows={8}
+                                maxRows={20}
+                                value={imagePrompt}
+                                onValueChange={setImagePrompt}
+                                isDisabled={props.initPromptLoading}
+                            />
                         </Tab>
-                        <Tab title="Image" key="image" isDisabled={!props.imageLink} className="w-full max-md:h-full max-md:max-h-[50%] flex flex-col items-center">
+                        <Tab title={<div className="flex items-center gap-2"><Icon downscale>style</Icon>Model</div>} key="model" isDisabled={!imagePrompt || imagePrompt?.length == 0} className="w-full flex flex-col items-center">
+                            <div className="flex flex-col w-full justify-center items-center relative gap-2">
+                                <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Free Styles using Huggingface (expect queue times and timeouts)</p>
+                                <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                    {imageModels.filter(im => im.provider !== "replicate").map((model) => (
+                                        <Button
+                                            className="min-w-[100px]"
+                                            key={model.id}
+                                            variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                            size="sm"
+                                            onClick={() => setImageModel(model)}
+                                        >
+                                            {model.style}
+                                        </Button>
+                                    ))}
+                                </div>
+                                <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Instant generation using Replicate. <a href={"/settings#api"} className="underline text-blue-500">Get API key</a></p>
+                                <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                    {imageModels.filter(im => im.provider == "replicate").map((model) => (
+                                        <Button
+                                            className="min-w-[100px]"
+                                            key={model.id}
+                                            variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                            size="sm"
+                                            onClick={() => setImageModel(model)}
+                                        >
+                                            {model.style}
+                                        </Button>
+                                    ))}
+                                </div>
+                                <p className="text-xs dark:text-zinc-400 w-full max-w-xl">GIF using Replicate <a href={"/settings#api"} className="underline text-blue-500">Get API key</a></p>
+                                <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                    {videoModels.filter(im => im.provider == "replicate").map((model) => (
+                                        <Button
+                                            className="min-w-[100px]"
+                                            key={model.id}
+                                            variant={imageModel.id === model.id ? "solid" : "ghost"}
+                                            size="sm"
+                                            onClick={() => setImageModel(model)}
+                                        >
+                                            {model.title}
+                                        </Button>
+                                    ))}
+                                </div>
+                            </div>
+                        </Tab>
+                        <Tab title={<div className="flex items-center gap-2"><Icon downscale>image</Icon>Result</div>} key="image" isDisabled={!props.imageLink} className="w-full max-md:h-full max-md:max-h-[50%] flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl max-w-[1024px] max-md:h-full">
                                 { imageModel.type.includes("-to-image") ?
                                     <img src={safeParseLink(props.imageLink)} className="w-full h-full object-cover" />
@@ -262,8 +271,21 @@ export default function ImagePrompterDrawer(props: Props) {
 
                 </div>
 
-                <DrawerFooter className="flex flex-row justify-center items-center w-full">
-                    <Button 
+                <DrawerFooter className="flex flex-col justify-center items-center w-full max-w-xl self-center">
+                    {selectedTab == "prompt" && imagePrompt && imagePrompt.length > 0 &&
+                        <Button 
+                            onClick={() => setSelectedTab("model")} 
+                            radius="full" 
+                            fullWidth 
+                            size="lg" 
+                            color="primary" 
+                            endContent={<Icon>arrow_forward</Icon>} 
+                            className="mb-2"
+                        >
+                            Select a model
+                        </Button>
+                    }
+                    {selectedTab == "model" && <Button 
                         isLoading={props.initPromptLoading}
                         onClick={() => {
                             if(isGenerateLoading) {
@@ -273,14 +295,16 @@ export default function ImagePrompterDrawer(props: Props) {
                             }
                         }}
                         radius="full"
+                        fullWidth
+                        size="lg"
                         color={isGenerateLoading ? "danger" : "primary"}
                         endContent={<Icon filled>{isGenerateLoading ? "stop" : "send"}</Icon>}
                     >
                         {isGenerateLoading ? "Abort" : "Generate"}
-                    </Button>
-                    <DrawerClose disabled={!props.imageLink} asChild>
-                        <Button onClick={props.saveImage} isDisabled={!props.imageLink} color="secondary" endContent={<Icon>add</Icon>} radius="full">Add to Chat</Button>
-                    </DrawerClose>
+                    </Button>}
+                    {selectedTab == "image" && <DrawerClose disabled={!props.imageLink} asChild>
+                        <Button size="lg" fullWidth onClick={props.saveImage} isDisabled={!props.imageLink} color="primary" endContent={<Icon>add</Icon>} radius="full">Add</Button>
+                    </DrawerClose>}
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>
