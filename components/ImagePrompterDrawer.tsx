@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { uploadLinkToImgur } from "@/functions/ai/image";
-import { Character } from "@/types/db";
+import { Character, Lora } from "@/types/db";
 
 type Props = {
     imageLink: string | null | undefined;
@@ -29,6 +29,7 @@ export default function ImagePrompterDrawer(props: Props) {
     const [isGenerateLoading, setIsGenerateLoading] = useState(false);
     const [selectedTab, setSelectedTab] = useState<"prompt" | "model" | "image">("prompt");
     const [currentStatus, setCurrentStatus] = useState<string | undefined>();
+    const [loras, setLoras] = useState<Lora[]>([]);
     const { toast } = useToast();
 
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -79,7 +80,7 @@ export default function ImagePrompterDrawer(props: Props) {
                     body: JSON.stringify({
                         imagePrompt: imagePrompt,
                         model: imageModel.id,
-                        loras: props.character?.loras
+                        loras: loras
                     }),
                     signal
                 })
@@ -178,6 +179,20 @@ export default function ImagePrompterDrawer(props: Props) {
         }
     }, [currentStatus, toast])
 
+    useEffect(() => {
+        if(props.character) {
+            setLoras(props.character.loras ?? []);
+        }
+    }, [props.character])
+
+    const toggleLora = (lora: Lora) => {
+        if(loras.includes(lora)) {
+            setLoras(prev => prev.filter(l => l !== lora));
+        } else {
+            setLoras(prev => [...prev, lora]);
+        }
+    }
+
     return (
         <>
         <Drawer>
@@ -256,13 +271,15 @@ export default function ImagePrompterDrawer(props: Props) {
                                         </Button>
                                     ))}
                                 </div>
-                                <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Character LoRA weights</p>
+                                <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Character LoRA. Click to toggle them on/off. Only works on Pony models for now.</p>
                                 <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
                                     {props.character?.loras?.map((lora, index) => (
                                         <Button
                                             className="min-w-[100px]"
                                             key={index}
                                             size="sm"
+                                            onClick={() => toggleLora(lora)}
+                                            variant={loras.includes(lora) ? "solid" : "ghost"}
                                         >
                                             {lora.title}
                                         </Button>
