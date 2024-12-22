@@ -543,8 +543,15 @@ export default function ChatMain(props : Props) {
                                                 </span>
                                             </Button>
                                         ))}
-                                        <Button isLoading={isLoading} isDisabled={isSavingVariant} onClick={handleGenerateVariant} isIconOnly variant="light" className="dark:text-zinc-400">
-                                            <Icon color="text-zinc-400">add</Icon>
+                                        <Button 
+                                            isLoading={isLoading} 
+                                            isDisabled={isSavingVariant} 
+                                            onClick={handleGenerateVariant} 
+                                            variant="light" 
+                                            className="dark:text-zinc-400"
+                                            startContent={<Icon color="text-zinc-400">add</Icon>}
+                                        >
+                                            Next variant
                                         </Button>
                                     </div>
                                 </div>
