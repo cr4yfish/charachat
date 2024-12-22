@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import { Separator } from "../ui/separator";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import CategoryAutocomplete from "./CategoryAutocomplete";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerDescription } from "@/components/ui/drawer";
 import { useState } from "react";
 import { saveCharacter } from "@/app/c/new/actions";
 import { Button } from "../utils/Button";
-import { Character, Profile, Tag } from "@/types/db";
+import { Character, Lora, Profile, Tag } from "@/types/db";
 import InputWithAI from "../story/InputWithAI";
 import CharacterCard from "./CharacterCard";
 import { getKeyClientSide } from "@/lib/crypto";
@@ -37,6 +38,8 @@ export default function CharacterNew(props: Props) {
     const { toast } = useToast();
     const router = useRouter();
 
+    // lora
+    const [newLora, setNewLora] = useState<Lora>({} as Lora);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -144,6 +147,40 @@ export default function CharacterNew(props: Props) {
         setNewCharacter({
             ...newCharacter,
             [name]: value
+        })
+    }
+
+    const handleAddLora = () => {
+        if(!newLora.title || !newLora.url || !newLora.activation) {
+            toast({
+                title: "Please fill out all fields",
+                description: "Title, URL and Activation are required",
+                variant: "destructive"
+            })  
+            return;
+        }
+
+        if(newCharacter.loras == undefined) {
+            setNewCharacter({
+                ...newCharacter,
+                loras: [newLora]
+            })
+        } else {
+            setNewCharacter({
+                ...newCharacter,
+                loras: [...newCharacter.loras, newLora]
+            })
+        }
+
+        setNewLora({} as Lora);
+    }
+
+    const removeLora = (index: number) => {
+        const newLoras = newCharacter.loras;
+        newLoras?.splice(index, 1);
+        setNewCharacter({
+            ...newCharacter,
+            loras: newLoras
         })
     }
 
@@ -381,6 +418,34 @@ export default function CharacterNew(props: Props) {
                         profile={props.profile}
                         character={newCharacter}
                     />
+                    <h3>Loras</h3>
+                    <p className="text-xs dark:text-zinc-400">With LORAs you can make any image generation possible. E.g. you can generate pictures of the real Oppenheimer for an Oppenheimer Character. Compatibility is not guaranteed. Especially for multiple LORAs.</p>
+                    <div className="flex flex-row flex-wrap gap-2">
+                        {newCharacter.loras?.map((lora, index) => (
+                            <Chip className=" cursor-pointer " onClick={() => removeLora(index)} key={index}>{lora.title}</Chip>
+                        ))}
+                    </div>
+                    <Drawer>
+                        <DrawerTrigger asChild>
+                            <Button startContent={<Icon>add</Icon>}>Add Lora</Button>
+                        </DrawerTrigger>
+                        <DrawerContent className=" max-md:h-full w-full" onClick={e => e.stopPropagation()}>
+                            <DrawerHeader>
+                                <DrawerTitle>Add another Lora</DrawerTitle>
+                                <DrawerDescription>These are used to fine-tune all images of this Character. With LORAs you can pretty much generate anything. Please be responsible.</DrawerDescription>
+                            </DrawerHeader>
+                            <div className="max-md:h-full p-4 flex flex-col items-center justify-start flex-wrap gap-3">
+                                <Input value={newLora.title} onValueChange={(value) => setNewLora({...newLora, title: value})} label="Lora Name" placeholder="NY Central Park" />
+                                <Input value={newLora.url} onValueChange={(value) => setNewLora({...newLora, url: value})} label="URL to Safetensors" placeholder="https://huggingface.co/somedude/nycentralparklora" />
+                                <Input value={newLora.activation} onValueChange={(value) => setNewLora({...newLora, activation: value})} label="Activation Words" placeholder="central park, park, NY, new york, nyc" />
+                            </div>
+                        <DrawerFooter>
+                            <DrawerClose asChild>
+                                <Button onClick={handleAddLora} color="primary">Add Lora</Button>
+                            </DrawerClose>
+                        </DrawerFooter>
+                        </DrawerContent>
+                    </Drawer>
                     <Input 
                         label="Voice Cloning Speaker link" 
                         placeholder="https://link.to/speaker.wav"

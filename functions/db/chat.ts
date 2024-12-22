@@ -50,7 +50,8 @@ const chatFormatter = async (db: any): Promise<Chat> => {
                 user: db.character_owner,
                 username: db.character_owner_username,
                 avatar_link: db.character_owner_avatar_link,
-            }
+            },
+            loras: db.character_loras,
         },
         user: {
             user: db.profile_user,

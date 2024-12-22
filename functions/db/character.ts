@@ -4,7 +4,7 @@
 import { cache } from "react";
 
 import { createClient } from "@/utils/supabase/supabase";
-import { Character } from "@/types/db";
+import { Character, Lora } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "@/lib/crypto";
 import { getKeyServerSide } from "../serverHelpers";
 import { LoadMoreProps } from "@/types/client";
@@ -69,13 +69,12 @@ const characterFormatter = async (db: any): Promise<Character> => {
 
 export const decryptCharacter = async (character: Character, key: string): Promise<Character> => {
     const buffer = Buffer.from(key, "hex");
-
     try {
         return {
             ...character,
             name: decryptMessage(character.name ?? " ", buffer),
             description: decryptMessage(character.description ?? " ", buffer),
-            intro: decryptMessage(character.intro ?? " ", buffer),
+            intro: decryptMessage(character.intro ?? "", buffer),
             bio: decryptMessage(character.bio ?? " ", buffer),
             book: decryptMessage(character.book ?? " ", buffer),
             image_link: decryptMessage(character.image_link ?? " ", buffer),
@@ -85,7 +84,8 @@ export const decryptCharacter = async (character: Character, key: string): Promi
             first_message: decryptMessage(character.first_message ?? " ", buffer),
             speaker_link: decryptMessage(character.speaker_link ?? " ", buffer),
             scenario: decryptMessage(character.scenario ?? " ", buffer),
-            tags_full: (character.tags_full) ? await Promise.all(character.tags_full.map(t => decryptTag(t))) : []
+            tags_full: (character.tags_full) ? await Promise.all(character.tags_full.map(t => decryptTag(t))) : [],
+            loras: character.loras ? await Promise.all(character.loras.map(l => decryptLora(l, buffer))) : []
         }
     } catch (error) {
         console.error("Error decrypting character", error);
@@ -101,7 +101,7 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         ...character,
         name: encryptMessage(character.name ?? " ", buffer),
         description: encryptMessage(character.description ?? " ", buffer),
-        intro: encryptMessage(character.intro ?? " ", buffer),
+        intro: encryptMessage(character.intro ?? "", buffer),
         bio: encryptMessage(character.bio ?? " ", buffer),
         book: encryptMessage(character.book ?? " ", buffer),
         image_link: encryptMessage(character.image_link ?? " ", buffer),
@@ -111,7 +111,24 @@ export const encryptCharacter = async (character: Character, key: string): Promi
         first_message: encryptMessage(character.first_message ?? " ", buffer),
         speaker_link: encryptMessage(character.speaker_link ?? " ", buffer),
         scenario: encryptMessage(character.scenario ?? " ", buffer),
-        tags_full: character.tags_full ? await Promise.all(character.tags_full.map(t => encryptTag(t))) : []
+        tags_full: character.tags_full ? await Promise.all(character.tags_full.map(t => encryptTag(t))) : [],
+        loras: character.loras ? await Promise.all(character.loras.map(l => encryptLora(l, buffer))) : []
+    }
+}
+
+function encryptLora(lora: Lora, buffer: Buffer): Lora {
+    return {
+        title: encryptMessage(lora.title, buffer),
+        url: encryptMessage(lora.url, buffer),
+        activation: encryptMessage(lora.activation ?? "", buffer),
+    }
+}
+
+function decryptLora(lora: Lora, buffer: Buffer): Lora {
+    return {
+        title: decryptMessage(lora.title, buffer),
+        url: decryptMessage(lora.url, buffer),
+        activation: decryptMessage(lora.activation ?? "", buffer),
     }
 }
 
@@ -221,7 +238,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
 
 export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
     const { data, error } = await (await createClient())
-        .from(publicTableName)
+        .from(characterTableName)
         .select(characterMatcher)
         .or(`name.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
 

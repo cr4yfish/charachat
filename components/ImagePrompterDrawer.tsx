@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { uploadLinkToImgur } from "@/functions/ai/image";
+import { Character } from "@/types/db";
 
 type Props = {
     imageLink: string | null | undefined;
@@ -19,6 +20,7 @@ type Props = {
     initImagePrompt?: string;
     setImagePrompt?: (prompt: string) => void;
     initPromptLoading?: boolean;
+    character?: Character | undefined;
 }
 
 export default function ImagePrompterDrawer(props: Props) {
@@ -76,7 +78,8 @@ export default function ImagePrompterDrawer(props: Props) {
                     method: "POST",
                     body: JSON.stringify({
                         imagePrompt: imagePrompt,
-                        model: imageModel.id
+                        model: imageModel.id,
+                        loras: props.character?.loras
                     }),
                     signal
                 })
@@ -253,6 +256,18 @@ export default function ImagePrompterDrawer(props: Props) {
                                         </Button>
                                     ))}
                                 </div>
+                                <p className="text-xs dark:text-zinc-400 w-full max-w-xl">Character LoRA weights</p>
+                                <div className="flex flex-row items-center gap-2 overflow-x-auto max-w-xl w-full justify-self-center self-center relative pb-2">
+                                    {props.character?.loras?.map((lora, index) => (
+                                        <Button
+                                            className="min-w-[100px]"
+                                            key={index}
+                                            size="sm"
+                                        >
+                                            {lora.title}
+                                        </Button>
+                                    ))}
+                                </div>
                             </div>
                         </Tab>
                         <Tab title={<div className="flex items-center gap-2"><Icon downscale>image</Icon>Result</div>} key="image" isDisabled={!props.imageLink} className="w-full max-md:h-full max-md:max-h-[50%] flex flex-col items-center">
@@ -285,25 +300,40 @@ export default function ImagePrompterDrawer(props: Props) {
                             Select a model
                         </Button>
                     }
-                    {selectedTab == "model" && <Button 
+                    {selectedTab == "model" && !isGenerateLoading && <Button 
                         isLoading={props.initPromptLoading}
-                        onClick={() => {
-                            if(isGenerateLoading) {
-                                handleAbort();
-                            } else {
-                                handleGenerateImage();
-                            }
-                        }}
+                        onClick={handleGenerateImage}
                         radius="full"
                         fullWidth
                         size="lg"
-                        color={isGenerateLoading ? "danger" : "primary"}
-                        endContent={<Icon filled>{isGenerateLoading ? "stop" : "send"}</Icon>}
+                        color="primary"
+                        endContent={<Icon filled>send</Icon>}
                     >
-                        {isGenerateLoading ? "Abort" : "Generate"}
+                        Generate
                     </Button>}
-                    {selectedTab == "image" && <DrawerClose disabled={!props.imageLink} asChild>
-                        <Button size="lg" fullWidth onClick={props.saveImage} isDisabled={!props.imageLink} color="primary" endContent={<Icon>add</Icon>} radius="full">Add</Button>
+                    {isGenerateLoading && <Button 
+                        isLoading={props.initPromptLoading}
+                        onClick={handleAbort}
+                        radius="full"
+                        fullWidth
+                        size="lg"
+                        color="danger"
+                        endContent={<Icon filled>stop</Icon>}
+                    >
+                        Abort
+                    </Button>}
+                    {selectedTab == "image" && !isGenerateLoading && <DrawerClose disabled={!props.imageLink} asChild>
+                        <Button 
+                            size="lg" 
+                            fullWidth 
+                            onClick={props.saveImage} 
+                            isDisabled={!props.imageLink} 
+                            color="primary" 
+                            endContent={<Icon>add</Icon>} 
+                            radius="full"
+                        >
+                            Add
+                        </Button>
                     </DrawerClose>}
                 </DrawerFooter>
             </DrawerContent>

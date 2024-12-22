@@ -537,6 +537,7 @@ export default function Messagebubble(props: Props) {
                                 setImagePrompt={setImagePrompt}
                                 initPromptLoading={imagePromptLoading}
                                 initImagePrompt={imagePrompt}
+                                character={props.chat?.character}
                                 trigger={
                                     <Button 
                                         isDisabled={props.isDeleting}

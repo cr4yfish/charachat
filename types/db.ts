@@ -31,6 +31,7 @@ export type Character = {
     scenario?: string;
     tags?: string[];
     tags_full?: Tag[];
+    loras?: Lora[];
 }
 
 export type Chat = {
@@ -148,4 +149,10 @@ export type Leaderboard = {
     avatar_link: string;
     total_chat_count: number;
     position?: number;
+}
+
+export type Lora = {
+    url: string;
+    activation?: string;
+    title: string;
 }

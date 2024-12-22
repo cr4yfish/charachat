@@ -1,4 +1,4 @@
-import { Profile } from "@/types/db";
+import { Lora, Profile } from "@/types/db";
 
 export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): string | undefined => {
     switch(modelId as ModelId) {
@@ -131,7 +131,11 @@ export type ImageModelId =
     "black-forest-labs/flux-1.1-pro" |
     "stability-ai/stable-diffusion-3.5-large" |
     "stability-ai/stable-diffusion-3.5-large-turbo" |
-    "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48"
+    "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48" |
+    "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9" |
+    "datacte/flux-aesthetic-anime:2c3677b83922a0ac99493467805fb0259f55c4f4f7b1988b1dd1d92f083a8304" |
+    "delta-lock/ponynai3:2f436c5f839e5b12eefe2a99a1e289fe8ba1459367123c7a6b6e9839178a7d3e" |
+    "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a"
 
 export type VideoModelId = 
     "fofr/ltx-video:983ec70a06fd872ef4c29bb6b728556fc2454125a5b2c68ab51eb8a2a9eaa46a" |
@@ -156,6 +160,7 @@ export type ImageModel = {
     style: string;
     provider: Provider;
     type: ModelType;
+    extra_lora?: Lora[];
 }
 
 export type VideoModel = {
@@ -163,6 +168,7 @@ export type VideoModel = {
     title: string;
     provider: Provider;
     type: ModelType;
+    extra_lora?: string;
 }
 
 export const videoModels: VideoModel[] = [
@@ -294,8 +300,44 @@ export const imageModels: ImageModel[] = [
         provider: "replicate",
         type: "text-to-image"
     },
+    {
+        id: "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9",
+        title: "Anime Flux",
+        style: "JH",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+    {
+        id: "delta-lock/ponynai3:2f436c5f839e5b12eefe2a99a1e289fe8ba1459367123c7a6b6e9839178a7d3e",
+        title: "Pony AI3",
+        style: "Pony Anime",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+    {
+        id: "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a",
+        title: "Pony Realism",
+        style: "Pony Real",
+        provider: "replicate",
+        type: "text-to-image"
+    }
 
 ]
+
+export const getExtraImageModelOptions = (modelId: ImageModelId) => {
+    switch(modelId) {
+        case "delta-lock/ponynai3:2f436c5f839e5b12eefe2a99a1e289fe8ba1459367123c7a6b6e9839178a7d3e":
+            return {
+                var: "waiANINSFWPONYXL_v11",
+                model: "waiANINSFWPONYXL_v11",
+                steps: 75
+            }
+        case "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a":
+            return {
+                step: 75
+            }
+    }
+}
 
 export const isFreeModel = (modelId: ModelId) => {
     switch(modelId) {
