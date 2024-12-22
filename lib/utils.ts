@@ -94,20 +94,23 @@ export function safeParseLink(link: string | undefined | null): string {
   return "https://placehold.co/600x400";
 }
 
-export const _INTRO_MESSAGE = (character: Character): string => {
+export const _INTRO_MESSAGE = (character: Character, username: string): string => {
+  const variables = getChatVariables(username, character.name)
+
   return `
     ${character.first_message && `
-      This is the first message you should respond with:
-      ${character.first_message}  
+      Repeat the following text in your response to get the chat started (the user doesnt see this message): 
+      ${replaceVariables(character.first_message, variables)}  
     `}
 
     ${character.intro && `
       This is how you would introduce yourself. Use this to create a first message:
-      ${character.intro}
+      ${replaceVariables(character.intro, variables)}
     `}
 
     ${character.scenario && `
-      This is the scenario you are in: ${character.scenario}  
+      Repeat the following text in your response to get the chat started (the user doesnt see this message): 
+      ${replaceVariables(character.scenario, variables)}  
     `}
   `
 };
@@ -124,4 +127,11 @@ export function replaceVariables(text: string, variables: Record<string, string>
   return text.replace(/\${(.*?)}/g, (_, match) => {
     return variables[match] || '';
   });
+}
+
+export const getChatVariables = (username: string, charName: string): Record<string, string> => {
+  return {
+    "{{user}}": username,
+    "{{char}}": charName
+  }
 }

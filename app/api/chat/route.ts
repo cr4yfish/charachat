@@ -5,7 +5,7 @@ import { Character, Chat, Message, Profile } from '@/types/db';
 import { convertToCoreMessages, streamText, Message as AIMessage, tool } from 'ai';
 import { addMessage } from '@/functions/db/messages';
 
-import { _INTRO_MESSAGE, replaceVariables } from "@/lib/utils";
+import { _INTRO_MESSAGE, getChatVariables, replaceVariables } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { addMemory, banStringsTool, chatRenameTool, generateImageOfCharacterTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
 import { ModelId } from '@/lib/ai';
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         if(
             latestMessage &&
             latestMessage.role === "user" && 
-            (latestMessage.content !== _INTRO_MESSAGE(chat.character)) && 
+            (latestMessage.content !== _INTRO_MESSAGE(chat.character, chat.persona?.full_name ?? profile.username)) && 
             !selfDestruct
         ) 
         {
@@ -58,15 +58,13 @@ export async function POST(req: Request) {
             
         }
 
-        const variables: Record<string, string> = {
-            "{{user}}": chat.persona?.full_name || profile.username,
-            "{{char}}": chat.character.name,
-        }
 
         const model = await getLanguageModel({
             modelId: chat.llm || profile.default_llm,
             apiKey: await getModelApiKey(profile, chat.llm as ModelId),
         });
+
+        const variables = getChatVariables(chat.persona?.full_name ?? profile.username, chat.character.name);
 
         // We summarize this with AI (only summarizes >1000 characters)
         const summarizedMemory = chat.dynamic_book ?  await summarizeTool({ profile, text: replaceVariables(chat.dynamic_book, variables) }) : "";
