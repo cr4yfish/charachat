@@ -40,6 +40,7 @@ export default function CharacterNew(props: Props) {
 
     // lora
     const [newLora, setNewLora] = useState<Lora>({} as Lora);
+    const [editLoraMode, setEditLoraMode] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -160,12 +161,25 @@ export default function CharacterNew(props: Props) {
             return;
         }
 
+        // add first lora
         if(newCharacter.loras == undefined) {
             setNewCharacter({
                 ...newCharacter,
                 loras: [newLora]
             })
-        } else {
+        } 
+        // update existing lora
+        else if(newCharacter.loras.find(l => l.url == newLora.url)) {
+            const newLoras = newCharacter.loras;
+            const index = newLoras.findIndex(l => l.url == newLora.url);
+            newLoras[index] = newLora;
+            setNewCharacter({
+                ...newCharacter,
+                loras: newLoras
+            })
+        } 
+        // add another lora
+        else {
             setNewCharacter({
                 ...newCharacter,
                 loras: [...newCharacter.loras, newLora]
@@ -182,6 +196,12 @@ export default function CharacterNew(props: Props) {
             ...newCharacter,
             loras: newLoras
         })
+        setNewLora({} as Lora);
+    }
+
+    const editLora = (index: number) => {
+        setNewLora(newCharacter.loras![index]);
+        setEditLoraMode(true);
     }
 
     return (
@@ -422,17 +442,17 @@ export default function CharacterNew(props: Props) {
                     <p className="text-xs dark:text-zinc-400">With LORAs you can make any image generation possible. E.g. you can generate pictures of the real Oppenheimer for an Oppenheimer Character. Compatibility is not guaranteed. Especially for multiple LORAs.</p>
                     <div className="flex flex-row flex-wrap gap-2">
                         {newCharacter.loras?.map((lora, index) => (
-                            <Chip className=" cursor-pointer " onClick={() => removeLora(index)} key={index}>{lora.title}</Chip>
+                            <Chip className=" cursor-pointer " onClick={() => editLora(index)} key={index}>{lora.title}</Chip>
                         ))}
                     </div>
-                    <Drawer>
+                    <Drawer onOpenChange={setEditLoraMode} open={editLoraMode}>
                         <DrawerTrigger asChild>
-                            <Button startContent={<Icon>add</Icon>}>Add Lora</Button>
+                            <Button startContent={<Icon>add</Icon>}>Add LoRa</Button>
                         </DrawerTrigger>
                         <DrawerContent className=" max-md:h-full w-full" onClick={e => e.stopPropagation()}>
                             <DrawerHeader>
-                                <DrawerTitle>Add another Lora</DrawerTitle>
-                                <DrawerDescription>These are used to fine-tune all images of this Character. With LORAs you can pretty much generate anything. Please be responsible.</DrawerDescription>
+                                <DrawerTitle>Add another LoRa</DrawerTitle>
+                                <DrawerDescription>These are used to fine-tune all images of this Character. With LoRa you can pretty much generate anything. Please be responsible.</DrawerDescription>
                             </DrawerHeader>
                             <div className="max-md:h-full p-4 flex flex-col items-center justify-start flex-wrap gap-3">
                                 <Input value={newLora.title} onValueChange={(value) => setNewLora({...newLora, title: value})} label="Lora Name" placeholder="NY Central Park" />
@@ -441,8 +461,18 @@ export default function CharacterNew(props: Props) {
                             </div>
                         <DrawerFooter>
                             <DrawerClose asChild>
-                                <Button onClick={handleAddLora} color="primary">Add Lora</Button>
+                                <Button onClick={handleAddLora} color="primary">{editLoraMode ? "Save LoRa" : "Add LoRa"}</Button>
                             </DrawerClose>
+                            {newCharacter.loras && newLora && newCharacter.loras.find(l => l.url == newLora.url) &&
+                                <DrawerClose asChild>
+                                    <Button 
+                                        onClick={() => removeLora(newCharacter.loras?.findIndex(l => l.url == newLora.url) ?? 0)}
+                                        color="danger"
+                                    >
+                                        Delete LoRa
+                                    </Button>
+                                </DrawerClose>
+                            }
                         </DrawerFooter>
                         </DrawerContent>
                     </Drawer>
