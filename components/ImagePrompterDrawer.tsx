@@ -178,17 +178,18 @@ export default function ImagePrompterDrawer(props: Props) {
         }
     }, [currentStatus, toast])
 
-    useEffect(() => {
-        if(props.character) {
-            setLoras(props.character.loras ?? []);
-        }
-    }, [props.character])
-
     const toggleLora = (lora: Lora) => {
         if(loras.includes(lora)) {
             setLoras(prev => prev.filter(l => l !== lora));
+            if(lora.activation !== undefined) {
+                setImagePrompt(prev => prev.replace(lora.activation as string, ""));
+            }
+            
         } else {
             setLoras(prev => [...prev, lora]);
+            if(lora.activation !== undefined) {
+                setImagePrompt(prev => lora.activation + ", " + prev);
+            }
         }
     }
 
