@@ -74,7 +74,6 @@ export default function ImagePrompterDrawer(props: Props) {
             })
 
             if(imageModel.provider === "replicate") {
-
                 const res = await fetch("/api/image/replicate", {
                     method: "POST",
                     body: JSON.stringify({
@@ -288,7 +287,7 @@ export default function ImagePrompterDrawer(props: Props) {
                             </div>
                         </Tab>
                         <Tab title={<div className="flex items-center gap-2"><Icon downscale>image</Icon>Result</div>} key="image" isDisabled={!props.imageLink} className="w-full max-md:h-full max-md:max-h-[50%] flex flex-col items-center">
-                            <div className="overflow-hidden rounded-xl max-w-[1024px] max-md:h-full">
+                            <div className="overflow-hidden rounded-xl max-w-[1024px] max-h-[768px] max-md:h-full">
                                 { imageModel.type.includes("-to-image") ?
                                     <img src={safeParseLink(props.imageLink)} className="w-full h-full object-cover" />
                                     :

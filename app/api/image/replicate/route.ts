@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/functions/db/auth";
 import { getKeyServerSide } from "@/functions/serverHelpers";
-import { ImageModelId } from "@/lib/ai";
+import { getExtraImageModelOptions, ImageModelId } from "@/lib/ai";
 import { decryptMessage } from "@/lib/crypto";
 import { Lora } from "@/types/db";
 import { NextResponse } from "next/server";
@@ -31,13 +31,14 @@ export async function POST(request: Request) {
 
     const modelName = model?.split(":")[0] ?? "black-forest-labs/flux-schnell";
     const modelVersion = model?.split(":")[1];
+    const extraOptions = getExtraImageModelOptions(model as ImageModelId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const options: any = {
         model: modelName,
         version: modelVersion,
         input: { 
-            prompt: "score_9, score_8_up, score_7_up" + loras?.map(l => l.activation).join(",") + "," + imagePrompt,
+            prompt: "score_9, score_8_up, score_7_up, " + loras?.map(l => l.activation).join(",") + "," + imagePrompt,
             negative_prompt: "score_6, score_5, score_4, score_3, score_2, score_1, ugly, low res, blurry, bad quality, bad anatomy, worst quality, low quality, low resolutions, extra fingers, blur, blurry, ugly, wrongs proportions, watermark, image artifacts, lowres, ugly, jpeg artifacts, deformed, noisy image",
             disable_safety_checker: true,
             safety_tolerance: 6,
@@ -46,9 +47,9 @@ export async function POST(request: Request) {
             go_fast: true,
             aspect_ratio: "4:3",
             extra_lora: loras?.map(lora => lora.url).join(","),
+            ...extraOptions
         },
     }
-    
     // A prediction is the result you get when you run a model, including the input, output, and other details
     const prediction = await replicate.predictions.create(options);
     

@@ -151,7 +151,7 @@ export default function CharacterNew(props: Props) {
     }
 
     const handleAddLora = () => {
-        if(!newLora.title || !newLora.url || !newLora.activation) {
+        if(!newLora.title || !newLora.url) {
             toast({
                 title: "Please fill out all fields",
                 description: "Title, URL and Activation are required",
