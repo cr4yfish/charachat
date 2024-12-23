@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         model: modelName,
         version: modelVersion,
         input: { 
-            prompt: "score_9, score_8_up, score_7_up, " + loras?.map(l => l.activation).join(",") + "," + imagePrompt,
+            prompt: "score_9, score_8_up, score_7_up, " + imagePrompt,
             negative_prompt: "score_6, score_5, score_4, score_3, score_2, score_1, ugly, low res, blurry, bad quality, bad anatomy, worst quality, low quality, low resolutions, extra fingers, blur, blurry, ugly, wrongs proportions, watermark, image artifacts, lowres, ugly, jpeg artifacts, deformed, noisy image",
             disable_safety_checker: true,
             safety_tolerance: 6,
