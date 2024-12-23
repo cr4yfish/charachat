@@ -8,6 +8,7 @@ import Icon from "../utils/Icon";
 import StoryCard from "../story/StoryCard";
 import { Story } from "@/types/db";
 import { Button } from "../utils/Button";
+import Markdown from "react-markdown";
 
 
 type Props = {
@@ -35,35 +36,35 @@ export default function CharacterPageTabs(props: Props) {
                     <>
                     <h3>Introduction</h3>
                     <p className=" !text-red-500 dark:!text-red-500 !m-0 !p-0">Notice: Character introductions are deprecated and should be moved to the Greeting instead. This will still work, for now.</p>
-                    <p>{props.character.intro}</p>
+                    <Markdown>{props.character.intro}</Markdown>
                     </>
                     }
 
                     {( props.character.first_message) && 
                     <>
                     <h3>Greeting / First message</h3>
-                    <p>{props.character.first_message}</p>
+                    <Markdown>{props.character.first_message}</Markdown>
                     </>
                     }
 
                     {props.character.bio &&
                     <>
                     <h3>Bio</h3>
-                    <p>{props.character.bio}</p>
+                    <Markdown>{props.character.bio}</Markdown>
                     </>
                     }
 
                     {props.character.personality &&
                     <>
                     <h3>Personality</h3>
-                    <p>{props.character.personality}</p>
+                    <Markdown>{props.character.personality}</Markdown>
                     </>
                     }
 
                     {props.character.scenario &&
                     <>
                     <h3>Scenario</h3>
-                    <p>{props.character.scenario}</p>
+                    <Markdown>{props.character.scenario}</Markdown>
                     </>
                     }
 
