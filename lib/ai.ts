@@ -267,44 +267,9 @@ export const imageModels: ImageModel[] = [
         type: "text-to-image"
     },
     {
-        id: "stability-ai/stable-diffusion-3.5-large-turbo",
-        title: "Stable Diffusion 3.5 Large Turbo",
-        style: "SD Turbo",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "stability-ai/stable-diffusion-3.5-large",
-        title: "Stable Diffusion 3.5 Large",
-        style: "SD3.5",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48",
-        title: "Proteus v0.3",
-        style: "Proteus",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "luma/photon-flash",
-        title: "Photon Flash",
-        style: "Photon",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "nvidia/sana:c6b5d2b7459910fec94432e9e1203c3cdce92d6db20f714f1355747990b52fa6",
-        title: "NVIDIA Sana",
-        style: "Sana",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
         id: "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9",
         title: "Anime Flux",
-        style: "JH",
+        style: "Flux Anime",
         provider: "replicate",
         type: "text-to-image"
     },
@@ -325,11 +290,24 @@ export const imageModels: ImageModel[] = [
     {
         id: "delta-lock/noobai-xl:63d7bedb177c2a94481bf7309def720d355f46d3130d9131a562099806a8f621",
         title: "noobai-xl",
-        style: "noobai-xl",
+        style: "NoobAI-XL",
         provider: "replicate",
         type: "text-to-image"
-    }
-
+    },
+    {
+        id: "stability-ai/stable-diffusion-3.5-large-turbo",
+        title: "Stable Diffusion 3.5 Large Turbo",
+        style: "SD Turbo",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+    {
+        id: "stability-ai/stable-diffusion-3.5-large",
+        title: "Stable Diffusion 3.5 Large",
+        style: "SD3.5",
+        provider: "replicate",
+        type: "text-to-image"
+    },
 ]
 
 export const getExtraImageModelOptions = (modelId: ImageModelId) => {
@@ -346,6 +324,16 @@ export const getExtraImageModelOptions = (modelId: ImageModelId) => {
                 step: 100,
                 width: 864,
                 height: 1184
+            }
+        case "delta-lock/noobai-xl:63d7bedb177c2a94481bf7309def720d355f46d3130d9131a562099806a8f621":
+            return {
+                negative_prompt: "(worst quality, low quality, ugly:1.4), furry, (multiple_views:2), multiple_views, (comic, 4koma, censored, bar_censor, mosaic_censoring), poorly drawn hands,poorly drawn feet,poorly drawn face,out of frame,mutation,mutated,extra limbs,extra legs,extra arms,disfigured,deformed,cross-eye,blurry,(bad art, bad anatomy:1.4),blurred,text,watermark,negative_hand-neg,((( three fingers, four fingers, six fingers, seven fingers, extra fingers, missing fingers, fused fingers, deformed fingers, ugly fingers,deformed hands, bad hands, worst time, worst hands, wrong hands, twisted hands, ugly hands,deformed toes, fused toes, missing toes,wrong feet, deformed feet, ugly feet))),unaestheticXL_cbp62 -neg,NEGATIVE_HANDS,",
+                width: 832,
+                height: 1216,
+                steps: 35,
+                vae: "noobaiXLNAIXL_epsilonPred11Version",
+                model: "noobaiXLNAIXL_epsilonPred11Version",
+                scheduler: "Euler A",
             }
     }
 }
