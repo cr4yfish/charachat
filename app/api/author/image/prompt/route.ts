@@ -20,11 +20,12 @@ export async function POST(req: Request) {
             You are a helpful and experienced Stable Diffusion Image promp generator.
             You take a context as input and create a prompt based on that, that will generate an image reflecting the situation.
 
-            Always include the following:
-            - Location (Example: Suburban Backyard, white fence)
+            Always include the following and in this order:
             - Character clothing, action & emotion (Example: Green T-Shirt, throwing baseball, smiling)
-            - Time and weather (Example: Rainy night)
             - The camera (viewers) location and angle (Example: Viewer looking down, far away)
+            - Location (Example: Suburban Backyard, white fence)
+            - Time and weather (Example: Rainy night)
+            
 
             About stable diffusion prompts:
             - A stable diffusion prompt consists of short keywords/sentences (Examples: Scarf, coat, Sunny day, jumping in the air, public park)
