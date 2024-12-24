@@ -136,7 +136,9 @@ export type ImageModelId =
     "datacte/flux-aesthetic-anime:2c3677b83922a0ac99493467805fb0259f55c4f4f7b1988b1dd1d92f083a8304" |
     "delta-lock/ponynai3:2f436c5f839e5b12eefe2a99a1e289fe8ba1459367123c7a6b6e9839178a7d3e" |
     "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a" |
-    "delta-lock/noobai-xl:63d7bedb177c2a94481bf7309def720d355f46d3130d9131a562099806a8f621"
+    "delta-lock/noobai-xl:63d7bedb177c2a94481bf7309def720d355f46d3130d9131a562099806a8f621" |
+    "lucataco/flux-dev-lora:091495765fa5ef2725a175a57b276ec30dc9d39c22d30410f2ede68a3eab66b3" |
+    "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9"
 
 export type VideoModelId = 
     "fofr/ltx-video:983ec70a06fd872ef4c29bb6b728556fc2454125a5b2c68ab51eb8a2a9eaa46a" |
@@ -267,6 +269,13 @@ export const imageModels: ImageModel[] = [
         type: "text-to-image"
     },
     {
+        id: "lucataco/flux-dev-lora:091495765fa5ef2725a175a57b276ec30dc9d39c22d30410f2ede68a3eab66b3",
+        title: "Flux Dev Single Lora",
+        style: "Flux LoRa",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+    {
         id: "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9",
         title: "Anime Flux",
         style: "Flux Anime",
@@ -291,6 +300,13 @@ export const imageModels: ImageModel[] = [
         id: "delta-lock/noobai-xl:63d7bedb177c2a94481bf7309def720d355f46d3130d9131a562099806a8f621",
         title: "noobai-xl",
         style: "NoobAI-XL",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+    {
+        id: "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9",
+        title: "animagine xl 3.1",
+        style: "Animagine",
         provider: "replicate",
         type: "text-to-image"
     },
@@ -333,7 +349,7 @@ export const getExtraImageModelOptions = (modelId: ImageModelId) => {
                 steps: 35,
                 vae: "noobaiXLNAIXL_epsilonPred11Version",
                 model: "noobaiXLNAIXL_epsilonPred11Version",
-                scheduler: "Euler A",
+                scheduler: "Euler a",
             }
     }
 }

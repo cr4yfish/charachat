@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     const modelName = model?.split(":")[0] ?? "black-forest-labs/flux-schnell";
     const modelVersion = model?.split(":")[1];
     const extraOptions = getExtraImageModelOptions(model as ImageModelId);
-
+    const lorasLinks = loras?.map(lora => lora.url) ?? [];
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const options: any = {
         model: modelName,
@@ -46,7 +47,8 @@ export async function POST(request: Request) {
             output_format: "jpg",
             go_fast: true,
             aspect_ratio: "4:3",
-            extra_lora: loras?.map(lora => lora.url).join(","),
+            extra_lora: lorasLinks.join(","),
+            hf_lora: lorasLinks[0],
             ...extraOptions
         },
     }
