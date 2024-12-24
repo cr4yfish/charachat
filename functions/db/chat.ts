@@ -279,13 +279,13 @@ export const updateChat = async (chat: Chat): Promise<void> => {
 
 }
 
-export const updateDynamicMemory = async (chatId: string, memory: string): Promise<string> => {
+export const updateDynamicMemory = async (chatId: string, memory: string, replace?: boolean): Promise<string> => {
     const key = await getKeyServerSide();
 
     const dynamic_book = (await getChat(chatId)).dynamic_book;
 
     if(dynamic_book) {
-        memory = `${dynamic_book}. ${memory}`;
+        memory = replace ? memory : `${dynamic_book}. ${memory}`;
     }
 
     const profile = await getCurrentUser();

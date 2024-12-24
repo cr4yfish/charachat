@@ -12,10 +12,11 @@ import { generateAudio } from './audio';
 type AddMemoryProps = {
     chat: Chat,
     memory: string,
+    replace?: boolean,
 }
 
 export const addMemory = async (props: AddMemoryProps): Promise<string> => {
-    return await updateDynamicMemory(props.chat.id, props.memory)
+    return await updateDynamicMemory(props.chat.id, props.memory, props.replace)
 }
 
 // server side tool

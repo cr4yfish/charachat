@@ -91,6 +91,7 @@ export async function POST(req: Request) {
             - getMemory: Get your Chat memory
             - addToolResultToChat: Add any tool result the chat. It will only then be displayed to the user. Use when user should see the result
             - removeMemory: Remove someting from the memory. Either on user request or the topic changes and the information wont be needed anymore
+            - improveMemory: Improve the memory by summarizing it. Run this tool after adding a new memory to the chat
 
             Use them automatically or when the user asks for something that can be done using one or more tools.
 
@@ -185,6 +186,16 @@ export async function POST(req: Request) {
                         const summary = await summarizeTool({ profile, text: memory });
                         return summary;
                     } 
+                }),
+                improveMemory: tool({
+                    description: "Improve the memory by summarizing it.",
+                    parameters: z.object({ request: z.string().describe("Which memory to improve") }),
+                    execute: async() => {
+                        const memory = await getMemory({ chat });
+                        if(!memory) return "Memory is empty.";
+                        const summary = await summarizeTool({ profile, text: memory });
+                        return await addMemory({ chat, memory: summary, replace: true });
+                    }
                 }),
                 
                 summarize: tool({
