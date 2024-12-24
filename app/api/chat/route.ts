@@ -163,8 +163,8 @@ export async function POST(req: Request) {
             ],
             tools: chat.llm == "openrouter" ? undefined : {
                 addNewMemory: tool({
-                    description: "Add a new memory to the character's knowledge.",
-                    parameters: z.object({ memory: z.string() }),
+                    description: "Add a new memory to the character's knowledge. Input gets appended, so only the new information is needed.",
+                    parameters: z.object({ memory: z.string().describe("The new memory to be appended to the Chat memory.") }),
                     execute: async ({ memory }: { memory: string }) => {
                         return await addMemory({chat, memory})
                     }
