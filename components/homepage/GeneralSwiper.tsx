@@ -16,7 +16,7 @@ export default async function GeneralSwiper(props: Props) {
         
     const defaultLoad: LoadMoreProps = {
         cursor: 0,
-        limit: 16,
+        limit: 29,
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,7 +26,7 @@ export default async function GeneralSwiper(props: Props) {
         <>
         <InfiniteSwiperLoader 
             loadMore={props.loader} 
-            limit={15} 
+            limit={21} 
             rows={props.rows}
             initialData={initialData} 
             component={props.component}
