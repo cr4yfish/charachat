@@ -151,6 +151,9 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "c4ai-aya-expanse-32b":
             return getCohere(modelId, apiKey);
 
+        case "gryphe/mythomax-l2-13b:free": 
+            return getOpenRouter("gryphe/mythomax-l2-13b:free", apiKey);
+
         case "openrouter":
             const profile = await getCurrentUser();
             const model = profile.openrouter_model;

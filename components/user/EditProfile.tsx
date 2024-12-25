@@ -307,6 +307,7 @@ export default function EditProfile(props: Props) {
                         <Chip color="success">Llama 3.2 90b</Chip>
                         <Chip color="success">Llama 3 70b</Chip>
                         <Chip color="success">Gemma 2</Chip>
+                        <Chip color="success">Mythomax L2 13b</Chip>
                     </div>
                     <Separator className="my-2" />
                     

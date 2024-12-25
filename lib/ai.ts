@@ -46,6 +46,9 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
             }
             return process.env.MISTRAL_API_KEY;
 
+        case "gryphe/mythomax-l2-13b:free":
+            return process.env.PUBLIC_OPENROUTER_API_KEY;
+
         case "openrouter":
             return profile.openrouter_encrypted_api_key;
 
@@ -99,7 +102,8 @@ export type ModelId =
     "xtts-v2" |
     "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0" |
     "fal-ai/ltx-video/image-to-video" |
-    "openrouter"
+    "openrouter" |
+    "gryphe/mythomax-l2-13b:free"
 
 export type ProviderId = 
     "OpenAI" |
@@ -347,6 +351,7 @@ export const isFreeModel = (modelId: ModelId) => {
         case "llama3-groq-70b-8192-tool-use-preview":
         case "llama-3.3-70b-versatile":
         case "gemma2-9b-it":
+        case "gryphe/mythomax-l2-13b:free":
             return true;
     }
     return false;
@@ -356,6 +361,7 @@ export const isFreeModel = (modelId: ModelId) => {
 export const llmDoesntSupportTools = (modelId: ModelId) => {
     switch(modelId) {
         case "llama-3.3-70b-versatile":
+        case "gryphe/mythomax-l2-13b:free":
         case "openrouter":
             return true;
     }
@@ -391,6 +397,13 @@ export const LLMs: LLMType[] = [
         "usecase": "Good quality, sometimes stupid",
         "provider": "Groq",
         "tags": ["Free", "Fast", "Kinda Uncensored"]
+    },
+    {
+        "key": "gryphe/mythomax-l2-13b:free",
+        "name": "Mythomax L2 13b",
+        "usecase": "Popular for some reason",
+        "provider": "OpenRouter",
+        "tags": ["Free", "Stupid", "Uncensored"]
     },
     {
         "key": "grok-beta",
