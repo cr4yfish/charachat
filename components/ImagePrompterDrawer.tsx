@@ -200,11 +200,11 @@ export default function ImagePrompterDrawer(props: Props) {
                 {props.trigger}
             </DrawerTrigger>
             <DrawerContent className=" max-md:h-full w-full" onClick={e => e.stopPropagation()}>
-                <DrawerHeader className="flex flex-col items-center justify-center">
+                <DrawerHeader className="flex flex-col items-center justify-center p-0 m-0 pt-2">
                     <DrawerTitle>Image Generator</DrawerTitle>
                 </DrawerHeader>
 
-                <div className="max-md:h-full p-4 flex flex-col items-center justify-start flex-wrap gap-3">
+                <div className="max-md:h-full p-4 flex flex-col items-center justify-start gap-3">
                     <Tabs 
                         variant="underlined"
                         color="primary"
