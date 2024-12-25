@@ -123,7 +123,7 @@ export async function POST(req: Request) {
             anthropic: {cacheControl: { type: "ephemeral" }}
         }
 
-        const convertedMessages = convertToCoreMessages(messages.slice(0,30));
+        const convertedMessages = convertToCoreMessages(messages.slice(-100));
 
         // add the cache control to the last message and the second to last user message
         convertedMessages[convertedMessages.length-1].experimental_providerMetadata = anthropicCacheControl;
