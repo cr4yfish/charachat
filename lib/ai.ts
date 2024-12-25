@@ -276,23 +276,9 @@ export const imageModels: ImageModel[] = [
         type: "text-to-image"
     },
     {
-        id: "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9",
-        title: "Anime Flux",
-        style: "Flux Anime",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "delta-lock/ponynai3:2f436c5f839e5b12eefe2a99a1e289fe8ba1459367123c7a6b6e9839178a7d3e",
-        title: "Pony AI3",
-        style: "Pony Anime",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a",
-        title: "Pony Realism",
-        style: "Pony Real",
+        id: "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9",
+        title: "animagine xl 3.1",
+        style: "Animagine",
         provider: "replicate",
         type: "text-to-image"
     },
@@ -304,9 +290,9 @@ export const imageModels: ImageModel[] = [
         type: "text-to-image"
     },
     {
-        id: "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9",
-        title: "animagine xl 3.1",
-        style: "Animagine",
+        id: "delta-lock/ponynai3:2f436c5f839e5b12eefe2a99a1e289fe8ba1459367123c7a6b6e9839178a7d3e",
+        title: "Pony AI3",
+        style: "Pony Anime",
         provider: "replicate",
         type: "text-to-image"
     },
