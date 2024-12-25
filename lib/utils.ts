@@ -1,6 +1,7 @@
 import { Character } from "@/types/db";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { placeholderImage } from "./defaults";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -91,7 +92,7 @@ export function safeParseLink(link: string | undefined | null): string {
   if(link && isValidURL(link) && link.includes("https://")) {
     return link;
   }
-  return "https://placehold.co/600x400";
+  return placeholderImage;
 }
 
 export const _INTRO_MESSAGE = (character: Character, username: string): string => {
