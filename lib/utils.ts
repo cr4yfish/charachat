@@ -124,7 +124,7 @@ export async function sleep(ms: number) {
   })
 }
 
-export function replaceVariables(text: string, variables: Record<string, string>) {
+export function replaceVariables(text = "", variables: Record<string, string>) {
   return text.replace(/\${(.*?)}/g, (_, match) => {
     return variables[match] || '';
   });
