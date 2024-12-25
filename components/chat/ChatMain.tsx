@@ -34,6 +34,7 @@ import { CardBody, Card, CardHeader } from "@nextui-org/card";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Chip } from "@nextui-org/chip";
 import { getKeyClientSide } from "@/lib/crypto";
+import { _MAX_MESSAGES_IN_CHAT } from "@/lib/defaults";
 
 const _LIMIT = 30;
 
@@ -194,7 +195,10 @@ export default function ChatMain(props : Props) {
         if(isLoading && messages.length > 0) {
             scrollToBottom();
         }
-    }, [messages, isLoading])
+        if(!isLoading && messages.length > _MAX_MESSAGES_IN_CHAT) {
+            setMessages(messages.slice(-_MAX_MESSAGES_IN_CHAT));
+        }
+    }, [messages, isLoading, setMessages])
 
     useEffect(() => {
         const handleBlur = (e: FocusEvent) => {
