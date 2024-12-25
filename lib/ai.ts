@@ -353,6 +353,15 @@ export const isFreeModel = (modelId: ModelId) => {
 }
 
 
+export const llmDoesntSupportTools = (modelId: ModelId) => {
+    switch(modelId) {
+        case "llama-3.3-70b-versatile":
+        case "openrouter":
+            return true;
+    }
+    return false;
+}
+
 export type LLMType = {
     key: ModelId,
     name: string,

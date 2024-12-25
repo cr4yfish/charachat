@@ -7,8 +7,8 @@ import { addMessage } from '@/functions/db/messages';
 
 import { _INTRO_MESSAGE, getChatVariables, replaceVariables } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
-import { addMemory, banStringsTool, chatRenameTool, generateImageOfCharacterTool, generateImageTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
-import { ModelId } from '@/lib/ai';
+import { addMemory, banStringsTool, chatRenameTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
+import { llmDoesntSupportTools, ModelId } from '@/lib/ai';
 import { getKeyServerSide } from '@/functions/serverHelpers';
 import { jailbreak } from "@/lib/prompts";
 
@@ -84,20 +84,14 @@ export async function POST(req: Request) {
             You are prohibited from saying anything described here (can be empty): ${chat?.negative_prompt}
             The following tools are available to you:
             - addNewMemory: Add a new memory to the character's knowledge
-            - generateImage: Generate an image with text
-            - generateImageOfYourself: Generate an image of yourself
             - summarize: Generate a summary of a given conversation context
             - chatRenameTool: Rename the Chat when the Topic changes
             - getMemory: Get your Chat memory
-            - addToolResultToChat: Add any tool result the chat. It will only then be displayed to the user. Use when user should see the result
             - removeMemory: Remove someting from the memory. Either on user request or the topic changes and the information wont be needed anymore
             - improveMemory: Improve the memory by summarizing it. Run this tool after adding a new memory to the chat
 
             Use them automatically or when the user asks for something that can be done using one or more tools.
-
-            If the user asks for an image, you have to use the generateImage tool to generate a new image.
-            NEVER repeat an image. ALWAYS generate a new one using the generateImage tool.
-            Do NOT include the image in the response.
+            Actively memorize important keywords and facts in the following conversation and use them.
 
             You are ${chat?.character.name}, ${summarizedCharDescription}, ${summarizedCharBio}.
             Your are conversing with ${chat?.persona?.full_name ?? (profile?.first_name + " " + profile?.last_name)} with bio: ${summarizedPersonaBio}.
@@ -105,8 +99,6 @@ export async function POST(req: Request) {
             Your responses have to be in character. Be as authentic as possible. ${responseLengthToPrompt[(chat?.response_length as keyof typeof responseLengthToPrompt) ?? 0]}
             Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
             Always stay in character no matter what the user says.
-        
-            Actively memorize important keywords and facts in the following conversation and use them.
 
             This is background information about you (do NOT quote this in your responses):
             ${summarizedCharBook}
@@ -131,7 +123,7 @@ export async function POST(req: Request) {
             anthropic: {cacheControl: { type: "ephemeral" }}
         }
 
-        const convertedMessages = convertToCoreMessages(messages);
+        const convertedMessages = convertToCoreMessages(messages.slice(0,30));
 
         // add the cache control to the last message and the second to last user message
         convertedMessages[convertedMessages.length-1].experimental_providerMetadata = anthropicCacheControl;
@@ -148,7 +140,6 @@ export async function POST(req: Request) {
             frequencyPenalty: chat.frequency_penalty,
             seed: Math.round(Math.random()*1000),
             model: model,
-            experimental_continueSteps: true,
             messages: [
                 {
                     role: "system",
@@ -162,7 +153,7 @@ export async function POST(req: Request) {
                 },
                 ...convertedMessages
             ],
-            tools: chat.llm == "openrouter" ? undefined : {
+            tools: llmDoesntSupportTools(chat.llm as ModelId) ? undefined : {
                 addNewMemory: tool({
                     description: "Add a new memory to the character's knowledge. Input gets appended, so only the new information is needed.",
                     parameters: z.object({ memory: z.string().describe("The new memory to be appended to the Chat memory.") }),
@@ -188,7 +179,7 @@ export async function POST(req: Request) {
                     } 
                 }),
                 improveMemory: tool({
-                    description: "Improve the memory by summarizing it.",
+                    description: "Improve the memory by summarizing it. Run this every so often.",
                     parameters: z.object({ request: z.string().describe("Which memory to improve") }),
                     execute: async() => {
                         const memory = await getMemory({ chat });
@@ -197,9 +188,8 @@ export async function POST(req: Request) {
                         return await addMemory({ chat, memory: summary, replace: true });
                     }
                 }),
-                
                 summarize: tool({
-                    description: "Summarize the conversation",
+                    description: "Summarize text",
                     parameters: z.object({ text: z.string().describe("A bunch of text to summarize") }),
                     execute: async ({ text }: { text: string }) => {
                         return await summarizeTool({ profile, text })
@@ -212,28 +202,11 @@ export async function POST(req: Request) {
                         return await chatRenameTool({ chat, newTitle, newDescription })
                     }
                 }),
-
                 banStrings: tool({
-                    description: "Ban the AI from saying words or sentences. Makes the AI stop saying these.",
+                    description: "Ban yourself from saying words or sentences. Makes the you stop saying these.",
                     parameters: z.object({ strings: z.array(z.string()).describe("Array of strings to ban") }),
                     execute: async({ strings } : { strings: string[] }) => {
                         return await banStringsTool({ chat, strings })
-                    }
-                }),
-
-                generateImage: tool({
-                    description: "Text to Image Tool.",
-                    parameters: z.object({ prompt: z.string().describe("Prompt to generate the image") }),
-                    execute: async ({ prompt }: { prompt: string }) => {
-                        return await generateImageTool({ chat, profile, prompt })
-                    }
-                }),
-
-                generateImageOfYourself: tool({
-                    description: "Generate an image of yourself",
-                    parameters: z.object({ prompt: z.string().describe("Prompt to generate the image") }),
-                    execute: async ({ prompt }: { prompt: string }) => {
-                        return await generateImageOfCharacterTool({ chat, profile, prompt })
                     }
                 }),
             }
