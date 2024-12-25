@@ -77,7 +77,7 @@ export async function POST(req: Request) {
         const summarizedPersonaBio = replaceVariables(chat?.persona?.bio || profile?.bio || "", variables)
 
         const systemMessage = `
-            ${chat?.character?.system_prompt}
+            ${replaceVariables(chat?.character?.system_prompt, variables)}
             ${jailbreak}
             Always replace "{{user}}" with "${chat.persona?.full_name || profile.username}" in your responses.
             You are prohibited from responding with an empty message.
