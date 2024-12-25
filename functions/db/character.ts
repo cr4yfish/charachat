@@ -171,13 +171,13 @@ export const getNewestCharacter = cache(async (): Promise<Character> => {
         .from(publicTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
-        .range(0, 2);
+        .range(0, 3);
 
     if (error) {
         throw error;
     }
 
-    return await characterFormatter(data.find((c) => safeParseLink(c.image_link) !== ""));
+    return await characterFormatter(data.find((c) => safeParseLink(c.image_link) !== "" && c.is_nsfw == false ));
 })
 
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
