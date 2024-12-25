@@ -304,6 +304,7 @@ export default function EditProfile(props: Props) {
                     <h3>Free models</h3>
                     <div className="flex flex-wrap items-center gap-2">
                         <Chip color="success">Mistral Nemo</Chip>
+                        <Chip color="success">Llama 3.3 70b</Chip>
                         <Chip color="success">Llama 3.2 90b</Chip>
                         <Chip color="success">Llama 3 70b</Chip>
                         <Chip color="success">Gemma 2</Chip>
