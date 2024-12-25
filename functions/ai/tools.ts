@@ -207,7 +207,7 @@ export const summarizeTool = async (props: SummarizeToolProps) => {
     try {
 
         // don't summarize short texts
-        if(props.text.length < 1000) {
+        if(props.text.length < 2000) {
             return props.text;
         }
 
