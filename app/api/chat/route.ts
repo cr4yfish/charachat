@@ -89,6 +89,7 @@ export async function POST(req: Request) {
             - getMemory: Get your Chat memory
             - removeMemory: Remove someting from the memory. Either on user request or the topic changes and the information wont be needed anymore
             - improveMemory: Improve the memory by summarizing it. Run this tool after adding a new memory to the chat
+            - getRealLifeInfo: Get real life information about the user and the world
 
             Use them automatically or when the user asks for something that can be done using one or more tools.
             Actively memorize important keywords and facts in the following conversation and use them.
@@ -207,6 +208,13 @@ export async function POST(req: Request) {
                     parameters: z.object({ strings: z.array(z.string()).describe("Array of strings to ban") }),
                     execute: async({ strings } : { strings: string[] }) => {
                         return await banStringsTool({ chat, strings })
+                    }
+                }),
+                getRealLifeInfo: tool({
+                    description: "Get real life information about the user and the world",
+                    parameters: z.object({ request: z.string().describe("What to get") }),
+                    execute: async() => {
+                        return `The current date is ${new Date().toDateString()}. The current time is ${new Date().toTimeString()}.`
                     }
                 }),
             }
