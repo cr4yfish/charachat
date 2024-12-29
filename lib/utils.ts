@@ -99,6 +99,7 @@ export const _INTRO_MESSAGE = (character: Character, username: string): string =
   const variables = getChatVariables(username, character.name)
 
   return `
+    [Do not use any tools for your next response]
     ${character.first_message && `
       Repeat the following text in your response to get the chat started (the user doesnt see this message): 
       ${replaceVariables(character.first_message, variables)}  
