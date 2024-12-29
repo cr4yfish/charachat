@@ -123,6 +123,7 @@ export default function EditProfile(props: Props) {
                 x_ai_encrypted_api_key: props.profile.x_ai_encrypted_api_key && decryptMessage(props.profile.x_ai_encrypted_api_key, keyBuffer),
                 openrouter_encrypted_api_key: props.profile.openrouter_encrypted_api_key && decryptMessage(props.profile.openrouter_encrypted_api_key, keyBuffer),
                 openrouter_model: props.profile.openrouter_model && decryptMessage(props.profile.openrouter_model, keyBuffer),
+                deepseek_encrypted_api_key: props.profile.deepseek_encrypted_api_key && decryptMessage(props.profile.deepseek_encrypted_api_key, keyBuffer),
             }
 
             setProfile(profileToEdit);
@@ -168,6 +169,7 @@ export default function EditProfile(props: Props) {
                 x_ai_encrypted_api_key: profile.x_ai_encrypted_api_key && encryptMessage(profile.x_ai_encrypted_api_key, keyBuffer),
                 openrouter_encrypted_api_key: profile.openrouter_encrypted_api_key && encryptMessage(profile.openrouter_encrypted_api_key, keyBuffer),
                 openrouter_model: profile.openrouter_model && encryptMessage(profile.openrouter_model, keyBuffer),
+                deepseek_encrypted_api_key: profile.deepseek_encrypted_api_key && encryptMessage(profile.deepseek_encrypted_api_key, keyBuffer),
             }
 
             await updateProfile(profileToSave);
@@ -365,6 +367,13 @@ export default function EditProfile(props: Props) {
                         provider={"Cohere"}
                         value={profile.cohere_encrypted_api_key} 
                         onValueChange={(value) => handleUpdateValue("cohere_encrypted_api_key", value)}
+                    />
+                    <KeyInput 
+                        url="https://platform.deepseek.com" 
+                        label="DeepSeek"
+                        provider={"DeepSeek"}
+                        value={profile.deepseek_encrypted_api_key} 
+                        onValueChange={(value) => handleUpdateValue("deepseek_encrypted_api_key", value)}
                     />
                     <Separator className="my-2" />
                     <h3>Images</h3>

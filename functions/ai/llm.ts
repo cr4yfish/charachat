@@ -164,6 +164,8 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
             const decryptedModel = decryptMessage(model, Buffer.from(key, 'hex'));
             return getOpenRouter(decryptedModel, apiKey);
 
+        case "deepseek-chat":
+            return getOpenAICompatible("deepseek-chat", "https://api.deepseek.com", apiKey);
             
         default:
             throw new Error("Model not found");

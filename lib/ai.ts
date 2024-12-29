@@ -52,6 +52,9 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case "openrouter":
             return profile.openrouter_encrypted_api_key;
 
+        case "deepseek-chat":
+            return profile.deepseek_encrypted_api_key;
+
         default:
             return undefined;
     }
@@ -103,7 +106,8 @@ export type ModelId =
     "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0" |
     "fal-ai/ltx-video/image-to-video" |
     "openrouter" |
-    "gryphe/mythomax-l2-13b:free"
+    "gryphe/mythomax-l2-13b:free" |
+    "deepseek-chat"
 
 export type ProviderId = 
     "OpenAI" |
@@ -117,7 +121,8 @@ export type ProviderId =
     "Huggingface" |
     "Replicate" |
     "FAL" |
-    "OpenRouter"
+    "OpenRouter" |
+    "DeepSeek"
 
 export type ImageModelId = 
     "black-forest-labs/FLUX.1-schnell" |
@@ -528,6 +533,13 @@ export const LLMs: LLMType[] = [
         "name": "Your openAI model",
         "provider": "You",
         "usecase": "Depends on your model"
+    },
+    {
+        "key": "deepseek-chat",
+        "name": "DeepSeek v3",
+        "provider": "DeepSeek",
+        "usecase": "New model",
+        "tags": ["Quality", "Fast"]
     },
 
     // non-text models
