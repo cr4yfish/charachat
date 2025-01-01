@@ -330,14 +330,17 @@ export default function Messagebubble(props: Props) {
         const messageBeforeLast = props.messages[props.index-2];
 
         const context = `
-            2 messages ago:
+            # 2 messages ago:
             ${messageBeforeLast?.role == "user" ? "User" : "Character"}: ${messageBeforeLast?.content}
 
-            Previous message: 
+            # Previous message: 
             ${lastMessage?.role == "user" ? "User" : "Character"}: ${lastMessage?.content}
 
-            This message:
+            # This message:
             ${props.message.role == "user" ? "User" : "Character"}: ${props.message.content}
+
+            # Use this Character information to describe the Character in the image prompt:
+            ${props.chat?.character.bio}
         `;
 
         const res = await fetch("/api/author/image/prompt", {
