@@ -60,6 +60,25 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
     }
 }
 
+/**
+ * Can adjust the temperature for some models
+ * @param modelId 
+ * @param temp 
+ * @returns 
+ */
+export const getCustomTemperature = (modelId: ModelId, temp: number): number | undefined => {
+    switch(modelId) {
+        case "deepseek-chat":
+            // 0.6 -> 1.3, recommended by DeepSeek for General Conversation
+            // 0.8 -> 1.5, recommended by DeepSeek for creative writing
+            // 1.0 -> 1.7
+            return temp+.7;
+
+        default: 
+            return temp;
+    }
+}
+
 export const checkUserHasImageAPIKey = (profile: Profile): boolean => {
     if(profile.hf_encrypted_api_key || profile.hf_encrypted_api_key) {
         return true;

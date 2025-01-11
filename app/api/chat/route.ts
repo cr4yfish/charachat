@@ -8,7 +8,7 @@ import { addMessage } from '@/functions/db/messages';
 import { _INTRO_MESSAGE, getChatVariables, replaceVariables } from "@/lib/utils";
 import { getLanguageModel, getModelApiKey } from '@/functions/ai/llm';
 import { addMemory, banStringsTool, chatRenameTool, getMemory, removeMemory, summarizeTool } from '@/functions/ai/tools';
-import { llmDoesntSupportTools, ModelId } from '@/lib/ai';
+import { getCustomTemperature, llmDoesntSupportTools, ModelId } from '@/lib/ai';
 import { getKeyServerSide } from '@/functions/serverHelpers';
 import { jailbreak } from "@/lib/prompts";
 
@@ -137,7 +137,7 @@ export async function POST(req: Request) {
         convertedMessages.reverse();
 
         const result = await streamText({
-            temperature: chat.temperature,
+            temperature: getCustomTemperature(chat.llm as ModelId, chat.temperature),
             frequencyPenalty: chat.frequency_penalty,
             seed: Math.round(Math.random()*1000),
             model: model,
