@@ -465,6 +465,13 @@ export const LLMs: LLMType[] = [
         "tags": ["Quality", "Fast", "Uncensored"]
     },
     {
+        "key": "deepseek-chat",
+        "name": "DeepSeek v3",
+        "provider": "DeepSeek",
+        "usecase": "New model",
+        "tags": ["Quality", "Fast"]
+    },
+    {
         "key": "gpt-4o-mini",
         "name": "GPT-4o Mini",
         "usecase": "Unbeatable price, Incredibly accurate",
@@ -478,21 +485,6 @@ export const LLMs: LLMType[] = [
         "provider": "OpenAI",
         "tags": ["Quality", "Fast"]
     },
-    {
-        "key": "o1-preview",
-        "name": "o1",
-        "provider": "OpenAI",
-        "usecase": "Unbelievable quality",
-        "tags": ["Quality", "Fast"]
-    },
-    {
-        "key": "o1-mini",
-        "name": "o1 Mini",
-        "provider": "OpenAI",
-        "usecase": "Very good quality for lower cost",
-        "tags": ["Quality", "Fast"]
-    },
-
     {
         "key": "gemini-1.5-flash",
         "name": "Gemini Flash",
@@ -552,13 +544,6 @@ export const LLMs: LLMType[] = [
         "name": "Your openAI model",
         "provider": "You",
         "usecase": "Depends on your model"
-    },
-    {
-        "key": "deepseek-chat",
-        "name": "DeepSeek v3",
-        "provider": "DeepSeek",
-        "usecase": "New model",
-        "tags": ["Quality", "Fast"]
     },
 
     // non-text models
