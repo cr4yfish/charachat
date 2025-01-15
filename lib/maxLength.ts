@@ -6,15 +6,14 @@ type MaxLength = {
 export const _CHARACTER_MAX_LENGTH: MaxLength = {
     name: 100,
     description: 5000,
-    personality: 1000,
-    bio: 5000,
-    intro: 5000,
-    book: 8000,
-    first_message: 5000,
-    system_protmp: 2000,
+    personality: 5000,
+    bio: 10000,
+    intro: 10000,
+    book: 15000,
+    first_message: 10000,
+    system_prompt: 5000,
     image_prompt: 1000,
-    system_prompt: 2000,
-    scenario: 3000,
+    scenario: 10000,
 }
 
 export const _CHAT_MAX_LENGTH: MaxLength = {
