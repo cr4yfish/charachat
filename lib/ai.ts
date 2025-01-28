@@ -3,6 +3,7 @@ import { Lora, Profile } from "@/types/db";
 export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): string | undefined => {
     switch(modelId as ModelId) {
         case 'llama3-groq-70b-8192-tool-use-preview':
+        case "deepseek-r1-distill-llama-70b":
         case "llama-3.2-90b-vision-preview":
         case "llama-3.3-70b-versatile":
         case "gemma2-9b-it":
@@ -102,6 +103,7 @@ export type ModelId =
     "llama3-groq-70b-8192-tool-use-preview" |
     "llama-3.2-90b-vision-preview" |
     "llama-3.3-70b-versatile" |
+    "deepseek-r1-distill-llama-70b" |
     "gemma2-9b-it" |
     "ollama" |
     "gpt-4o-mini" |
@@ -376,6 +378,7 @@ export const isFreeModel = (modelId: ModelId) => {
         case "llama-3.3-70b-versatile":
         case "gemma2-9b-it":
         case "gryphe/mythomax-l2-13b:free":
+        case "deepseek-r1-distill-llama-70b":
             return true;
     }
     return false;
@@ -387,6 +390,7 @@ export const llmDoesntSupportTools = (modelId: ModelId) => {
         case "llama-3.3-70b-versatile":
         case "gryphe/mythomax-l2-13b:free":
         case "openrouter":
+        case "deepseek-r1-distill-llama-70b":
             return true;
     }
     return false;
@@ -401,6 +405,13 @@ export type LLMType = {
 }
 
 export const LLMs: LLMType[] = [
+    {
+        "key": "deepseek-r1-distill-llama-70b",
+        "name": "DeepSeek R1",
+        "provider": "DeepSeek",
+        "usecase": "Fast, high quality",
+        "tags": ["Free", "Quality", "Fast"]
+    },
     {
         "key": "llama-3.3-70b-versatile",
         "name": "Llama 3.3 70b",
