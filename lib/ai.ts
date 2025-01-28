@@ -410,7 +410,7 @@ export const LLMs: LLMType[] = [
         "name": "DeepSeek R1",
         "provider": "Groq",
         "usecase": "Fast, high quality",
-        "tags": ["Free", "Quality", "Fast"]
+        "tags": ["Free", "Thinking", "Uncensored"]
     },
     {
         "key": "llama-3.3-70b-versatile",
