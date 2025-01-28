@@ -408,7 +408,7 @@ export const LLMs: LLMType[] = [
     {
         "key": "deepseek-r1-distill-llama-70b",
         "name": "DeepSeek R1",
-        "provider": "DeepSeek",
+        "provider": "Groq",
         "usecase": "Fast, high quality",
         "tags": ["Free", "Quality", "Fast"]
     },
