@@ -164,11 +164,12 @@ export type ImageModelId =
     "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48" |
     "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9" |
     "datacte/flux-aesthetic-anime:2c3677b83922a0ac99493467805fb0259f55c4f4f7b1988b1dd1d92f083a8304" |
-    "delta-lock/ponynai3:delta-lock/ponynai3:d6e79b8adc56619f2067d42cffce922ff374e0c292a65b2683d33045a4049535" |
+    "delta-lock/ponynai3:ea38949bfddea2db315b598620110edfa76ddaf6313a18e6cbc6a98f496a34e9" |
     "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a" |
-    "delta-lock/noobai-xl:8ce6383446e13f0397ef97eeeeedcac942ced182fb4550e32247e6dabaa7f5b5" |
+    "delta-lock/noobai-xl:dceca5ec09fd6fd0e5dbd5d3dcefb25f73802560e5b89008021fd07c9691e880" |
     "lucataco/flux-dev-lora:091495765fa5ef2725a175a57b276ec30dc9d39c22d30410f2ede68a3eab66b3" |
-    "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9"
+    "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9" |
+    "rocketdigitalai/animagine-xl-4.0:7af46ee494f1cf196d49a8592737f4eb789e34a5a995751b23a869d19f5dc2ba"
 
 export type VideoModelId = 
     "fofr/ltx-video:983ec70a06fd872ef4c29bb6b728556fc2454125a5b2c68ab51eb8a2a9eaa46a" |
@@ -308,19 +309,26 @@ export const imageModels: ImageModel[] = [
     {
         id: "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9",
         title: "animagine xl 3.1",
-        style: "Animagine",
+        style: "Animagine3",
         provider: "replicate",
         type: "text-to-image"
     },
     {
-        id: "delta-lock/noobai-xl:8ce6383446e13f0397ef97eeeeedcac942ced182fb4550e32247e6dabaa7f5b5",
+        id: "rocketdigitalai/animagine-xl-4.0:7af46ee494f1cf196d49a8592737f4eb789e34a5a995751b23a869d19f5dc2ba",
+        title: "animagine xl 4.0",
+        style: "Animagine4",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+    {
+        id: "delta-lock/noobai-xl:dceca5ec09fd6fd0e5dbd5d3dcefb25f73802560e5b89008021fd07c9691e880",
         title: "noobai-xl",
         style: "NoobAI-XL",
         provider: "replicate",
         type: "text-to-image"
     },
     {
-        id: "delta-lock/ponynai3:delta-lock/ponynai3:d6e79b8adc56619f2067d42cffce922ff374e0c292a65b2683d33045a4049535",
+        id: "delta-lock/ponynai3:ea38949bfddea2db315b598620110edfa76ddaf6313a18e6cbc6a98f496a34e9",
         title: "Pony AI3",
         style: "Pony Anime",
         provider: "replicate",
@@ -344,7 +352,7 @@ export const imageModels: ImageModel[] = [
 
 export const getExtraImageModelOptions = (modelId: ImageModelId) => {
     switch(modelId) {
-        case "delta-lock/ponynai3:delta-lock/ponynai3:d6e79b8adc56619f2067d42cffce922ff374e0c292a65b2683d33045a4049535":
+        case "delta-lock/ponynai3:ea38949bfddea2db315b598620110edfa76ddaf6313a18e6cbc6a98f496a34e9":
             return {
                 steps: 100,
                 vae: "tPonynai3_v65",
@@ -357,7 +365,7 @@ export const getExtraImageModelOptions = (modelId: ImageModelId) => {
                 width: 864,
                 height: 1184
             }
-        case "delta-lock/noobai-xl:8ce6383446e13f0397ef97eeeeedcac942ced182fb4550e32247e6dabaa7f5b5":
+        case "delta-lock/noobai-xl:dceca5ec09fd6fd0e5dbd5d3dcefb25f73802560e5b89008021fd07c9691e880":
             return {
                 negative_prompt: "(worst quality, low quality, ugly:1.4), furry, (multiple_views:2), multiple_views, (comic, 4koma, censored, bar_censor, mosaic_censoring), poorly drawn hands,poorly drawn feet,poorly drawn face,out of frame,mutation,mutated,extra limbs,extra legs,extra arms,disfigured,deformed,cross-eye,blurry,(bad art, bad anatomy:1.4),blurred,text,watermark,negative_hand-neg,((( three fingers, four fingers, six fingers, seven fingers, extra fingers, missing fingers, fused fingers, deformed fingers, ugly fingers,deformed hands, bad hands, worst time, worst hands, wrong hands, twisted hands, ugly hands,deformed toes, fused toes, missing toes,wrong feet, deformed feet, ugly feet))),unaestheticXL_cbp62 -neg,NEGATIVE_HANDS,",
                 width: 832,
