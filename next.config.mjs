@@ -12,7 +12,7 @@ const withPWA = withPWAInit({
 export default withPWA({
   // Your Next.js config
   images: {
-    unoptimized: false,
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
