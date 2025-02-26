@@ -26,7 +26,7 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case "gemini-2.0-flash-exp":
             return profile.gemini_encrypted_api_key;
 
-        case "claude-3-5-sonnet-latest":
+        case "claude-3-7-sonnet-latest":
         case "claude-3-5-haiku-latest":
             return profile.anthropic_encrypted_api_key;
 
@@ -114,7 +114,7 @@ export type ModelId =
     "gemini-1.5-pro" |
     "gemini-2.0-flash-exp" |
     "open-mistral-nemo" |
-    "claude-3-5-sonnet-latest" |
+    "claude-3-7-sonnet-latest" |
     "claude-3-5-haiku-latest" |
     "openai-compatible" |
     "grok-beta" |
@@ -470,7 +470,7 @@ export const LLMs: LLMType[] = [
         "tags": ["Free", "New", "Fast"]
     },
     {
-        "key": "claude-3-5-sonnet-latest",
+        "key": "claude-3-7-sonnet-latest",
         "name": "Claude Sonnet",
         "provider": "Anthropic",
         "usecase": "Best model out there, expensive",

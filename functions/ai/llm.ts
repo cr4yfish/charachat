@@ -137,7 +137,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "open-mistral-nemo":
             return getMistral(modelId, apiKey);
 
-        case "claude-3-5-sonnet-latest":
+        case "claude-3-7-sonnet-latest":
         case "claude-3-5-haiku-latest":
             return getAnthropic(modelId, apiKey);
 
