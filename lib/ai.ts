@@ -169,7 +169,9 @@ export type ImageModelId =
     "delta-lock/noobai-xl:dceca5ec09fd6fd0e5dbd5d3dcefb25f73802560e5b89008021fd07c9691e880" |
     "lucataco/flux-dev-lora:091495765fa5ef2725a175a57b276ec30dc9d39c22d30410f2ede68a3eab66b3" |
     "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9" |
-    "rocketdigitalai/animagine-xl-4.0:7af46ee494f1cf196d49a8592737f4eb789e34a5a995751b23a869d19f5dc2ba"
+    "aisha-ai-official/animagine-xl-4.0:057e2276ac5dcd8d1575dc37b131f903df9c10c41aed53d47cd7d4f068c19fa5" |
+    "aisha-ai-official/wai-nsfw-illustrious-v11:152992479714a33337898ed89d84dd2e74a6111834638d04135f4efc2cba94f2" |
+    "google/imagen-3"
 
 export type VideoModelId = 
     "fofr/ltx-video:983ec70a06fd872ef4c29bb6b728556fc2454125a5b2c68ab51eb8a2a9eaa46a" |
@@ -299,6 +301,15 @@ export const imageModels: ImageModel[] = [
         provider: "replicate",
         type: "text-to-image"
     },
+
+    {
+        id: "google/imagen-3",
+        title: "Imagen 3",
+        style: "Imagen 3",
+        provider: "replicate",
+        type: "text-to-image"
+    },
+
     {
         id: "lucataco/flux-dev-lora:091495765fa5ef2725a175a57b276ec30dc9d39c22d30410f2ede68a3eab66b3",
         title: "Flux Dev Single Lora",
@@ -314,37 +325,16 @@ export const imageModels: ImageModel[] = [
         type: "text-to-image"
     },
     {
-        id: "rocketdigitalai/animagine-xl-4.0:7af46ee494f1cf196d49a8592737f4eb789e34a5a995751b23a869d19f5dc2ba",
+        id: "aisha-ai-official/animagine-xl-4.0:057e2276ac5dcd8d1575dc37b131f903df9c10c41aed53d47cd7d4f068c19fa5",
         title: "animagine xl 4.0",
         style: "Animagine4",
         provider: "replicate",
         type: "text-to-image"
     },
     {
-        id: "delta-lock/noobai-xl:dceca5ec09fd6fd0e5dbd5d3dcefb25f73802560e5b89008021fd07c9691e880",
-        title: "noobai-xl",
-        style: "NoobAI-XL",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "delta-lock/ponynai3:ea38949bfddea2db315b598620110edfa76ddaf6313a18e6cbc6a98f496a34e9",
-        title: "Pony AI3",
-        style: "Pony Anime",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "stability-ai/stable-diffusion-3.5-large-turbo",
-        title: "Stable Diffusion 3.5 Large Turbo",
-        style: "SD Turbo",
-        provider: "replicate",
-        type: "text-to-image"
-    },
-    {
-        id: "stability-ai/stable-diffusion-3.5-large",
-        title: "Stable Diffusion 3.5 Large",
-        style: "SD3.5",
+        id: "aisha-ai-official/wai-nsfw-illustrious-v11:152992479714a33337898ed89d84dd2e74a6111834638d04135f4efc2cba94f2",
+        title: "Illustrious v11",
+        style: "Illustrious11",
         provider: "replicate",
         type: "text-to-image"
     },
