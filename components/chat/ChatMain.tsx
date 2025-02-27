@@ -715,9 +715,6 @@ export default function ChatMain(props : Props) {
                 }
                 </AnimatePresence>
                 <div className="flex flex-row items-center gap-2 w-full justify-center">
-                    <Button size="lg" isIconOnly radius="full" variant="flat">
-                        <Icon filled>mic</Icon>
-                    </Button>
                     <Textarea 
                         placeholder="Send a message" 
                         size="lg" 
