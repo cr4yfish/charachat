@@ -213,7 +213,7 @@ export const summarizeTool = async (props: SummarizeToolProps) => {
 
         const summarizedText = await authorNoStream({
             profile: props.profile,
-            systemText: "You are a summarize tool for AI. You remove unnessesary words and shorten everything as much as possible. Your summary is always significantly shorter than the original text. The Resulting text does not need to be human readable. You only return the text.",
+            systemText: "You are a summarize tool. You remove unnessesary words and shorten everything as much as possible. You remove redundancies and repetitions, keeping chronological order. Your summary is always significantly shorter than the original text. You only return the text.",
             prompt: "Summarize this text: " + props.text
         })
 

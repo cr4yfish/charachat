@@ -83,7 +83,7 @@ export async function POST(req: Request) {
             You are prohibited from responding with an empty message.
             You are prohibited from saying anything described here (can be empty): ${chat?.negative_prompt}
             The following tools are available to you:
-            - addNewMemory: Add a new memory to the character's knowledge
+            - addNewMemory: Add a new piece of memory to the character's memory. Only add new information that is NOT already in the memory.
             - summarize: Generate a summary of a given conversation context
             - chatRenameTool: Rename the Chat when the Topic changes
             - getMemory: Get your Chat memory
@@ -156,8 +156,8 @@ export async function POST(req: Request) {
             ],
             tools: llmDoesntSupportTools(chat.llm as ModelId) ? undefined : {
                 addNewMemory: tool({
-                    description: "Add a new memory to the character's knowledge. Input gets appended, so only the new information is needed.",
-                    parameters: z.object({ memory: z.string().describe("The new memory to be appended to the Chat memory.") }),
+                    description: "Add a new piece of memory to the character's knowledge. Only add new information that is NOT already in the memory.",
+                    parameters: z.object({ memory: z.string().describe("The new memory to be added to the Chat memory.") }),
                     execute: async ({ memory }: { memory: string }) => {
                         return await addMemory({chat, memory})
                     }
@@ -214,7 +214,7 @@ export async function POST(req: Request) {
                     description: "Get real life information about the user and the world",
                     parameters: z.object({ request: z.string().describe("What to get") }),
                     execute: async() => {
-                        return `The current date is ${new Date().toDateString()}. The current time is ${new Date().toTimeString()}.`
+                        return `The current date is ${new Date().toLocaleDateString()}. The current time is ${new Date().toLocaleString()}.`
                     }
                 }),
             }
