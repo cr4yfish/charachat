@@ -49,11 +49,15 @@ export function StatsCard(props: Props) {
   const [data, setData] = useState<Stats[]>([])
 
   useEffect(() => {
-    setData(props.stats.reverse().map((item) => ({
-      timeframe: props.interval == "daily" ? new Date(item.timeframe).toLocaleDateString() : months[new Date(item.timeframe).getMonth()],
-      count: item.count,
-      accumulated_count: item?.accumulated_count,
-    })))
+    try {
+      setData(props.stats.reverse().map((item) => ({
+        timeframe: props.interval == "daily" ? new Date(item.timeframe).toLocaleDateString() : months[new Date(item.timeframe).getMonth()],
+        count: item.count,
+        accumulated_count: item?.accumulated_count,
+      })))
+    } catch (e) {
+      console.error("Error parsing stats data:", e)
+    }
   }, [props.stats])
 
   return (
