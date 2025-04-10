@@ -104,6 +104,7 @@ export type ModelId =
     "llama-3.2-90b-vision-preview" |
     "llama-3.3-70b-versatile" |
     "deepseek-r1-distill-llama-70b" |
+    "meta-llama/llama-4-scout-17b-16e-instruct" |
     "gemma2-9b-it" |
     "ollama" |
     "gpt-4o-mini" |
@@ -403,6 +404,13 @@ export type LLMType = {
 }
 
 export const LLMs: LLMType[] = [
+    {
+        "key": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "name": "Llama 4",
+        "provider": "Groq",
+        "usecase": "130k context length wtf?",
+        "tags": ["Quality", "Uncensored"]
+    },
     {
         "key": "deepseek-r1-distill-llama-70b",
         "name": "DeepSeek R1",
