@@ -7,6 +7,7 @@ export const getProfileAPIKey = (modelId: ModelId | string, profile: Profile): s
         case "llama-3.2-90b-vision-preview":
         case "llama-3.3-70b-versatile":
         case "gemma2-9b-it":
+        case "meta-llama/llama-4-scout-17b-16e-instruct":
             if(profile.groq_encrypted_api_key && profile.groq_encrypted_api_key.length > 0) {
                 return profile.groq_encrypted_api_key;
             }
@@ -409,7 +410,7 @@ export const LLMs: LLMType[] = [
         "name": "Llama 4",
         "provider": "Groq",
         "usecase": "130k context length wtf?",
-        "tags": ["Quality", "Uncensored"]
+        "tags": ["Free", "Quality"]
     },
     {
         "key": "deepseek-r1-distill-llama-70b",

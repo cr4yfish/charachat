@@ -1,6 +1,6 @@
 import { ModelId } from "./ai";
 
-export const defaultLLM: ModelId = "llama-3.2-90b-vision-preview"
+export const defaultLLM: ModelId = "meta-llama/llama-4-scout-17b-16e-instruct"
 
 export const placeholderImage = "https://placehold.co/600x400";
 
