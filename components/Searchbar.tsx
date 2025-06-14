@@ -1,14 +1,14 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
 import { motion, AnimatePresence } from "motion/react";
 import Icon from "./utils/Icon";
 import React from "react";
 import { Character, Story } from "@/types/db";
 import { searchCharacters } from "@/functions/db/character";
 import { searchStories } from "@/functions/db/stories";
-import { Spinner } from "@nextui-org/spinner";
 import dynamic from "next/dynamic";
+import { Input } from "./ui/input";
+import { Spinner } from "./ui/spinner";
 
 const SearchResult = dynamic(() => import("./SearchResult"), { ssr: false });
 
@@ -69,15 +69,8 @@ export default function Searchbar() {
             <div className="relative w-full max-w-lg flex flex-col gap-4 ">
                 <Input 
                     placeholder="Search Characters and Stories" 
-                    radius="full"
-                    startContent={loading ? <Spinner size="sm" color="default" /> : <Icon>search</Icon>}
-                    size="lg"
-                    isClearable
                     value={search}
                     onValueChange={setSearch}
-                    classNames={{
-                        inputWrapper: "dark:bg-zinc-800/30"
-                    }}
                 />
                 
                 <AnimatePresence>

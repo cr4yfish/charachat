@@ -1,8 +1,5 @@
-"use server";
-
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Button } from "@/components/utils/Button";
 import React from "react";
 
@@ -24,11 +21,11 @@ const NewsCard = (props: NewCardProps) => {
   )
 }
 
-export default async function News() {
+export default function News() {
 
     return (
         <>
-        <ScrollShadow orientation={"horizontal"} className="w-full overflow-y-auto pb-3">
+        <div className="w-full overflow-y-auto pb-3">
           <div className="flex flex-row items-center gap-4 w-fit">
 
             <NewsCard 
@@ -65,7 +62,7 @@ export default async function News() {
             />
 
           </div>
-        </ScrollShadow>
+        </div>
         </>
     )
 }

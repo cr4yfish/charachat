@@ -1,30 +1,39 @@
 "use server"
 
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
-
+import Form from "next/form"
 import Link from "next/link"
-import { Input } from "@nextui-org/input"
-
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { login } from "../actions"
 
 export default async function Login() {
+
+    const handleSubmit = async (formData: FormData) => {
+        'use server'
+        await login(formData)
+        // Handle any additional logic after login if needed
+    }
 
     return (
         <>
         <div className="z-10 px-4 py-6 h-screen flex flex-col gap-4 items-center justify-center pt-[15vh] pb-[33vh]">
             <p>Login or sign up</p>
-            <form className="w-full">
+            <Form action={handleSubmit} className="w-full">
                 <Card>
                     <CardHeader>Login</CardHeader>
-                    <CardBody className="flex flex-col gap-2">
-                        <Input name="email" type="email" label="Email" />
-                        <Input name="password" type="password" label="Password" />
-                    </CardBody>
+                    <CardContent className="flex flex-col gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input name="email" type="email" />
+                        <Label htmlFor="password">Password</Label>
+                        <Input name="password" type="password" />
+                    </CardContent>
                     <CardFooter>
-                        <button formAction={login} >Login</button>
+                        <Button>Login</Button>
                     </CardFooter>
                 </Card>
-            </form>
+            </Form>
             <Link href="/signup">Sign up instead</Link>
         </div>
         </>

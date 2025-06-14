@@ -11,7 +11,7 @@ export default function ThemeSwitcher() {
     return (
         <>
         <Button variant="light" radius="full" isIconOnly onClick={() => setTheme(theme == "light" ? "dark" : "light")}>
-            <Icon>{theme == "light" ? "dark_mode" : "light_mode"}</Icon>
+            <Icon>dark_mode</Icon>
         </Button>
         </>
     )

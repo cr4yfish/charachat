@@ -12,7 +12,6 @@ import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
 import ImageInputWithAI from "../ImageInputWithAI";
 import StoryCard from "./StoryCard";
-import { Switch } from "@nextui-org/switch";
 import { _STORY_MAX_LENGHT } from "@/lib/maxLength";
 import ExtraCharacterSelect from "./ExtraCharacterSelect";
 import CharacterAvatarButton from "../character/CharacterAvatarButton";

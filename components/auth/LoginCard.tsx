@@ -1,8 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Input } from "@nextui-org/input";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "../utils/Button";
 import { FormEvent, useState } from "react";
@@ -10,6 +8,9 @@ import { login, LoginResponse, signUp } from "@/functions/db/auth";
 import { loginSchema, signUpSchema } from "@/lib/schemas";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import ImageInputWithAI from "../ImageInputWithAI";
+import { Card, CardHeader, CardContent as CardBody, CardFooter } from "../ui/card";
+import {Input} from "../ui/input";
+import { z } from "zod";
 
 type Props = {
     shouldRedirect?: boolean;
@@ -120,7 +121,7 @@ export default function LoginCard(props: Props) {
                         <Input 
                             name="username" 
                             type="text"
-                            isRequired={isSignUp} 
+                            required={isSignUp} 
                             label="Username" 
                             description="Your public display name"
                             value={username} 
@@ -132,7 +133,7 @@ export default function LoginCard(props: Props) {
                             name="first_name" 
                             type="text" 
                             description="What the AI will call you. Only visible to you & AI"
-                            isRequired={isSignUp}
+                            required={isSignUp}
                             label="First Name" 
                             value={firstName} 
                             onValueChange={setFirstName} 

@@ -1,7 +1,6 @@
 "use client";
 
 import { Persona, Profile } from "@/types/db";
-import {Tabs, Tab} from "@nextui-org/tabs";
 
 import AnimeImport from "../character/importers/AnimeImport";
 

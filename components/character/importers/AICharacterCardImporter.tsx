@@ -3,12 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Card as NextUICard, CardBody as NextUICardBody } from "@nextui-org/card";
-import { Input } from "@nextui-org/input";
 import Icon from "@/components/utils/Icon";
-import { Spinner } from "@nextui-org/spinner";
 import Markdown from "react-markdown";
-import { Avatar } from "@nextui-org/avatar";
 import { truncateText } from "@/lib/utils";
 import { Character, Profile } from "@/types/db";
 import { getAICharacterCard, searchAICharacterCards } from "@/functions/serverHelpers";
@@ -38,8 +34,8 @@ function CharacterPageCard(props: CharacterPageCardProps) {
 
     return (
         <>
-        <NextUICard isDisabled={props.isLoading} isPressable onClick={handleCallback}>
-            <NextUICardBody className="flex flex-row gap-2">
+        <Card onClick={handleCallback}>
+            <CardContent className="flex flex-row gap-2">
                 <div>
                     <Avatar src={props.page.thumbnail ? props.page.thumbnail.url : ""} size="lg" alt={props.page.title} />
                 </div>
@@ -51,8 +47,8 @@ function CharacterPageCard(props: CharacterPageCardProps) {
                    
                     <Markdown className="text-xs dark:text-zinc-400">{truncateText(props.page.description, 280)}</Markdown>
                 </div>
-            </NextUICardBody>
-        </NextUICard>
+            </CardContent>
+        </Card>
         </>
     )
 }

@@ -1,4 +1,3 @@
-import { Button as NextUIButton } from "@nextui-org/button"
 import React from "react"
 
 const Button = React.forwardRef(({
@@ -41,27 +40,17 @@ const Button = React.forwardRef(({
 }, ref: React.ForwardedRef<HTMLButtonElement>) => {
 
     return (
-        <NextUIButton
+        <button
             className={` font-black ${className}`}
             onClick={onClick}
             type={type}
-            variant={variant}
-            size={size}
-            isLoading={isLoading}
-            isDisabled={isDisabled}
             color={color}
-            startContent={startContent}
-            endContent={endContent}
-            isIconOnly={isIconOnly}
-            fullWidth={fullWidth}
-            radius={radius}
             form={form}
             ref={ref}
-            formAction={formAction}
             id={id}
         >
             {children}
-        </NextUIButton>
+        </button>
     )
 })
 

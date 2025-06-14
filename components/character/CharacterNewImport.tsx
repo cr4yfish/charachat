@@ -1,7 +1,6 @@
 "use client";
 
 import { Character, Profile } from "@/types/db";
-import {Tabs, Tab} from "@nextui-org/tabs";
 import dynamic from "next/dynamic";
 const AnimeImport = dynamic(() => import("./importers/AnimeImport"), { ssr: false });
 const AICharacterCardsImporter = dynamic(() => import("./importers/AICharacterCardImporter"), { ssr: false });

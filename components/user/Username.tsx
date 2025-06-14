@@ -1,6 +1,5 @@
 import { Profile } from "@/types/db"
 import ConditionalLink from "../utils/ConditionalLink"
-import { Avatar } from "@nextui-org/avatar"
 import { safeParseLink } from "@/lib/utils"
 
 type Props = {

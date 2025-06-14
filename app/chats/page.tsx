@@ -5,9 +5,9 @@ import ChatCardSmallSkeleton from "@/components/chat/ChatCardSmallSkeleton";
 import InfiniteListLoader from "@/components/InfiniteListLoader";
 import { getChats } from "@/functions/db/chatList";
 
-export default async function UserChats() {
+export default async function Page() {
 
-    const chats = await getChats({ cursor: 0, limit: 25 });
+    // const chats = await getChats({ cursor: 0, limit: 25 });
 
     return (
         <>
@@ -20,14 +20,14 @@ export default async function UserChats() {
                 
             </div>
 
-            <InfiniteListLoader 
+            {/* <InfiniteListLoader 
                 initialData={chats}
                 loadMore={getChats}
                 limit={5}
                 component={ChatCard}
                 skeleton={<ChatCardSmallSkeleton />}
                 componentProps={{ hasLink: true }}
-            />
+            /> */}
     
         </div>
         </>

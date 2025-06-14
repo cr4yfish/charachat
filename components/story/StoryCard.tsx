@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "motion/react";
 import { Story } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
 import { safeParseLink, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
+import { Card, CardContent as CardBody } from "../ui/card";
 
 type Props = {
     data: Story;
@@ -30,7 +30,6 @@ export default function StoryCard(props: Props) {
                 transition={{ duration: 0.25 }}
             >
                 <Card 
-                    isPressable={props.hasLink} 
                     className={`
                         h-[150px] w-[300px] bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border-none shadow-none
                         hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40

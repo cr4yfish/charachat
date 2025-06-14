@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardTitle, CardHeader } from "../ui/card";
 
-export default async function SpotlighFallback() {
+export default function SpotlighFallback() {
     return (
         <>
         <div className="w-full h-[320px] relative overflow-visible">

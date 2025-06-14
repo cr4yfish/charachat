@@ -1,16 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Skeleton } from './ui/skeleton';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { useToast } from '@/hooks/use-toast';
 import { LoadMoreProps } from '@/types/client';
 import { JSONObject } from '@ai-sdk/provider';
+import useSWRInfinite from "swr/infinite";
+import { fetcher } from '@/lib/utils';
 
 interface Props {
-    loadMore: (props : LoadMoreProps) => Promise<any[]>;
+    loadMore?: (props : LoadMoreProps) => Promise<any[]>;
+    apiUrl: string;
     limit: number;
     initialData?: Array<any>;
     component: React.FC<any>;
@@ -22,74 +23,65 @@ interface Props {
 
 export default function InfiniteSwiperLoader(props: Props) {
     const { toast } = useToast();
-    const [items, setItems] = useState<any[]>(props.initialData ?? []);
-    const [cursor, setCursor] = useState(props.initialData?.length ?? 0)
-    const [canLoadMore, setCanLoadMore] = useState(true);
-    const [rowsArray, setRowsArray] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
-    
+
+    const {
+        data,
+        isLoading,
+        isValidating,
+        error,
+        size,
+        setSize,
+        mutate
+    } = useSWRInfinite<any[]>(
+        (pageIndex, prevPageData) => {
+            if(prevPageData && !prevPageData.length) return null; // reached the end
+            return props.apiUrl + `?cursor=${pageIndex}&limit=${props.limit}` + (props.args ? `&args=${JSON.stringify(props.args)}` : '');
+        },
+        fetcher, {
+            dedupingInterval: 60*60*1000, // 1 hour
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+            suspense: true,
+            fallbackData: []
+        },
+    )
+
+    const items = useMemo(() => {
+        return data ? data.flat() : [];
+    }, [data])
+
+    const handleScroll = useCallback(async () => {
+        if (containerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+            if (scrollLeft + clientWidth >= scrollWidth - 5) {
+                setSize(prevSize => prevSize + 1);
+            }
+        }
+    }, [setSize])
+
     // load more data on scrolling to end
     useEffect(() => {
-        const handleScroll = async () => {
-            if (containerRef.current) {
-                const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-                if (scrollLeft + clientWidth >= scrollWidth - 5) {
-                    if(isLoading || !canLoadMore) return;
-                    setIsLoading(true)
-            
-                    try {
-                        const res = await props.loadMore({ cursor: cursor, limit: props.limit, args: props.args } )
-                        
-                        setCursor(prevCursor => prevCursor + res.length);
-            
-                        if(items) {
-                            setItems(prevItems => [...prevItems, ...res]);
-                        } else {
-                            setItems(res);
-                        }
-            
-                        if(res.length < props.limit) {
-                            containerRef.current?.removeEventListener('scroll', handleScroll);
-                            setCanLoadMore(false);
-                        }
-            
-                    } catch(error) {
-                        const err = error as Error;
-                        toast({
-                            title: "Error",
-                            description: err.message,
-                            variant: "destructive"
-                        })
-                    }
-                    
-                    setIsLoading(false);
-                };
-            }
-        };
-
         const container = containerRef.current;
         if (container) {
             container.addEventListener('scroll', handleScroll);
             return () => container.removeEventListener('scroll', handleScroll);
         }
-    }, [canLoadMore, cursor, isLoading, items, props, toast]);
-
-    useEffect(() => {
+    }, [size, isLoading, items, props, toast]);
+    
+    const rowsArray = useMemo(() => {
         const rows = props.rows ?? 1;
         const columns = Math.ceil(items.length / rows);
-        const newRowsArray = Array.from({ length: rows }, (_, rowIndex) =>
+        return Array.from({ length: rows }, (_, rowIndex) =>
             Array.from({ length: columns }, (_, colIndex) =>
                 items[rowIndex + colIndex * rows]
             ).filter(item => item !== undefined)
         );
-        setRowsArray(newRowsArray);
-    }, [props.rows, items])
+    }, [props.rows, items]);
 
     return (
         <ScrollArea asChild >
-            <ScrollShadow 
-                orientation={"horizontal"}
+            <div 
                 className="overflow-x-auto w-full"
                 ref={containerRef}
             >
@@ -99,12 +91,12 @@ export default function InfiniteSwiperLoader(props: Props) {
                             {rowItems.map((item: any, index: number) => (
                                 <props.component key={index} data={item} {...props.componentProps} />
                             ))}
-                            {isLoading && <Skeleton className=' w-[300px] relative min-h-full rounded-lg' />}
+                            {(isLoading || isValidating || items.length == 0) && <Skeleton className=' w-[300px] relative min-h-full rounded-lg' />}
                         </div>
                     ))}
                     
                 </div>
-            </ScrollShadow>
+            </div>
         </ScrollArea>
     );
 }

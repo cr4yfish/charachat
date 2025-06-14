@@ -1,7 +1,5 @@
 "use client";
 
-import { Avatar } from "@nextui-org/avatar";
-import { Tabs, Tab } from "@nextui-org/tabs";
 import { Persona, Profile } from "@/types/db";
 import Icon from "@/components/utils/Icon";
 

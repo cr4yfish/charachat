@@ -14,8 +14,6 @@ import { Tag } from "@/types/db";
 import { Button } from "./utils/Button";
 import { useEffect, useState } from "react";
 import { getTags } from "@/functions/db/tags";
-import { Chip } from "@nextui-org/chip";
-import { Spinner } from "@nextui-org/spinner";
 
 type Props = {
     selectedTags: Tag[]

@@ -2,7 +2,6 @@
 
 import { v4 as uuidv4 } from "uuid";
 import { Message as AIMessage } from "ai/react";
-import { Spinner } from "@nextui-org/spinner";
 import { motion } from "motion/react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -30,9 +29,7 @@ import { ChatRequestOptions, Message } from "ai";
 import { ContextMenuSeparator } from "@radix-ui/react-context-menu";
 import Icon from "../utils/Icon";
 import { addMessage, updateMessage } from "@/functions/db/messages";
-import { Textarea } from "@nextui-org/input";
 import { Button } from "../utils/Button";
-import { Avatar } from "@nextui-org/avatar";
 import { decryptMessage, getKeyClientSide } from "@/lib/crypto";
 import ImagePrompterDrawer from "../ImagePrompterDrawer";
 

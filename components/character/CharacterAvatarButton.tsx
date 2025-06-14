@@ -3,8 +3,6 @@
 import { getCharacter } from "@/functions/db/character";
 import { safeParseLink, truncateText } from "@/lib/utils";
 import { Character } from "@/types/db";
-import { Avatar } from "@nextui-org/avatar";
-import { Card, CardBody } from "@nextui-org/card";
 import { useEffect, useState } from "react";
 import ConditionalLink from "../utils/ConditionalLink";
 

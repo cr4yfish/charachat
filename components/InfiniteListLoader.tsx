@@ -4,7 +4,6 @@
 import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { useToast } from "@/hooks/use-toast";
-import { Spinner } from "@nextui-org/spinner";
 import { LoadMoreProps } from "@/types/client";
 
 

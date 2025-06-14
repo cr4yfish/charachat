@@ -1,12 +1,10 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./utils/Button";
 import { useRef, useState } from "react";
 import Icon from "./utils/Icon";
 import { isValidURL, safeParseLink } from "@/lib/utils";
-import { Avatar } from "@nextui-org/avatar";
 import dynamic from "next/dynamic";
 
 const ImagePrompterDrawer = dynamic(() => import("./ImagePrompterDrawer"), { ssr: false });

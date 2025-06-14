@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Card, CardBody } from "@nextui-org/card";
 import { Character } from "@/types/db";
-import { truncateText } from "@/lib/utils";
+import { cn, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
 import Markdown from "react-markdown";
 import Username from "../user/Username";
 import ImageWithBlur from "../ImageWithBlur";
 import Link from "next/link";
+import { Card, CardContent } from "../ui/card";
 
 type Props = {
     data: Character,
@@ -30,17 +30,14 @@ export default function CharacterCard(props: Props) {
                 transition={{ duration: 0.25 }}
             >
                 <Card 
-                    isPressable={props.hasLink} 
-                    className={`
-                        h-[150px] w-[310px] bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border dark:border-none shadow-none
-                        hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40
-                        ${props.fullWidth && "w-full"} 
-                        ${props.isSmall && "h-full"}
-                        ${props.noBg && "bg-transparent dark:bg-transparent"} 
-                        ${props.bgOverwrite}
-                    `}
+                    className={cn("h-[150px] w-[310px] bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border dark:border-none shadow-none hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40 flex items-center justify-center" + props.bgOverwrite
+                    ,{
+                        "w-full": props.fullWidth,
+                        "h-full": props.isSmall,
+                        "bg-transparent dark:bg-transparent": props.noBg,
+                    })}
                     >
-                    <CardBody className="flex flex-row gap-4">
+                    <CardContent className=" size-full flex flex-row gap-4 p-3">
                         
                         <div className="flex items-center justify-center">
                             <div className="relative h-[100%] w-[100px] overflow-hidden rounded-2xl">
@@ -61,7 +58,7 @@ export default function CharacterCard(props: Props) {
                                     <h3 className="font-medium">{truncateText(props.data.name,40)}</h3>
                                     <Username profile={props.data.owner} />
                                 </div>
-                                <Markdown className="text-xs max-w-md">{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</Markdown> 
+                                <Markdown>{truncateText(props.data.description, props.fullWidth ? 80 : 40)}</Markdown> 
                             </div>
 
                             
@@ -87,7 +84,7 @@ export default function CharacterCard(props: Props) {
                             </div>
                             
                         </div>
-                    </CardBody>
+                    </CardContent>
                 </Card>
             </motion.div>
         </Link>

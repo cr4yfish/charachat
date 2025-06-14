@@ -2,7 +2,6 @@
 
 
 import React from "react";
-import {Autocomplete, AutocompleteItem} from "@nextui-org/autocomplete";
 import { useAsyncList } from "@react-stately/data";
 
 import { Persona } from "@/types/db";

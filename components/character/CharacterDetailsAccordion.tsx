@@ -2,7 +2,6 @@
 
 
 import { Character } from "@/types/db";
-import { Accordion, AccordionItem } from "@nextui-org/accordion"
 
 type Props = {
     character: Character

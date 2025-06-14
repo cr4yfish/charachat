@@ -13,7 +13,6 @@ import { Button } from "@/components/utils/Button";
 import { SharedChatProvider } from "@/context/SharedChatSettings";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Metadata } from "next";
-import { Avatar } from "@nextui-org/avatar";
 import { getKeyServerSide } from "@/functions/serverHelpers";
 
 type Params = Promise<{ chatId: string }>

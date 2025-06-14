@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Spacer } from "@nextui-org/spacer";
-import { Input } from "@nextui-org/input";
 import { useToast } from "@/hooks/use-toast";
-import { Chip } from "@nextui-org/chip";
 import { Button } from "@/components/utils/Button";
 import Icon from "../utils/Icon";
 import { Profile } from "@/types/db";
@@ -18,7 +15,6 @@ import LoginButton from "../auth/LoginButton";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { Separator } from "../ui/separator";
 import LLMSelect from "../LLMSelect";
-import { Switch } from "@nextui-org/switch";
 import { useTheme } from "next-themes";
 
 type KeyInputProps = {

@@ -1,12 +1,9 @@
 "use client";
 
-import { Card, CardBody } from "@nextui-org/card";
 import { usePathname } from "next/navigation";
-
 import { Chat } from "@/types/db";
 import { useEffect, useState } from "react";
 import { formatLastMessageTime, truncateText } from "@/lib/utils";
-import { Avatar } from "@nextui-org/avatar";
 import ConditionalLink from "../utils/ConditionalLink";
 
 type Props = {

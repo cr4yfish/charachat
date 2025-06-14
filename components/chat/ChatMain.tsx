@@ -1,12 +1,9 @@
 "use client";
 
 import { useChat, Message as AIMessage } from "ai/react";
-import { Textarea } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import InfiniteScroll from "react-infinite-scroller";
-import { Spacer } from "@nextui-org/spacer";
 import { AnimatePresence, motion } from "motion/react";
-import { Switch } from "@nextui-org/switch";
 
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -16,12 +13,10 @@ import { useRef, useState, useEffect } from "react";
 import { addMessage, deleteMessage, getMessages } from "@/functions/db/messages";
 import Messagebubble from "./Messagebubble";
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Spinner } from "@nextui-org/spinner";
 import { isSameDay, isToday, isYesterday } from "@/lib/utils";
 
 import { _INTRO_MESSAGE } from "@/lib/utils";
 import { addTokens as updateTokens } from "@/functions/db/profiles";
-import { Avatar } from "@nextui-org/avatar";
 import { useSharedChat } from "@/context/SharedChatSettings";
 import ConditionalLink from "../utils/ConditionalLink";
 import PersonaCard from "../persona/PersonaCard";
@@ -30,9 +25,6 @@ import PersonaAutocomplete from "../persona/PersonaAutocomplete";
 import ToolMessage from "./ToolMessage";
 import { getCharacter } from "@/functions/db/character";
 import { LLMsWithAPIKeys } from "@/lib/ai";
-import { CardBody, Card, CardHeader } from "@nextui-org/card";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
-import { Chip } from "@nextui-org/chip";
 import { getKeyClientSide } from "@/lib/crypto";
 import { _MAX_MESSAGES_IN_CHAT } from "@/lib/defaults";
 

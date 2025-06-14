@@ -2,13 +2,11 @@
 
 import { motion } from "motion/react";
 import Image from "next/image"
-import { Card, CardBody } from "@nextui-org/card";
 import { Persona } from "@/types/db";
 import ConditionalLink from "../utils/ConditionalLink";
 import { safeParseLink, truncateText } from "@/lib/utils";
 import Icon from "../utils/Icon";
 import Markdown from "react-markdown";
-import { Avatar } from "@nextui-org/avatar";
 import Username from "../user/Username";
 
 type Props = {

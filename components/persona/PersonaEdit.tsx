@@ -8,7 +8,6 @@ import { personaSchema } from "@/lib/schemas";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
 import ImageInputWithAI from "../ImageInputWithAI";
-import { Switch } from "@nextui-org/switch";
 import { createPersona, deletePersona, updatePersona } from "@/functions/db/personas";
 import PersonaCard from "./PersonaCard";
 import { useToast } from "@/hooks/use-toast";

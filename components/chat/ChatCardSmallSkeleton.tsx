@@ -1,6 +1,6 @@
 import { Skeleton } from "../ui/skeleton";
 
-export default async function ChatCardSmallSkeleton() {
+export default function ChatCardSmallSkeleton() {
     
     return (
         <div className="flex flex-row min-w-full h-[64px] gap-2 p-2">

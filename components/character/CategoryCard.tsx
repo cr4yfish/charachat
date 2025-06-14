@@ -1,7 +1,6 @@
 "use client";
 
 import { Category } from "@/types/db"
-import { Card, CardBody } from "@nextui-org/card"
 
 type Props = {
     data?: Category | null,

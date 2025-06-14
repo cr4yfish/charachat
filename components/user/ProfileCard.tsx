@@ -1,11 +1,11 @@
 "use server";
 
-import {User} from "@nextui-org/user";
 import Link from "next/link";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import { getCurrentUser } from "@/functions/db/auth";
 import { Profile } from "@/types/db";
+import { User } from "../ui/user";
 
 export default async function ProfileCard() {
     let profile: Profile | undefined = undefined;

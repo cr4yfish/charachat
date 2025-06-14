@@ -8,7 +8,6 @@ import InfiniteSwiperLoader from "./InfiniteSwiperLoder";
 import { getCategories } from "@/functions/db/categories";
 import { useCurrentCategory } from "@/context/CurrentCategoryProvider";
 import CategoryCardWithContext from "./character/CategoryCardWithContext";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "./ui/skeleton";
 
@@ -112,8 +111,7 @@ export default function CategoryScroller(props: Props) {
                 component={CategoryCardWithContext}
             />
 
-            <ScrollShadow 
-                orientation={"horizontal"}
+            <div 
                 className="overflow-x-auto w-full"
                 ref={containerRef}
             >
@@ -128,7 +126,7 @@ export default function CategoryScroller(props: Props) {
                         </div>
                     }
                 </div>
-            </ScrollShadow>
+            </div>
         </div>
             
         </>

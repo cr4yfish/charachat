@@ -2,7 +2,6 @@
 
 import CharacterCard from "@/components/character/CharacterCard";
 import { getStory } from "@/functions/db/stories";
-import { Spacer } from "@nextui-org/spacer";
 import Image from "next/image";
 import { Button } from "@/components/utils/Button";
 import { getCurrentUser } from "@/functions/db/auth";

@@ -1,5 +1,3 @@
-"use server";
-
 import {
   Sidebar,
   SidebarFooter,
@@ -15,7 +13,7 @@ const SidebarLink = dynamic(() => import ("./SidebarLink"), { loading: () => <Sk
 const LoginButton = dynamic(() => import ("./auth/LoginButton"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
 const ProfileCard = dynamic(() => import ("./user/ProfileCard"), { loading: () => <Skeleton className="w-full h-full max-h-[48px]" />})
 
-export async function LeftSidebar() {
+export function LeftSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-2">

@@ -7,7 +7,6 @@ import Icon from "@/components/utils/Icon";
 import CategoryCard from "@/components/character/CategoryCard";
 import Markdown from "react-markdown";
 import { safeParseLink } from "@/lib/utils";
-import { Card, CardBody } from "@nextui-org/card";
 import Username from "@/components/user/Username";
 import ImageWithBlur from "@/components/ImageWithBlur";
 import Image from "next/image";

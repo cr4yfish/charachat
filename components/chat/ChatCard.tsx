@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardBody } from "@nextui-org/card";
 import { Chat } from "@/types/db";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
@@ -10,8 +9,6 @@ import { useState } from "react";
 import TextareaWithCounter from "../utils/TextareaWithCounter";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import { deleteChat, updateChat } from "@/functions/db/chat";
-import { Input } from "@nextui-org/input";
-import { Avatar } from "@nextui-org/avatar";
 
 
 type Props = {

@@ -5,8 +5,6 @@ import { Button } from "@/components/utils/Button";
 import Icon from "@/components/utils/Icon";
 import { searchCharactersInfinite } from "@/functions/db/character";
 import { Character } from "@/types/db";
-import { Input } from "@nextui-org/input";
-import { Spinner } from "@nextui-org/spinner";
 import { useCallback, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import {

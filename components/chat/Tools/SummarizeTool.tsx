@@ -2,7 +2,6 @@
 
 import { ToolInvocation } from "ai";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Spinner } from "@nextui-org/spinner";
 
 type Props = {
     toolInvocation: ToolInvocation,

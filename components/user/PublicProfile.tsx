@@ -2,7 +2,6 @@
 
 import { getPublicProfile } from "@/functions/db/profiles";
 import { getLeaderboardPosition } from "@/functions/db/stats";
-import { Avatar } from "@nextui-org/avatar";
 import Icon from "../utils/Icon";
 
 type Props = {

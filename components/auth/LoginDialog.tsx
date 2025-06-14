@@ -22,7 +22,7 @@ export default function LoginDialog() {
 
         if(!isLoggedIn) {
             try {
-                getCurrentUser().then((user) => {
+                getCurrentUser().then((user: any) => {
                     if(user.user) {
                         setIsLoggedIn(true)
                     }

@@ -1,8 +1,6 @@
-"use server"
-
 import ChatCardSmallSkeleton from "../chat/ChatCardSmallSkeleton"
 
-export default async function SidebarChatListFallback() {
+export default function SidebarChatListFallback() {
     return (
         <>
         <div className="flex flex-col gap-2">

@@ -1,6 +1,5 @@
 "use client";
 
-import { Textarea } from "@nextui-org/input";
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "./ui/drawer";
 import { Button } from "./utils/Button";
 import Icon from "./utils/Icon";
@@ -8,7 +7,6 @@ import { isValidURL, safeParseLink, sleep } from "@/lib/utils";
 import { ImageModel, imageModels, VideoModel, videoModels } from "@/lib/ai";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Tabs, Tab } from "@nextui-org/tabs";
 import { uploadLinkToImgur } from "@/functions/ai/image";
 import { Character, Lora } from "@/types/db";
 

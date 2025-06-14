@@ -4,7 +4,6 @@ import Link from "next/link";
 import Markdown from "react-markdown";
 import Icon from "./utils/Icon";
 import { truncateText } from "@/lib/utils";
-import { Avatar } from "@nextui-org/avatar";
 import { motion } from "motion/react";
 
 type Props = {

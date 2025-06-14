@@ -1,6 +1,5 @@
 "use client";
 
-import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from "@nextui-org/modal"
 import React, { useEffect, useRef } from "react";
 import { Noise, NoiseContent } from "react-noise";
 import "react-noise/css";

@@ -2,7 +2,6 @@
 
 import { ToolInvocation } from "ai";
 import { Alert, AlertTitle } from "@/components/ui/alert"
-import { Spinner } from "@nextui-org/spinner";
 import { Chat } from "@/types/db";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Character } from "@/types/db";
-import { Card, CardBody } from "@nextui-org/card";
 import {
     Drawer,
     DrawerClose,
@@ -13,8 +12,6 @@ import {
   } from "@/components/ui/drawer"
 import Icon from "../utils/Icon";
 import { searchCharacters } from "@/functions/db/character";
-import { Input } from "@nextui-org/input";
-import { Spinner } from "@nextui-org/spinner";
 import { Button } from "../utils/Button";
 import { useToast } from "@/hooks/use-toast";
 import CharacterAvatarButton from "../character/CharacterAvatarButton";

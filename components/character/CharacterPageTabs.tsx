@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { Character } from "@/types/db";
-import { Tabs, Tab } from "@nextui-org/tabs";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import Icon from "../utils/Icon";
 import StoryCard from "../story/StoryCard";
 import { Story } from "@/types/db";

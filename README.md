@@ -95,7 +95,6 @@ As you can see, the message is not readable in the database and can only be decr
 
 ## Tech Stack
 - Shadcn UI
-- NextUI
 - Tailwind CSS
 - Next.js
 - TypeScript

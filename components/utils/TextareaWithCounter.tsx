@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react"
-import { Textarea } from "@nextui-org/input"
 
 type Props = {
     value?: string;

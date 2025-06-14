@@ -1,6 +1,5 @@
 "use client";
 
-import { Switch } from "@nextui-org/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Separator } from "../ui/separator";
@@ -17,12 +16,10 @@ import { getKeyClientSide } from "@/lib/crypto";
 import { deleteCharacter, encryptCharacter, updateCharacter } from "@/functions/db/character";
 import ImageInputWithAI from "../ImageInputWithAI";
 import { _CHARACTER_MAX_LENGTH } from "@/lib/maxLength";
-import { Input } from "@nextui-org/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
 import Icon from "../utils/Icon";
 import TagsSelect from "../TagsSelect";
-import { Chip } from "@nextui-org/chip";
 
 type Props = {
     initCharacter: Character;

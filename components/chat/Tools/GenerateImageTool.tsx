@@ -5,7 +5,6 @@ import Image from "next/image";
 import { ToolInvocation, Message as AIMessage } from "ai";
 import { v4 as uuidv4 } from "uuid"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Spinner } from "@nextui-org/spinner";
 import { getKeyClientSide } from "@/lib/crypto";
 import { addMessage } from "@/functions/db/messages";
 import { Chat, Profile, Message } from "@/types/db";

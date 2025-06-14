@@ -1,8 +1,7 @@
 "use client";
 
 import { Category } from "@/types/db"
-import { Card, CardBody } from "@nextui-org/card"
-
+import { Card, CardContent as CardBody } from "@/components/ui/card";
 import { useCurrentCategory } from "@/context/CurrentCategoryProvider";
 
 type Props = {
@@ -16,7 +15,6 @@ export default function CategoryCardWithContext(props: Props) {
     return (
         <>
         <Card 
-            isPressable
             onClick={() => {
                 setCurrentCategory(props.data)
             }}

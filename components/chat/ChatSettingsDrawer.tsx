@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Slider, SliderValue } from "@nextui-org/slider";
 import { Button } from "../utils/Button";
 import Icon from "../utils/Icon";
 import SaveDeleteButton from "../utils/SaveDeleteButton";
