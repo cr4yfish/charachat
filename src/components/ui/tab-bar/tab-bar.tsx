@@ -41,7 +41,7 @@ const PureTab = (props: TabProps) => {
                 href={props.href} 
             >
                 <motion.div
-                    className={cn("flex flex-col items-center justify-center gap-3 h-full p-2 px-4 z-20 relative text-white/90", { "text-blue-300": isActive, "p-0": props.isButton })}
+                    className={cn("flex flex-col items-center justify-center gap-3 h-full p-2 px-4 z-20 relative text-white/90", { "text-sky-100": isActive, "p-0": props.isButton })}
                 >
                     <div className={cn("h-[13px] scale-90 ", { "size-full flex items-center justify-center scale-100": props.isButton })}>{props.icon}</div>
                     {props.name && <span className={cn("text-[9pt] font-bold ") } >{props.name}</span>}
@@ -50,7 +50,7 @@ const PureTab = (props: TabProps) => {
             {isActive && (props.isButton !== true) && <motion.div
                 layoutId="tab-indicator"
                 id="tab-indicator"
-                className="absolute bottom-0 left-0 right-0 size-full bg-blue-700/15 shadow-2xl shadow-blue-400/50 border border-white/20 backdrop-blur-2xl rounded-full"
+                className="absolute bottom-0 left-0 right-0 size-full bg-sky-900/20 shadow-2xl shadow-primary border border-primary/20 backdrop-blur rounded-full"
             ></motion.div>}
         </motion.li>
     );

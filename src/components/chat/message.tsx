@@ -278,7 +278,7 @@ const AIMessage = memo(PureAIMessage, (prev, next) => {
 
 const PureUserMessage = ({ message }: { message: UIMessage }) => {
     return (
-        <div className="text-neutral-100 dark:bg-neutral-800 rounded-3xl rounded-tr-none p-3">
+        <div className="text-slate-100 dark:bg-slate-800 rounded-3xl rounded-tr-none p-3">
             {/* <Markdown>{message.content}</Markdown> */}
             {message.parts && message.parts.length > 0 && message.parts.map((part, index) => {
                 if(part.type === "text") {
@@ -286,7 +286,7 @@ const PureUserMessage = ({ message }: { message: UIMessage }) => {
                 }
 
                 return (
-                    <div key={index} className="bg-neutral-100 dark:bg-neutral-800 p-2 rounded-md mb-2">
+                    <div key={index} className=" p-2 rounded-md mb-2">
                         <span className="font-semibold">Unknown part type: {part.type}</span>
                         <span className="text-neutral-500 dark:text-neutral-400">{JSON.stringify(part)}</span>
                     </div>

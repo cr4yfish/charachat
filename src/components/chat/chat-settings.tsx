@@ -95,22 +95,21 @@ export const PureChatSettings = (props: Props) => {
                     <SettingsIcon />
                 </Button>
             </DrawerTrigger>
-            <DrawerContent className="h-screen">
+            <DrawerContent className="h-screen pt-0">
                 <DrawerHeader>
-                    <DrawerTitle>Chat Settings</DrawerTitle>
+                    <DrawerTitle className="w-full text-start">Chat Settings</DrawerTitle>
                 </DrawerHeader>
-                <div className="flex flex-col gap-4 justify-between overflow-auto p-4">
-                    <span className="text-muted-foreground text-sm">
-                        General settings                        
-                    </span>
+                <div className="flex flex-col gap-4 justify-between overflow-auto p-4 pt-0 pb-12">
+                    <span className="text-muted-foreground text-sm">General settings</span>
                     <LLMSelect 
                         selectedKey={chat?.llm as ModelId | undefined}
-                        onSelect={handleLLMChange} showLink
+                        onSelect={handleLLMChange} 
+                        showLink
                     />
 
                     <TextareaWithCounter 
                         label="📖 Dynamic Book"
-                        description="You can add any text here, and the AI will use it as context. This is useful for providing additional information or context to the AI."
+                        description="Add context for the AI to reference during conversations."
                         placeholder="Add text here..."
                         maxLength={10000}
                         value={chat?.dynamic_book || ""}
@@ -125,7 +124,7 @@ export const PureChatSettings = (props: Props) => {
 
                     <TextareaWithCounter
                         label="📝 Negative Prompt"
-                        description="You can add any text here, and the AI will use it to avoid generating certain content. This is useful for filtering out unwanted content."
+                        description="Tell the AI what to avoid generating."
                         placeholder="Add text here..."
                         maxLength={2000}
                         value={chat?.negative_prompt}
@@ -137,99 +136,95 @@ export const PureChatSettings = (props: Props) => {
                             handleChatChange(updatedChat);
                         }}
                     />
+                    
                     <span className="text-muted-foreground text-sm">Adjust the AI</span>
 
-                    <div className="flex flex-col gap-2">
-                        <BetterSwitch 
-                            label="🔍 Context Awareness"
-                            description="Enable this to make the AI aware of the context of the conversation. This will make the AI more responsive to the conversation."
-                            disabled
-                            checked
-                        />
+                    <BetterSwitch 
+                        label="🔍 Context Awareness"
+                        description="Makes the AI more responsive to conversation context."
+                        disabled
+                        checked
+                    />
 
-                        <ButtonGroup 
-                            label="📝 Response Length"
-                            description="Control how long the AI's responses will be."
-                            options={[{
-                                value: "1",
-                                label: "Chat"
-                            }, {
-                                value: "2",
-                                label: "Story"
-                            }, {
-                                value: "3",
-                                label: "Novel"
-                            }]}
-                            value={chat?.response_length.toString()}
-                            onValueChange={(value) => {
-                                const updatedChat = {
-                                    ...chat,
-                                    responseLength: value
-                                } as Chat;
-                                handleChatChange(updatedChat);
-                            }}  
-                        />
-                    </div>
+                    <ButtonGroup 
+                        label="📝 Response Length"
+                        description="Control how long the AI's responses will be."
+                        options={[{
+                            value: "1",
+                            label: "Chat"
+                        }, {
+                            value: "2",
+                            label: "Story"
+                        }, {
+                            value: "3",
+                            label: "Novel"
+                        }]}
+                        value={chat?.response_length.toString()}
+                        onValueChange={(value) => {
+                            const updatedChat = {
+                                ...chat,
+                                responseLength: value
+                            } as Chat;
+                            handleChatChange(updatedChat);
+                        }}  
+                    />
 
-                    <div className="flex flex-col gap-2">
-                        <ButtonGroup 
-                            label="💡 Creativity"
-                            description="Increase this to make the AI more creative and less factual."
-                            options={[{
-                                value: "0.6",
-                                label: "Assistant"
-                            }, {
-                                value: "0.7",
-                                label: "Author"
-                            }, {
-                                value: "0.8",
-                                label: "On Drugs"
-                            }]}
-                            value={chat?.temperature.toString()}
-                            onValueChange={(value) => {
-                                const updatedChat = {
-                                    ...chat,
-                                    temperature: parseFloat(value)
-                                } as Chat;
-                                handleChatChange(updatedChat);
-                            }}
-                        />
-                    </div>
+                    <ButtonGroup 
+                        label="💡 Creativity"
+                        description="Increase this to make the AI more creative and less factual."
+                        options={[{
+                            value: "0.6",
+                            label: "Assistant"
+                        }, {
+                            value: "0.7",
+                            label: "Author"
+                        }, {
+                            value: "0.8",
+                            label: "On Drugs"
+                        }]}
+                        value={chat?.temperature.toString()}
+                        onValueChange={(value) => {
+                            const updatedChat = {
+                                ...chat,
+                                temperature: parseFloat(value)
+                            } as Chat;
+                            handleChatChange(updatedChat);
+                        }}
+                    />
 
-                    <div className="flex flex-col gap-2">
-                        <ButtonGroup 
-                            label="👮 Repetition Police"
-                            description="Increase this if the AI tends to repeat itself."
-                            options={[{
-                                value: "0",
-                                label: "Default"
-                            }, {
-                                value: "0.5",
-                                label: "Medium"
-                            }, {
-                                value: "0.9",
-                                label: "Extreme"
-                            }]}
-                            value={chat?.frequency_penalty.toString()}
-                            onValueChange={(value) => {
-                                const updatedChat = {
-                                    ...chat,
-                                    frequency_penalty: parseFloat(value)
-                                } as Chat;
-                                handleChatChange(updatedChat);
-                            }}
-                        />
-                    </div>
-                </div>
-                <DrawerFooter>
-                    <span className="text-xs text-muted-foreground">
-                        {isSyncing ? <div className="flex items-center gap-1"><Spinner /> <span>Saving changes...</span></div> : "All changes are saved automatically."}
-                    </span>
+                    <ButtonGroup 
+                        label="👮 Repetition Police"
+                        description="Increase this if the AI tends to repeat itself."
+                        options={[{
+                            value: "0",
+                            label: "Default"
+                        }, {
+                            value: "0.5",
+                            label: "Medium"
+                        }, {
+                            value: "0.9",
+                            label: "Extreme"
+                        }]}
+                        value={chat?.frequency_penalty.toString()}
+                        onValueChange={(value) => {
+                            const updatedChat = {
+                                ...chat,
+                                frequency_penalty: parseFloat(value)
+                            } as Chat;
+                            handleChatChange(updatedChat);
+                        }}
+                    />
 
                     <Button variant={"destructive"} className=" rounded-3xl">
                         <TrashIcon color="currentColor" />
                         Delete Chat
                     </Button>
+                </div>
+
+                <DrawerFooter className="fixed bottom-0 left-0 w-full h-fit bg-gradient-to-t from-background via-background/75 to-background/0 pb-2 pt-3 flex justify-end">
+                    <span className="text-xs text-muted-foreground">
+                        {isSyncing ? <div className="flex items-center gap-1"><Spinner /> <span>Saving changes...</span></div> : "All changes are saved automatically."}
+                    </span>
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>

@@ -22,6 +22,7 @@ import { useDebounce } from "use-debounce";
 import { ImageInput } from "../ui/image-input";
 import { API_ROUTES } from "@/lib/apiRoutes";
 import { useRouter } from "next/navigation";
+import equal from "fast-deep-equal";
 
 type Step = "initial" | "details" | "metadata" | "review";
 
@@ -30,13 +31,13 @@ type Props = {
     small?: boolean;
 }
 
-const PureNewCharacterFromScratch = (props: Props) => {
+const PureNewCharacterFromScratch = ({ initCharacter, small }: Props) => {
     const [step, setStep] = useState<Step>("initial");
     const [isSaved, setIsSaved] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const router = useRouter();
-    const [newChar, setNewChar] = useState<Character>(props?.initCharacter || {} as Character);
+    const [newChar, setNewChar] = useState<Character>(initCharacter || {} as Character);
     const [debouncedChar] = useDebounce(newChar, 500);
 
     useEffect(() => {
@@ -46,13 +47,7 @@ const PureNewCharacterFromScratch = (props: Props) => {
 
         // check if debouncedChar is different from the initial character
         // only save if there are changes
-        if(debouncedChar.id === props?.initCharacter?.id &&
-            debouncedChar.name === props.initCharacter.name &&
-            debouncedChar.description === props.initCharacter.description &&
-            debouncedChar.image_link === props.initCharacter.image_link &&
-            debouncedChar.bio === props.initCharacter.bio &&
-            debouncedChar.personality === props.initCharacter.personality &&
-            debouncedChar.intro === props.initCharacter.intro) {
+        if(equal(debouncedChar, initCharacter)) {
             // No changes, do not save
             setIsSaved(false);
             return;
@@ -76,7 +71,7 @@ const PureNewCharacterFromScratch = (props: Props) => {
         }).finally(() => {
             setIsLoading(false);
         })
-    }, [debouncedChar, props]);
+    }, [debouncedChar, initCharacter]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleValueChange = (field: keyof Character, value: any) => {
@@ -143,7 +138,7 @@ const PureNewCharacterFromScratch = (props: Props) => {
                 clearDraftCharacterCookie();
 
                 // Redirect to new character page
-                router.push(`/c/${newChar.id}`);
+                router.push("/c/" + newChar.id);
 
 
             }).catch((error) => {
@@ -166,7 +161,7 @@ const PureNewCharacterFromScratch = (props: Props) => {
         <Drawer>
             <DrawerTrigger asChild>
                 
-                {props.small ? 
+                {small ? 
                 <div className="flex flex-row justify-between items-center gap-2 rounded-3xl bg-neutral-800 p-4 cursor-pointer hover:bg-neutral-700 transition-all duration-200">
                     <div className="flex flex-col">
                         <p className="dark:text-muted-foreground text-xs">Continue editing</p>
@@ -205,11 +200,11 @@ const PureNewCharacterFromScratch = (props: Props) => {
 
                         {isLoading ? <span className="text-xs">Saving...</span> : 
                             isSaved ? (
-                            <span className="flex flex-row items-center gap-1 text-orange-400 text-xs ">
+                            <span className="flex flex-row items-center gap-1 text-emerald-400 text-xs ">
                                 <CheckIcon size={12} />
                                 <span>Draft Saved</span>
                             </span>)
-                            : (<span className="text-xs text-neutral-500">Draft not saved</span>)
+                            : (<span className="text-xs text-slate-500">Draft not saved</span>)
                         }
 
                     </DrawerDescription>
@@ -402,9 +397,11 @@ const PureNewCharacterFromScratch = (props: Props) => {
     )
 }
 
-const NewCharacterFromScratch = memo(PureNewCharacterFromScratch, (prevProps, nextProps) => {
+const NewCharacterFromScratch = memo(PureNewCharacterFromScratch, (prev, next) => {
     // Only re-render if the initial character changes
-    return prevProps.initCharacter?.id === nextProps.initCharacter?.id;
+    if(prev.initCharacter?.id === next.initCharacter?.id) return false;
+
+    return true;
 });
 
 export default NewCharacterFromScratch;

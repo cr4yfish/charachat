@@ -36,7 +36,7 @@ export default function RootLayout({
       <html lang="en" className='dark' >
         <body className={`${montserrat.className} ${geistMono.variable} antialiased h-screen overflow-y-hidden`}>
           <Toaster position={"top-center"} />
-          <NextTopLoader showSpinner={false} />
+          <NextTopLoader color='#00a6f4' showSpinner={false} />
           <TopBar />
           <AppTabBar />
           <GlobalLiquidFilter />

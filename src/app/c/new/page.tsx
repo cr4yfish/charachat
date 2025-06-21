@@ -23,10 +23,10 @@ const PureImportOption = (props : { title: string, description: string, image?: 
 
             <div className="flex flex-col">
                 <span className=" text-lg font-medium">{props.title}</span>
-                <p className="text-neutral-500 text-sm">{props.description}</p>
+                <p className="text-slate-500 text-sm">{props.description}</p>
             </div>
 
-            <div className=" absolute right-0 h-full flex items-center justify-center text-neutral-500 dark:text-neutral-500 ">
+            <div className=" absolute right-0 h-full flex items-center justify-center text-slate-500 dark:text-slate-500 ">
                 <ChevronRightIcon color="currentColor" />
             </div>
         </Link>
@@ -69,7 +69,7 @@ export default async function NewCharPage() {
 
                 <h2 className="text-xl font-bold">Or import from a 3rd party</h2>
 
-                <div className="flex flex-col gap-4 rounded-3xl bg-neutral-900 p-3">
+                <div className="flex flex-col gap-4 rounded-3xl bg-slate-900 p-3">
                     <ImportOption 
                         title="Silly Tavern" 
                         description="Import directly from Silly Tavern" 
@@ -103,7 +103,7 @@ export default async function NewCharPage() {
                 </div>
 
                 <div>
-                    <p className="text-neutral-600 dark:text-neutral-400 text-sm">More import options coming soon!</p>
+                    <p className="dark:text-muted-foreground text-sm">More import options coming soon!</p>
                 </div>
 
             </div>

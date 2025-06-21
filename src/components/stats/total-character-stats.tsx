@@ -19,14 +19,13 @@ export default function TotalCharacterStats() {
     
     return (
         <div className="flex flex-col gap-2">
-            <Card className="!w-[240px] !h-[80px] flex flex-col gap-0 py-3 bg-white/40 dark:bg-zinc-900/20 ">
+            <Card className="!w-[240px] !h-[80px] flex flex-col gap-0 py-3  rounded-3xl ">
                 <CardHeader className="pb-0">
                     <CardDescription>Total number of Characters</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0 pb-0">
                     <div className="flex items-center justify-between gap-2">
-                        <h1 className="text-2xl font-bold capitalize">{data?.count?.toLocaleString()}</h1>
-                        <h1 className="text-2xl font-bold text-gray-400 ">{data?.accumulated_count?.toLocaleString()}</h1>
+                        <span className="text-xl font-bold capitalize">{data?.count?.toLocaleString()}</span>
                     </div>
                 </CardContent>
             </Card>

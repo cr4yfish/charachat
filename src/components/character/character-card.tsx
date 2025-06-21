@@ -57,7 +57,7 @@ function PureCharacterCard(props: Props) {
                 transition={{ duration: 0.25 }}
             >
                 <Card 
-                    className={cn("h-[150px] w-[290px] py-3 bg-zinc-100/40 dark:bg-zinc-800/40 backdrop-blur-xl border dark:border-none shadow-none hover:bg-zinc-200/50 dark:hover:bg-zinc-700/40 flex items-center justify-center transition-all" 
+                    className={cn("h-[150px] w-[290px] py-3 dark:bg-slate-800/20 backdrop-blur-xl border dark:border-none shadow-none dark:hover:bg-slate-800/30 flex items-center justify-center transition-all" 
                     + props.bgOverwrite,
                     {
                         "w-full": props.fullWidth,

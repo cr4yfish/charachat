@@ -140,7 +140,7 @@ const PurePromptInput = (props: Props) => {
                     <Liquid className={cn("transition-all rounded-3xl size-full  overflow-hidden")}>
                         <Textarea 
                             placeholder="Type your message here..."
-                            className={cn("transition-all resize-none size-full !bg-black/50 border-none focus:ring-0 focus:border-none flex items-center justify-center p-4 pr-12")}
+                            className={cn("transition-all resize-none size-full !bg-slate-950/50 border-none focus:ring-0 focus:border-none flex items-center justify-center p-4 pr-12")}
                             rows={1}
                             name='prompt'
                             autoFocus

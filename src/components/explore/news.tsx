@@ -11,7 +11,7 @@ type NewCardProps = {
 const NewsCard = (props: NewCardProps) => {
   return (
     <>
-      <Alert className="rounded-3xl dark:bg-neutral-900/50 dark:prose-invert prose-p:m-0 w-[300px] h-[90px] flex flex-col gap-1 justify-start">
+      <Alert className="rounded-3xl  dark:prose-invert prose-p:m-0 w-[300px] h-[90px] flex flex-col gap-1 justify-start">
         <AlertTitle className="m-0" >{props.title}</AlertTitle>
         <AlertDescription className="text-xs">
           {props.description}
