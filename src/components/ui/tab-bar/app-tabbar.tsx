@@ -18,7 +18,7 @@ export function AppTabBar() {
     return (
         <motion.div 
             initial={{ bottom: "-90px" }}
-            animate={ (pathname === "/chat" || pathname.includes("/chat/")) ? { bottom: "-120px"} : { bottom: "0px" }}
+            animate={ (pathname === "/chat" || pathname.includes("/chat/") || pathname === "/search") ? { bottom: "-120px"} : { bottom: "0px" }}
             exit={{ bottom: "-90px" }}
             className={cn("transition all flex items-center justify-center gap-2 w-full h-[60px] fixed bottom-0 left-0 z-50")}
         >
