@@ -75,7 +75,7 @@ export const PureChat = (props: Props) => {
 
     },
     onError: (error) => {
-      console.error("Chat error:", error);
+      // console.error("Chat error:", error);
 
       switch(error.message) {
         case ERROR_MESSAGES.CHAT_NOT_FOUND:
@@ -97,6 +97,35 @@ export const PureChat = (props: Props) => {
           toast.error(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
           break;
 
+        case ERROR_MESSAGES.UNAUTHORIZED:
+          // toast.error(ERROR_MESSAGES.UNAUTHORIZED);
+
+          // We're going to add a tool message to the chat where they can log in
+          
+          // add an assistant message to the chat
+          setMessages((prevMessages) => {
+            const newMessage: Message = {
+              id: uuidv4(),
+              role: "assistant",
+              content: "",
+              createdAt: new Date(),
+              parts: [
+                {
+                  type: "tool-invocation",
+                  toolInvocation: {
+                    toolName: TOOL_NAMES.login,
+                    toolCallId: uuidv4(),
+                    args: {},
+                    result: "",
+                    state: "result"
+                  }
+                }
+              ]
+            };
+            return [...prevMessages, newMessage];
+          });
+
+          break;
 
         default:
           toast.error(ERROR_MESSAGES.GENERIC_ERROR);

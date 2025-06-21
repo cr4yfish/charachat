@@ -3,7 +3,7 @@ import Image from "next/image";
 import { memo, useMemo, useState } from "react";
 import { Markdown } from "../ui/markdown";
 import { Button } from "../ui/button";
-import { CopyIcon, EditIcon, ImageIcon, TrashIcon, VolumeIcon } from "lucide-react";
+import { CopyIcon, EditIcon, ImageIcon, LogInIcon, TrashIcon, VolumeIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/defaults";
 import { TOOL_NAMES } from "@/lib/toolNames";
@@ -11,6 +11,7 @@ import equal from 'fast-deep-equal';
 import { cn, getMessageIdFromAnnotations } from "@/lib/utils";
 import { API_ROUTES } from "@/lib/apiRoutes";
 import { toast } from "sonner";
+import { SignInButton } from "@clerk/nextjs";
 
 const PureHeader = ({ image, name, role}: { image?: string, name?: string, role: string }) => {
     return (
@@ -218,6 +219,122 @@ const PureAIContent = ({ message: { parts} }: { message: UIMessage }) => {
                                     </div>
                                 )
                         }
+
+                    case TOOL_NAMES.login: {
+                        return (
+                            <div key={callId} className="flex flex-col">
+                                <Markdown>
+                                    {(() => {
+                                        const variants = [
+                                            "Oh honey, looks like you're trying to sneak into the VIP section without a ticket! 🎭 I'd love to spill all the tea with you, but first you gotta show me some ID. Click that shiny button below and let's make this official! ✨",
+                                            "Whoops! Looks like you're browsing incognito mode in real life! 🕵️ I'm dying to chat, but I need to know who I'm talking to first. Hit that sign-in button and let's get this party started! 🎉",
+                                            "Hold up, mysterious stranger! 👻 I'd love to dive deep into conversation, but I need you to introduce yourself properly first. Click below to sign in and unlock the full experience! 🔓",
+                                            "Well well well, what do we have here? 🤔 A ghost trying to chat! I'm all for supernatural encounters, but I need you to materialize first. Sign in below and let's make some magic happen! ✨",
+                                            "Error 404: User not found! 🤖 I'm having an existential crisis here - am I talking to myself? Please sign in so I can confirm you're not just a figment of my imagination! 🤯",
+                                            "HALT! You shall not pass... without logging in first! 🧙‍♂️ I'm not Gandalf, but I do know you need credentials to enter this realm. Click the magical button below! ⚡",
+                                            "Beep boop! 🚨 Anonymous user detected! My security protocols are going crazy right now. Please identify yourself before I call the digital police! 👮‍♀️",
+                                            "Hey there, John Doe! 😏 Oh wait, that's not your real name, is it? I see right through your disguise! Time to drop the act and sign in like the rest of us mortals. 🎭",
+                                            "I'm not saying you're sus, but... you're kinda sus. 👀 Among us players know what I mean! Prove you're not an impostor by signing in below! 🚀",
+                                            "Knock knock! Who's there? ...Nobody apparently! 😅 This is awkward. Please sign in so I know who I'm delivering my amazing jokes to! 🎪",
+                                            "Breaking news: Local AI refuses to chat with mysterious entity! 📺 More at 11... or right now if you just sign in! I promise I don't bite (I don't even have teeth)! 🦷",
+                                            "You're like a ninja, but in the worst way possible - completely invisible to my systems! 🥷 Time to drop the stealth mode and reveal yourself, warrior! ⚔️"
+                                        ];
+                                        return variants[Math.floor(Math.random() * variants.length)];
+                                    })()}
+                                </Markdown>
+                                <motion.div 
+                                    className="p-2 text-sky-400 flex items-center relative overflow-hidden"
+                                    initial={{ scale: 0, rotate: -180 }}
+                                    animate={{ 
+                                        scale: [0, 1.2, 0.9, 1.1, 1],
+                                        rotate: [-180, 360, -45, 180, 0],
+                                        y: [0, -10, 5, -5, 0]
+                                    }}
+                                    transition={{ 
+                                        duration: 2,
+                                        ease: "easeInOut",
+                                        times: [0, 0.3, 0.6, 0.8, 1]
+                                    }}
+                                    whileHover={{
+                                        scale: 1.3,
+                                        rotate: [0, 10, -10, 5, -5, 0],
+                                        transition: { duration: 0.5, repeat: Infinity }
+                                    }}
+                                    whileTap={{ scale: 0.8 }}
+                                >
+                                    <motion.div
+                                        animate={{ 
+                                            rotate: 360,
+                                            scale: [1, 1.5, 1]
+                                        }}
+                                        transition={{
+                                            rotate: { duration: 3, repeat: Infinity, ease: "linear" },
+                                            scale: { duration: 1, repeat: Infinity, repeatType: "reverse" }
+                                        }}
+                                        className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 opacity-20 rounded-full blur-sm"
+                                    />
+                                    
+                                    <motion.div
+                                        animate={{
+                                            x: [0, 100, -100, 50, -50, 0],
+                                            opacity: [0.3, 1, 0.3, 1, 0.3, 1]
+                                        }}
+                                        transition={{ duration: 4, repeat: Infinity }}
+                                        className="absolute inset-0 bg-rainbow-gradient opacity-10"
+                                    />
+
+                                    <motion.div
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ 
+                                            x: 0, 
+                                            opacity: 1,
+                                            rotate: [0, 5, -5, 3, -3, 0]
+                                        }}
+                                        transition={{ 
+                                            delay: 0.5,
+                                            rotate: { duration: 2, repeat: Infinity }
+                                        }}
+                                        whileHover={{ 
+                                            scale: 1.2, 
+                                            rotate: 45,
+                                            color: "#ff00ff"
+                                        }}
+                                    >
+                                        <LogInIcon className="mr-2 h-4 w-4 drop-shadow-lg filter brightness-150" />
+                                    </motion.div>
+                                    
+                                    <motion.div
+                                        initial={{ x: 20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.8 }}
+                                        whileHover={{
+                                            scale: 1.1,
+                                            textShadow: "0px 0px 8px rgb(255,255,255)",
+                                            transition: { duration: 0.3 }
+                                        }}
+                                        className="relative z-10"
+                                    >
+                                        <SignInButton />
+                                    </motion.div>
+
+                                    <motion.div
+                                        animate={{
+                                            scale: [0, 2, 0],
+                                            rotate: [0, 360],
+                                            opacity: [0, 0.5, 0]
+                                        }}
+                                        transition={{
+                                            duration: 3,
+                                            repeat: Infinity,
+                                            repeatDelay: 1
+                                        }}
+                                        className="absolute inset-0 border-4 border-rainbow-500 rounded-full"
+                                    />
+                                </motion.div>
+                                
+                            </div>
+                        )
+                    }
 
                     default:
                         return (   

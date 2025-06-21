@@ -10,4 +10,5 @@ export const TOOL_NAMES = {
 
     generateImage: "imageGen",
 
+    login: "login",
 }
