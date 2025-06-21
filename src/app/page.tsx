@@ -15,6 +15,7 @@ import { getCachedNewestCharacters } from "./api/characters/newest/route";
 import { getCachedPopularCharacters } from "./api/characters/popular/route";
 import { getCachedInitialCategories } from "./api/categories/route";
 import { getInitialCachedCharactersByCategory } from "./api/characters/category/route";
+import TotalCharacterStats from "@/components/stats/total-character-stats";
 
 
 export default async function Home() {
@@ -62,6 +63,10 @@ export default async function Home() {
             <h2 className="dark:prose-invert text-lg font-bold">New</h2>
           </div>
           <GeneralSwiper initialData={initialNewest} apiUrl={API_ROUTES.GET_NEWEST_CHARACTERS} component={ImageCharacterCard} rows={2} />
+        </div>
+
+        <div>
+          <TotalCharacterStats />
         </div>
 
         <CurrentCategoryProvider>

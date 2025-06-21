@@ -38,5 +38,9 @@ export const API_ROUTES = {
     GET_PROFILE: "/api/profile",
     GET_OWN_PROFILE: "/api/profile/me",
     UPDATE_PROFILE: "/api/profile/update",
+
+    // Stats
+    GET_TOTAL_CHARACTER_STATS: "/api/stats/total-character-stats",
+    GET_TOTAL_CHAT_STATS: "/api/stats/total-chat-stats",
     
 }
