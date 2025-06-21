@@ -62,6 +62,7 @@
     "react-noise": "^0.2.11",
     "react-virtuoso": "^4.13.0",
     "replicate": "^1.0.1",
+    "sharp": "^0.34.2",
     "sonner": "^2.0.5",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.3.1",

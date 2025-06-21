@@ -167,6 +167,9 @@ importers:
       replicate:
         specifier: ^1.0.1
         version: 1.0.1
+      sharp:
+        specifier: ^0.34.2
+        version: 0.34.2
       sonner:
         specifier: ^2.0.5
         version: 2.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -7361,7 +7364,6 @@ snapshots:
       '@img/sharp-win32-arm64': 0.34.2
       '@img/sharp-win32-ia32': 0.34.2
       '@img/sharp-win32-x64': 0.34.2
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:
