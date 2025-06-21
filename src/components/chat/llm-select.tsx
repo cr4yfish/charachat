@@ -19,6 +19,7 @@ import { _DEFAULT_LLM } from "@/lib/defaults";
 import LLMIcon from "../llm/llm-icon";
 import useSWR from "swr";
 import { API_ROUTES } from "@/lib/apiRoutes";
+import Link from "next/link";
 
 const PureFancyLLM = ({ llm, showIcon, showProvider }: { llm: LLM | undefined, showIcon?: boolean, showProvider?: boolean}) => {
     if(!llm) {
@@ -77,6 +78,7 @@ type Props = {
     selectedKey?: ModelId | undefined;
     label?: string;
     description?: string;
+    showLink?: boolean;
 }
 
 const PureLLMSelect = (props: Props) => {
@@ -91,6 +93,11 @@ const PureLLMSelect = (props: Props) => {
             <Label className="flex flex-col items-start gap-1" htmlFor="llm-select">
                 <span>{props.label || "Select a Model"}</span>
                 <span className="text-xs text-muted-foreground">{props.description}</span>
+                {props.showLink && 
+                <Link className="text-xs underline font-light text-blue-400" href={"/home/settings"}>
+                    Manage API Keys
+                </Link>
+                }
             </Label>
             <Select name="llm-select" value={props.selectedKey}  >
                 <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border">

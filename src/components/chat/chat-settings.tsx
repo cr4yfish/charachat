@@ -105,7 +105,7 @@ export const PureChatSettings = (props: Props) => {
                     </span>
                     <LLMSelect 
                         selectedKey={chat?.llm as ModelId | undefined}
-                        onSelect={handleLLMChange}
+                        onSelect={handleLLMChange} showLink
                     />
 
                     <TextareaWithCounter 
