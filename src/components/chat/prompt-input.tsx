@@ -24,7 +24,7 @@ const PureSuggestion = ({ suggestion, onClick }: { suggestion: SuggestionType, o
         >
             <Button 
                 variant={"secondary"} 
-                className="rounded-full text-xs border bg-background/50 backdrop-blur"
+                className="rounded-full text-xs border text-white/75 bg-primary/25 backdrop-blur"
                 onClick={handleClick}
             >
                 {suggestion.title}
@@ -57,6 +57,9 @@ const PureSuggestions = ({ onClick, chatId }: { onClick: (suggestion: string) =>
 
     return (
         <div className="flex flex-row flex-nowrap gap-2 overflow-x-auto relative z-10 ">
+            <Button className="text-muted-foreground" disabled={isLoading || isValidating} onClick={handleMutate} size={"icon"} variant={"ghost"}>
+                {(isLoading || isValidating) ? <RefreshCwIcon className="animate-spin" /> : <RefreshCwIcon />}
+            </Button>           
             {suggestions?.map((suggestion) => (
                 <Suggestion 
                     key={`suggestion-${suggestion.content}`} 
@@ -64,9 +67,6 @@ const PureSuggestions = ({ onClick, chatId }: { onClick: (suggestion: string) =>
                     onClick={onClick}
                 />
             ))}
-            <Button className="text-muted-foreground" disabled={isLoading || isValidating} onClick={handleMutate} size={"icon"} variant={"ghost"}>
-                {(isLoading || isValidating) ? <RefreshCwIcon className="animate-spin" /> : <RefreshCwIcon />}
-            </Button>
         </div>
     );
 }
