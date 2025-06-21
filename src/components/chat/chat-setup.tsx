@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Badge } from "../ui/badge";
-import { cn, fetcher } from "@/lib/utils";
+import { cn, fetcher, truncateText } from "@/lib/utils";
 import { Button } from "../ui/button";
 import useLLMCookie from "@/hooks/useLLMCookie";
 import Image from "next/image";
@@ -185,16 +185,18 @@ const PureChatSetup = (props: Props) => {
                             </div>
                         )}
                         {personas?.map(persona => (
-                            <Card key={persona.id} className={cn("flex flex-col gap-2 py-3 transition-all border", { "border-green-400 bg-green-800/30 shadow-lg shadow-green-400/20": selectedPersona?.id === persona.id })} onClick={() => setSelectedPersona(persona)}>
-                                <CardHeader>
-                                    <CardTitle>{persona.full_name}</CardTitle>
-                                    <CardDescription className="text-xs dark:text-neutral-400/80">{persona.bio}</CardDescription>
-                                </CardHeader>
+                            <Card key={persona.id} className={cn("flex flex-row gap-2 p-3 transition-all border", { "border-green-400 bg-green-800/30 shadow-lg shadow-green-400/20": selectedPersona?.id === persona.id })} onClick={() => setSelectedPersona(persona)}>
                                 {persona.avatar_link && (
-                                    <div className="relative size-16 rounded-full overflow-hidden">
-                                        <Image fill src={persona.avatar_link} alt={persona.full_name} className="w-16 h-16 rounded-full object-cover" />
+                                    <div className="relative size-16 rounded-xl overflow-hidden shrink-0">
+                                        <Image fill src={persona.avatar_link} alt={persona.full_name} className="object-cover" />
                                     </div>
                                 )}
+                                
+                                <CardHeader className="flex flex-col w-full flex-1 p-0 overflow-hidden">
+                                    <CardTitle className="truncate">{persona.full_name}</CardTitle>
+                                    <CardDescription className="text-xs dark:text-neutral-400/80">{truncateText(persona.bio, 117)}</CardDescription>
+                                </CardHeader>
+
                             </Card>
                         ))}
                     </div>
