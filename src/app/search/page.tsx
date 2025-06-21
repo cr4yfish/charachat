@@ -53,7 +53,7 @@ export default async function SearchPage({
                         ))
                     ) : (
                         <div className="text-center text-slate-400">
-                            No results found for <span className="font-semibold">{q}</span>
+                            {q ? <>No results found for <span className="font-semibold">{q}</span></> : null}
                         </div>
                     )}
                 </div>
