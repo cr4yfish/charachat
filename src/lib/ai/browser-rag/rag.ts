@@ -39,8 +39,8 @@ export async function addMemoryToRAG(memory: RAGMemory): Promise<void> {
   try {
     // Add the memory to the RAG database
     await db().insert(memory);
-  } catch (error) {
-    console.error("Error adding memory to RAG:", error);
+  } catch {
+    return
   }
 }
 
@@ -50,8 +50,8 @@ export async function searchRAG(query: string | undefined, limit = 5): Promise<R
     // Search the RAG database for the query
     const results = await db().query(query, { limit });
     return results as RAGMemory[];
-  } catch (error) {
-    console.error("Error searching RAG:", error);
+  } catch {
+    // console.error("Error searching RAG:", error);
     return [];
   }
 }
