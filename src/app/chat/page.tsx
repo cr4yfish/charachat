@@ -3,6 +3,7 @@ import { Chat } from "@/components/chat/chat";
 import { ChatTopBar } from "@/components/ui/top-bar/chat-top-bar";
 import { v4 as uuidv4 } from "uuid";
 import { getShallowCharacter } from "@/lib/db/character";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function NewChatPage({
     searchParams,
@@ -27,10 +28,12 @@ export default async function NewChatPage({
 
     const shallowCharacter = await getShallowCharacter(characterId);
 
+    const user = await currentUser();
+
     return (
         <>
 
-        <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} />
+        <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} userId={user?.id} />
         <Chat shallowCharacter={shallowCharacter} chatId={chatId} initialMessages={[]} />
 
         </>
