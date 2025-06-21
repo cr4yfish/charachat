@@ -30,7 +30,7 @@ export default async function NewChatPage({
     return (
         <>
 
-        <ChatTopBar shallowCharacter={shallowCharacter} />
+        <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} />
         <Chat shallowCharacter={shallowCharacter} chatId={chatId} initialMessages={[]} />
 
         </>
