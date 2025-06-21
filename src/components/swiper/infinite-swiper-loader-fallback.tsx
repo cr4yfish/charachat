@@ -1,13 +1,12 @@
-"use server";
+"use client";
 
 import { Skeleton } from "../ui/skeleton";
-
 
 type Props = {
     rows: number;
 }
 
-export default async function InfiniteSwiperLoaderFallback(props: Props) {
+export default function InfiniteSwiperLoaderFallback(props: Props) {
 
     return (
         <>

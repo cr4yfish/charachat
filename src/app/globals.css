@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -61,7 +62,6 @@
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -76,6 +76,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --radix-select-trigger-height: 2.5rem;
 }
 
 .dark {
@@ -95,7 +96,6 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -110,6 +110,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --radix-select-trigger-height: 2.5rem;
 }
 
 @layer base {
@@ -118,5 +119,155 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--muted);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--muted);
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+}
+
+.overwrite-overflow {
+  overflow-y: visible !important;
+}
+
+.liquid-card {
+  position: relative;
+  --highlight: rgba(255, 255, 255, 0.75);
+}
+
+.liquid-filter,
+.liquid-overlay,
+.liquid-specular {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.liquid-filter {
+  z-index: 1;
+  backdrop-filter: blur(4px);
+  filter: url(#liquid-distortion) saturate(120%) brightness(1.15);
+}
+
+.liquid-distortion-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 80%),
+              radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 80%);
+  background-size: 300% 300%;
+  animation: floatDistort 10s infinite ease-in-out;
+  mix-blend-mode: overlay;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes floatDistort {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+.liquid-overlay {
+  z-index: 2;
+  
+}
+
+.liquid-specular {
+  z-index: 3;
+  box-shadow: inset 1px 1px 1px var(--highlight);
+}
+
+.liquid-content {
+  position: relative;
+  z-index: 4;
+  height: 100%;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .liquid-card {
+    --highlight: rgba(255, 255, 255, 0.15);
+  }
+  .liquid-overlay {
+    background: rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-noise canvas {
+  width: 100% !important;
+}
+
+
+/* 
+  Animated border
+  Applies a border that animates with a gradient effect.
+*/
+.animated-shadow {
+  border-radius: inherit;
+}
+
+.animated-shadow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 400% 400%;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 
+              0 0 40px rgba(99, 102, 241, 0.3), 
+              0 0 60px rgba(139, 92, 246, 0.2);
+  animation: gradientAnimation 10s ease infinite, shadowPulse 3s ease-in-out infinite;
+  border-radius: inherit;
+}
+
+.animated-shadow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-clip: padding-box;
+}
+
+@keyframes shadowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 
+                0 0 40px rgba(99, 102, 241, 0.3), 
+                0 0 60px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 
+                0 0 60px rgba(99, 102, 241, 0.5), 
+                0 0 80px rgba(139, 92, 246, 0.3);
   }
 }

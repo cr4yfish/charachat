@@ -1,3 +1,4 @@
+import { ProviderId } from "@/lib/ai/types";
 import { JSONObject } from "@ai-sdk/provider";
 
 
@@ -17,9 +18,10 @@ export type Category = {
 export type Character = {
     id: string;
     created_at?: string;
-    owner: Profile;
+    owner?: Profile;
+    owner_clerk_user_id?: string;
     name: string;
-    description: string;
+    description?: string;
     image_link?: string;
     bio?: string;
     intro?: string;
@@ -43,10 +45,20 @@ export type Character = {
     loras?: Lora[];
 }
 
+/**
+ * Small version of Character type for shallow references
+ * Used in chats and messages to reduce data size
+ */
+export type ShallowCharacter = {
+    id?: string,
+    name?: string,
+    image_link?: string,
+}
+
 export type Chat = {
     id: string;
     created_at?: string;
-    user: Profile;
+    user?: Profile;
     title: string;
     description: string;
     character: Character;
@@ -60,19 +72,44 @@ export type Chat = {
     response_length: number;
     temperature: number;
     frequency_penalty: number;
+    clerk_user_id?: string;
+}
+
+export type ShallowChat = {
+    id: string;
+    created_at?: string;
+    user?: string;
+    clerk_user_id?: string;
+    title: string;
+    description: string;
+    character: ShallowCharacter;
+    last_message_at?: string;
+    last_message?: string;
+}
+
+export type APIKey = {
+    encrypted_api_key: string;
+    provider: ProviderId;
 }
 
 export type Profile = {
-    user: string;
+    user?: string;
+    clerk_user_id?: string;
+    id?: string;
     created_at?: string;
-    username: string;
-    first_name: string;
+    username?: string;
+    first_name?: string;
     last_name?: string;
     bio?: string;
     public_bio?: string;
     avatar_link?: string;
-    tokens: number;
-    default_llm: string;
+    tokens?: number;
+    api_keys?: APIKey[];
+
+    /**
+     * @deprecated
+     */
+    default_llm?: string;
     ollama_base_url?: string;
     ollama_encrypted_api_key?: string;
     groq_base_url?: string;
@@ -93,6 +130,9 @@ export type Profile = {
     theme?: string;
 }
 
+/**
+ * @deprecated
+ */
 export type Story = {
     id: string;
     created_at?: string;
@@ -112,10 +152,11 @@ export type Story = {
 
 export type Message = {
     id: string;
-    created_at?: string;
+    created_at: string;
     chat: Chat;
-    character: Character;
-    user: Profile;
+    character?: Character;
+    user?: Profile;
+    clerk_user_id?: string;
     from_ai: boolean;
     content: string;
 }

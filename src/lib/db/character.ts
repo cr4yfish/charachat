@@ -3,10 +3,14 @@
 
 import { cache } from "react";
 
-import { createServerSupabaseClient as createClient } from "./server";
+import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
 import { Character } from "@/types/db";
 import { LoadMoreProps } from "@/types/db";
 import { safeParseLink } from "@/lib/utils";
+import { decryptMessage, encryptMessage } from "../crypto/client";
+import { currentUser } from "@clerk/nextjs/server";
+import { getKeyServerSide } from "../crypto/server";
+import { revalidateTag } from "next/cache";
 
 const characterMatcher = `
     *,
@@ -44,6 +48,94 @@ const characterFormatter = async (db: any): Promise<Character> => {
     return char;
 }
 
+export const decryptCharacter = async (character: Character, key: Buffer): Promise<Character> => {
+    try {
+        return {
+            ...character,
+            name: decryptMessage(character.name ?? " ", key),
+            description: decryptMessage(character.description ?? " ", key),
+            intro: decryptMessage(character.intro ?? "", key),
+            bio: decryptMessage(character.bio ?? " ", key),
+            book: decryptMessage(character.book ?? " ", key),
+            image_link: decryptMessage(character.image_link ?? " ", key),
+            personality: decryptMessage(character.personality ?? " ", key),
+            system_prompt: decryptMessage(character.system_prompt ?? " ", key),
+            image_prompt: decryptMessage(character.image_prompt ?? " ", key),
+            first_message: decryptMessage(character.first_message ?? " ", key),
+            speaker_link: decryptMessage(character.speaker_link ?? " ", key),
+            scenario: decryptMessage(character.scenario ?? " ", key),
+            // tags_full: (character.tags_full) ? await Promise.all(character.tags_full.map(t => decryptTag(t))) : [],
+            // loras: character.loras ? await Promise.all(character.loras.map(l => decryptLora(l, buffer))) : []
+        }
+    } catch (error) {
+        console.error("Error decrypting character", error);
+        return character;
+    }
+
+}
+
+export const encryptCharacter = async (character: Character, key: Buffer): Promise<Character> => {
+
+    return {
+        ...character,
+        name: encryptMessage(character.name ?? " ", key),
+        description: encryptMessage(character.description ?? " ", key),
+        intro: encryptMessage(character.intro ?? "", key),
+        bio: encryptMessage(character.bio ?? " ", key),
+        book: encryptMessage(character.book ?? " ", key),
+        image_link: encryptMessage(character.image_link ?? " ", key),
+        personality: encryptMessage(character.personality ?? " ", key),
+        system_prompt: encryptMessage(character.system_prompt ?? " ", key),
+        image_prompt: encryptMessage(character.image_prompt ?? " ", key),
+        first_message: encryptMessage(character.first_message ?? " ", key),
+        speaker_link: encryptMessage(character.speaker_link ?? " ", key),
+        scenario: encryptMessage(character.scenario ?? " ", key),
+        // tags_full: character.tags_full ? await Promise.all(character.tags_full.map(t => encryptTag(t))) : [],
+        // loras: character.loras ? await Promise.all(character.loras.map(l => encryptLora(l, buffer))) : []
+    }
+}
+
+export const createCharacter = async (newChar: Character): Promise<Character> => {
+    const user = await currentUser();
+
+    if(!user || !user.id) {
+        throw new Error("createCharacter: User not found");
+    }
+
+    const key = await getKeyServerSide();
+
+    let char: Character = newChar;
+
+    if(newChar.is_private) {
+        char = await encryptCharacter(newChar, key);
+    }
+    
+
+    const { data, error } = await (await createClient())
+        .from("characters")
+        .insert({
+            ...char,
+            // TEMP WORKAROUND FOR TESTING PHASE
+            // TODO: REMOVE THIS 
+            owner: process.env.MIGRATION_HELPER_USER_ID!, 
+            owner_clerk_user_id: user.id,
+            is_private: newChar.is_private ?? false,
+            is_unlisted: newChar.is_unlisted ?? false
+        })
+        .select(characterMatcher)
+        .single();
+
+    revalidateTag("characters");
+    revalidateTag("spotlight");
+
+    if (error) {
+        console.error("Error creating character", error);
+        throw error;
+    }
+
+    return await characterFormatter(data);
+}
+
 
 export const getCharacter = cache(async (characterId: string): Promise<Character> => {
     const { data, error } = await (await createClient())
@@ -60,8 +152,24 @@ export const getCharacter = cache(async (characterId: string): Promise<Character
     return await characterFormatter(data);
 })
 
-export const getCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+export const getShallowCharacter = cache(async (characterId: string): Promise<Character> => {
     const { data, error } = await (await createClient())
+        .from("character_quick_view")
+        .select(`*`)
+        .eq("id", characterId)
+        .single();
+
+    if (error) {
+        console.error("Error fetching single character", error);
+        throw error;
+    }
+
+    return await characterFormatter(data);
+})
+
+
+export const getCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
         .select(characterMatcher)
         .order("created_at", { ascending: false })
@@ -80,11 +188,12 @@ export const getCharacters = cache(async (props: LoadMoreProps): Promise<Charact
  * Gets the latest 2 characters and returns the first one with a working image link
  */
 export const getNewestCharacter = cache(async (): Promise<Character> => {
-    const { data, error } = await (await createClient())
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
         .select(characterMatcher)
+        .or('image_link.ilike.%.png, image_link.ilike.%.jpg, image_link.ilike.%.jpeg')
         .order("created_at", { ascending: false })
-        .range(0, 3);
+        .range(0, 3)
 
     if (error) {
         throw error;
@@ -94,7 +203,7 @@ export const getNewestCharacter = cache(async (): Promise<Character> => {
 })
 
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data, error } = await (await createClient())
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
         .select(characterMatcher)
         .order("chats", { ascending: false })
@@ -110,7 +219,7 @@ export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<
 })
 
 export const getTrendingCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data, error } = await (await createClient())
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from("characters_ordered_by_chats")
         .select(characterMatcher)
         .order("recent_chat_count", { ascending: false })
@@ -131,7 +240,7 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
         throw new Error("Category ID not found");
     }
 
-    const { data, error } = await (await createClient())
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(characterTableName)
         .select(characterMatcher)
         .eq("category", props.args.categoryId)
@@ -237,6 +346,8 @@ export const deleteCharacter = async (characterId: string): Promise<void> => {
     if (error) {
         throw error;
     }
+
+    revalidateTag("characters");
 }
 
 

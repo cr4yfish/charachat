@@ -1,16 +1,11 @@
 "use client";
 
 import { fetcher } from "@/lib/utils";
-import { useEffect } from "react";
 import useSWR from "swr";
 
 export function Chars() {
 
     const { data } = useSWR('/api/characters/trending', fetcher);
-
-    useEffect(() => {
-        console.log("Characters data:", data);
-    }, [data])
 
     return (
         <div>

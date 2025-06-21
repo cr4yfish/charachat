@@ -44,7 +44,10 @@ export function getKeyClientSide(): string {
  * @returns encrypted message
  */
 export function encryptMessage(message: string, key: Buffer): string {
-    if(checkIsEncrypted(message)) throw new Error("Trying to encrypt a message that's already encrypted!");
+    if(checkIsEncrypted(message)) {
+        console.warn("Trying to encrypt a message that's already encrypted!");
+        return message; // If the message is already encrypted, return it as is
+    };
 
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(_ENCRYPTION_STANDARD, key, iv);
@@ -61,7 +64,7 @@ export function encryptMessage(message: string, key: Buffer): string {
  */
 export function decryptMessage(encryptedMessage: string, key: Buffer): string {
     if(!checkIsEncrypted(encryptedMessage)) {
-        console.error("Trying to decrypt a message that's not encrypted!");
+        //console.error("Trying to decrypt a message that's not encrypted!");
         return encryptedMessage;
     };
 
