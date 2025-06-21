@@ -80,7 +80,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
             return getCohere(modelId, apiKey);
 
         case "OpenRouter":
-            return getOpenRouter("gryphe/mythomax-l2-13b:free", apiKey);
+            return getOpenRouter(modelId, apiKey);
 
         // case "openrouter":
         //     const profile = await getCurrentUser();
@@ -93,7 +93,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         //     return getOpenRouter(decryptedModel, apiKey);
 
         case "DeepSeek":
-            return getDeepSeek("deepseek-chat", apiKey);
+            return getDeepSeek(modelId, apiKey);
             
         default:
             throw new Error("Model not found");

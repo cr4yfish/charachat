@@ -49,33 +49,39 @@ export const LLMs: LLM[] = [
         tags: ["Free", "Quality"],
         isFree: true,
     },
-    {
-        key: "compound-beta",
-        name: "Compound Beta",
-        provider: "Groq",
-        usecase: "Fast, high quality",
-        tags: ["Free", "Thinking", "Uncensored"],
-        isFree: true,
-    },
-    {
-        key: "compound-beta-mini",
-        name: "Compound Beta Mini",
-        provider: "Groq",
-        usecase: "Fast, high quality",
-        tags: ["Free", "Thinking", "Uncensored"],
-        isFree: true,
-    },
+
+    // Running into "empty message" errors with these models
+    // {
+    //     key: "compound-beta",
+    //     name: "Compound Beta",
+    //     provider: "Groq",
+    //     usecase: "Fast, high quality",
+    //     tags: ["Free", "Thinking", "Uncensored"],
+    //     isFree: true,
+    // },
+    // {
+    //     key: "compound-beta-mini",
+    //     name: "Compound Beta Mini",
+    //     provider: "Groq",
+    //     usecase: "Fast, high quality",
+    //     tags: ["Free", "Thinking", "Uncensored"],
+    //     isFree: true,
+    // },
     
-
-
     {
-        "key": "grok-beta",
-        "name": "Grok",
-        "usecase": "Allrounder, low quality sometimes",
+        "key": "grok-3-latest",
+        "name": "Grok 3",
+        "usecase": "Fascist AI",
         "provider": "xAI",
-        "tags": ["Fast", "Uncensored"],
+        "tags": ["Fast", "Fuck Elon Musk", "Uncensored"],
     },
-
+    {
+        "key": "grok-3-mini-latest",
+        "name": "Grok 3 mini",
+        "usecase": "Smol fascist AI",
+        "provider": "xAI",
+        "tags": ["Fast", "Fuck Elon Musk", "Uncensored"],
+    },
     {
         "key": "open-mistral-nemo",
         "name": "Nemo",
@@ -134,16 +140,20 @@ export const LLMs: LLM[] = [
         "provider": "OpenAI",
         "tags": ["Quality", "Fast"],
         contextLength: 128000
-        
     },
-    {
-        "key": "gpt-4o",
-        "name": "GPT-4o",
-        "usecase": "Incredibly accurate",
-        "provider": "OpenAI",
-        "tags": ["Quality", "Fast"],
-        contextLength: 128000
-    },
+
+    /**
+     * Use 4.1 instead
+     * @deprecated
+     */
+    // {
+    //     "key": "gpt-4o",
+    //     "name": "GPT-4o",
+    //     "usecase": "Incredibly accurate",
+    //     "provider": "OpenAI",
+    //     "tags": ["Quality", "Fast"],
+    //     contextLength: 128000
+    // },
     {
         "key": "gpt-4o-mini-realtime-preview-2024-12-17",
         "name": "GPT-4o Mini Realtime Preview",
@@ -194,7 +204,7 @@ export const LLMs: LLM[] = [
     },
     {
         key: "o4-mini-2025-04-16",
-        name: "O4 Mini 2025/04/16",
+        name: "o4 Mini",
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],
@@ -202,7 +212,7 @@ export const LLMs: LLM[] = [
     },
     {
         key: "o3-2025-04-16",
-        name: "O3 2025/04/16",
+        name: "o3",
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],

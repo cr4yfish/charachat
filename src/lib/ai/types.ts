@@ -100,7 +100,8 @@ export type ModelId =
     "deepseek-reasoner" |
 
     // xAI
-    "grok-beta" |
+    "grok-3-latest" |
+    "grok-3-mini-latest" |
 
     // Cohere
     "command-r-plus" |
