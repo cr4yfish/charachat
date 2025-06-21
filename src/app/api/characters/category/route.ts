@@ -3,17 +3,6 @@ import { LIMITS } from "@/lib/limits";
 import { TIMINGS } from "@/lib/timings";
 import { unstable_cache } from "next/cache";
 
-export async function getInitialCachedCharactersByCategory(categoryId: string) {
-    return await unstable_cache(
-        async () => await getCharactersByCategory({ cursor: 0, limit: LIMITS.MAX_CHARACTERS_PER_PAGE, args: { categoryId } }),
-        [`characters-category-${categoryId}-cursor-0`],
-        {
-            revalidate: TIMINGS.ONE_HOUR, // Cache for one hour
-            tags: ['characters', `characters-category-${categoryId}`],
-        }
-    )();
-}
-
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const categoryId = url.searchParams.get("categoryId");

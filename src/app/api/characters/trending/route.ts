@@ -3,24 +3,6 @@ import { LIMITS } from "@/lib/limits";
 import { TIMINGS } from "@/lib/timings";
 import { unstable_cache } from 'next/cache';
 
-/**
- * Fetch first page of trending characters with caching.
- */
-export const getCachedTrendingInitialCharacters = unstable_cache(
-    async () => {
-        return await getTrendingCharacters({
-            cursor: 0,
-            limit: LIMITS.MAX_CHARACTERS_PER_PAGE,
-            args: undefined,
-        });
-    },
-    ['trending-characters-cursor-0'],
-    {
-        revalidate: TIMINGS.ONE_DAY,
-        tags: ['characters', 'trending-characters-cursor-0'],
-    }
-);
-
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const cursor = url.searchParams.get('cursor') || '0';

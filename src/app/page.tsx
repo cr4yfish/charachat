@@ -9,14 +9,9 @@ import { CurrentCategoryProvider } from "@/hooks/use-current-category";
 import CategoryScroller from "@/components/categories/category-scroller";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getCachedSpotlight } from "./api/spotlight/route";
-import { getCachedTrendingInitialCharacters } from "./api/characters/trending/route";
-import { getCachedNewestCharacters } from "./api/characters/newest/route";
-import { getCachedPopularCharacters } from "./api/characters/popular/route";
-import { getCachedInitialCategories } from "./api/categories/route";
-import { getInitialCachedCharactersByCategory } from "./api/characters/category/route";
 import TotalCharacterStats from "@/components/stats/total-character-stats";
-
+import { getCachedNewestCharacters, getCachedPopularCharacters, getCachedSpotlight, getCachedTrendingInitialCharacters, getInitialCachedCharactersByCategory } from "@/lib/db/character";
+import { getCachedInitialCategories } from "@/lib/db/categories";
 
 export default async function Home() {
   const draftChar = await getDraftCharacterFromCookie();

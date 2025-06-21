@@ -10,7 +10,10 @@ import { safeParseLink } from "@/lib/utils";
 import { decryptMessage, encryptMessage } from "../crypto/client";
 import { currentUser } from "@clerk/nextjs/server";
 import { getKeyServerSide } from "../crypto/server";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
+import { LIMITS } from "../limits";
+import { TIMINGS } from "../timings";
+import { Vibrant } from "node-vibrant/node";
 
 const characterMatcher = `
     *,
@@ -203,6 +206,58 @@ export const getNewestCharacter = cache(async (): Promise<Character> => {
     return data.find((c) => safeParseLink(c.image_link) !== "");
 })
 
+/**
+ * Fetch first page of newest characters with caching.
+ */
+export const getCachedNewestCharacters = unstable_cache(
+    async () => {
+        return await getCharacters({
+            cursor: 0,
+            limit: LIMITS.MAX_CHARACTERS_PER_PAGE,
+        });
+    },
+    ['newest-characters-cursor-0'],
+    {
+        revalidate: TIMINGS.ONE_HOUR,
+        tags: ['characters', 'newest-characters-cursor-0'],
+    }
+);
+
+export const getCachedSpotlight = unstable_cache(
+    async () => {
+        const character = await getNewestCharacter();
+        const imageUrl = safeParseLink(character.image_link);
+
+        const isSupportedUrl = !imageUrl.includes(".webp");
+
+        const palette = isSupportedUrl && await Vibrant.from(imageUrl).getPalette().catch((err) => {
+                console.warn("Error getting palette, skipping it:", err, "Character:", character.name);
+                return null;
+        });
+
+        // convert palette to a simpler object with hex values
+        const paletteHex =  {
+                Vibrant: palette ? palette.Vibrant?.hex : "#8ec5ff",
+                DarkVibrant: palette ?palette.DarkVibrant?.hex  : "#8ec5ff",
+                LightVibrant: palette ?palette.LightVibrant?.hex  : "#8ec5ff",
+                Muted: palette ? palette.Muted?.hex  : "#8ec5ff",
+                DarkMuted: palette ? palette.DarkMuted?.hex  : "#8ec5ff",
+                LightMuted: palette ? palette.LightMuted?.hex  : "#8ec5ff",
+        };
+
+        return {
+                character: {
+                        ...character,
+                        image_link: imageUrl,
+                },
+                palette: paletteHex,
+        };
+    },
+    ['spotlight'],
+    { revalidate: TIMINGS.ONE_DAY }
+);
+
+
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
@@ -218,6 +273,24 @@ export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<
         return await characterFormatter(db);
     }));
 })
+
+/**
+ * Fetch first page of popular characters with caching.
+ */
+export const getCachedPopularCharacters = unstable_cache(
+    async () => {
+        return await getPopularCharacters({
+            cursor: 0,
+            limit: LIMITS.MAX_CHARACTERS_PER_PAGE,
+            args: undefined,
+        });
+    },
+    ['popular-characters-cursor-0'],
+    {
+        revalidate: TIMINGS.ONE_HOUR, // cache for one hour
+        tags: ['characters', 'popular-characters-cursor-0'],
+    }
+);
 
 export const getTrendingCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
@@ -235,6 +308,23 @@ export const getTrendingCharacters = cache(async (props: LoadMoreProps): Promise
     }));
 })
 
+/**
+ * Fetch first page of trending characters with caching.
+ */
+export const getCachedTrendingInitialCharacters = unstable_cache(
+    async () => {
+        return await getTrendingCharacters({
+            cursor: 0,
+            limit: LIMITS.MAX_CHARACTERS_PER_PAGE,
+            args: undefined,
+        });
+    },
+    ['trending-characters-cursor-0'],
+    {
+        revalidate: TIMINGS.ONE_DAY,
+        tags: ['characters', 'trending-characters-cursor-0'],
+    }
+);
 
 export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     if(!props.args?.categoryId) {    
@@ -258,6 +348,18 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
         return await characterFormatter(db);
     }));
 })
+
+
+export async function getInitialCachedCharactersByCategory(categoryId: string) {
+    return await unstable_cache(
+        async () => await getCharactersByCategory({ cursor: 0, limit: LIMITS.MAX_CHARACTERS_PER_PAGE, args: { categoryId } }),
+        [`characters-category-${categoryId}-cursor-0`],
+        {
+            revalidate: TIMINGS.ONE_HOUR, // Cache for one hour
+            tags: ['characters', `characters-category-${categoryId}`],
+        }
+    )();
+}
 
 export const searchCharacters = cache(async (search: string, sort: 'newest' | 'likes' | 'relevance' | 'popular' = 'relevance'): Promise<Character[]> => {
     let query = (await createUnauthenticatedServerSupabaseClient())

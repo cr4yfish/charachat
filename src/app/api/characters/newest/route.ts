@@ -3,23 +3,6 @@ import { LIMITS } from "@/lib/limits";
 import { TIMINGS } from "@/lib/timings";
 import { unstable_cache } from "next/cache";
 
-/**
- * Fetch first page of newest characters with caching.
- */
-export const getCachedNewestCharacters = unstable_cache(
-    async () => {
-        return await getCharacters({
-            cursor: 0,
-            limit: LIMITS.MAX_CHARACTERS_PER_PAGE,
-        });
-    },
-    ['newest-characters-cursor-0'],
-    {
-        revalidate: TIMINGS.ONE_HOUR,
-        tags: ['characters', 'newest-characters-cursor-0'],
-    }
-);
-
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const cursor = url.searchParams.get('cursor') || '0';
