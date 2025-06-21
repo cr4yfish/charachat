@@ -190,16 +190,17 @@ export const getCharacters = cache(async (props: LoadMoreProps): Promise<Charact
 export const getNewestCharacter = cache(async (): Promise<Character> => {
     const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
-        .select(characterMatcher)
-        .or('image_link.ilike.%.png, image_link.ilike.%.jpg, image_link.ilike.%.jpeg')
+        .select("*")
+        // .or('image_link.ilike.%.png, image_link.ilike.%.jpg, image_link.ilike.%.jpeg')
         .order("created_at", { ascending: false })
+        .eq("is_nsfw", false)
         .range(0, 3)
 
     if (error) {
         throw error;
     }
 
-    return await characterFormatter(data.find((c) => safeParseLink(c.image_link) !== "" && c.is_nsfw == false ));
+    return data.find((c) => safeParseLink(c.image_link) !== "");
 })
 
 export const getPopularCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
