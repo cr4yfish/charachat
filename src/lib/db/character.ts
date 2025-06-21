@@ -21,12 +21,12 @@ const characterMatcher = `
 const characterTableName = "character_overview"
 const publicTableName = "character_overview_public"
 
-const characterFormatter = async (db: any): Promise<Character> => {
-    const owner = db.profiles;
-    const category = db.categories;
+const characterFormatter = async (db: any | undefined): Promise<Character> => {
+    const owner = db?.profiles;
+    const category = db?.categories;
     
-    delete db.profiles;
-    delete db.categories;
+    delete db?.profiles;
+    delete db?.categories;
 
     // let is_liked = false;
 
@@ -42,7 +42,7 @@ const characterFormatter = async (db: any): Promise<Character> => {
         owner: owner,
         category: category,
         is_liked: false,
-        tags_full: JSON.stringify(db.tags_full) === "[null]" ? undefined : db.tags_full
+        tags_full: JSON.stringify(db?.tags_full) === "[null]" ? undefined : db?.tags_full
     } as Character;
 
     return char;
