@@ -18,7 +18,6 @@ export type Category = {
 export type Character = {
     id: string;
     created_at?: string;
-    owner?: Profile;
     owner_clerk_user_id?: string;
     name: string;
     description?: string;
@@ -34,15 +33,27 @@ export type Character = {
     personality?: string;
     chats?: number;
     likes?: number;
-    is_liked?: boolean;
+    
     system_prompt?: string;
     image_prompt?: string;
     first_message?: string;
-    speaker_link?: string;
+    
     scenario?: string;
     tags?: string[];
+    
+    /**
+     * Only used client-side to display the character in the UI
+    */
     tags_full?: Tag[];
+    is_liked?: boolean;
+
+    /**
+     * @deprecated
+     */
     loras?: Lora[];
+    speaker_link?: string;
+    owner?: Profile;
+
 }
 
 /**
