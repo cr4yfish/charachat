@@ -61,6 +61,7 @@ const titles: TopBarTitle[] = [
     { title: "Home", pathname: "/home" },
     { title: "New Character", pathname: "/c/new", showBackButton: true },
     { title: "Settings", pathname: "/home/settings", showBackButton: true },
+    { title: "Search", pathname: "/search", showBackButton: true },
 ];
 
 const actions : TopBarAction[] = [

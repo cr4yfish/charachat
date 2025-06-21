@@ -259,11 +259,32 @@ export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promi
     }));
 })
 
-export const searchCharacters = cache(async (search: string): Promise<Character[]> => {
-    const { data, error } = await (await createClient())
-        .from(characterTableName)
-        .select(characterMatcher)
-        .or(`name.ilike.*${search}*` + "," + `description.ilike.*${search}*`);
+export const searchCharacters = cache(async (search: string, sort: 'newest' | 'likes' | 'relevance' | 'popular' = 'relevance'): Promise<Character[]> => {
+    let query = (await createUnauthenticatedServerSupabaseClient())
+        .from(publicTableName)
+        .select("*")
+        .or(`name.ilike.*${search}*,description.ilike.*${search}*,bio.ilike.*${search}*,intro.ilike.*${search}*,book.ilike.*${search}*,personality.ilike.*${search}*,scenario.ilike.*${search}*`);
+
+    // Apply sorting based on the sort parameter
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+            query = query.order('likes', { ascending: false });
+            break;
+        case 'popular':
+            query = query.order('chats', { ascending: false });
+            break;
+        case 'relevance':
+        default:
+            // For relevance, we could implement text search ranking if available
+            // For now, fall back to newest as default
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         throw error;
