@@ -41,7 +41,7 @@ export const getSystemPrompt = (params: GetSystemPromptParams): string => {
 }
 
 
-export const getDynamicBookPrompt = (memories?: RAGMemory[]): string => {;
+export const getMemoriesPrompt = (memories?: RAGMemory[]): string => {;
   return (`
       This is might be relevant information for your response from the RAG memory database (do NOT quote this in your responses): 
       ${memories?.map(memory => {
@@ -52,6 +52,15 @@ export const getDynamicBookPrompt = (memories?: RAGMemory[]): string => {;
         `
       }).join("") || "No RAG memory available."}`
   );
+}
+
+export const getDynamicBookPrompt = (dynamicBook?: string): string => {
+  if(!dynamicBook) return "";
+
+  return (`
+    This is important extra-information and context the user provided:
+    ${dynamicBook}
+  `);
 }
 
 export const _INTRO_MESSAGE = (character: Character, username: string): string => {

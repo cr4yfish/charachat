@@ -1,15 +1,16 @@
 
 import { getLLMModelCookie } from "@/app/actions";
-import { getLanguageModel } from "@/lib/ai";
+import { getLanguageModel, getModelApiKey } from "@/lib/ai";
 import { generateImageAgent } from "@/lib/ai/agents/image";
 import { RAGMemory } from "@/lib/ai/browser-rag/rag";
-import { _INTRO_MESSAGE, getDynamicBookPrompt, getSystemPrompt } from "@/lib/ai/prompts";
+import { _INTRO_MESSAGE, getDynamicBookPrompt, getMemoriesPrompt, getSystemPrompt } from "@/lib/ai/prompts";
 import { ModelId } from "@/lib/ai/types";
 import { llmSupportsTools } from "@/lib/ai/utils";
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { getCharacter } from "@/lib/db/character";
 import { createChat, getChat } from "@/lib/db/chat";
 import { addMessage, addMessages } from "@/lib/db/messages";
+import { getProfile } from "@/lib/db/profile";
 import { ERROR_MESSAGES } from "@/lib/errorMessages";
 import { getMostRecentUserMessage, sanitizeResponseMessages } from "@/lib/utils";
 import { Chat, Message } from "@/types/db";
@@ -126,16 +127,25 @@ export async function POST(req:Request) {
 
     const modelId = (chat.llm || clientLLM) as ModelId;
 
+    const profile = await getProfile(user.id);
+    if (!profile) {
+        console.error("Profile not found for user:", user.id);
+        return new Response(ERROR_MESSAGES.PROFILE_NOT_FOUND, { status: 404 });
+    }
+    const apiKey = await getModelApiKey(profile, modelId)
+
     const model = await getLanguageModel({
-        modelId: modelId,
+        modelId: modelId, apiKey
     });
 
 
     const systemPrompt = getSystemPrompt({
         character, chat
     });
+    
+    const bookPrompt = getDynamicBookPrompt(chat.dynamic_book);
 
-    const bookPrompt = getDynamicBookPrompt(memories);
+    const memoriesPrompt = getMemoriesPrompt(memories);
 
     // Core messages strip them down to the essentials
     // -> saves tokens
@@ -168,6 +178,11 @@ export async function POST(req:Request) {
                         // System prompt for the AI character
                         role: "system",
                         content: systemPrompt
+                    },
+                    {
+                        // Dynamic book prompt for the AI character
+                        role: "system",
+                        content: memoriesPrompt
                     },
                     {
                         // Dynamic book prompt for the AI character
