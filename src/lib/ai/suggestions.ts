@@ -4,10 +4,11 @@
  */
 
 import { Character, Chat, Message, Profile } from "@/types/db";
-import { getLanguageModel } from ".";
+import { getLanguageModel, getModelApiKey } from ".";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { getSuggestionsPrompt } from "./prompts";
+import { ModelId } from "./types";
 
 export type Suggestion = {
     title: string;
@@ -17,7 +18,7 @@ export type Suggestion = {
 type GenerateSuggestionsProps = {
     chat: Chat;
     recentMessages?: Message[];
-    userProfile?: Profile | undefined;
+    userProfile: Profile | undefined;
     character?: Character | undefined;
 }
 
@@ -28,7 +29,12 @@ const suggestionSchema = z.object({
 
 export async function generateSuggestions({ chat, recentMessages, userProfile: profile, character }: GenerateSuggestionsProps): Promise<Suggestion[]> {
 
-    const model = await getLanguageModel({ modelId: chat.llm })
+    if (!profile) {
+        throw new Error("User profile is required to generate suggestions.");
+    }
+
+    const apiKey = await getModelApiKey(profile, chat.llm as ModelId);
+    const model = await getLanguageModel({ modelId: chat.llm, apiKey })
 
     const prompt = getSuggestionsPrompt({
         profile, character,recentMessages,
