@@ -23,4 +23,6 @@ export const ERROR_MESSAGES = {
     LLM_MODEL_REQUIRED: "LLM model is required to proceed.",
 
     USER_MESSAGE_NOT_FOUND: "No user message found in the chat. Please ensure you have sent a message before proceeding.",
+
+    PROFILE_NOT_FOUND: "Profile not found. Please check your profile settings and try again.",
 }
