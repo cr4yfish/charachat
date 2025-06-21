@@ -11,6 +11,7 @@ import equal from "fast-deep-equal"
 type Option = {
     value: string;
     label: string;
+    disabled?: boolean;
 }
 
 type Props = {
@@ -59,6 +60,7 @@ const PureButtonGroup = ({ value, onValueChange, options, label, description, di
                             >
                                 <Button
                                     variant={"outline"}
+                                    disabled={option.disabled}
                                     className={cn("w-full !border-border ", {
                                         "rounded-l-3xl": index === 0 && dir === "horizontal",
                                         "rounded-r-3xl": index === options!.length - 1 && dir === "horizontal",

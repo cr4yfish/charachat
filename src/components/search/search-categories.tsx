@@ -28,7 +28,7 @@ const PureSearchCategories = ({ initType, currentQuery, initSortType } : { initT
                     }}
                     options={[
                         { label: "Characters", value: "characters" },
-                        { label: "Creators", value: "creators" }
+                        { label: "Creators", value: "creators", disabled: true } , // creators is not implemented yet
                     ]}
                 />
             </div>
