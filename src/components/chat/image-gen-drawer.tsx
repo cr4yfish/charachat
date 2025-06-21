@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { ImageModel } from "@/lib/ai/types";
@@ -34,7 +34,6 @@ const PureImageGenDrawer = (props: Props) => {
     const [step, setStep] = useState<Step>("prompt");
     const [imageModel, setImageModel] = useState<ImageModel | undefined>();
     const [isGenerateLoading, setIsGenerateLoading] = useState<boolean>(false);
-    const [currentStatus, setCurrentStatus] = useState<string>("");
     const [imagePrompt, setImagePrompt] = useState<string>("");
     const [internalImageLink, setInternalImageLink] = useState<string>("");
     
@@ -99,13 +98,6 @@ const PureImageGenDrawer = (props: Props) => {
         }
     }
 
-    useEffect(() => {
-        if(currentStatus) {
-            console.log("Current status:", currentStatus);
-        }
-    }, [currentStatus])
-
-
     return (
         <Drawer open={props.isOpen} onOpenChange={props.onOpenChange}>
             <DrawerContent className="h-screen">
@@ -166,9 +158,18 @@ const PureImageGenDrawer = (props: Props) => {
 
                 </div>
                 <DrawerFooter>
+                    {isGenerateLoading && (
+                        <Button variant="outline" onClick={handleAbort}>
+                            Abort Generation
+                            <span className="ml-2 loading loading-spinner loading-sm"></span>
+                        </Button>
+                    )}
                     {step === "prompt" && <Button variant={"liquid"} onClick={() => setStep("model")} >Select a model</Button>}
                     {step === "model" && <Button onClick={handleGenerateImage}>Generate Image</Button>}
-                    {step === "result" && <Button onClick={handleSetImageLink}>Add to chat</Button>}
+                    {step === "result" && <Button disabled={isGenerateLoading} onClick={handleSetImageLink}>
+                        Add Image Link
+                        {isGenerateLoading && <span className="ml-2 loading loading-spinner loading-sm"></span>}
+                    </Button>}
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>

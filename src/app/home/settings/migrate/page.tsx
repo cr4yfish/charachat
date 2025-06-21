@@ -1,14 +1,5 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { InputWithLabel } from "@/components/ui/input-with-label";
-import Form from "next/form";
 
 export default function MigratePage() {
-
-    const handleSubmit = async (formData: FormData) => {
-
-    }
 
     return (
         <div className="flex flex-col gap-4 h-full w-full px-4 pt-[75px] pb-[100px] overflow-y-auto">
@@ -19,22 +10,6 @@ export default function MigratePage() {
                 <p>Click the button below to start the migration process.</p>
             </div>
 
-            <Form action={handleSubmit} className="flex flex-col gap-2">
-                <InputWithLabel 
-                    label="Your Charachat v1 Email"
-                    placeholder="charachat@v1.com"
-                    type="email"
-                />
-                <InputWithLabel 
-                    label="Your Charachat v1 Password"
-                    placeholder="********"
-                    type="password"
-                />
-
-                <Button>
-                    Migrate
-                </Button>
-            </Form>
         </div>
     );
 }

@@ -104,7 +104,7 @@ export const PureChat = (props: Props) => {
     },
   });
   
-  const { data, setSize } = useSWRInfinite<Message[]>(
+  const { setSize } = useSWRInfinite<Message[]>(
     (pageIndex, previousPageData) => {
       // If there are no previous pages, return null to stop fetching
       if (previousPageData && previousPageData.length === 0) return null;
