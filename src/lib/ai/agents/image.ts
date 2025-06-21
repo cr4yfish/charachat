@@ -1,5 +1,9 @@
+import { decryptMessage } from "@/lib/crypto/client";
+import { getKeyServerSide } from "@/lib/crypto/server";
+import { getProfile } from "@/lib/db/profile";
 import { uploadImageToImgur } from "@/lib/imgur";
 import { createReplicate } from "@ai-sdk/replicate";
+import { currentUser } from "@clerk/nextjs/server";
 import { experimental_generateImage } from "ai";
 import sharp from 'sharp';
 
@@ -23,7 +27,28 @@ type Params = {
  * @returns 
  */
 export async function generateImageAgent({ imagePrompt, model }: Params) {
-    const replicateToken = process.env.REPLICATE_API_KEY;
+    
+    const user = await currentUser();
+
+    if (!user) {
+        throw new Error("Unauthorized: User not found");
+    }
+
+    const profile = await getProfile(user.id)
+
+    if (!profile) {
+        throw new Error("Profile not found");
+    }
+
+    const encryptedReplicateToken = profile.api_keys?.find(key => key.provider === "Replicate")?.encrypted_api_key;
+
+   
+    if (!encryptedReplicateToken) {
+        throw new Error("Replicate API key not found");
+    }
+
+    const key = await getKeyServerSide();
+    const replicateToken = decryptMessage(encryptedReplicateToken, key);
 
     const replicate = createReplicate({
         apiToken: replicateToken
