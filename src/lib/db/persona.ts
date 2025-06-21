@@ -94,7 +94,8 @@ export const getPersonas = cache(async (props: LoadMoreProps) => {
     const { data, error } = await (await createClient())
         .from(tableName)
         .select(personaMatcher)
-        .range(props.cursor, props.cursor + props.limit - 1);
+        .order("created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1)
         
     if (error) {
         // console.error("Error fetching personas", error);
