@@ -14,7 +14,7 @@ export const getCachedSpotlight = unstable_cache(
         const isSupportedUrl = !imageUrl.includes(".webp");
 
         const palette = isSupportedUrl && await Vibrant.from(imageUrl).getPalette().catch((err) => {
-                console.error("Error getting palette, skipping it:", err, "Character:", character.name);
+                console.warn("Error getting palette, skipping it:", err, "Character:", character.name);
                 return null;
         });
 
