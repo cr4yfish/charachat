@@ -12,12 +12,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { SidebarToggle } from "./sidebar-toggle";
 import { NavItem, tabs } from "./tab-bar/app-tabbar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { memo } from "react";
 import { cn } from "@/lib/utils";
+import { BotIcon } from "lucide-react";
 
 const PureNavbarItem = (props: NavItem & { isActive?: boolean, sidebarOpen: boolean }) => {
   return (
@@ -52,8 +52,10 @@ export function AppSidebar() {
     return (
     <>
         <Sidebar collapsible={"icon"} variant={"floating"}>
-            <SidebarHeader>
-                <SidebarToggle />
+            <SidebarHeader className="p-4 flex flex-row items-center gap-2">
+                <BotIcon />
+                <span className="font-bold">Charachat</span>
+                {/* <SidebarToggle /> */}
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
