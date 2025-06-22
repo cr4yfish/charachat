@@ -26,6 +26,9 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             name: db.character_name,
             image_link: db.character_image_link,
             category: db.character_category,
+            is_private: db.character_is_private || false,
+            is_nsfw: db.character_is_nsfw || false,
+            is_unlisted: db.character_is_unlisted || false,
         },
     } as Chat;
 
@@ -48,25 +51,6 @@ const chatFormatter = async (db: any): Promise<Chat> => {
         }
     }
 
-    // if(decryptedChat.story?.is_private) {
-    //     try {
-    //         const key = await getKeyServerSide();
-    //         decryptedChat.story = await decryptStory(decryptedChat.story, key);
-    //     } catch (error) {
-    //         console.error("Error decrypting story in chat", error);
-    //         return decryptedChat;
-    //     }
-    // }
-
-    // if(decryptedChat.persona?.is_private) {
-    //     try {
-    //         const key = await getKeyServerSide();
-    //         decryptedChat.persona = await decryptPersona(decryptedChat.persona, key);
-    //     } catch (error) {
-    //         console.error("Error decrypting persona in chat", error);
-    //         return decryptedChat;
-    //     }
-    // }
 
     return decryptedChat;
 }
