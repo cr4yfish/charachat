@@ -91,7 +91,7 @@ const actions : TopBarAction[] = [
 const PureTopBar = () => {
     const pathname = usePathname();
     const router = useRouter();
-    const { open: sidebarOpen, isMobile } = useSidebar();
+    const { isMobile } = useSidebar();
 
     const activeTitle = React.useMemo(() => {
         return titles.find(title => title.pathname === pathname);
@@ -109,12 +109,12 @@ const PureTopBar = () => {
         <>
         <div className={cn("fixed z-50 top-0 left-0 h-[75px] ml-0 w-full transition-all overflow-hidden", {
             "bg-transparent":activeTitle === undefined,
-            "ml-[255px]": sidebarOpen && !isMobile,
-            "ml-[60px]": !sidebarOpen  && !isMobile,
+            "ml-[255px]": !isMobile,
+            // "ml-[60px]": !sidebarOpen  && !isMobile,
         })} >
             <div className={cn("bg-gradient-to-b from-black/50 to-transparent w-full relative overflow-hidden flex flex-row justify-center ", {
-                "pr-[260px] ": sidebarOpen  && !isMobile,
-                "pr-[60px]": !sidebarOpen  && !isMobile,
+                "pr-[260px] ": !isMobile,
+                // "pr-[60px]": !sidebarOpen  && !isMobile,
             })}>
 
                 <div className="flex items-center justify-between px-4 py-2  w-full relative max-w-[1920px]">

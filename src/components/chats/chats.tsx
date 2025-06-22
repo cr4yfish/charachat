@@ -97,7 +97,7 @@ export default function Chats() {
     
     return (
         <>
-        <div className="flex flex-col items-center justify-start h-screen w-full p-4 pt-[75px] pb-[100px] overflow-y-auto ">
+        <div className="flex flex-col items-center justify-start h-screen w-full p-4 pt-[75px] pb-[100px] max-w-[1024px] overflow-y-auto ">
 
             {dateGroupedChats.map(({ date, chats }) => (
                 chats.length > 0 && (
