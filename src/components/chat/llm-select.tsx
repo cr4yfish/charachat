@@ -105,7 +105,7 @@ const PureLLMSelect = (props: Props) => {
                 <span className="text-xs text-muted-foreground">{props.description}</span>
 
             </Label>
-            <Select name="llm-select" value={props.selectedKey}  >
+            <Select name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as ModelId)}  >
                 <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border">
                     <SelectValue aria-label="Select a LLM" className="!h-fit !border-border">
                         <FancyLLM llm={getLLMById(props.selectedKey || _DEFAULT_LLM)} showIcon showProvider  />
@@ -121,7 +121,8 @@ const PureLLMSelect = (props: Props) => {
                             {group.llms.map((llm) => (
                                 <SelectItem
                                     key={llm.key}
-                                    value={llm.name}
+                                    value={llm.key}
+                                    role="button"
                                     onClick={() => props.onSelect?.(llm.key)}
                                     className="dark:hover:bg-primary/10"
                                 >
