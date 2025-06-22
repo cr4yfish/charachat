@@ -3,9 +3,9 @@ import "server-only";
 
 import { cache } from "react";
 import { Chat, LoadMoreProps } from "@/types/db";
-import { getKeyServerSide } from "../crypto/server";
+import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { createServerSupabaseClient as createClient } from "./server";
-import { checkIsEncrypted, decryptMessage, encryptMessage } from "../crypto/client";
+import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptCharacter } from "./character";
 
 const chatMatcher = `
@@ -91,11 +91,11 @@ export const decryptChat = async(chat: Chat, key: Buffer): Promise<Chat> => {
     try {
         return {
             ...chat,
-            last_message: decryptMessage(chat.last_message ?? "", key),
-            dynamic_book: decryptMessage(chat.dynamic_book ?? "", key),
-            negative_prompt: decryptMessage(chat.negative_prompt ?? "", key),
-            title: decryptMessage(chat.title, key),
-            description: decryptMessage(chat.description, key)
+            last_message: await decryptMessageBackwardsCompatible(chat.last_message ?? "", key),
+            dynamic_book: await decryptMessageBackwardsCompatible(chat.dynamic_book ?? "", key),
+            negative_prompt: await decryptMessageBackwardsCompatible(chat.negative_prompt ?? "", key),
+            title: await decryptMessageBackwardsCompatible(chat.title, key),
+            description: await decryptMessageBackwardsCompatible(chat.description, key)
         }
     } catch (error) {
         console.error("Error decrypting chat:",error);

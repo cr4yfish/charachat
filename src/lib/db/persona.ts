@@ -4,8 +4,8 @@
 import { cache } from "react";
 import { createServerSupabaseClient as createClient } from "./server";
 import { LoadMoreProps, Persona } from "@/types/db";
-import { checkIsEncrypted, decryptMessage, encryptMessage } from "../crypto/client";
-import { getKeyServerSide } from "../crypto/server";
+import { checkIsEncrypted, encryptMessage } from "../crypto/client";
+import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 
 const personaMatcher = `
     *,
@@ -50,9 +50,9 @@ export const decryptPersona = async (persona: Persona, key: string): Promise<Per
         const keyBuffer = Buffer.from(key, "hex");
         return {
             ...persona,
-            full_name: decryptMessage(persona.full_name, keyBuffer),
-            bio: persona.bio ? decryptMessage(persona.bio, keyBuffer) : undefined,
-            avatar_link: persona.avatar_link ? decryptMessage(persona.avatar_link, keyBuffer) : undefined
+            full_name: await decryptMessageBackwardsCompatible(persona.full_name, keyBuffer),
+            bio: persona.bio ? await decryptMessageBackwardsCompatible(persona.bio, keyBuffer) : undefined,
+            avatar_link: persona.avatar_link ? await decryptMessageBackwardsCompatible(persona.avatar_link, keyBuffer) : undefined
         }
     } catch (error) {
         console.error("Error decrypting persona", error);

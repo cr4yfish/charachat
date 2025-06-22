@@ -45,5 +45,7 @@ export const API_ROUTES = {
     // Stats
     GET_TOTAL_CHARACTER_STATS: "/api/stats/total-character-stats",
     GET_TOTAL_CHAT_STATS: "/api/stats/total-chat-stats",
+
+    MIGRATION: "/api/migration",
     
 }

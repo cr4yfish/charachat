@@ -9,6 +9,9 @@ import { cookies } from "next/headers";
 import { _ENC_KEY_COOKIE_NAME } from "..";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { TIMINGS } from "@/lib/timings";
+import { getKeyServerSideLegacy } from "./legacy";
+import { decryptMessageLegacy } from "../client/legacy";
+import { decryptMessage } from "../client";
 
 /**
  * Gets the users's key from the cookies using cookies() from the header.
@@ -101,4 +104,27 @@ export const setKeyCookie = async (password: string, email: string) => {
  */
 export const removeKeyCookie = async () => {
     (await cookies()).set(_ENC_KEY_COOKIE_NAME, "", { secure: true, sameSite: "strict", priority: "high", maxAge: 0 });
+}
+
+export async function decryptMessageBackwardsCompatible(encryptedMessage: string, key: Buffer): Promise<string> {
+    // if the message is not encrypted, return it as is
+    if(!encryptedMessage || !encryptedMessage.startsWith("ENC:")) {
+        return encryptedMessage;
+    }
+
+    try {
+        return decryptMessage(encryptedMessage, key);
+    } catch {
+        //console.error("Decryption error:", error);
+        
+        // try with legacy decryption
+        const legacyKey = await getKeyServerSideLegacy();
+        if(!legacyKey) {
+            throw new Error("Legacy key not found for decryption");
+        }
+
+        const legacyDecrypted = decryptMessageLegacy(encryptedMessage, Buffer.from(legacyKey, "hex"));
+
+        return legacyDecrypted;
+    }
 }

@@ -10,10 +10,7 @@
 
 import crypto from "node:crypto";
 import { _ENC_KEY_COOKIE_NAME, _ENCRYPTION_MARKER } from "..";
-
 const _ENCRYPTION_STANDARD = "aes-256-cbc";
-
-
 
 /**
  * Takes a string and checks if the string is encrypted
@@ -76,11 +73,8 @@ export function decryptMessage(encryptedMessage: string, key: Buffer): string {
         let decrypted = decipher.update(encrypted, "hex", "utf8");
         decrypted += decipher.final("utf8");
         return decrypted;
-    } catch (error) {
-        console.error("Decryption failed:", error);
-        // Return the original message if decryption fails
-        // This will display the encrypted message as is
-        // "the show must go on"
-        return encryptedMessage; 
+    } catch {
+        //console.error("Decryption failed:", error);
+        throw new Error("Decryption failed. The message might be corrupted or the key is incorrect.");
     }
 }

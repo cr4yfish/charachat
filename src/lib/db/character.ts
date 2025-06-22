@@ -7,9 +7,9 @@ import { createServerSupabaseClient as createClient, createUnauthenticatedServer
 import { Character } from "@/types/db";
 import { LoadMoreProps } from "@/types/db";
 import { safeParseLink } from "@/lib/utils";
-import { decryptMessage, encryptMessage } from "../crypto/client";
+import { encryptMessage } from "../crypto/client";
 import { currentUser } from "@clerk/nextjs/server";
-import { getKeyServerSide } from "../crypto/server";
+import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { LIMITS } from "../limits";
 import { TIMINGS } from "../timings";
@@ -51,22 +51,51 @@ const characterFormatter = async (db: any | undefined): Promise<Character> => {
     return char;
 }
 
+const privateCharacterFormatter = async (db: any | undefined): Promise<Character> => {
+    const owner = db?.profiles;
+    const category = db?.categories;
+    
+    delete db?.profiles;
+    delete db?.categories;
+
+    // let is_liked = false;
+
+    // // quickly check if user is logged in
+    // const { data: { user } } = await createClient().auth.getUser();
+    // if(user?.id !== undefined) {
+    //     // check like status
+    //     is_liked = await isCharacterLiked(db.id, user.id);
+    // }
+
+    let char = {
+        ...db,
+        owner: owner,
+        category: category,
+        is_liked: false,
+        tags_full: JSON.stringify(db?.tags_full) === "[null]" ? undefined : db?.tags_full
+    } as Character;
+    
+    char = await decryptCharacter(char, await getKeyServerSide());
+
+    return char;
+}
+
 export const decryptCharacter = async (character: Character, key: Buffer): Promise<Character> => {
     try {
         return {
             ...character,
-            name: decryptMessage(character.name ?? " ", key),
-            description: decryptMessage(character.description ?? " ", key),
-            intro: decryptMessage(character.intro ?? "", key),
-            bio: decryptMessage(character.bio ?? " ", key),
-            book: decryptMessage(character.book ?? " ", key),
-            image_link: decryptMessage(character.image_link ?? " ", key),
-            personality: decryptMessage(character.personality ?? " ", key),
-            system_prompt: decryptMessage(character.system_prompt ?? " ", key),
-            image_prompt: decryptMessage(character.image_prompt ?? " ", key),
-            first_message: decryptMessage(character.first_message ?? " ", key),
-            speaker_link: decryptMessage(character.speaker_link ?? " ", key),
-            scenario: decryptMessage(character.scenario ?? " ", key),
+            name: await decryptMessageBackwardsCompatible(character.name ?? " ", key),
+            description: await decryptMessageBackwardsCompatible(character.description ?? " ", key),
+            intro: await decryptMessageBackwardsCompatible(character.intro ?? "", key),
+            bio: await decryptMessageBackwardsCompatible(character.bio ?? " ", key),
+            book: await decryptMessageBackwardsCompatible(character.book ?? " ", key),
+            image_link: await decryptMessageBackwardsCompatible(character.image_link ?? " ", key),
+            personality: await decryptMessageBackwardsCompatible(character.personality ?? " ", key),
+            system_prompt: await decryptMessageBackwardsCompatible(character.system_prompt ?? " ", key),
+            image_prompt: await decryptMessageBackwardsCompatible(character.image_prompt ?? " ", key),
+            first_message: await decryptMessageBackwardsCompatible(character.first_message ?? " ", key),
+            speaker_link: await decryptMessageBackwardsCompatible(character.speaker_link ?? " ", key),
+            scenario: await decryptMessageBackwardsCompatible(character.scenario ?? " ", key),
             // tags_full: (character.tags_full) ? await Promise.all(character.tags_full.map(t => decryptTag(t))) : [],
             // loras: character.loras ? await Promise.all(character.loras.map(l => decryptLora(l, buffer))) : []
         }
@@ -435,7 +464,7 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
     }
 
     return Promise.all(data.map(async (db: any) => {
-        return await characterFormatter(db);
+        return await privateCharacterFormatter(db);
     }));
 })
 

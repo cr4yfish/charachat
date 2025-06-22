@@ -5,7 +5,7 @@ import { cache } from "react";
 import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
 import { Profile } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "../crypto/client";
-import { getKeyServerSide } from "../crypto/server";
+import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { currentUser } from "@clerk/nextjs/server";
 
 const publicTableName = "profiles_view";
@@ -47,9 +47,9 @@ export const decryptProfile = async (profile: Profile, key: Buffer): Promise<Pro
 
         return {
             ...profile,
-            first_name: decryptMessage(profile.first_name ?? "", key),
-            last_name: decryptMessage(profile.last_name ?? "", key),
-            bio: decryptMessage(profile.bio ?? "", key),
+            first_name: await decryptMessageBackwardsCompatible(profile.first_name ?? "", key),
+            last_name: await decryptMessageBackwardsCompatible(profile.last_name ?? "", key),
+            bio: await decryptMessageBackwardsCompatible(profile.bio ?? "", key),
         }
     } catch (error) {
         console.error("Error decrypting profile", error);

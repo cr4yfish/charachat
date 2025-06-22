@@ -4,8 +4,8 @@ import { cache } from "react";
 
 import { createServerSupabaseClient as createClient } from "./server";
 import { Message } from "@/types/db";
-import { decryptMessage, encryptMessage } from "../crypto/client";
-import { getKeyServerSide } from "../crypto/server";
+import { encryptMessage } from "../crypto/client";
+import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { revalidateTag } from "next/cache";
 
 type getMessagesProps = {
@@ -27,10 +27,10 @@ export const getMessages = cache(async ({ chatId, from, limit, key } : getMessag
         throw error;
     }
 
-    const decryptedData = data.map((message: Message) => ({
+    const decryptedData = await Promise.all(data.map(async (message: Message) => ({
         ...message,
-        content: decryptMessage(message.content, key),
-    }));
+        content: await decryptMessageBackwardsCompatible(message.content, key),
+    })));
 
     // Sort messages by created_at in ascending order
     decryptedData.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
@@ -50,10 +50,10 @@ export const getLatestChatMessage = cache(async (chatId: string, key: Buffer, nu
         throw error;
     }
 
-    const decryptedMessages = data.map((message: Message) => ({
+    const decryptedMessages = await Promise.all(data.map(async (message: Message) => ({
         ...message,
-        content: decryptMessage(message.content, key),
-    }));
+        content: await decryptMessageBackwardsCompatible(message.content, key),
+    })));
 
     return decryptedMessages;
 })
