@@ -18,15 +18,19 @@ import { fetcher } from "@/lib/utils";
 import equal from 'fast-deep-equal';
 import Spinner from "../ui/spinner";
 import { CheckIcon } from "lucide-react";
+import { TIMINGS_MILLISECONDS } from "@/lib/timings";
 
 const PureAPIKeyInputCard = () => {
-    const { data: profile, mutate, isLoading } = useSWR<Profile>(API_ROUTES.GET_OWN_PROFILE, fetcher)
+    const { data: profile, mutate, isLoading, isValidating, } = useSWR<Profile>(API_ROUTES.GET_OWN_PROFILE, fetcher, {
+      dedupingInterval: TIMINGS_MILLISECONDS.ONE_MINUTE,
+      refreshInterval: TIMINGS_MILLISECONDS.ONE_MINUTE,
+      revalidateOnMount: true,
+    })
     const [debouncedProfile] = useDebounce(profile, 1000);
     const isChanged = useMemo(() => {
       if (!profile || !debouncedProfile) return false;
       return !equal(profile, debouncedProfile);
     }, [profile, debouncedProfile]);
-
 
     useEffect(() => {
       if(!debouncedProfile) return;
@@ -49,10 +53,7 @@ const PureAPIKeyInputCard = () => {
       })
       .then(() => {
         toast.success("Profile updated successfully");
-        // mutate(debouncedProfile, {
-        //   optimisticData: debouncedProfile,
-        //   revalidate: true, // revalidate on update
-        // });
+        // mutate(profile, true); // Revalidate the profile data
       })
       .catch(error => {
         console.error("Error updating profile:", error);
@@ -89,12 +90,13 @@ const PureAPIKeyInputCard = () => {
           <CardDescription>All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to use any AI for which you provide an API key - in addition to free models.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          {isLoading && 
           <div className="flex flex-row items-center gap-2 text-muted-foreground text-xs">
-              <Spinner  />
-              <p>Loading your profile...</p>
+            {isLoading || isValidating && <Spinner />}
+            {isLoading && <p>Loading your profile...</p>}
+            {isValidating && <p>Syncing with your profile...</p>}
+            {!isLoading && !isValidating && profile && <p>Profile loaded. You can now manage your API keys.</p>}
+            {!profile && !isLoading && !isValidating && <p className="text-red-500">Failed to load profile. Please try again later.</p>}
           </div>
-          } 
           <Accordion type="single" collapsible>
               <AccordionItem value="free-models">
                 <AccordionTrigger>Free models</AccordionTrigger>
