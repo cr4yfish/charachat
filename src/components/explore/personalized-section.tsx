@@ -9,10 +9,11 @@ import {
 
 import dynamic from "next/dynamic";
 import { Character } from "@/types/db"
+import LatestChat from "./latest-chat";
 const NewCharacterFromScratch = dynamic(() => import("@/components/new-character/new-character-from-scratch")); 
 
 type Props = {
-    draftChar: Character | undefined;
+    draftChar: Character | undefined | null;
 }
 
 /**
@@ -31,21 +32,19 @@ export function PersonalizedSection(props: Props) {
 
     return (
         <div className="flex flex-col gap-2 w-full relative">
-            <p className="text-xs dark:text-zinc-400">Continue where you left off</p>
+            <p className="text-xs text-muted-foreground">Continue where you left off</p>
 
             <Carousel>
                 <CarouselContent>
-                    <CarouselItem>
-                        {props.draftChar && (
+
+                    {props.draftChar && (
+                        <CarouselItem>
                             <NewCharacterFromScratch small initCharacter={props.draftChar} />
-                        )}
-                    </CarouselItem>
-                    <CarouselItem>
-                        
-                    </CarouselItem>
-                    <CarouselItem>
-                        
-                    </CarouselItem>
+                        </CarouselItem>
+                    )}
+
+                    <LatestChat />
+     
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />

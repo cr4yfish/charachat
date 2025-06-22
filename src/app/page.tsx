@@ -24,9 +24,6 @@ export default async function Home() {
   const initCategories = await getCachedInitialCategories();
   const initialCurrentCategory = initCategories[0];
   const intialCharactersForIntialCategory = await getInitialCachedCharactersByCategory(initialCurrentCategory.id);
-  
-
-  const showPersonalizedSection = !!draftChar;
 
   return (
     <div className="flex flex-col justify-center max-[2133px]:block max-h-full w-full overflow-y-auto overflow-x-hidden pb-[200px]">
@@ -36,13 +33,12 @@ export default async function Home() {
       <div className="flex flex-col gap-4 px-4 py-6 pt-1 h-fit max-w-[1920px] overflow-x-visible relative">
 
         {/* Personalized section */}
-        {showPersonalizedSection && 
-          <PersonalizedSection draftChar={draftChar} />
-        }
+        <PersonalizedSection draftChar={draftChar} />
+        
 
         <div className="flex flex-col gap-2 w-full relative">
           <div>
-              <p className="text-xs dark:text-zinc-400">Most chats in the last 3 days</p>
+              <p className="text-xs text-muted-foreground">Most chats in the last 3 days</p>
               <h2 className="dark:prose-invert text-lg font-bold">Trending 🔥</h2>
           </div>
           <GeneralSwiper initialData={initialTrending} apiUrl={API_ROUTES.GET_TRENDING_CHARACTERS} component={ImageCharacterCard} rows={1} />
@@ -54,7 +50,7 @@ export default async function Home() {
 
         <div className="flex flex-col gap-2 w-full relative">
           <div>
-            <p className="text-xs dark:text-zinc-400">Check out what the Community made</p>
+            <p className="text-xs text-muted-foreground">Check out what the Community made</p>
             <h2 className="dark:prose-invert text-lg font-bold">New</h2>
           </div>
           <GeneralSwiper initialData={initialNewest} apiUrl={API_ROUTES.GET_NEWEST_CHARACTERS} component={ImageCharacterCard} rows={2} />
@@ -70,7 +66,7 @@ export default async function Home() {
       
         <div className="flex flex-col gap-2 w-full relative">
           <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0">
-              <p className="text-xs dark:text-zinc-400">The hot stuff</p>
+              <p className="text-xs text-muted-foreground">The hot stuff</p>
               <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
           </div>
           <GeneralSwiper initialData={initialPopular} apiUrl={API_ROUTES.GET_POPULAR_CHARACTERS} component={ImageCharacterCard} rows={1} />

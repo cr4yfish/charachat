@@ -22,6 +22,7 @@ export const API_ROUTES = {
     UPDATE_CHAT: "/api/chat/settings",
     GET_SHALLOW_CHAT: "/api/chat/shallow?chatId=",
     GET_CHAT: "/api/chat?id=",
+    GET_LATEST_CHAT: "/api/chat/latest",
     GET_CHATS: "/api/chats",
     GET_SUGGESTIONS: "/api/chat/suggestions?chat-id=",
     GET_CHAT_MESSAGES: "/api/chat/messages?chatId=",

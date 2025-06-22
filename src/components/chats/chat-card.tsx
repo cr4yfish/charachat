@@ -36,19 +36,19 @@ const PureChatCard = ({chat}: Props) => {
                 whileTap={{ scale: 0.99 }}
             >
                 <div className={cn("absolute size-full bg-black/0 transition-all pointer-events-none duration-1000 z-10", { "backdrop-blur": isLoading })}></div>
-                <Card className="p-4 w-full bg-transparent border-none hover:bg-muted transition-colors cursor-pointer flex flex-col gap-2">
-                    <CardContent className="flex items-center gap-3 p-0">
+                <Card className="p-4 w-full bg-transparent border-none hover:bg-muted transition-colors cursor-pointer flex flex-col gap-2 overflow-hidden">
+                    <CardContent className="flex items-center gap-3 p-0 w-full overflow-hidden">
                         <div className="overflow-hidden relative size-14 shrink-0 p-4 rounded-full">
                             {chat.character.image_link && <Image src={chat.character.image_link} alt="" fill />}
                         </div>
                         
-                        <div className="flex flex-col gap-1.5 w-full">
+                        <div className="flex flex-col gap-1.5 w-full overflow-hidden">
                             <div className="flex flex-col gap-1 w-full pr-3">
                                 <CardTitle>{chat.character.name}</CardTitle>
                                 {chat.last_message && 
-                                    <CardDescription>
-                                        <Markdown className="!text-xs !text-muted-foreground">
-                                            {truncateText(prettyRenderSingleMessageContent(chat.last_message), 58) || "No messages yet"}
+                                    <CardDescription className="max-w-[95%]">
+                                        <Markdown className="!text-xs !text-muted-foreground truncate overflow-hidden">
+                                            {truncateText(prettyRenderSingleMessageContent(chat.last_message), 32) || "No messages yet"}
                                         </Markdown>
                                     </CardDescription>  
                                 }
