@@ -42,7 +42,7 @@ export function getKeyClientSide(): string {
  */
 export function encryptMessage(message: string, key: Buffer): string {
     if(checkIsEncrypted(message)) {
-        console.warn("Trying to encrypt a message that's already encrypted!");
+        //console.warn("Trying to encrypt a message that's already encrypted!");
         return message; // If the message is already encrypted, return it as is
     };
 
