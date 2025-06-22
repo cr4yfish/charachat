@@ -76,7 +76,6 @@ const PureImageGenDrawer = (props: Props) => {
 
             const { imageUrl } = await res.json();
 
-            console.log("Generated image response:", imageUrl);
             setInternalImageLink(imageUrl);
             setStep("result");
             toast.success("Image generated successfully!");

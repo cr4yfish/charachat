@@ -29,8 +29,6 @@ export async function POST(request: Request) {
             from_ai: true
         }
 
-        console.log("Saving message:", msgToSave);
-
         const key = await getKeyServerSide();
 
         await addMessage(msgToSave, key)

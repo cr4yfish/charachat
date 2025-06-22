@@ -54,11 +54,9 @@ const PureYourProfile = ({ userid }: Props) => {
 
         const vibrant = new Vibrant(safeParseLink(profile.avatar_link));
         vibrant.getPalette().then(pal => {
-            console.log("Palette for profile:", pal);
             const hexPalette = {
                 Vibrant: pal.Vibrant?.hex || "#FFFFFF",
             }
-            console.log("Hex Palette:", hexPalette);
             setPalette(hexPalette);
         }).catch((err) => {
             console.error("Error getting palette:", err);
@@ -105,9 +103,6 @@ const PureYourProfile = ({ userid }: Props) => {
     // update external profile with debounced state
     useEffect(() => {
         if(!debouncedProfile) return;
-
-        console.log("Saving profile", debouncedProfile);
-
         saveProfile();
 
     }, [debouncedProfile, mutate, setIsSaving, saveProfile])

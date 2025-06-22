@@ -62,7 +62,6 @@ const PureAPIKeyInputCard = () => {
     }, [debouncedProfile, mutate, isChanged])
 
     const handleKeyChange = (providerId: ProviderId, key: string) => {
-      console.log(profile)
       if (!profile) {
         console.error("Profile is not loaded yet");
         return;

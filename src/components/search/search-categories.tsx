@@ -23,7 +23,6 @@ const PureSearchCategories = ({ initType, currentQuery, initSortType } : { initT
                     onValueChange={(value) => {
                         const currentSearchParams = new URLSearchParams(window.location.search);
                         currentSearchParams.set("type", value);
-                        console.log("Search type changed to:", value, currentQuery);
                         router.push(`/search?` + currentSearchParams.toString());
                     }}
                     options={[
@@ -45,7 +44,6 @@ const PureSearchCategories = ({ initType, currentQuery, initSortType } : { initT
                         onValueChange={(value) => {
                             const currentSearchParams = new URLSearchParams(window.location.search);
                             currentSearchParams.set("sort", value);
-                            console.log("Sort type changed to:", value, currentQuery);
                             router.push(`/search?` + currentSearchParams.toString());
                         }}
                         options={[

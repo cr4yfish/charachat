@@ -18,6 +18,5 @@ export async function GET() {
         return Response.json({ error: "Failed to fetch stats" }, { status: 500 });
     }
 
-    console.log("Fetched total character stats:", stats[0]);
     return Response.json(stats[0]);
 }

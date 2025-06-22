@@ -13,8 +13,6 @@ export async function uploadImageToImgur(base64: string): Promise<string> {
         throw new Error(e);
     });
 
-    console.log("Imgur upload response:", imgurResponse);
-
     return imgurResponse.data.link
 }
 

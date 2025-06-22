@@ -77,7 +77,6 @@ const profileFormatter = async (db: any): Promise<Profile> => {
 
 
 export const getProfile = cache(async (userid: string) => {
-    console.log("GET PROFILE CALLED WITHOUT CACHE");
     const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from("profiles")
         .select(`*`)

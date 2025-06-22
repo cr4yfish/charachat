@@ -12,7 +12,6 @@ export const getStats = cache(async (tableName: string, limit=30): Promise<Stats
     if (error) {
         throw new Error(error.message)
     }
-    console.log("Fetched stats from table:", tableName, "Data:", data)
     return data
 })
 

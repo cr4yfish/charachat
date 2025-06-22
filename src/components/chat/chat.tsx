@@ -49,7 +49,6 @@ export const PureChat = (props: Props) => {
     initialMessages: props.initialMessages,
     onFinish: (message) => {
       // Handle the message when the chat is finished
-      console.log("Chat finished with message:", message);
 
       // If the pathname ID does not match the chat ID, redirect to the chat page
       if(!pathnameID) { router.replace("/chat/" + props.chatId); } 
