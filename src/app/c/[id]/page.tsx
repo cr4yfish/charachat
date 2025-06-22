@@ -6,11 +6,11 @@ import { Metadata } from "next";
 import { getCharacter } from "@/lib/db/character";
 import ImageWithBlur from "@/components/image/imageWithBlur";
 import Username from "@/components/user/username";
-import { HeartIcon, LockIcon, MessageCircleIcon } from "lucide-react";
-// import CharacterPageActions from "@/components/character/character-page-actions";
+import {LockIcon, MessageCircleIcon } from "lucide-react";
 import CharacterPageTabs from "@/components/character/character-page-tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import CharacterPageActions from "@/components/character/character-page-actions";
 
 type Params = Promise<{ id: string }>
 
@@ -58,6 +58,8 @@ export default async function CharacterView({ params }: { params: Params }) {
     //         console.error("Error getting palette, skipping it:", err, "Character:", character.name);
     //         return null;
     // });
+
+ 
 
     return (
         <>
@@ -119,18 +121,9 @@ export default async function CharacterView({ params }: { params: Params }) {
                             </div>
                         }
 
-                        <div className="flex flex-row flex-wrap gap-2 text-sm dark:text-zinc-200">
-                            
-                            <div className="flex items-center gap-2">
-                                <MessageCircleIcon />
-                                <span>{character.chats} Chats</span>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <HeartIcon />
-                                <span>{character.likes} Likes</span>
-                            </div>
-                        </div>
+                        <CharacterPageActions 
+                            character={character}
+                        />
 
                         <div className="dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400 !select-none">
                             <Markdown>{character.description}</Markdown>

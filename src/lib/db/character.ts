@@ -456,7 +456,7 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
         .from(characterTableName)
         .select(characterMatcher)
         .eq("owner_clerk_user_id", user.id)
-        .order((props.args?.sort as string) ?? "created_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
@@ -523,6 +523,10 @@ export const isCharacterLiked = cache(async(characterId: string, userId: string)
     return data.length > 0; 
 })
 
+/**
+ * @deprecated
+ * @param characterId 
+ */
 export const likeCharacter = async(characterId: string): Promise<void> => {
     const { data: { user } } = await (await createClient()).auth.getUser();
 
@@ -542,6 +546,10 @@ export const likeCharacter = async(characterId: string): Promise<void> => {
     }
 }
 
+/**
+ * @deprecated
+ * @param characterId 
+ */
 export const unlikeCharacter = async(characterId: string): Promise<void> => {
     const { data: { user } } = await (await createClient()).auth.getUser();
 
@@ -559,3 +567,65 @@ export const unlikeCharacter = async(characterId: string): Promise<void> => {
         throw error;
     }
 }
+
+
+export const bookmarkCharacter = async (characterId: string): Promise<void> => {
+    const user = await currentUser();
+    if(!user?.id) {
+        throw new Error("bookmarkCharacter: User not found");
+    }
+    const { error } = await (await createClient())
+        .from("character_bookmarks")
+        .insert({
+            character: characterId,
+            clerk_user_id: user.id
+        });
+    if (error) {
+        console.error("Error bookmarking character", error);
+        throw error;
+    }
+    revalidateTag("bookmarked-characters");
+}
+
+export const removeBookmarkCharacter = async (characterId: string): Promise<void> => {
+    const user = await currentUser();
+    if(!user?.id) {
+        throw new Error("removeBookmarkCharacter: User not found");
+    }
+    const { error } = await (await createClient())
+        .from("character_bookmarks")
+        .delete()
+        .eq("character", characterId)
+        .eq("clerk_user_id", user.id);
+    if (error) {
+        console.error("Error removing bookmark character", error);
+        throw error;
+    }
+    revalidateTag("bookmarked-characters");
+}
+
+export const getBookmarkedCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+    const user = await currentUser();
+
+    if(!user?.id) {
+        throw new Error("getLikedCharacters: User not found");
+    }
+
+    const { data, error } = await (await createClient())
+        .from("character_bookmarks")
+        .select(`
+            *,
+            characters!character_bookmarks_character_fkey (*)
+        `)
+        .eq("clerk_user_id", user.id)
+        .order("created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1);
+
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async (db: any) => {
+        return await privateCharacterFormatter(db.characters as any);
+    }));
+})
