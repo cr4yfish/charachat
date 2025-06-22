@@ -4,7 +4,7 @@ import { LLM } from "@/lib/ai/types";
 import { getLLMById, getLLMGroupedByProvider } from "@/lib/ai/utils";
 import { API_ROUTES } from "@/lib/apiRoutes";
 import { Persona } from "@/types/db";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import {
   Card,
@@ -62,6 +62,8 @@ const LLMOverview = ({nextStep} : { nextStep: () => void }) => {
     const { llmCookie } = useLLMCookie();
     const [selectedLLM, setSelectedLLM] = useState<LLM | null>(null);
 
+    const { data: profile } = useSWR(API_ROUTES.GET_OWN_PROFILE, fetcher);
+
     const handleLLMSelected = async (llm: LLM) => {
         setSelectedLLM(llm);
 
@@ -93,6 +95,10 @@ const LLMOverview = ({nextStep} : { nextStep: () => void }) => {
         }
     }, [llmCookie, setSelectedLLM, selectedLLM, nextStep])
 
+    const groups = useMemo(() => {
+        return getLLMGroupedByProvider(profile);
+    }, [profile]);
+
     return (
         <div className="flex flex-col gap-2 w-full overflow-y-auto max-h-[400px]">
             {/* {LLMsWithAPIKeys(profile).map(llm => (
@@ -104,7 +110,7 @@ const LLMOverview = ({nextStep} : { nextStep: () => void }) => {
                 />
             ))} */}
             
-            {getLLMGroupedByProvider().map(group => (
+            {groups.map(group => (
                 <div key={group.provider} className="flex flex-col gap-2">
                     <div className="flex flex-row items-center gap-2">
                         <LLMIcon provider={group.provider} width={16} />
