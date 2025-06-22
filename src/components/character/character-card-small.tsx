@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import ImageWithBlur from "../image/imageWithBlur";
 import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
-import {  LockIcon, MessageCircleIcon } from "lucide-react";
+import {  EyeOffIcon, LockIcon, MessageCircleIcon, ShieldIcon } from "lucide-react";
 import { memo, useState } from "react";
 
 type Props = {
@@ -25,8 +25,9 @@ function PureCharacterCard(props: Props) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
             >
-                <Card className={cn("h-[72px] w-full p-3 dark:bg-slate-800/5 border dark:border-none shadow-none dark:hover:bg-slate-800/30 flex flex-row items-center justify-start gap-3 transition-all", {
-                    "dark:bg-slate-800/40": isHovered
+                <Card className={cn("h-[72px] w-full overflow-hidden p-3 dark:bg-slate-800/5 border shadow-none dark:hover:bg-slate-800/30 flex flex-row items-center justify-start gap-3 transition-all", {
+                    "dark:bg-slate-800/40": isHovered,
+                    "dark:border-emerald-400": props.data.is_private,
                 })}  >
 
                     <div className="relative size-[52px] rounded-lg overflow-hidden shrink-0">
@@ -42,7 +43,7 @@ function PureCharacterCard(props: Props) {
                     </div>
 
 
-                    <CardContent className="flex flex-col flex-1 gap-1 p-0 w-full ">
+                    <CardContent className="flex flex-col flex-1 gap-1 p-0 w-full overflow-hidden ">
 
                         <div className="flex flex-col">
                             <div className="flex flex-col">
@@ -55,7 +56,7 @@ function PureCharacterCard(props: Props) {
                         </div>
 
                         
-                        <div className="flex flex-row items-center gap-2 text-muted-foreground w-full ">
+                        <div className="flex flex-row items-center justify-between gap-2 text-muted-foreground w-full ">
                             {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
                             <>
                                 <div className="flex items-center gap-1 text-xs">
@@ -64,12 +65,28 @@ function PureCharacterCard(props: Props) {
                                 </div>
                             </>
                             } 
-                            {props.data.is_private &&
-                                <div className="flex gap-1 items-center text-green-500">
-                                    <LockIcon color="currentColor" />
-                                    <span className="text-xs">Private</span>
-                                </div>
-                            }
+                            <div className="flex items-center gap-1">
+                                {props.data.is_private &&
+                                    <div className="flex gap-1 items-center text-emerald-400">
+                                        <LockIcon size={12} color="currentColor" />
+                                        <span className="text-xs sr-only ">Private</span>
+                                    </div>
+                                }
+
+                                {props.data.is_unlisted && 
+                                    <div className="flex gap-1 items-center text-sky-400">
+                                        <EyeOffIcon size={12} color="currentColor" />
+                                        <span className="text-xs sr-only ">Unlisted</span>
+                                    </div>
+                                }
+                                
+                                {props.data.hide_definition && 
+                                    <div className="flex gap-1 items-center text-orange-400">
+                                        <ShieldIcon size={12} color="currentColor" />
+                                        <span className="text-xs sr-only  ">Definition hidden</span>
+                                    </div>
+                                }
+                            </div>
                         </div>
                             
                     </CardContent>

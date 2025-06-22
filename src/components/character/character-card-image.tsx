@@ -1,32 +1,40 @@
 "use client";
 
 import { Character } from "@/types/db";
-import { truncateText } from "@/lib/utils";
+import { cn, truncateText } from "@/lib/utils";
 import ImageWithBlur from "../image/imageWithBlur";
-import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
 import { memo } from "react";
-import { MessageCircleIcon } from "lucide-react";
+import { LockIcon, MessageCircleIcon } from "lucide-react";
+import ConditionalLink from "../conditional-link";
 
 type CardProps = {
     data: Character;
+    hasLink?: boolean; // Optional prop to determine if the card should be a link
 }
 
 const PureImageCard = (props: CardProps) => {
 
     return (
-        <Link href={`/c/${props.data.id}`} className="w-full overflow-visible">
-                <Card className="h-[200px] w-[150px] relative py-3 border shadow-none transition-all hover:transform-3d" >
-                   
+        <ConditionalLink active={props.hasLink || true} href={`/c/${props.data.id}`} className="w-full overflow-visible">
+                <Card className={cn("h-[200px] w-[150px] relative py-3 border shadow-none transition-all", {  " border-emerald-400 ": props.data.is_private })} >
+                   {props.data.is_private && (
+                    <div className="absolute top-0 right-0 text-emerald-400 pt-2 pr-2 z-10 flex items-center gap-1">
+                        <LockIcon size={12} color="currentColor" />
+                        <span className="text-xs">Private</span>
+                    </div>
+                   )}
                     <CardContent className="absolute z-10 bottom-0 left-0 w-full p-0 overflow-visible rounded-b-2xl">
                         <div className="flex flex-col pb-2 px-3 pt-1 z-10 relative">
                             <h3 className="font-medium text-sm truncate text-neutral-200 ">{truncateText(props.data.name, 15)}</h3>
                             <div className="flex flex-row justify-between items-center text-xs text-muted-foreground opacity-75">
                                 {props.data.description && <p className=" truncate w-[80%] " >{props.data.description}</p>}
-                                <span className="flex items-center gap-1 ml-0.5 ">
-                                    <MessageCircleIcon size={12} /> 
-                                    {props.data.chats?.toLocaleString()}
-                                </span>
+                                {props.data.chats && props.data.chats > 0 && 
+                                    <span className="flex items-center gap-1 ml-0.5 ">
+                                        <MessageCircleIcon size={12} /> 
+                                        {props.data.chats?.toLocaleString()}
+                                    </span>
+                                }
                             </div>
                            
                         </div>
@@ -45,7 +53,7 @@ const PureImageCard = (props: CardProps) => {
                         />
                     </div>
                 </Card>
-        </Link>
+        </ConditionalLink>
     )
 }
 
