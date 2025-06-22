@@ -53,24 +53,21 @@ const PureTopBar = (props: Props) => {
                             </motion.div>
                         }
 
-                        <span className="font-bold truncate " >
+                        <Link href={"/c/" + props.shallowCharacter.id} className="font-bold truncate " >
                             {props.shallowCharacter?.name}
-                        </span>
+                        </Link>
                     </div>
             
                 </div>
                 
-
-    
-
                 {props.isLoggedIn && 
                 <ChatSettings 
                     chatId={props.chatId} 
                     characterId={props.shallowCharacter?.id} 
                 />}
-            </div>
-            <div className="absolute -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
 
+                <div className="absolute -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
+            </div>
         </header>
         </>
     );
