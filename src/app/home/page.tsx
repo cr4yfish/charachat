@@ -1,4 +1,8 @@
-import { HomePage } from "@/components/home/home-page";
+import SavedCharacters from "@/components/home/saved-characters";
+import { YourCharacters } from "@/components/home/your-characters";
+import { YourProfile } from "@/components/home/your-profile";
+import { getUserCharacters } from "@/lib/db/character";
+import { LIMITS } from "@/lib/limits";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -14,9 +18,24 @@ export default async function ChatsPage() {
         );
     }
 
+    const initialOwnCharacters = await getUserCharacters({
+        cursor: 0,
+        limit: LIMITS.MAX_CHARACTERS_PER_PAGE
+    })
+
     return (
-        <div className="flex flex-col gap-4 h-screen max-w-screen overflow-hidden mt-[75px] px-4">       
-            <HomePage userid={user.id} />
+        <div className=" h-screen max-w-screen overflow-x-hidden overflow-y-auto pt-[75px] pb-[100px] px-4">     
+            
+            <div className="flex flex-col gap-4 w-full h-fit">
+                
+            
+                <YourProfile userid={user.id} />
+
+                <YourCharacters initialOwnCharacters={initialOwnCharacters} />
+
+                <SavedCharacters />
+
+            </div>
         </div>
     );
 }
