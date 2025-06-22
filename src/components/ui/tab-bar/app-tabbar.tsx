@@ -5,8 +5,15 @@ import { Tab, TabBar } from "./tab-bar";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
+import { useSidebar } from "../sidebar";
 
-const tabs = [
+export type NavItem = {
+    name: string;
+    href: string;
+    icon: React.ReactNode;
+}
+
+export const tabs: NavItem[] = [
     { name: "Explore", href: "/", icon:  <CompassIcon />},
     { name: "Chats", href: "/chats", icon: <MessageCircleIcon /> },
     { name: "Home", href: "/home", icon: <HomeIcon /> }
@@ -14,6 +21,9 @@ const tabs = [
 
 export function AppTabBar() {
     const pathname = usePathname();
+    const { isMobile } = useSidebar();
+
+    if(!isMobile) return null; // Hide tab bar on desktop
 
     return (
         <motion.div 

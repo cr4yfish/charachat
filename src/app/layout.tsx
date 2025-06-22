@@ -9,6 +9,8 @@ import { TopBar } from '@/components/ui/top-bar/top-bar'
 import { GlobalLiquidFilter } from '@/components/ui/liquid'
 import { Toaster } from 'sonner'
 import NextTopLoader from 'nextjs-toploader';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/ui/app-sidebar'
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -74,13 +76,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className='dark' >
-        <body className={`${montserrat.className} ${geistMono.variable} antialiased h-screen overflow-y-hidden`}>
-          <Toaster position={"top-center"} />
-          <NextTopLoader color='#00a6f4' showSpinner={false} />
-          <TopBar />
-          <AppTabBar />
-          <GlobalLiquidFilter />
-          {children}
+        <body className={`${montserrat.className} ${geistMono.variable} antialiased h-screen overflow-hidden`}>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <Toaster position={"top-center"} />
+              <NextTopLoader color='#00a6f4' showSpinner={false} />
+              <TopBar />
+              <AppTabBar />
+              <GlobalLiquidFilter />
+              {children}
+            </SidebarInset>
+          </SidebarProvider>
         </body>
       </html>
     </ClerkProvider>

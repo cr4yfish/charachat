@@ -26,7 +26,7 @@ export default async function Home() {
   const intialCharactersForIntialCategory = await getInitialCachedCharactersByCategory(initialCurrentCategory.id);
 
   return (
-    <div className="flex flex-col justify-center max-[2133px]:block max-h-full w-full overflow-y-auto overflow-x-hidden pb-[200px]">
+    <div className="block max-h-full h-screen w-full overflow-y-auto overflow-x-hidden">
 
       <Spotlight init={spotlight} />
 
