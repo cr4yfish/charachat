@@ -445,7 +445,7 @@ const PureMessage = (props: MessageProps) => {
     }
 
     return (
-        <div id={props.message.id} className={cn("w-full flex flex-col mb-4 relative", {
+        <div id={props.message.id} className={cn("w-full overflow-hidden flex flex-col mb-4 relative", {
             "items-end": props.message.role === "user",
         })}>
             {props.message.role === "user" ? 
