@@ -37,7 +37,7 @@ const PureChatCard = ({chat, small}: Props) => {
                         <div className="relative size-[24px] shrink-0 rounded-full overflow-hidden border border-teal-200/80">
                             <Image 
                                 src={safeParseLink(chat.character.image_link)}
-                                fill alt="" className="object-cover"
+                                fill alt="" className="object-cover object-top"
                             />
                         </div>
                         }
@@ -62,7 +62,7 @@ const PureChatCard = ({chat, small}: Props) => {
                 <Card className="p-4 w-full bg-transparent border-none hover:bg-muted transition-colors cursor-pointer flex flex-col gap-2 overflow-hidden">
                     <CardContent className="flex items-center gap-3 p-0 w-full overflow-hidden">
                         <div className="overflow-hidden relative size-14 shrink-0 p-4 rounded-full">
-                            {chat.character.image_link && <Image src={chat.character.image_link} alt="" fill />}
+                            {chat.character.image_link && <Image src={chat.character.image_link} alt="" fill className="object-cover object-top" />}
                         </div>
                         
                         <div className="flex flex-col gap-1.5 w-full overflow-hidden">
