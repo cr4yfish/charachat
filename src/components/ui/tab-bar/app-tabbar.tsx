@@ -39,7 +39,6 @@ export function AppTabBar() {
                     icon={<SearchIcon />}
                     href="/search"
                     isButton
-                    onClick={() => console.log("Search clicked")}
                 />
             </TabBar>
          </motion.div>
