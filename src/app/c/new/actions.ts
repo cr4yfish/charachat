@@ -1,6 +1,6 @@
 "use server";
 
-import { ImportCharType } from "@/components/character/import/importer";
+import { ImportCharType } from "@/components/new-character/import/importer";
 import { COOKIE_NAMES } from "@/lib/cookieNames";
 import { TIMINGS } from "@/lib/timings";
 import { Character } from "@/types/db";

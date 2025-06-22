@@ -1,4 +1,4 @@
-import { Importer } from "@/components/character/import/importer";
+import { Importer } from "@/components/new-character/import/importer";
 import { searchSillyTavern } from "../actions";
 
 export default async function ImportPage() {
