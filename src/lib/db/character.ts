@@ -14,6 +14,7 @@ import { revalidateTag, unstable_cache } from "next/cache";
 import { LIMITS } from "../limits";
 import { TIMINGS } from "../timings";
 import { Vibrant } from "node-vibrant/node";
+import { getProfile } from "./profile";
 
 const characterMatcher = `
     *,
@@ -146,6 +147,11 @@ export const createCharacter = async (newChar: Character): Promise<Character> =>
         char = await encryptCharacter(newChar, key);
     }
     
+    const profile = await getProfile(user.id);
+
+    if (!profile || !profile.user) {
+        throw new Error("createCharacter: During the Beta phase you must have migrated your account from v1");
+    }
 
     const { data, error } = await (await createClient())
         .from("characters")
@@ -153,7 +159,7 @@ export const createCharacter = async (newChar: Character): Promise<Character> =>
             ...char,
             // TEMP WORKAROUND FOR TESTING PHASE
             // TODO: REMOVE THIS 
-            owner: process.env.MIGRATION_HELPER_USER_ID!, 
+            owner: profile?.user, 
             owner_clerk_user_id: user.id,
             is_private: newChar.is_private ?? false,
             is_unlisted: newChar.is_unlisted ?? false
