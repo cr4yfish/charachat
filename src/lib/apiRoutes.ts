@@ -8,6 +8,7 @@ export const API_ROUTES = {
     // Character related routes
     GET_CHARACTER_BY_ID: "/api/characters?id=",
     GET_CHARACTERS: "/api/characters",
+    GET_OWN_CHARACTERS: "/api/characters/own",
     GET_CHARACTERS_BY_CATEGORY: "/api/characters/category",
     GET_TRENDING_CHARACTERS: "/api/characters/trending",
     GET_NEWEST_CHARACTERS: "/api/characters/newest",

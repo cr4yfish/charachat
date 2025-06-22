@@ -417,7 +417,7 @@ export const searchCharactersInfinite = cache(async (props: LoadMoreProps): Prom
 })
 
 export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data: { user }} = await (await createClient()).auth.getUser();
+    const user = await currentUser();
 
     if(!user?.id) {
         throw new Error("getUserChar: User not found");
@@ -426,7 +426,7 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
     const { data, error } = await (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
-        .eq("owner", user.id)
+        .eq("owner_clerk_user_id", user.id)
         .order((props.args?.sort as string) ?? "created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1);
 
