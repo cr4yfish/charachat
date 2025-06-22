@@ -68,11 +68,19 @@ export function decryptMessage(encryptedMessage: string, key: Buffer): string {
         return encryptedMessage;
     };
 
-    const msgWithoutPrefix = encryptedMessage.slice(_ENCRYPTION_MARKER.length); // Removes the encryption marker
-    const [ivHex, encrypted] = msgWithoutPrefix.split(":"); // Splits the init vector from the encrypted message itself
-    const iv = Buffer.from(ivHex, "hex");
-    const decipher = crypto.createDecipheriv(_ENCRYPTION_STANDARD, key, iv);
-    let decrypted = decipher.update(encrypted, "hex", "utf8");
-    decrypted += decipher.final("utf8");
-    return decrypted;
+    try {
+        const msgWithoutPrefix = encryptedMessage.slice(_ENCRYPTION_MARKER.length); // Removes the encryption marker
+        const [ivHex, encrypted] = msgWithoutPrefix.split(":"); // Splits the init vector from the encrypted message itself
+        const iv = Buffer.from(ivHex, "hex");
+        const decipher = crypto.createDecipheriv(_ENCRYPTION_STANDARD, key, iv);
+        let decrypted = decipher.update(encrypted, "hex", "utf8");
+        decrypted += decipher.final("utf8");
+        return decrypted;
+    } catch (error) {
+        console.error("Decryption failed:", error);
+        // Return the original message if decryption fails
+        // This will display the encrypted message as is
+        // "the show must go on"
+        return encryptedMessage; 
+    }
 }
