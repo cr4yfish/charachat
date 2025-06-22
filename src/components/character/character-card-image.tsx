@@ -16,7 +16,7 @@ type CardProps = {
 const PureImageCard = (props: CardProps) => {
 
     return (
-        <ConditionalLink active={props.hasLink || true} href={`/c/${props.data.id}`} className="w-full overflow-visible">
+        <ConditionalLink active={props.hasLink || true} href={`/c/${props.data.id}`} className="w-fit overflow-visible">
                 <Card className={cn("h-[200px] w-[150px] relative py-3 border shadow-none transition-all", {  " border-emerald-400 ": props.data.is_private })} >
                    {props.data.is_private && (
                     <div className="absolute top-0 right-0 text-emerald-400 pt-2 pr-2 z-10 flex items-center gap-1">
