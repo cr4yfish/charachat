@@ -4,6 +4,7 @@ import React, { memo, } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
+import CodeBlock from './code-block';
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
@@ -107,6 +108,10 @@ const components: Partial<Components> = {
       </img>
     );
   },
+  code: ({ node, children, ...props }) => {
+    return <CodeBlock {...props}>{children}</CodeBlock>;
+  }
+  
 };
 
 
