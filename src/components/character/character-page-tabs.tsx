@@ -22,18 +22,17 @@ export default function CharacterPageTabs(props: Props) {
         :
         <div className="w-full flex justify-start items-start flex-col dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0 !select-none">
 
-            <Accordion collapsible type="single" defaultValue="description" className="w-full prose-h2:m-0">
+            <Accordion collapsible type="single" defaultValue="bio" className="w-full prose-h2:m-0">
 
-                {props.character.description && 
-                <AccordionItem value="description" title="Description" className="prose-h2:m-0 prose-p:m-0">
+                {props.character.bio && 
+                <AccordionItem value="bio" title="Bio" className="prose-h2:m-0 prose-p:m-0">
                     <AccordionTrigger className="cursor-pointer">
-                        <h2 className="text-lg font-bold">Description</h2>
+                        <h2 className="text-lg font-bold">Bio</h2>
                     </AccordionTrigger>
                     <AccordionContent className="dark:prose-invert prose-p:m-0">
-                        <Markdown>{props.character.description}</Markdown>
+                        <Markdown>{props.character.bio}</Markdown>
                     </AccordionContent>
-                </AccordionItem>
-                }
+                </AccordionItem>}
 
                 {props.character.intro && 
                 <AccordionItem value="introduction" title="Introduction" className="prose-h2:m-0 prose-p:m-0">
@@ -45,27 +44,6 @@ export default function CharacterPageTabs(props: Props) {
                     </AccordionContent>
                 </AccordionItem>
                 }
-
-                {props.character.first_message && 
-                <AccordionItem value="firstmessage" title="First Message" className="prose-h2:m-0 prose-p:m-0">
-                    <AccordionTrigger className="cursor-pointer">
-                        <h2 className="text-lg font-bold">First Message</h2>
-                    </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
-                        <Markdown>{props.character.first_message}</Markdown>
-                    </AccordionContent>
-                </AccordionItem>
-                }
-
-                {props.character.bio && 
-                <AccordionItem value="bio" title="Bio" className="prose-h2:m-0 prose-p:m-0">
-                    <AccordionTrigger className="cursor-pointer">
-                        <h2 className="text-lg font-bold">Bio</h2>
-                    </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
-                        <Markdown>{props.character.bio}</Markdown>
-                    </AccordionContent>
-                </AccordionItem>}
 
                 {props.character.personality && 
                 <AccordionItem value="personality" title="Personality" className="prose-h2:m-0 prose-p:m-0">
@@ -85,6 +63,17 @@ export default function CharacterPageTabs(props: Props) {
                     </AccordionTrigger>
                     <AccordionContent className="dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.scenario}</Markdown>
+                    </AccordionContent>
+                </AccordionItem>
+                }
+
+                {props.character.first_message && 
+                <AccordionItem value="firstmessage" title="First Message" className="prose-h2:m-0 prose-p:m-0">
+                    <AccordionTrigger className="cursor-pointer">
+                        <h2 className="text-lg font-bold">First Message</h2>
+                    </AccordionTrigger>
+                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                        <Markdown>{props.character.first_message}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
                 }

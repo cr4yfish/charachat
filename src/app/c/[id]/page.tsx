@@ -64,7 +64,7 @@ export default async function CharacterView({ params }: { params: Params }) {
     return (
         <>
         <div className="relative w-full h-full min-h-full">
-            <div className="fixed top-0 left-0 w-full h-[75px] bg-gradient-to-b from-black/50 to-transparent z-50">
+            <div className="fixed top-0 left-0 w-full h-[75px] bg-gradient-to-b from-black/50 to-transparent z-50 ml-[260px] pr-[260px]">
                 <div className="relative size-full px-4 py-2 flex items-center justify-between">
                     <span className="text-3xl font-bold">{character.name}</span> 
 
@@ -125,7 +125,7 @@ export default async function CharacterView({ params }: { params: Params }) {
                             character={character}
                         />
 
-                        <div className="dark:prose-invert prose-p:text-sm dark:prose-p:text-neutral-400 !select-none">
+                        <div className="dark:prose-invert max-w-[690px] !select-none">
                             <Markdown>{character.description}</Markdown>
                         </div>
                         
