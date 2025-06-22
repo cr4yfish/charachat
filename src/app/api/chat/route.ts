@@ -132,7 +132,14 @@ export async function POST(req:Request) {
         console.error("Profile not found for user:", user.id);
         return new Response(ERROR_MESSAGES.PROFILE_NOT_FOUND, { status: 404 });
     }
-    const apiKey = await getModelApiKey(profile, modelId)
+    let apiKey = undefined;
+
+    try {
+        apiKey = await getModelApiKey(profile, modelId)
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return new Response(errorMessage, { status: 400 });
+    }
 
     const model = await getLanguageModel({
         modelId: modelId, apiKey

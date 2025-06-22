@@ -7,13 +7,14 @@ import { Profile } from "@/types/db";
 import { ModelId } from "./types";
 import { LanguageModelV1 } from "ai";
 import { getAnthropic, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getXai } from "./providers";
+import { ERROR_MESSAGES } from "../errorMessages";
 
 export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promise<string> {
     const selectedModelId = modelid || profile.default_llm as ModelId;
     const selectedModel = getLLMById(selectedModelId);
 
     if(!selectedModel) {
-        throw new Error("Model not found: " + selectedModelId);
+        throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
     }
 
     // This can be undefined if user has no API key for this model
@@ -21,7 +22,7 @@ export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promi
 
     // User doesnt have one and also no env variable set
     if(!encryptedAPIKey) {
-        throw new Error("You do not have access to this model: " + selectedModel);
+        throw new Error(ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED);
     }
 
     // encryptedApiKey is set and model is free
@@ -36,7 +37,7 @@ export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promi
         const key = await getKeyServerSide();
         return decryptMessage(encryptedAPIKey, key);
     } 
-    throw new Error("Could not get API Key for this model: " + selectedModel);
+    throw new Error(ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED);
 }
 
 type GetLanguageModelProps = {
@@ -50,7 +51,7 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
     
     const model = getLLMById(modelId as ModelId);
     if(!model) {
-        throw new Error("Model not found: " + modelId);
+        throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
     }
 
     switch(model.provider) {
@@ -96,6 +97,6 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
             return getDeepSeek(modelId, apiKey);
             
         default:
-            throw new Error("Model not found");
+            throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
     }
 }

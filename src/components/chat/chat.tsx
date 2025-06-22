@@ -96,6 +96,14 @@ export const PureChat = (props: Props) => {
           toast.error(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
           break;
 
+        case ERROR_MESSAGES.LLM_MODEL_NOT_FOUND:
+          toast.error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
+          break;
+
+        case ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED:
+          toast.error(ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED);
+          break;
+
         case ERROR_MESSAGES.UNAUTHORIZED:
           // toast.error(ERROR_MESSAGES.UNAUTHORIZED);
 

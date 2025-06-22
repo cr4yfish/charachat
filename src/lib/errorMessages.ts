@@ -21,6 +21,8 @@ export const ERROR_MESSAGES = {
     CHARACTER_ID_REQUIRED: "Character ID is required to proceed.",
 
     LLM_MODEL_REQUIRED: "LLM model is required to proceed.",
+    LLM_MODEL_NOT_FOUND: "LLM model not found. Please check the selected model and try again.",
+    LLM_MODEL_ACCESS_DENIED: "You do not have access to this LLM model. Please check your API key and permissions.",
 
     USER_MESSAGE_NOT_FOUND: "No user message found in the chat. Please ensure you have sent a message before proceeding.",
 
