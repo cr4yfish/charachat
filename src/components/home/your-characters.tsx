@@ -5,16 +5,9 @@ import { fetcher } from "@/lib/utils";
 import { Character } from "@/types/db";
 import useSWR from "swr";
 import ImageCharacterCard from "../character/character-card-image";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
 
 export const PureYourCharacters = () => {
-    const { data: characters, isLoading } = useSWR<Character[]>(API_ROUTES.GET_OWN_CHARACTERS, fetcher, {
-        revalidateOnFocus: false,
-        revalidateIfStale: false,
-        revalidateOnReconnect: false,
-        revalidateOnMount: false,
-        dedupingInterval: TIMINGS_MILLISECONDS.ONE_HOUR
-    })
+    const { data: characters, isLoading } = useSWR<Character[]>(API_ROUTES.GET_OWN_CHARACTERS, fetcher)
 
     return (
         <div className="flex flex-col">
