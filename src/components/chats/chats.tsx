@@ -3,16 +3,51 @@
 import { API_ROUTES } from "@/lib/apiRoutes";
 import { fetcher } from "@/lib/utils";
 import { Chat } from "@/types/db";
-import useSWR from "swr";
 import { ChatCard } from "./chat-card";
 import { useMemo } from "react";
 import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import useSWRInfinite from "swr/infinite";
+import { Button } from "../ui/button";
+import { LIMITS } from "@/lib/limits";
+import Spinner from "../ui/spinner";
 
 export default function Chats() {
-    const { data } = useSWR<Chat[]>(API_ROUTES.GET_CHATS, fetcher, {
+    const { data, setSize, size, isValidating } = useSWRInfinite<Chat[]>(
+        (pageIndex, previousPageData) => {
+            // If there is no previous page data, return the first page URL
+            if (previousPageData && previousPageData.length === 0) return null;
+            const cursor = pageIndex * LIMITS.MAX_CHATS_PER_PAGE; 
+            return API_ROUTES.GET_CHATS + `?cursor=${cursor}`; // Fetch all chats
+        }, fetcher, {
         dedupingInterval: TIMINGS_MILLISECONDS.ONE_HOUR, // 1 hour
-        focusThrottleInterval: TIMINGS_MILLISECONDS.ONE_MINUTE, // 1 minute
     }) 
+
+    const chats = useMemo(() => {
+        if (!data) return [];
+        
+        // De-duplicate chats by ID
+        const chatMap: Record<string, Chat> = {};
+        data.forEach(page => {
+            page.forEach(chat => {
+                if (!chatMap[chat.id]) {
+                    chatMap[chat.id] = chat;
+                }
+            });
+        });
+        return Object.values(chatMap);
+    }, [data]);
+
+    const handleLoadMore = () => {
+        // This function can be used to load more chats if needed
+        setSize(size + 1);
+    }
+
+    const hasMore = useMemo(() => {
+        if (!data || data.length === 0) return false;
+        // Check if the last page has less than the limit, which means there are no more chats to load
+        const lastPage = data[data.length - 1];
+        return lastPage.length >= LIMITS.MAX_CHATS_PER_PAGE;
+    }, [data]);
 
     /**
      * Group chats by date using either last_message_at (might be undefined) or created_at.
@@ -23,7 +58,7 @@ export default function Chats() {
      * - Rest
      */
     const dateGroupedChats = useMemo(() => {
-        if (!data) return [];
+        if (!chats) return [];
 
         const today = new Date();
         const yesterday = new Date(today);
@@ -38,7 +73,7 @@ export default function Chats() {
             "Older": []
         };
 
-        data.forEach(chat => {
+        chats.forEach(chat => {
             const date = chat.last_message_at || chat.created_at;
             if (!date) return;
 
@@ -58,11 +93,11 @@ export default function Chats() {
             date: key,
             chats
         }));
-    }, [data])
+    }, [chats])
     
     return (
         <>
-        <div className="flex flex-col items-center justify-start h-screen w-full p-4 py-[75px] overflow-y-auto ">
+        <div className="flex flex-col items-center justify-start h-screen w-full p-4 pt-[75px] pb-[100px] overflow-y-auto ">
 
             {dateGroupedChats.map(({ date, chats }) => (
                 chats.length > 0 && (
@@ -76,6 +111,17 @@ export default function Chats() {
                     </div>
                 )
             ))}
+
+            {hasMore && 
+                <Button 
+                    disabled={isValidating} 
+                    onClick={handleLoadMore}
+                    variant={"ghost"}
+                    className="mb-4"
+                    >
+                        {isValidating && <Spinner />}
+                        {isValidating ? "Loading" : "Load more"}
+                </Button>}
 
         </div>
         </>
