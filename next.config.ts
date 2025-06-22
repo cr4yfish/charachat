@@ -1,6 +1,17 @@
 import type { NextConfig } from 'next';
+import withPWAInit from "@ducanh2912/next-pwa";
 
-const nextConfig: NextConfig = {
+const withPWA = withPWAInit({
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  cacheStartUrl: true,
+  dynamicStartUrl: true,
+  dynamicStartUrlRedirect: "/login"
+});
+
+export default withPWA({
+  // Your Next.js config
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -20,9 +31,7 @@ const nextConfig: NextConfig = {
       "onnxruntime-node$": false, // Disable onnxruntime-node for browser environments
       "sharp$": false, // optional - Disable sharp package (used by some image processing packages)
     };
-
     return config;
   }
-};
+}) as NextConfig
 
-export default nextConfig;
