@@ -37,12 +37,16 @@ export const encryptProfile = async (profile: Profile, key: Buffer): Promise<Pro
 export const decryptProfile = async (profile: Profile, key: Buffer): Promise<Profile> => {
     try {
 
-        // decrypt api keys
-        if (profile.api_keys) {
-            profile.api_keys = profile.api_keys.map(apiKey => ({
-                ...apiKey,
-                encrypted_api_key: decryptMessage(apiKey.encrypted_api_key, key)
-            }));
+        try {
+            // decrypt api keys
+            if (profile.api_keys) {
+                profile.api_keys = profile.api_keys.map(apiKey => ({
+                    ...apiKey,
+                    encrypted_api_key: decryptMessage(apiKey.encrypted_api_key, key)
+                }));
+            }
+        } catch {
+            profile.api_keys = []; // Reset api keys if decryption fails
         }
 
         return {
@@ -51,8 +55,7 @@ export const decryptProfile = async (profile: Profile, key: Buffer): Promise<Pro
             last_name: await decryptMessageBackwardsCompatible(profile.last_name ?? "", key),
             bio: await decryptMessageBackwardsCompatible(profile.bio ?? "", key),
         }
-    } catch (error) {
-        console.error("Error decrypting profile", error);
+    } catch {
         return profile;
     }
 }
@@ -113,12 +116,16 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
 
     // make sure any api keys are encrypted
     // or encrypt them now if they are not
-    if (profile.api_keys) {
-        const key = await getKeyServerSide();
-        profile.api_keys = profile.api_keys.map(apiKey => ({
-            ...apiKey,
-            encrypted_api_key: encryptMessage(apiKey.encrypted_api_key, key)
-        }));
+    try {
+        if (profile.api_keys) {
+            const key = await getKeyServerSide();
+            profile.api_keys = profile.api_keys.map(apiKey => ({
+                ...apiKey,
+                encrypted_api_key: encryptMessage(apiKey.encrypted_api_key, key)
+            }));
+        }
+    } catch {
+        profile.api_keys = []; // Reset api keys if encryption fails
     }
 
     const res = await getProfile(profile.clerk_user_id);
