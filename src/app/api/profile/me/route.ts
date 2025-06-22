@@ -27,7 +27,7 @@ export async function GET() {
         },
         ['user-profile-'+id], // cache key
         {
-            revalidate: TIMINGS.ONE_HOUR, // cache for two hours
+            revalidate: TIMINGS.ONE_MINUTE, // cache for two hours
             tags: ['user', 'user-profile-'+id]
         }
     )();
