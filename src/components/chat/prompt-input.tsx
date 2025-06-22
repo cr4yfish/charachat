@@ -133,7 +133,7 @@ const PurePromptInput = (props: Props) => {
     }, [])
 
     return (
-        <div className='fixed bottom-0 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1'>
+        <div className={cn('absolute bottom-0 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1')}>
             <div className="flex flex-col gap-2 w-full max-w-[760px]">
                 {props.chatId && <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />}
                 <form onSubmit={handleSubmit} className="relative w-full">
