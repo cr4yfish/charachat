@@ -28,7 +28,6 @@ const PureImporter = ({ label, searchAction }: Props) => {
     const handleSearch = useCallback(async (search: string) => {
         setLoading(true);
         try {
-            console.log("Searching for:", search);
             const results = await searchAction(search);
             if (!results) {
                 setSearchResults([]);

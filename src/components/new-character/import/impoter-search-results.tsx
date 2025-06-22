@@ -73,8 +73,7 @@ const PureImporterSearchResults = ({ searchResults }: Props) => {
             is_nsfw: char.nsfw || false,
         }).then(() => {
             // Optionally, you can add any additional logic after saving the character
-            console.log("Character saved to draft successfully:", char.name);
-            router.push(`/c/new`); // Redirect to the character page
+            router.push("/c/new?isImport=true"); // Redirect to the character page
         }).catch((error) => {
             console.error("Error saving character to draft:", error);
         });

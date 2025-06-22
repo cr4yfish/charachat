@@ -9,7 +9,7 @@ type Props = {
     className?: string;
     checked?: boolean;
     onCheckedChange?: (checked: boolean) => void;
-    label?: string;
+    label?: string | React.ReactNode;
     description?: string;
     optional?: boolean;
     disabled?: boolean;
@@ -27,7 +27,7 @@ export const PureBetterSwitch = (props: Props) => {
     return (
         <Card 
             onClick={() => handleCheckedChange(!internalChecked)}
-            className={cn("flex flex-row justify-between px-3 py-3 items-center cursor-pointer bg-black/15", { " border-neutral-400 ": internalChecked})}
+            className={cn("flex flex-row justify-between px-3 py-3 items-center cursor-pointer bg-background/15", { " border-primary/50 ": internalChecked})}
             >
             <CardHeader className="flex flex-col gap-1 flex-1 p-0">
                 <CardTitle>{props.label}</CardTitle>

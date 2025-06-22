@@ -22,7 +22,6 @@ const PureImportSearch = ({ onSearchChange, placeholder }: Props) => {
 
     useEffect(() => {
         if(debouncedValue.length > 0) {
-            console.log("Debounced value:", debouncedValue);
             onSearchChange?.(debouncedValue);
         }
     }, [debouncedValue, onSearchChange])

@@ -2,6 +2,7 @@
 import React, { memo, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from './label';
+import { cn } from '@/lib/utils';
 
 type Props = {
     value?: string;
@@ -12,6 +13,10 @@ type Props = {
     label?: string;
     optional?: boolean;
     ref?: React.Ref<HTMLTextAreaElement>;
+    noResize?: boolean;
+    rows?: number;
+    height?: number; // Optional height prop, not used in the component but can be passed
+    name?: string; // Optional name prop, not used in the component but can be passed
 }
 
 export const PureTextareaWithCounter = (props: Props) => {
@@ -27,7 +32,7 @@ export const PureTextareaWithCounter = (props: Props) => {
     };
 
     return (
-        <div className="relative flex flex-col gap-1">
+        <div className="relative flex flex-col gap-1 h-full">
 
             <div className='flex flex-col'>
                 {props.label && (
@@ -40,13 +45,16 @@ export const PureTextareaWithCounter = (props: Props) => {
                 )}
             </div>
 
-            <div className='relative'>
+            <div className='relative h-full'>
                 <Textarea
                     value={props.value}
+                    name={props.name || props.label?.toLowerCase().replace(/\s+/g, '-') || 'textarea'}
+                    id={props.name  || props.label?.toLowerCase().replace(/\s+/g, '-') || 'textarea'}
                     onChange={handleChange}
                     ref={props.ref}
-                    className="resize-none pb-6 max-h-[250px] bg-black border-border "
-                    rows={4}
+                    className={cn("pb-6 h-full bg-black border-border", props.noResize ? "resize-none" : "resize-y")}
+                    style={{ maxHeight: props.height ? `${props.height}px` : '250px' }}
+                    rows={props.rows || 4}
                     maxLength={props.maxLength}
                     placeholder={props.placeholder || "Type your message here..."}
                 />

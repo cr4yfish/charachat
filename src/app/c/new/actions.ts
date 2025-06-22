@@ -140,8 +140,6 @@ export async function searchAnime(search: string): Promise<ImportCharType[]> {
 
     const json: AnimeImportResponse = res;
 
-    console.log("Anime search results:", json);
-
     if(!json || !Array.isArray(json) || json.length === 0) {
         console.warn("No characters found for search:", search);
     }
