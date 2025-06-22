@@ -91,7 +91,7 @@ const actions : TopBarAction[] = [
 const PureTopBar = () => {
     const pathname = usePathname();
     const router = useRouter();
-    const { open: sidebarOpen } = useSidebar();
+    const { open: sidebarOpen, isMobile } = useSidebar();
 
     const activeTitle = React.useMemo(() => {
         return titles.find(title => title.pathname === pathname);
@@ -109,12 +109,12 @@ const PureTopBar = () => {
         <>
         <div className={cn("fixed z-50 top-0 left-0 h-[75px] ml-0 w-full px-4 py-2 transition-all overflow-hidden", {
             "bg-transparent":activeTitle === undefined,
-            "ml-[260px]": sidebarOpen,
-            "ml-[60px]": !sidebarOpen,
+            "ml-[260px]": sidebarOpen && !isMobile,
+            "ml-[60px]": !sidebarOpen  && !isMobile,
         })} >
             <div className={cn(" flex items-center justify-between bg-gradient-to-b from-black/50 to-transparent w-full relative overflow-hidden ", {
-                "pr-[260px] ": sidebarOpen,
-                "pr-[60px]": !sidebarOpen,
+                "pr-[260px] ": sidebarOpen  && !isMobile,
+                "pr-[60px]": !sidebarOpen  && !isMobile,
             })}>
                 <div className="flex flex-row items-center gap-1">
                     { activeTitle?.showBackButton &&

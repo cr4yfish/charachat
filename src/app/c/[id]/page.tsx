@@ -6,11 +6,10 @@ import { Metadata } from "next";
 import { getCharacter } from "@/lib/db/character";
 import ImageWithBlur from "@/components/image/imageWithBlur";
 import Username from "@/components/user/username";
-import {LockIcon, MessageCircleIcon } from "lucide-react";
+import {LockIcon } from "lucide-react";
 import CharacterPageTabs from "@/components/character/character-page-tabs";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import CharacterPageActions from "@/components/character/character-page-actions";
+import CharacterTopHeader from "@/components/character/character-top-header";
 
 type Params = Promise<{ id: string }>
 
@@ -64,22 +63,8 @@ export default async function CharacterView({ params }: { params: Params }) {
     return (
         <>
         <div className="relative w-full h-full min-h-full">
-            <div className="fixed top-0 left-0 w-full h-[75px] bg-gradient-to-b from-black/50 to-transparent z-50 ml-[260px] pr-[260px]">
-                <div className="relative size-full px-4 py-2 flex items-center justify-between">
-                    <span className="text-3xl font-bold">{character.name}</span> 
 
-                    <div>
-                        <Link href={"/chat?characterid=" + character.id}>
-                            <Button>
-                                <MessageCircleIcon />
-                                <span>Start Chat</span> 
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-                <div className="absolute top-0 left-0 -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
-            </div>
-            
+            <CharacterTopHeader character={character} />
 
             <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden pt-[75px]">
 
