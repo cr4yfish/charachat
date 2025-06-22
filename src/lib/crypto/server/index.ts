@@ -24,12 +24,35 @@ export async function getKeyServerSide(): Promise<Buffer> {
     
     const cookieStore = await cookies();
     const key = cookieStore.get(_ENC_KEY_COOKIE_NAME)?.value;
-    // if(!key) redirect("/logout"); // we need the user to log back in to get the password to generate a new key
 
-    if(!key) {
-        // create a new key
+    if(key) {
+        // if the key is in the cookie, return it
+        return Buffer.from(key, "hex");
+    }
+
+    // 2 strategies:
+    // 1. try to get the key from the user metadata
+    // 2. create a new key and save it to the user metadata and cookie
+    else if(!key) {
         const user = await currentUser();
         if(!user) { throw new Error("User is not authenticated"); }
+
+        // try to get the key from the user metadata
+        const metadata = user.privateMetadata
+        if(metadata && metadata[_ENC_KEY_COOKIE_NAME]) {
+            // if the key is in the metadata, use it
+            const keyFromMetadata = metadata[_ENC_KEY_COOKIE_NAME];
+            if(!keyFromMetadata || typeof keyFromMetadata !== "string") { throw new Error("Key not found in user metadata");
+
+            // save the key to the cookie for future use
+            } else {
+                setKeyCookie(keyFromMetadata, user.emailAddresses[0].emailAddress);
+                cookieStore.set(_ENC_KEY_COOKIE_NAME, keyFromMetadata, { secure: true, sameSite: "strict", priority: "high", maxAge: TIMINGS.ONE_YEAR });
+                return Buffer.from(keyFromMetadata, "hex");
+            }
+        }
+
+        // create a new key since it wasn't found in the cookies or user metadata
         const client = await clerkClient();
 
         const key = crypto.randomBytes(32).toString("hex");
@@ -48,7 +71,7 @@ export async function getKeyServerSide(): Promise<Buffer> {
         return Buffer.from(key, "hex");
     }
 
-    return Buffer.from(key, "hex");
+    throw new Error("Decryption key on server side not found in cookies or user metadata");
 }
 
 /**
