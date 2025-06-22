@@ -42,7 +42,7 @@ const encryptMessage = (message: string, key: Buffer): string => {
  * @throws Error if the message is not encrypted
  */
 const decryptMessage = (encryptedMessage: string, key: Buffer): string => {
-    if(encryptMessage == undefined || !encryptedMessage.startsWith("ENC:")) {
+    if(encryptedMessage == undefined || !encryptedMessage.startsWith("ENC:")) {
         return encryptedMessage
     }
     const msgWithoutPrefix = encryptedMessage.slice(4);

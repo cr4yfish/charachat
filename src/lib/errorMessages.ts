@@ -27,4 +27,6 @@ export const ERROR_MESSAGES = {
     USER_MESSAGE_NOT_FOUND: "No user message found in the chat. Please ensure you have sent a message before proceeding.",
 
     PROFILE_NOT_FOUND: "Profile not found. Please check your profile settings and try again.",
+
+    CRYPTO_ERROR: "An error occurred while processing cryptographic operations.",
 }
