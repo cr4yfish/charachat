@@ -79,10 +79,10 @@ export default function RootLayout({
         <body className={`${montserrat.className} ${geistMono.variable} antialiased h-screen overflow-hidden`}>
           <SidebarProvider>
             <AppSidebar />
+            <TopBar />
             <SidebarInset>
               <Toaster position={"top-center"} />
               <NextTopLoader color='#00a6f4' showSpinner={false} />
-              <TopBar />
               <AppTabBar />
               <GlobalLiquidFilter />
               {children}

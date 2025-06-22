@@ -26,11 +26,11 @@ export default async function Home() {
   const intialCharactersForIntialCategory = await getInitialCachedCharactersByCategory(initialCurrentCategory.id);
 
   return (
-    <div className="block max-h-full h-screen w-full overflow-y-auto overflow-x-hidden">
+    <div className="h-full w-full">
 
       <Spotlight init={spotlight} />
 
-      <div className="flex flex-col gap-4 px-4 py-6 pt-1 h-fit max-w-[1920px] overflow-x-visible relative">
+      <div className="flex flex-col gap-4 px-4 py-6 pt-1">
 
         {/* Personalized section */}
         <PersonalizedSection draftChar={draftChar} />

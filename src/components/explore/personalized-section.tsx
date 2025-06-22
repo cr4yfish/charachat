@@ -38,7 +38,7 @@ export function PersonalizedSection(props: Props) {
                 <CarouselContent>
 
                     {props.draftChar && (
-                        <CarouselItem>
+                        <CarouselItem className=" min-lg:basis-1/2">
                             <NewCharacterFromScratch small initCharacter={props.draftChar} />
                         </CarouselItem>
                     )}

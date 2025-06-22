@@ -107,50 +107,53 @@ const PureTopBar = () => {
     
     return (
         <>
-        <div className={cn("fixed z-50 top-0 left-0 h-[75px] ml-0 w-full px-4 py-2 transition-all overflow-hidden", {
+        <div className={cn("fixed z-50 top-0 left-0 h-[75px] ml-0 w-full transition-all overflow-hidden", {
             "bg-transparent":activeTitle === undefined,
-            "ml-[260px]": sidebarOpen && !isMobile,
+            "ml-[255px]": sidebarOpen && !isMobile,
             "ml-[60px]": !sidebarOpen  && !isMobile,
         })} >
-            <div className={cn(" flex items-center justify-between bg-gradient-to-b from-black/50 to-transparent w-full relative overflow-hidden ", {
+            <div className={cn("bg-gradient-to-b from-black/50 to-transparent w-full relative overflow-hidden flex flex-row justify-center ", {
                 "pr-[260px] ": sidebarOpen  && !isMobile,
                 "pr-[60px]": !sidebarOpen  && !isMobile,
             })}>
-                <div className="flex flex-row items-center gap-1">
-                    { activeTitle?.showBackButton &&
-                        <Link href={"/"} onClick={(e) => {
-                        e.preventDefault();
-                        router.back();
-                    }} className="flex flex-row items-center gap-1">
-                        <Button size={"icon"} variant={"ghost"} className="cursor-pointer">
-                            <ChevronLeftIcon size={12} />
-                        </Button>
-                    </Link>}
 
-                    {activeTitle && 
-                        <div className="flex flex-col">
-                            <span className=" text-3xl font-bold " >{activeTitle?.title}</span>
+                <div className="flex items-center justify-between px-4 py-2  w-full relative max-w-[1920px]">
+                    <div className="flex flex-row items-center gap-1">
+                        { activeTitle?.showBackButton &&
+                            <Link href={"/"} onClick={(e) => {
+                            e.preventDefault();
+                            router.back();
+                        }} className="flex flex-row items-center gap-1">
+                            <Button size={"icon"} variant={"ghost"} className="cursor-pointer">
+                                <ChevronLeftIcon size={12} />
+                            </Button>
+                        </Link>}
+
+                        {activeTitle && 
+                            <div className="flex flex-col">
+                                <span className=" text-3xl font-bold " >{activeTitle?.title}</span>
+                            </div>
+                        }
+                        
+                    </div>
+
+        
+
+                    {activeActions.length > 0 &&
+                        <div className="flex items-center gap-2 relative">
+                            {activeActions.map((action) => (
+                                <Link key={`top-bar-action-${action.pathname}-${action.icon}`} href={action.href} className=" cursor-pointer">
+                                    <Button className=" cursor-pointer" >
+                                        {action.icon}
+                                        {action.label && <span className="">{action.label}</span>}
+                                    </Button>
+                                </Link>
+                            ))}
                         </div>
                     }
-                    
                 </div>
-
-    
-
-                {activeActions.length > 0 &&
-                    <div className="flex items-center gap-2 relative">
-                        {activeActions.map((action) => (
-                            <Link key={`top-bar-action-${action.pathname}-${action.icon}`} href={action.href} className=" cursor-pointer">
-                                <Button className=" cursor-pointer" >
-                                    {action.icon}
-                                    {action.label && <span className="">{action.label}</span>}
-                                </Button>
-                            </Link>
-                        ))}
-                    </div>
-                }
-
                 {(activeTitle !== undefined) && <div className="absolute -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>}
+                
             </div>
         </div>
         </>
