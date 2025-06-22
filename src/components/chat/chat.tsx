@@ -21,6 +21,7 @@ import { Virtuoso } from 'react-virtuoso';
 import { TIMINGS_MILLISECONDS } from '@/lib/timings';
 import { Message as MessageComponent } from './message';
 import { TOOL_NAMES } from '@/lib/toolNames';
+import equal from 'fast-deep-equal';
 
 type Props = {
   shallowCharacter: ShallowCharacter;
@@ -338,7 +339,7 @@ export const PureChat = (props: Props) => {
 
   return (
     <>
-    <div id='messages' className='h-dvh min-w-0 w-full'>
+    <div id='messages' className='h-dvh w-full'>
 
       {(messages.length === 0) && !setupDone && (
         <div className='flex items-center justify-center h-full'>
@@ -411,9 +412,9 @@ export const PureChat = (props: Props) => {
 }
 
 export const Chat = memo(PureChat, (prev, next) => {
-  //if (prev.shallowCharacter?.id !== next.shallowCharacter?.id) return false;
   if (prev.chatId !== next.chatId) return false;
-  //if (JSON.stringify(prev.initialMessages) !== JSON.stringify(next.initialMessages)) return false;
+  if (prev.shallowCharacter.id !== next.shallowCharacter.id) return false;
+  if (!equal(prev.initialMessages, next.initialMessages)) return false;
 
   return true;
 });
