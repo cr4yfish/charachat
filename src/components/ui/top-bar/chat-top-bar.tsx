@@ -15,6 +15,7 @@ import Image from "next/image";
 import { ChatSettings } from "@/components/chat/chat-settings";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { useSidebar } from "../sidebar";
 
 type Props = {
     shallowCharacter: ShallowCharacter;
@@ -24,50 +25,50 @@ type Props = {
 
 const PureTopBar = (props: Props) => {
     const router = useRouter();
+    const { isMobile } = useSidebar();
     
     return (
         <>
-        <header className={cn("fixed z-50 top-0 left-0 h-[75px] w-full px-4 py-2 flex items-center justify-between bg-gradient-to-b from-black/50 to-transparent")} >
+        <header className={cn("fixed z-50 top-0 left-0 h-[75px] w-full flex flex-row justify-center items-center bg-gradient-to-b from-black/50 to-transparent", { "ml-[260px] pr-[280px]": !isMobile })} >
+            <div className="px-4 py-2 flex items-center justify-between w-full relative max-w-[1920px] ">
+                <div className="flex flex-row items-center gap-1">
+                    <Link href={"/"} onClick={(e) => {
+                        e.preventDefault();
+                        router.back();
+                    }} >
+                        <Button size={"icon"} variant={"ghost"} >
+                            <ChevronLeftIcon size={12} />
+                        </Button>
+                    </Link>
 
-  
-            <div className="flex flex-row items-center gap-1">
-                <Link href={"/"} onClick={(e) => {
-                    e.preventDefault();
-                    router.back();
-                }} >
-                    <Button size={"icon"} variant={"ghost"} >
-                        <ChevronLeftIcon size={12} />
-                    </Button>
-                </Link>
+                    <div className="flex flex-row items-center gap-2">
+                        {props.shallowCharacter?.image_link && 
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="size-[28px] rounded-full overflow-hidden relative">
+                                <Image 
+                                    src={props.shallowCharacter?.image_link}
+                                    alt=""
+                                    fill
+                                    className="object-cover rounded-full"
+                                />
+                            </motion.div>
+                        }
 
-                <div className="flex flex-row items-center gap-2">
-                    {props.shallowCharacter?.image_link && 
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="size-[28px] rounded-full overflow-hidden relative">
-                            <Image 
-                                src={props.shallowCharacter?.image_link}
-                                alt=""
-                                fill
-                                className="object-cover rounded-full"
-                            />
-                        </motion.div>
-                    }
-
-                    <span className="font-bold truncate " >
-                        {props.shallowCharacter?.name}
-                    </span>
-                </div>
-           
-            </div>
+                        <span className="font-bold truncate " >
+                            {props.shallowCharacter?.name}
+                        </span>
+                    </div>
             
+                </div>
+                
 
- 
+    
 
-            {props.isLoggedIn && 
-            <ChatSettings 
-                chatId={props.chatId} 
-                characterId={props.shallowCharacter?.id} 
-            />}
-
+                {props.isLoggedIn && 
+                <ChatSettings 
+                    chatId={props.chatId} 
+                    characterId={props.shallowCharacter?.id} 
+                />}
+            </div>
             <div className="absolute -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
 
         </header>
