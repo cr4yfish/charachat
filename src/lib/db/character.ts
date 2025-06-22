@@ -48,6 +48,10 @@ const characterFormatter = async (db: any | undefined): Promise<Character> => {
         tags_full: JSON.stringify(db?.tags_full) === "[null]" ? undefined : db?.tags_full
     } as Character;
 
+    if(char.is_private) {
+        return await decryptCharacter(char, await getKeyServerSide());
+    }
+
     return char;
 }
 
@@ -87,7 +91,7 @@ export const decryptCharacter = async (character: Character, key: Buffer): Promi
             name: await decryptMessageBackwardsCompatible(character.name ?? " ", key),
             description: await decryptMessageBackwardsCompatible(character.description ?? " ", key),
             intro: await decryptMessageBackwardsCompatible(character.intro ?? "", key),
-            bio: await decryptMessageBackwardsCompatible(character.bio ?? " ", key),
+            bio: await decryptMessageBackwardsCompatible(character.bio ?? "ll", key),
             book: await decryptMessageBackwardsCompatible(character.book ?? " ", key),
             image_link: await decryptMessageBackwardsCompatible(character.image_link ?? " ", key),
             personality: await decryptMessageBackwardsCompatible(character.personality ?? " ", key),
