@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/popover"
 import { SearchType, SortType } from "@/app/search/page";
 
-const PureSearchCategories = ({ initType, currentQuery, initSortType } : { initType?: SearchType | undefined, currentQuery?: string, initSortType?: SortType }) => {
+const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchType | undefined, currentQuery?: string, initSortType?: SortType }) => {
     const router = useRouter();
 
     return (
