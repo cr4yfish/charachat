@@ -1,20 +1,21 @@
 import Link from "next/link"
 import { memo, useState } from "react"
 import { motion } from "motion/react"
-import { cn, prettyPrintDate, prettyRenderSingleMessageContent, truncateText } from "@/lib/utils"
+import { cn, prettyPrintDate, prettyRenderSingleMessageContent, safeParseLink, truncateText } from "@/lib/utils"
 import { Card, CardContent, CardTitle, CardDescription, CardFooter } from "../ui/card"
 import Image from "next/image"
 import { Chat } from "@/types/db"
 import { setCharacterCookie } from "@/app/actions"
 import { useRouter } from "next/navigation"
-import { ChevronRightIcon } from "lucide-react"
+import { ArrowRightIcon, ChevronRightIcon } from "lucide-react"
 import { Markdown } from "../ui/markdown"
 
 type Props = {
     chat: Chat;
+    small?: boolean;
 }
 
-const PureChatCard = ({chat}: Props) => {
+const PureChatCard = ({chat, small}: Props) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -27,6 +28,28 @@ const PureChatCard = ({chat}: Props) => {
                 router.push("/chat/" + chat.id);
             })
         }}>
+            {small ? 
+            <div className="flex flex-row justify-between items-center gap-2 rounded-3xl text-teal-200/80 bg-teal-800 p-4 cursor-pointer hover:bg-teal-700 transition-all duration-200">
+                <div className="flex flex-col gap-1">
+                    <p className="text-xs">Continue your Chat with</p>
+                    <div className="flex items-center gap-1">
+                        {chat.character.image_link && 
+                        <div className="relative size-[24px] shrink-0 rounded-full overflow-hidden border border-teal-200/80">
+                            <Image 
+                                src={safeParseLink(chat.character.image_link)}
+                                fill alt="" className="object-cover"
+                            />
+                        </div>
+                        }
+                        <h2 className="font-bold text-white/90">{chat.character.name}</h2>
+                    </div>
+                    
+                </div>
+                <div className="flex items-center self-end ">
+                    <ArrowRightIcon color="currentColor" className="self-end" />
+                </div>
+            </div>
+            :
             <motion.div 
                 className="w-full rounded-3xl overflow-hidden relative " 
                 initial={{ opacity: 0, y: 10 }}
@@ -65,7 +88,7 @@ const PureChatCard = ({chat}: Props) => {
                     </div>
                     
                 </Card>
-            </motion.div>
+            </motion.div>}
         </Link>
     )
 }
@@ -73,6 +96,10 @@ const PureChatCard = ({chat}: Props) => {
 export const ChatCard = memo(PureChatCard, (prevProps, nextProps) => {
     if (prevProps.chat.id !== nextProps.chat.id) {
         return false; // Re-render if chat IDs are different
+    }
+
+    if( prevProps.small !== nextProps.small) {
+        return false; // Re-render if small prop is different
     }
 
     return true;

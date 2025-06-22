@@ -27,6 +27,8 @@ import { InputWithLabel } from "../ui/input-with-label";
 import SmallCharacterCard from "../character/character-card-small";
 import { Progress } from "../ui/progress";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
+import { safeParseLink } from "@/lib/utils";
 
 type Step = "initial" | "details" | "metadata" | "review";
 
@@ -193,13 +195,24 @@ const PureNewCharacterFromScratch = ({ initCharacter, small, defaultOpen }: Prop
             <DrawerTrigger asChild>
                 
                 {small ? 
-                <div className="flex flex-row justify-between items-center gap-2 rounded-3xl bg-slate-800 p-4 cursor-pointer hover:bg-slate-700 transition-all duration-200">
-                    <div className="flex flex-col">
-                        <p className="dark:text-muted-foreground text-xs">Continue editing</p>
-                        <h2 className="font-bold text-white/90">{(newChar && newChar.name) ? ` ${newChar.name}` : "From Scratch"}</h2>
+                <div className="flex flex-row text-violet-200/80 justify-between items-center gap-2 rounded-3xl bg-violet-800 p-4 cursor-pointer hover:bg-violet-700 transition-all duration-200">
+                    <div className="flex flex-col gap-1">
+                        <p className="text-xs">Continue editing</p>
+                        <div className="flex items-center gap-1">
+                            {newChar.image_link &&
+                            <div className="relative size-[24px] shrink-0 rounded-full overflow-hidden border border-violet-200/80">
+                                <Image 
+                                    src={safeParseLink(newChar.image_link)}
+                                    fill alt="" className="object-cover size-full"
+                                />
+                            </div>
+                            }
+                            <h2 className="font-bold text-white/90">{(newChar && newChar.name) ? ` ${newChar.name}` : "From Scratch"}</h2>
+                        </div> 
+                       
                     </div>
                     
-                    <div className="flex items-center self-end gap-1 text-muted-foreground">
+                    <div className="flex items-center self-end gap-1">
                         <ArrowRightIcon color="currentColor" className="self-end" />
                     </div>
                 </div> 

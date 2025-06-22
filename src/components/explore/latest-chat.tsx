@@ -27,7 +27,7 @@ const PureLatestChat = () => {
 
     return (
         <CarouselItem>
-            <ChatCard chat={latestChat} />
+            <ChatCard chat={latestChat} small />
         </CarouselItem>
     )
 }
