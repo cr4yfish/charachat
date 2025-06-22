@@ -51,14 +51,6 @@ export default async function CharacterView({ params }: { params: Params }) {
         transformedCharacter.image_prompt = "";
     }
 
-    // const palette = await Vibrant.from(safeParseLink(character.image_link))
-    //     .getPalette()
-    //     .catch((err) => {
-    //         console.error("Error getting palette, skipping it:", err, "Character:", character.name);
-    //         return null;
-    // });
-
- 
 
     return (
         <>
