@@ -63,6 +63,7 @@
     "react-noise": "^0.2.11",
     "react-syntax-highlighter": "^15.6.1",
     "react-virtuoso": "^4.13.0",
+    "remark-gfm": "^4.0.1",
     "replicate": "^1.0.1",
     "sharp": "^0.34.2",
     "sonner": "^2.0.5",

@@ -5,6 +5,7 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import CodeBlock from './code-block';
+import remarkGfm from 'remark-gfm';
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
@@ -124,7 +125,7 @@ const NonMemoizedMarkdown = ({ children, className }: { children?: string, class
 
   return (
     <div className={cn('prose dark:prose-invert', className)}>
-        <ReactMarkdown components={components}>
+        <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
         {children}
         </ReactMarkdown>
     </div>
