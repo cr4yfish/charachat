@@ -29,11 +29,12 @@ export default async function NewChatPage({
     const shallowCharacter = await getShallowCharacter(characterId);
 
     const user = await currentUser();
+    const isLoggedIn = !!user?.id;
 
     return (
         <>
 
-        <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} userId={user?.id} />
+        <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} isLoggedIn={isLoggedIn} />
         <Chat shallowCharacter={shallowCharacter} chatId={chatId} initialMessages={[]} />
 
         </>

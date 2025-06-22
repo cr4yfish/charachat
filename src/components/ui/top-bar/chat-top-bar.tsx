@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 type Props = {
     shallowCharacter: ShallowCharacter;
     chatId: string;
-    userId?: string | undefined;
+    isLoggedIn: boolean;
 }
 
 const PureTopBar = (props: Props) => {
@@ -62,7 +62,7 @@ const PureTopBar = (props: Props) => {
 
  
 
-            {props.userId !== undefined && 
+            {props.isLoggedIn && 
             <ChatSettings 
                 chatId={props.chatId} 
                 characterId={props.shallowCharacter?.id} 
@@ -78,6 +78,7 @@ const PureTopBar = (props: Props) => {
 export const ChatTopBar = memo(PureTopBar, (prev, next) => {
     if (prev.shallowCharacter.id !== next.shallowCharacter.id) return false;
     if (prev.chatId !== next.chatId) return false;
-    if (prev.userId !== next.userId) return false;
+    if (prev.isLoggedIn !== next.isLoggedIn) return false;
+    
     return true;
 });

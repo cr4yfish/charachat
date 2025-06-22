@@ -36,7 +36,7 @@ export default async function ExistingChatPage(props: { params: Promise<{ id: st
 
     return (
         <>
-        <ChatTopBar chatId={id} shallowCharacter={shallowCharacter} />
+        <ChatTopBar chatId={id} shallowCharacter={shallowCharacter} isLoggedIn />
         <Chat shallowCharacter={shallowCharacter} chatId={id} initialMessages={uiMessages} />
         </>
     )
