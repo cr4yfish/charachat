@@ -360,7 +360,7 @@ export const PureChat = (props: Props) => {
         itemContent={(index, message) => {
           return (
             <div key={message.id} className={cn("h-fit w-full relative max-w-[760px] px-4 mx-auto", {
-              "pt-[100px]": index === 0 && messages.length > 2, // add padding to the first message
+              "pt-[100px]": index === 0 && messages.length > 0, // add padding to the first message
               "pb-[40vh]": index === messages.length - 1, // add padding to the last message
             })}>
               <MessageComponent
