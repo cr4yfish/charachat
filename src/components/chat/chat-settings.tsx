@@ -22,6 +22,7 @@ import { useDebounce } from "use-debounce";
 import Spinner from "../ui/spinner";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { BetterSwitch } from "../ui/better-switch";
+import { useRouter } from "next/navigation";
 
 type Props = {
     characterId?: string | undefined;
@@ -38,7 +39,9 @@ export const PureChatSettings = (props: Props) => {
         keepPreviousData: true,
     })
     const [isSyncing, setIsSyncing] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [debouncedChat] = useDebounce(chat, 2000);
+    const router = useRouter();
 
     useEffect(() => {
         if (debouncedChat) {
@@ -215,7 +218,27 @@ export const PureChatSettings = (props: Props) => {
                         }}
                     />
 
-                    <Button variant={"destructive"} className=" rounded-3xl">
+                    <Button 
+                        variant={"destructive"} 
+                        className="rounded-3xl"
+                        disabled={isDeleting}
+                        onClick={() => {
+                            if (!props.chatId) return;
+                            setIsDeleting(true);
+                            fetch(API_ROUTES.DELETE_CHAT + props.chatId, {
+                                method: "DELETE"
+                            }).then(() => {
+                                mutate(undefined, {
+                                    revalidate: true
+                                });
+                                router.push("/chats");
+                            }).catch((err) => {
+                                console.error("Error deleting chat:", err);
+                            }).finally(() => {
+                                setIsDeleting(false);
+                            });
+                        }}
+                    >
                         <TrashIcon color="currentColor" />
                         Delete Chat
                     </Button>

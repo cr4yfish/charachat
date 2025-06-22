@@ -24,6 +24,7 @@ export const API_ROUTES = {
     GET_CHAT: "/api/chat?id=",
     GET_LATEST_CHAT: "/api/chat/latest",
     GET_CHATS: "/api/chats",
+    DELETE_CHAT: "/api/chat/delete?chatId=",
     GET_SUGGESTIONS: "/api/chat/suggestions?chat-id=",
     GET_CHAT_MESSAGES: "/api/chat/messages?chatId=",
     ADD_CHAT_MESSAGE: "/api/chat/message/add",
