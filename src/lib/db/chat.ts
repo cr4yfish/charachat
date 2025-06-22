@@ -165,6 +165,20 @@ export const getChats = cache(async (props: LoadMoreProps): Promise<Chat[]> => {
     }))
 })
 
+export const getLatestChat = cache(async (): Promise<Chat | undefined> => {
+    const { data, error } = await (await createClient())
+        .from(quickView)
+        .select(chatMatcher)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+    if (error) {
+        console.error("Error fetching latest chat", error);
+        return undefined;
+    }
+    return await chatFormatter(data);
+})
+
 
 type CreateChatProps = {
     chatId?: string;
