@@ -21,6 +21,7 @@ type Props = {
     fullWidth?: boolean;
     className?: string;
     readonly?: boolean;
+    name?: string;
 }
 
 const PureInputWithLabel = (props: Props) => {
@@ -45,7 +46,8 @@ const PureInputWithLabel = (props: Props) => {
            
            <div className="relative">
                 <Input 
-                    id={props.id}
+                    id={props.name || props.id}
+                    name={props.name}
                     type={inputType}
                     placeholder={props.placeholder}
                     value={props.value}
@@ -86,6 +88,7 @@ export const InputWithLabel = memo(PureInputWithLabel, (prev, next) => {
     if (prev.required !== next.required) return false;
     if (prev.disabled !== next.disabled) return false;
     if (prev.onChange !== next.onChange) return false;
+    
 
 
     return true;
