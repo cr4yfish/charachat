@@ -1,5 +1,4 @@
-import { memo, useCallback, useRef } from "react";
-import { Liquid } from "../ui/liquid";
+import { memo, useCallback, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Loader2Icon, RefreshCwIcon, SendIcon } from "lucide-react";
@@ -7,7 +6,7 @@ import { cn, fetcher } from "@/lib/utils";
 import { Suggestion as SuggestionType } from "@/lib/ai/suggestions";
 import useSWR from "swr";
 import { API_ROUTES } from "@/lib/apiRoutes";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 const PureSuggestion = ({ suggestion, onClick }: { suggestion: SuggestionType, onClick: (suggestion: string) => void }) => {
 
@@ -56,10 +55,18 @@ const PureSuggestions = ({ onClick, chatId }: { onClick: (suggestion: string) =>
     }
 
     return (
-        <div className="flex flex-row flex-nowrap gap-2 overflow-x-auto relative z-10 ">
-            <Button className="text-muted-foreground" disabled={isLoading || isValidating} onClick={handleMutate} size={"icon"} variant={"ghost"}>
-                {(isLoading || isValidating) ? <RefreshCwIcon className="animate-spin" /> : <RefreshCwIcon />}
-            </Button>           
+        <motion.div
+            initial={{ opacity: 0,}}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0  }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            layout 
+            className="absolute top-0 left-0 -translate-y-[30px] flex flex-row flex-nowrap gap-2 overflow-x-auto z-10 w-full transition-all ">
+            <motion.div layout className="transition-normal">
+                <Button className="text-muted-foreground transition-all" disabled={isLoading || isValidating} onClick={handleMutate} size={"icon"} variant={"ghost"}>
+                    {(isLoading || isValidating) ? <RefreshCwIcon className="animate-spin" /> : <RefreshCwIcon />}
+                </Button>
+            </motion.div>           
             {suggestions?.map((suggestion) => (
                 <Suggestion 
                     key={`suggestion-${suggestion.content}`} 
@@ -67,7 +74,7 @@ const PureSuggestions = ({ onClick, chatId }: { onClick: (suggestion: string) =>
                     onClick={onClick}
                 />
             ))}
-        </div>
+        </motion.div>
     );
 }
 
@@ -86,7 +93,17 @@ type Props = {
 }
 
 const PurePromptInput = (props: Props) => {
+
+    // This is used to get the input value from the textarea
+    // and to focus/blur the input field
+    // we're using a ref here to avoid re-rendering the component
+    // when the input value changes
     const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    // used for styling the input field
+    // when the input field is focused, it expands to full width
+    // autoFocus is set to true so that the input field is focused when the component mounts
+    const [isFocused, setIsFocused] = useState(true);
 
     const handleSubmit = (e?: React.FormEvent) => {
         e?.preventDefault();
@@ -132,29 +149,47 @@ const PurePromptInput = (props: Props) => {
         inputRef.current.focus();
     }, [])
 
+    // only blur if the input is empty
+    const handleBlur = useCallback(() => {
+        if(inputRef.current) {
+            if(inputRef.current.value.trim() === "") {
+                setIsFocused(false);
+            }
+        }
+    }, [inputRef]);
+
     return (
-        <div className={cn('absolute bottom-0 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1')}>
-            <div className="flex flex-col gap-2 w-full max-w-[760px]">
-                {props.chatId && <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />}
-                <form onSubmit={handleSubmit} className="relative w-full">
-                    <Liquid className={cn("transition-all rounded-3xl size-full  overflow-hidden")}>
-                        <Textarea 
-                            placeholder="Type your message here..."
-                            className={cn("transition-all resize-none size-full !bg-slate-950/50 border-none focus:ring-0 focus:border-none flex items-center justify-center p-4 pr-12")}
-                            rows={1}
-                            name='prompt'
-                            autoFocus
-                            ref={inputRef}
-                            onKeyDown={handleInputKeyDown}
-                        />
-                    </Liquid>
-                    <div className='absolute bottom-0 right-0 h-full flex items-end justify-center p-2 pb-4'>
-                        <Button variant={"secondary"} disabled={props.isLoading} className='z-10 rounded-full p-4' size={"icon"} type='submit'>
-                            {props.isLoading ? <Loader2Icon className="animate-spin text-primary" /> : <SendIcon />}
-                        </Button>
-                    </div>
+        <div className={cn('absolute bottom-0 max-sm:bottom-8 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1')}>
+            <div className={cn("flex flex-col items-center gap-2 w-full")}>
+                <AnimatePresence presenceAffectsLayout>
+                    {props.chatId && isFocused && <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />}
+                </AnimatePresence>
+                <motion.form 
+                    onSubmit={handleSubmit} 
+                    className={cn("relative w-full")}
+                    animate={{ width: isFocused ? "100%" : "250px" }}
+                >
+                    <Textarea 
+                        className={cn("!bg-slate-950/50 border-none focus:ring-0 focus:border-none pr-12")}
+                        minRows={1}
+                        placeholder="Send a message"
+                        name='prompt'
+                        autoFocus
+                        ref={inputRef}
+                        onKeyDown={handleInputKeyDown}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={handleBlur}
+                        endContent={
+                            <motion.div layout className=''>
+                                <Button variant={"secondary"} disabled={props.isLoading} className='z-10 rounded-full p-4 transition-all' size={"icon"} type='submit'>
+                                    {props.isLoading ? <Loader2Icon className="animate-spin text-primary" /> : <SendIcon />}
+                                </Button>
+                            </motion.div>
+                        }
+                    />
+
             
-                </form>
+                </motion.form>
             </div>
         </div>
   );

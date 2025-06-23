@@ -20,7 +20,9 @@ export const GlobalLiquidFilter = () => {
 export const PureLiquid = (props: { children: React.ReactNode, className?: string, glassContentClassNames?: string }) => {
 
     return (
-        <motion.div layout transition={{ duration: 0.15 }} className={cn(" liquid-card relative  border border-white/20 shadow-inner shadow-white/5 bg-white/10", props.className)}>
+        <motion.div 
+            layout
+            className={cn(" liquid-card relative  border border-white/20 shadow-inner shadow-white/5 bg-white/10", props.className)}>
             <div className="liquid-filter "></div>
             <div className="liquid-overlay"></div>
             <div className="liquid-specular"></div>
