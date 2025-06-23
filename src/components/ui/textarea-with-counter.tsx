@@ -52,8 +52,7 @@ export const PureTextareaWithCounter = (props: Props) => {
                     id={props.name  || props.label?.toLowerCase().replace(/\s+/g, '-') || 'textarea'}
                     onChange={handleChange}
                     ref={props.ref}
-                    className={cn("pb-6 h-full bg-black border-border", props.noResize ? "resize-none" : "resize-y")}
-                    style={{ maxHeight: props.height ? `${props.height}px` : '250px' }}
+                    className={cn("pb-6 h-full bg-black border-border max-h-[250px]", props.noResize ? "resize-none" : "resize-y")}
                     rows={props.rows || 4}
                     maxLength={props.maxLength}
                     placeholder={props.placeholder || "Type your message here..."}
