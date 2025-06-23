@@ -30,6 +30,7 @@ export function checkIsEncrypted(message: string): boolean {
  */
 export function encryptMessage(message: string, key: Buffer): string {
     if(checkIsEncrypted(message) || !message) {
+        console.warn(ERROR_MESSAGES.CRYPTO_ERROR)
         return message; // If the message is already encrypted, return it as is
     };
 
