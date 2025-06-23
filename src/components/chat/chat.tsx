@@ -278,6 +278,7 @@ export const PureChat = (props: Props) => {
 
   }, [append, props.chatId, props.shallowCharacter?.id, llmCookie]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleLoadMore = useCallback(() => {
     // Load more messages by increasing the size of the SWR infinite data 
     setSize((prevSize) => prevSize + 1);
@@ -357,43 +358,40 @@ export const PureChat = (props: Props) => {
         </div>
       )}
 
-      <Virtuoso 
-        className='w-full h-full'
-        ref={virtuosoRef}
-        scrollerRef={(ref) => {
-          if (scrollRef.current !== ref) {
-            scrollRef.current = ref as HTMLDivElement;
-          }
-        }}
-        data={messages}
-        atBottomStateChange={setIsAtBottom}
-        initialTopMostItemIndex={messages.length - 1}
-        overscan={10}
-        increaseViewportBy={{ top: 200, bottom: 0 }}
-        alignToBottom={true}
-        startReached={handleLoadMore}
-        itemContent={(index, message) => {
-          return (
-            <div key={message.id} className={cn("h-fit w-full relative max-w-[760px] px-4 mx-auto", {
-              "pt-[100px]": index === 0 && messages.length > 0, // add padding to the first message
-              "pb-[40vh]": index === messages.length - 1, // add padding to the last message
-            })}>
-              <MessageComponent
-                key={message.id} 
-                message={message} 
-                isLoading={isLoading && messages.length - 1 === index}
-                characterName={props.shallowCharacter?.name}
-                characterImage={props.shallowCharacter?.image_link}
-                openImageGen={() => setImageGenOpen(true)}
-                chatId={props.chatId}
-                deleteCallback={deleteCallback}
-                status={status}
-                latestMessage={messages[messages.length - 1]?.id === message.id}
-              />
-            </div>
-          )
-        }}
-      />
+        <Virtuoso 
+          className='w-full h-full'
+          ref={virtuosoRef}
+          scrollerRef={(ref) => {
+            if (scrollRef.current !== ref) {
+              scrollRef.current = ref as HTMLDivElement;
+            }
+          }}
+          data={messages}
+          atBottomStateChange={setIsAtBottom}
+          initialTopMostItemIndex={messages.length - 1}
+          overscan={10}
+          increaseViewportBy={{ top: 200, bottom: 200 }}
+          alignToBottom={true}
+          // startReached={handleLoadMore}
+          itemContent={(index, message) => {
+            return (
+              <div key={message.id} className={cn("h-fit w-full relative max-w-[760px] px-4 mx-auto")}>
+                <MessageComponent
+                  key={message.id} 
+                  message={message} 
+                  isLoading={isLoading && messages.length - 1 === index}
+                  characterName={props.shallowCharacter?.name}
+                  characterImage={props.shallowCharacter?.image_link}
+                  openImageGen={() => setImageGenOpen(true)}
+                  chatId={props.chatId}
+                  deleteCallback={deleteCallback}
+                  status={status}
+                  latestMessage={messages[messages.length - 1]?.id === message.id}
+                />
+              </div>
+            )
+          }}
+        />
 
       <PromptInput
         submitMiddleWare={submitMiddleWare}
