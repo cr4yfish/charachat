@@ -34,10 +34,12 @@ export default async function PureSettingsPage() {
           <CardContent className="flex flex-col gap-4">
             <BetterSwitch 
               label="Unblur NSFW"
+              disabled
               description="Enable this to unblur NSFW content in images by default."
             />
 
             <LLMSelect 
+              disabled
               selectedKey={_DEFAULT_LLM}
               label="Select the Author Model"
               description="The model used for writing help (e.g. generating descriptions)"
