@@ -10,9 +10,11 @@ import useSWRInfinite from "swr/infinite";
 import { Button } from "../ui/button";
 import { LIMITS } from "@/lib/limits";
 import Spinner from "../ui/spinner";
+import ChatCardSkeleton from "./chat-card-skeleton";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function Chats() {
-    const { data, setSize, size, isValidating } = useSWRInfinite<Chat[]>(
+    const { data, setSize, size, isValidating, isLoading } = useSWRInfinite<Chat[]>(
         (pageIndex, previousPageData) => {
             // If there is no previous page data, return the first page URL
             if (previousPageData && previousPageData.length === 0) return null;
@@ -99,18 +101,129 @@ export default function Chats() {
         <>
         <div className="flex flex-col items-center justify-start h-screen w-full p-4 pt-[75px] pb-[100px] max-w-[1024px] overflow-y-auto ">
 
-            {dateGroupedChats.map(({ date, chats }) => (
-                chats.length > 0 && (
-                    <div key={date} className="w-full mb-4">
-                        <h2 className="text-xs text-muted-foreground">{date}</h2>
-                        {chats.length > 0 && (
-                            chats.map(chat => (
-                                <ChatCard key={chat.id} chat={chat} />
-                            ))
-                        )}
-                    </div>
-                )
-            ))}
+            <AnimatePresence>
+                {(isValidating || isLoading) && 
+                    <motion.div 
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: {
+                                opacity: 1,
+                                transition: {
+                                    staggerChildren: 0.1, // Stagger each skeleton by 0.1s
+                                    delayChildren: 0.2    // Initial delay before first skeleton
+                                }
+                            },
+                            exit: {
+                                opacity: 0,
+                                transition: {
+                                    staggerChildren: 0.05,
+                                    staggerDirection: -1  // Exit in reverse order
+                                }
+                            }
+                        }}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="flex flex-col gap-4 w-full"
+                    >
+                        {Array.from({ length: 15}).map((_, index) => (
+                            <ChatCardSkeleton key={index} />
+                        ))}
+                    </motion.div>
+                }
+                {!isLoading && !isValidating && 
+                    <motion.div 
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: {
+                                opacity: 1,
+                                transition: {
+                                    staggerChildren: 0.2, // Stagger each date group
+                                    delayChildren: 0.1    // Initial delay before first group
+                                }
+                            },
+                            exit: {
+                                opacity: 0,
+                                transition: {
+                                    staggerChildren: 0.1,
+                                    staggerDirection: -1  // Exit in reverse order
+                                }
+                            }
+                        }}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="w-full mb-4"
+                    >            
+                        {dateGroupedChats.map(({ date, chats }) => (
+                            chats && chats.length > 0 && (
+                                <motion.div
+                                    key={date}
+                                    variants={{
+                                        hidden: { opacity: 0, y: 20 },
+                                        visible: {
+                                            opacity: 1,
+                                            y: 0,
+                                            transition: {
+                                                staggerChildren: 0.05, // Stagger individual chat cards within each group
+                                                delayChildren: 0.1
+                                            }
+                                        },
+                                        exit: {
+                                            opacity: 0,
+                                            y: -20,
+                                            transition: {
+                                                staggerChildren: 0.03,
+                                                staggerDirection: -1
+                                            }
+                                        }
+                                    }}
+                                    className="mb-6"
+                                >
+                                    <motion.h2 
+                                        variants={{
+                                            hidden: { opacity: 0, x: -10 },
+                                            visible: { opacity: 1, x: 0 },
+                                            exit: { opacity: 0, x: -10 }
+                                        }}
+                                        className="text-xs text-muted-foreground mb-3 font-medium"
+                                    >
+                                        {date}
+                                    </motion.h2>
+                                    {chats.map(chat => (
+                                        <motion.div
+                                            key={chat.id}
+                                            variants={{
+                                                hidden: { opacity: 0, y: 10, scale: 0.98 },
+                                                visible: { 
+                                                    opacity: 1, 
+                                                    y: 0, 
+                                                    scale: 1,
+                                                    transition: {
+                                                        type: "spring",
+                                                        stiffness: 300,
+                                                        damping: 30
+                                                    }
+                                                },
+                                                exit: { 
+                                                    opacity: 0, 
+                                                    y: -10, 
+                                                    scale: 0.98,
+                                                    transition: {
+                                                        duration: 0.2
+                                                    }
+                                                }
+                                            }}
+                                        >
+                                            <ChatCard chat={chat} />
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+                            )
+                        ))}
+                    </motion.div>
+                }
+            </AnimatePresence>
 
             {hasMore && 
                 <Button 

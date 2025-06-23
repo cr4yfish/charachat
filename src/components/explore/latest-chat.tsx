@@ -11,9 +11,9 @@ import { API_ROUTES } from "@/lib/apiRoutes";
 import { TIMINGS_MILLISECONDS } from "@/lib/timings";
 import { fetcher } from "@/lib/utils";
 import useSWR from "swr";
-import { ChatCard } from "../chats/chat-card";
 import { Chat } from "@/types/db";
 import { CarouselItem } from "../ui/carousel";
+import ChatCardSmall from "../chats/chat-card-small";
 
 const PureLatestChat = () => {
     const { data: latestChat, isLoading } = useSWR<Chat>(API_ROUTES.GET_LATEST_CHAT, fetcher, {
@@ -27,7 +27,7 @@ const PureLatestChat = () => {
 
     return (
         <CarouselItem className="min-lg:basis-1/2">
-            <ChatCard chat={latestChat} small />
+            <ChatCardSmall chat={latestChat} />
         </CarouselItem>
     )
 }
