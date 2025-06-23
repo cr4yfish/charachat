@@ -368,7 +368,8 @@ export const PureChat = (props: Props) => {
         data={messages}
         atBottomStateChange={setIsAtBottom}
         initialTopMostItemIndex={messages.length - 1}
-        overscan={3}
+        overscan={10}
+        increaseViewportBy={{ top: 200, bottom: 0 }}
         alignToBottom={true}
         startReached={handleLoadMore}
         itemContent={(index, message) => {
