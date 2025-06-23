@@ -34,7 +34,7 @@ const Bubble = ({ char, index }: { char: Character, index: number }) => {
                 repeat: Infinity,
                 repeatType: "reverse",
                 ease: "easeInOut",
-                delay: index * 0.5
+                delay: index * 0.1
             }}
         >
             <Image 

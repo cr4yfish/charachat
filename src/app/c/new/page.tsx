@@ -32,7 +32,7 @@ export default async function NewCharPage({ searchParams }: { searchParams: Prom
     
     return (
         <>
-        <div className="px-4 flex flex-col h-full pt-[75px] pb-[100px] justify-between overflow-hidden">
+        <div className="px-4 flex flex-col h-full pt-[75px] pb-[100px] justify-between overflow-hidden relative z-10">
         
             <CharacterBubbles />
             <NewCharacterFromScratch initCharacter={newChar} defaultOpen={isImport === "true"} />
@@ -43,9 +43,8 @@ export default async function NewCharPage({ searchParams }: { searchParams: Prom
                     <ChevronRightIcon size={14} />
                 </Link>
             </div>
-
-            <div className=" absolute bottom-0 left-0 size-full bg-gradient-to-tr from-primary/20 to-background -z-10 "></div>
         </div>
+        <div className=" absolute bottom-0 left-0 size-full bg-gradient-to-tr from-primary/20 to-background  "></div>
         </>
     )
 }
