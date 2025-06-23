@@ -29,7 +29,9 @@ export const PureBetterSwitch = (props: Props) => {
             onClick={() => handleCheckedChange(!internalChecked)}
             className={cn("flex flex-row justify-between px-3 py-3 items-center cursor-pointer bg-background/15", { " border-primary/50 ": internalChecked})}
             >
-            <CardHeader className="flex flex-col gap-1 flex-1 p-0">
+            <CardHeader className={cn("flex flex-col gap-1 flex-1 p-0", {
+                "opacity-50 pointer-events-none": props.disabled
+            })}>
                 <CardTitle>{props.label}</CardTitle>
                 <CardDescription className="text-xs">{props.description}</CardDescription>
             </CardHeader>
