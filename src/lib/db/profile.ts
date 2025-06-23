@@ -7,6 +7,7 @@ import { Profile } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { currentUser } from "@clerk/nextjs/server";
+import { ERROR_MESSAGES } from "../errorMessages";
 
 const publicTableName = "profiles_view";
 
@@ -125,7 +126,7 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
             }));
         }
     } catch {
-        profile.api_keys = []; // Reset api keys if encryption fails
+        throw new Error(ERROR_MESSAGES.CRYPTO_ERROR);
     }
 
     const res = await getProfile(profile.clerk_user_id);
