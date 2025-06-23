@@ -77,6 +77,7 @@ const FancyLLM = memo(PureFancyLLM, (prevProps, nextProps) => {
 type Props = {
     onSelect?: (key: ModelId) => void;
     selectedKey?: ModelId | undefined;
+    disabled?: boolean;
     label?: string;
     description?: string;
     showLink?: boolean;
@@ -105,7 +106,7 @@ const PureLLMSelect = (props: Props) => {
                 <span className="text-xs text-muted-foreground">{props.description}</span>
 
             </Label>
-            <Select name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as ModelId)}  >
+            <Select disabled={props.disabled} name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as ModelId)}  >
                 <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border">
                     <SelectValue aria-label="Select a LLM" className="!h-fit !border-border">
                         <FancyLLM llm={getLLMById(props.selectedKey || _DEFAULT_LLM)} showIcon showProvider  />
@@ -142,6 +143,10 @@ const PureLLMSelect = (props: Props) => {
 const LLMSelect = memo(PureLLMSelect, (prevProps, nextProps) => {
     if (prevProps.onSelect !== nextProps.onSelect) return false;
     if (prevProps.selectedKey !== nextProps.selectedKey) return false;
+    if (prevProps.disabled !== nextProps.disabled) return false;
+    if (prevProps.label !== nextProps.label) return false;
+    if (prevProps.description !== nextProps.description) return false;
+    if (prevProps.showLink !== nextProps.showLink) return false;
 
     return true;
 });
