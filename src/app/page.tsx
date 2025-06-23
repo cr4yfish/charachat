@@ -30,7 +30,7 @@ export default async function Home() {
 
       <Spotlight init={spotlight} />
 
-      <div className="flex flex-col gap-4 px-4 py-6 pt-1">
+      <div className="flex flex-col gap-4 px-4 py-6 pt-1  pb-[120px]">
 
         {/* Personalized section */}
         <PersonalizedSection draftChar={draftChar} />
