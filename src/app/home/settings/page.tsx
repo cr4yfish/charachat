@@ -21,21 +21,6 @@ export default async function PureSettingsPage() {
     <div className="flex flex-col h-full w-full px-4 pt-[75px] pb-[100px] overflow-y-auto">
 
       <div className="flex flex-col gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              Charachat v1 Migration
-            </CardTitle>
-            <CardDescription>
-              If you were a Charachat user, you can migrate your settings and chats to the new system. This will allow you to continue using your previous data seamlessly.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <Link href={"/home/settings/migrate"}>
-              <Button>Migrate</Button>
-            </Link>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader>
@@ -75,6 +60,23 @@ export default async function PureSettingsPage() {
             <UserButton />
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Charachat v1 Migration
+            </CardTitle>
+            <CardDescription>
+              If you were a Charachat user, you can migrate your settings and chats to the new system. This will allow you to continue using your previous data seamlessly.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <Link href={"/home/settings/migrate"}>
+              <Button>Migrate</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
       </div>
     </div>
   );
