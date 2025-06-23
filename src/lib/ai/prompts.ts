@@ -55,7 +55,7 @@ export const getMemoriesPrompt = (memories?: RAGMemory[]): string => {;
 }
 
 export const getDynamicBookPrompt = (dynamicBook?: string): string => {
-  if(!dynamicBook) return "";
+  if(!dynamicBook) return "[Ignore this]";
 
   return (`
     This is important extra-information and context the user provided:
