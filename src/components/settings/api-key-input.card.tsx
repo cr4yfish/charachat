@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useMemo } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import LLMBadge from "../llm/llm-badge";
@@ -22,23 +22,38 @@ import { TIMINGS_MILLISECONDS } from "@/lib/timings";
 
 const PureAPIKeyInputCard = () => {
     const { data: profile, mutate, isLoading, isValidating, } = useSWR<Profile>(API_ROUTES.GET_OWN_PROFILE, fetcher, {
-      dedupingInterval: TIMINGS_MILLISECONDS.ONE_MINUTE,
       refreshInterval: TIMINGS_MILLISECONDS.ONE_MINUTE,
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
       revalidateOnMount: true,
     })
     const [debouncedProfile] = useDebounce(profile, 1000);
-    const isChanged = useMemo(() => {
-      if (!profile || !debouncedProfile) return false;
-      return !equal(profile, debouncedProfile);
-    }, [profile, debouncedProfile]);
+    const initialProfileRef = useRef<Profile | null>(null);
+    const hasInitializedRef = useRef(false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
+    // Store the initial profile data on first load
     useEffect(() => {
-      if(!debouncedProfile) return;
+      if (profile && !hasInitializedRef.current) {
+        initialProfileRef.current = profile;
+        hasInitializedRef.current = true;
+      }
+    }, [profile]);    useEffect(() => {
+      // Don't update if we don't have a debounced profile
+      if (!debouncedProfile) return;
+      
+      // Don't update if we haven't initialized yet (prevents initial load updates)
+      if (!hasInitializedRef.current) return;
+      
+      // Don't update if the profile hasn't actually changed from the initial state
+      if (initialProfileRef.current && equal(debouncedProfile, initialProfileRef.current)) {
+        return;
+      }
 
-      // only update if the profile has changed
-      if(!isChanged) return;
+      setIsUpdating(true);
 
-      fetch(API_ROUTES.UPDATE_PROFILE, {
+      const updatingProfile = fetch(API_ROUTES.UPDATE_PROFILE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,15 +67,23 @@ const PureAPIKeyInputCard = () => {
         return res.json();
       })
       .then(() => {
-        toast.success("Profile updated successfully");
-        // mutate(profile, true); // Revalidate the profile data
+        // Update the initial profile reference to the new state to prevent further unnecessary updates
+        initialProfileRef.current = debouncedProfile;
       })
       .catch(error => {
         console.error("Error updating profile:", error);
-        toast.error("Failed to update profile. Please try again later.");
+      })
+      .finally(() => {
+        setIsUpdating(false);
       });
 
-    }, [debouncedProfile, mutate, isChanged])
+      toast.promise(updatingProfile, {
+        loading: "Updating profile...",
+        success: "Profile updated successfully",
+        error: "Failed to update profile. Please try again later.",
+      });
+
+    }, [debouncedProfile, mutate])
 
     const handleKeyChange = (providerId: ProviderId, key: string) => {
       if (!profile) {
@@ -83,19 +106,20 @@ const PureAPIKeyInputCard = () => {
         revalidate: false,
       }); // Optimistically update the profile
     }
+
     return (
       <Card>
         <CardHeader>
           <CardTitle>API Keys</CardTitle>
           <CardDescription>All API Keys are stored encrypted and are only decrypted when viewed or used. You will be able to use any AI for which you provide an API key - in addition to free models.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        </CardHeader>        <CardContent className="flex flex-col gap-4">
           <div className="flex flex-row items-center gap-2 text-muted-foreground text-xs">
-            {isLoading || isValidating && <Spinner />}
+            {(isLoading || isValidating || isUpdating) && <Spinner />}
             {isLoading && <p>Loading your profile...</p>}
-            {isValidating && <p>Syncing with your profile...</p>}
-            {!isLoading && !isValidating && profile && <p>Profile loaded. You can now manage your API keys.</p>}
-            {!profile && !isLoading && !isValidating && <p className="text-red-500">Failed to load profile. Please try again later.</p>}
+            {isValidating && !isUpdating && <p>Syncing with your profile...</p>}
+            {isUpdating && <p>Saving changes...</p>}
+            {!isLoading && !isValidating && !isUpdating && profile && <p>Profile loaded. You can now manage your API keys.</p>}
+            {!profile && !isLoading && !isValidating && !isUpdating && <p className="text-red-500">Failed to load profile. Please try again later.</p>}
           </div>
           <Accordion type="single" collapsible>
               <AccordionItem value="free-models">
@@ -108,51 +132,78 @@ const PureAPIKeyInputCard = () => {
                     ))}
                   </div>
                 </AccordionContent>
-              </AccordionItem>
-
-              {Providers.map(provider => (
+              </AccordionItem>              {Providers.map(provider => {
+                const hasApiKey = profile?.api_keys?.some(key => key.provider === provider.id && key.encrypted_api_key.length > 1);
+                const isProviderDisabled = isLoading || isUpdating;
+                
+                return (
                 <AccordionItem value={provider.id} key={provider.id}>
                   <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <LLMIcon provider={provider.id} />
-                      {provider.id}
+                      <span className={isProviderDisabled ? "text-muted-foreground" : ""}>{provider.id}</span>
                       {provider.hasFreeTier && <span className="text-xs text-green-500">Free Tier available</span>}
-                      {profile?.api_keys?.some(key => key.provider === provider.id) &&
-                        <span className="text-xs text-emerald-400">
+                      {hasApiKey && (
+                        <span className="text-xs text-emerald-400 flex items-center gap-1">
                           <CheckIcon size={12} />
+                          {isUpdating && <Spinner size="small" />}
                         </span>
-                      }
+                      )}
+                      {isValidating && !isUpdating && (
+                        <span className="text-xs text-blue-400 flex items-center gap-1">
+                          <Spinner size="small" />
+                          <span>Syncing</span>
+                        </span>
+                      )}
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                      <span className=" text-muted-foreground text-xs">{provider.id} Models</span>
+                      <span className="text-muted-foreground text-xs">{provider.id} Models</span>
                       <div className="flex flex-row gap-1 flex-wrap">
                         {LLMs.filter(model => model.provider === provider.id).map(model => 
                           <LLMBadge 
                             llm={model} 
                             key={model.key} 
-                            isActive={profile?.api_keys?.some(key => key.provider === provider.id)}
+                            isActive={hasApiKey}
                           />
                         )}
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <InputWithLabel 
-                        label="API Key"
-                        description="Enter your API key for this provider. This key will be stored encrypted and used to access the provider's models."
-                        placeholder={`${provider.id} API Key`}
-                        type="password"
-                        value={profile?.api_keys?.find(key => key.provider === provider.id)?.encrypted_api_key || ""}
-                        onChange={(e) => handleKeyChange(provider.id, e.target.value)}
-                        disabled={isLoading}
-                      />
-                      {provider.keyLink && <a className="text-blue-400 underline text-xs" href={provider.keyLink}>Get the key here</a>}
+                      <div className="relative">
+                        <InputWithLabel 
+                          label="API Key"
+                          description="Enter your API key for this provider. This key will be stored encrypted and used to access the provider's models."
+                          placeholder={`${provider.id} API Key`}
+                          type="password"
+                          value={profile?.api_keys?.find(key => key.provider === provider.id)?.encrypted_api_key || ""}
+                          onChange={(e) => handleKeyChange(provider.id, e.target.value)}
+                          disabled={isProviderDisabled}
+                        />
+                        {isUpdating && (
+                          <div className="absolute right-2 top-8 flex items-center gap-1 text-xs text-muted-foreground">
+                            <Spinner size="small" />
+                            <span>Saving...</span>
+                          </div>
+                        )}
+                      </div>
+                      {provider.keyLink && (
+                        <a 
+                          className={`text-blue-400 underline text-xs ${isProviderDisabled ? 'pointer-events-none opacity-50' : ''}`} 
+                          href={provider.keyLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Get the key here
+                        </a>
+                      )}
                     </div>
                   </AccordionContent>
                 </AccordionItem>
-              ))}
+                )
+              })}
 
           </Accordion>
 
