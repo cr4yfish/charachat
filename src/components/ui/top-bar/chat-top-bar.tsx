@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useSidebar } from "../sidebar";
 
 type Props = {
-    shallowCharacter: ShallowCharacter;
+    shallowCharacter: ShallowCharacter | undefined;
     chatId: string;
     isLoggedIn: boolean;
 }
@@ -53,17 +53,18 @@ const PureTopBar = (props: Props) => {
                             </motion.div>
                         }
 
-                        <Link href={"/c/" + props.shallowCharacter.id} className="font-bold truncate " >
+                        {props.shallowCharacter?.id ?<Link href={"/c/" + props.shallowCharacter.id} className="font-bold truncate " >
                             {props.shallowCharacter?.name}
-                        </Link>
+                        </Link> :
+                        <span>Charachat</span>}
                     </div>
             
                 </div>
                 
-                {props.isLoggedIn && 
+                {props.isLoggedIn && props.shallowCharacter?.id &&
                 <ChatSettings 
                     chatId={props.chatId} 
-                    characterId={props.shallowCharacter?.id} 
+                    characterId={props.shallowCharacter.id} 
                 />}
 
                 <div className="absolute -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
@@ -74,7 +75,7 @@ const PureTopBar = (props: Props) => {
 }
 
 export const ChatTopBar = memo(PureTopBar, (prev, next) => {
-    if (prev.shallowCharacter.id !== next.shallowCharacter.id) return false;
+    if (prev.shallowCharacter?.id !== next.shallowCharacter?.id) return false;
     if (prev.chatId !== next.chatId) return false;
     if (prev.isLoggedIn !== next.isLoggedIn) return false;
     

@@ -24,7 +24,7 @@ import { TOOL_NAMES } from '@/lib/toolNames';
 import equal from 'fast-deep-equal';
 
 type Props = {
-  shallowCharacter: ShallowCharacter;
+  shallowCharacter: ShallowCharacter | undefined;
   chatId: string;
   initialMessages: Message[];
 }
@@ -43,7 +43,7 @@ export const PureChat = (props: Props) => {
     sendExtraMessageFields: true,
     body: {
       chatId: props.chatId,
-      characterId: props.shallowCharacter.id,
+      characterId: props.shallowCharacter?.id,
       modelId: llmCookie,
       isIntro: false,
     },
@@ -52,7 +52,7 @@ export const PureChat = (props: Props) => {
       // Handle the message when the chat is finished
 
       // If the pathname ID does not match the chat ID, redirect to the chat page
-      if(!pathnameID) { router.replace("/chat/" + props.chatId); } 
+      if(!pathnameID && props.shallowCharacter?.id) { router.replace("/chat/" + props.chatId); } 
       
       else {
 
@@ -255,6 +255,11 @@ export const PureChat = (props: Props) => {
   const addIntroMessage = useCallback(() => {
     setSetupDone(true);
 
+    if(!props.shallowCharacter?.id) {
+      // Dont try to add an intro message if there is no character ID
+      return;
+    }
+
     // Intro message appender
     append({ 
       id: uuidv4(),
@@ -264,14 +269,14 @@ export const PureChat = (props: Props) => {
     }, {
       body: {
         chatId: props.chatId,
-        characterId: props.shallowCharacter.id,
+        characterId: props.shallowCharacter?.id,
         isIntro: true,
         modelId: llmCookie,
         isUserMessage: true,
       }
     });
 
-  }, [append, props.chatId, props.shallowCharacter.id, llmCookie]);
+  }, [append, props.chatId, props.shallowCharacter?.id, llmCookie]);
 
   const handleLoadMore = useCallback(() => {
     // Load more messages by increasing the size of the SWR infinite data 
@@ -376,8 +381,8 @@ export const PureChat = (props: Props) => {
                 key={message.id} 
                 message={message} 
                 isLoading={isLoading && messages.length - 1 === index}
-                characterName={props.shallowCharacter.name}
-                characterImage={props.shallowCharacter.image_link}
+                characterName={props.shallowCharacter?.name}
+                characterImage={props.shallowCharacter?.image_link}
                 openImageGen={() => setImageGenOpen(true)}
                 chatId={props.chatId}
                 deleteCallback={deleteCallback}
@@ -413,7 +418,7 @@ export const PureChat = (props: Props) => {
 
 export const Chat = memo(PureChat, (prev, next) => {
   if (prev.chatId !== next.chatId) return false;
-  if (prev.shallowCharacter.id !== next.shallowCharacter.id) return false;
+  if (prev.shallowCharacter?.id !== next.shallowCharacter?.id) return false;
   if (!equal(prev.initialMessages, next.initialMessages)) return false;
 
   return true;

@@ -4,6 +4,7 @@ import { ChatTopBar } from "@/components/ui/top-bar/chat-top-bar";
 import { v4 as uuidv4 } from "uuid";
 import { getShallowCharacter } from "@/lib/db/character";
 import { currentUser } from "@clerk/nextjs/server";
+import { Character } from "@/types/db";
 
 export default async function NewChatPage({
     searchParams,
@@ -20,13 +21,9 @@ export default async function NewChatPage({
         characterId = cookieStore.get("character_id")?.value;
     }
 
-    if(!characterId) {
-        return <div>No character selected for the chat.</div>;
-    }
-
     const chatId = uuidv4();
 
-    const shallowCharacter = await getShallowCharacter(characterId);
+    const shallowCharacter: Character | undefined = characterId ?  await getShallowCharacter(characterId) : undefined;
 
     const user = await currentUser();
     const isLoggedIn = !!user?.id;

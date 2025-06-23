@@ -13,7 +13,7 @@ import { API_ROUTES } from "@/lib/apiRoutes";
 import { toast } from "sonner";
 import { SignInButton } from "@clerk/nextjs";
 
-const PureHeader = ({ image, name, role}: { image?: string, name?: string, role: string }) => {
+const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
         <div className="font-medium text-sm flex items-center gap-2">
             <div className="flex items-center gap-2 dark:text-neutral-400 text-neutral-600">
@@ -25,7 +25,7 @@ const PureHeader = ({ image, name, role}: { image?: string, name?: string, role:
                         <Image alt="" fill src={image} /> 
                     </motion.div>
                 }
-                <span>{name ?? role}</span>
+                <span>{name ?? "Charachat"}</span>
             </div>
         </div>
     );

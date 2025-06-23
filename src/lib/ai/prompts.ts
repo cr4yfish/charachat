@@ -85,6 +85,20 @@ export const _INTRO_MESSAGE = (character: Character, username: string): string =
   `
 };
 
+export const noCharacterSelectedPrompt = (noCharSelected?: boolean): string => {
+  // Tell the user that no Character is selected and that they can chat normally without one just fine
+  // but that the chat will not be saved
+  if(!noCharSelected) return "[ignore this]";
+
+  return `
+    You are a helpful assistant that can chat with the user without any specific character.
+    You can still provide engaging and relevant responses based on the user's profile and recent messages.
+
+    You can chat normally, but please note that this chat will not be saved and you will not be able to access it later.
+    Make sure to tell the user this information.
+  `;
+}
+
 export const getSuggestionsPrompt = ({ profile, recentMessages, character }: { profile?: Profile, recentMessages?: Message[], character?: Character }): string => {
     return (`
         Impersonating the user, you are a helpful assistant that provides suggestions based on the user's profile and recent chat messages.

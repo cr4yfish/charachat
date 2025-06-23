@@ -3,7 +3,7 @@ import { getLLMModelCookie } from "@/app/actions";
 import { getLanguageModel, getModelApiKey } from "@/lib/ai";
 import { generateImageAgent } from "@/lib/ai/agents/image";
 import { RAGMemory } from "@/lib/ai/browser-rag/rag";
-import { _INTRO_MESSAGE, getDynamicBookPrompt, getMemoriesPrompt, getSystemPrompt } from "@/lib/ai/prompts";
+import { _INTRO_MESSAGE, getDynamicBookPrompt, getMemoriesPrompt, getSystemPrompt, noCharacterSelectedPrompt } from "@/lib/ai/prompts";
 import { ModelId } from "@/lib/ai/types";
 import { llmSupportsTools } from "@/lib/ai/utils";
 import { getKeyServerSide } from "@/lib/crypto/server";
@@ -13,7 +13,7 @@ import { addMessage, addMessages } from "@/lib/db/messages";
 import { getProfile } from "@/lib/db/profile";
 import { ERROR_MESSAGES } from "@/lib/errorMessages";
 import { getMostRecentUserMessage, sanitizeResponseMessages } from "@/lib/utils";
-import { Chat, Message } from "@/types/db";
+import { Character, Chat, Message } from "@/types/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { CoreAssistantMessage, CoreToolMessage, createDataStreamResponse, Message as AIMessage, streamText, convertToCoreMessages } from "ai";
 import { v4 as uuidv4 } from "uuid";
@@ -65,17 +65,12 @@ export async function POST(req:Request) {
      * End access controls and init stuff
      */
 
-    let chat = await getChat(chatId);
+    let chat: Chat | undefined = await getChat(chatId);
 
-    if(!chat) {
+    if(!chat && characterId) {
         try {
             
             if (!clientLLM) {  return new Response(ERROR_MESSAGES.LLM_MODEL_REQUIRED, { status: 400 }); }
-            
-            if(!characterId) {
-                // we need this on setup
-                return new Response(ERROR_MESSAGES.CHARACTER_ID_REQUIRED, { status: 400 });
-            }
 
             chat = await createChat({
                 chatId: chatId,
@@ -93,14 +88,14 @@ export async function POST(req:Request) {
     }
 
 
-    const character = await getCharacter(chat.character.id);
-    if (!character) { return new Response(ERROR_MESSAGES.CHARACTER_NOT_FOUND, { status: 404 }); }
+    const character: Character | undefined = chat ? await getCharacter(chat.character.id) : undefined;
+    //if (!character) { return new Response(ERROR_MESSAGES.CHARACTER_NOT_FOUND, { status: 404 }); }
 
     const key = await getKeyServerSide();
 
     // save user message
     // but only if it's NOT the intro message
-    if(!isIntro && isUserMessage) {
+    if(!isIntro && isUserMessage && chat?.id) {
         try {
             await addMessage({
                 id: userMessage.id,
@@ -115,7 +110,10 @@ export async function POST(req:Request) {
             console.error("Error adding user message:", error);
             return new Response(ERROR_MESSAGES.CHAT_UPDATE_FAILED, { status: 500 });
         }
-    } else if(isIntro) {
+    } 
+    
+    else if(isIntro && character) {
+
         // modify the last user message to be the intro message
         const introMessageContent = _INTRO_MESSAGE(character, user.username || "User");
 
@@ -125,7 +123,7 @@ export async function POST(req:Request) {
         })
     }
 
-    const modelId = (chat.llm || clientLLM) as ModelId;
+    const modelId = (chat?.llm || clientLLM) as ModelId;
 
     const profile = await getProfile(user.id);
     if (!profile) {
@@ -150,7 +148,7 @@ export async function POST(req:Request) {
         character, chat
     });
     
-    const bookPrompt = getDynamicBookPrompt(chat.dynamic_book);
+    const bookPrompt = getDynamicBookPrompt(chat?.dynamic_book);
 
     const memoriesPrompt = getMemoriesPrompt(memories);
 
@@ -158,6 +156,8 @@ export async function POST(req:Request) {
     // -> saves tokens
     const coreMessages = convertToCoreMessages(messages);
 
+    const noCharPrompt = noCharacterSelectedPrompt(chat?.id === undefined);
+    
     // make sure the first message is a user message
     // some models will add an empty user message at the start
     // if the first message is not a user message,
@@ -196,10 +196,18 @@ export async function POST(req:Request) {
                         role: "system",
                         content: bookPrompt
                     },
+                    {
+                        // No character selected prompt
+                        // this is only used if the chat has no character
+                        role: "system",
+                        content: noCharPrompt
+                    },
                     // User & AI messages
                     ...coreMessages
                 ],
                 onFinish: async ({ response }) => {
+
+                    if(!chat?.id) return;
 
                     const responseMessagesWithoutIncompleteToolCalls = sanitizeResponseMessages(response.messages);
 
