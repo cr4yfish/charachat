@@ -365,6 +365,39 @@ export const getCachedTrendingInitialCharacters = unstable_cache(
     }
 );
 
+/**
+ * Gets [LIMIT] amount of characters starting from a random cursor.
+ */
+export const getRandomCharacters = cache(async (limit = 60): Promise<Character[]> => {
+    // Get a larger pool of characters to randomize from
+    const randomCursor = Math.floor(Math.random() * limit);
+
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
+        .from(publicTableName)
+        .select(characterMatcher)
+        .eq("is_private", false)
+        .eq("is_unlisted", false)
+        .range(randomCursor, randomCursor + limit - 1)
+        
+    if (error) {
+        throw error;
+    }
+
+    // Shuffle the array using Fisher-Yates algorithm
+    const shuffled = [...data];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    // Take the requested slice from the shuffled array
+    const selectedData = shuffled.slice(randomCursor, randomCursor + limit);
+
+    return Promise.all(selectedData.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
+})
+
 export const getCharactersByCategory = cache(async (props: LoadMoreProps): Promise<Character[]> => {
     if(!props.args?.categoryId) {    
         throw new Error("Category ID not found");

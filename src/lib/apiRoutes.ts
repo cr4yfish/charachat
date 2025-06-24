@@ -11,6 +11,7 @@ export const API_ROUTES = {
     GET_OWN_CHARACTERS: "/api/characters/own",
     GET_CHARACTERS_BY_CATEGORY: "/api/characters/category",
     GET_TRENDING_CHARACTERS: "/api/characters/trending",
+    GET_RANDOM_CHARACTERS: "/api/characters/random",
     GET_NEWEST_CHARACTERS: "/api/characters/newest",
     GET_POPULAR_CHARACTERS: "/api/characters/popular",
     CREATE_CHARACTER: "/api/characters/create",
