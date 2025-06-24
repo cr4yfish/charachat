@@ -1,13 +1,13 @@
 import { Importer } from "@/components/new-character/import/importer";
-import { searchAnime } from "../actions";
+import { searchAnime } from "../../actions";
 
-export default async function ImportPage() {
+export default async function AnimeImportPage() {
     
     return (
-        <div className="h-full">
+        <div className="h-full w-full">
             <Importer 
                 searchAction={searchAnime} 
-                label="Import Fandom"
+                label="Import Anime"
             />   
         </div>
     )
