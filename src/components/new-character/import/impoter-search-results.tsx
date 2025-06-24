@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRightIcon } from "lucide-react";
 import ImageWithBlur from "@/components/image/imageWithBlur";
-import { truncateText } from "@/lib/utils";
+import { truncateText } from "@/lib/utils/text";
 
 const PureResultCard = ({ character, onClick }: { character: ImportCharType, onClick: (char: ImportCharType) => void }) => {
 
