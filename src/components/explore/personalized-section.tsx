@@ -12,6 +12,7 @@ import { Character } from "@/types/db"
 
 const LatestChat = dynamic(() => import("@/components/explore/latest-chat"));
 const NewCharacterFromScratch = dynamic(() => import("@/components/new-character/new-character-from-scratch")); 
+const WelcomeCard = dynamic(() => import("@/components/explore/welcome-card"));
 
 type Props = {
     draftChar: Character | undefined | null;
@@ -37,8 +38,10 @@ export function PersonalizedSection(props: Props) {
             <Carousel>
                 <CarouselContent>
 
+                    <WelcomeCard />
+
                     {props.draftChar && (
-                        <CarouselItem className=" min-lg:basis-1/2">
+                        <CarouselItem className=" min-lg:basis-1/3">
                             <NewCharacterFromScratch small initCharacter={props.draftChar} />
                         </CarouselItem>
                     )}

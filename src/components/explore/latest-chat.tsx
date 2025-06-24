@@ -26,7 +26,7 @@ const PureLatestChat = () => {
     if (isLoading || !latestChat) return null; // Return null while loading
 
     return (
-        <CarouselItem className="min-lg:basis-1/2">
+        <CarouselItem className="min-lg:basis-1/3">
             <ChatCardSmall chat={latestChat} />
         </CarouselItem>
     )
