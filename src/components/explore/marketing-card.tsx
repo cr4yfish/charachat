@@ -26,7 +26,7 @@ function MarketingCard() {
                     <div className="flex flex-col gap-1">
                         <p className="text-xs">🔒 Your Privacy Matters</p>
                         <div className="flex items-center gap-1">
-                            <h2 className="font-bold text-white/90">End-to-End Encrypted</h2>
+                            <h2 className="font-bold text-white/90">Encrypted Chats</h2>
                         </div>
                         
                     </div>
@@ -41,28 +41,27 @@ function MarketingCard() {
                     <DialogDescription>
                         Your conversations deserve real privacy and security
                     </DialogDescription>
-                </DialogHeader>
+                </DialogHeader>                
+                    <div className="flex flex-col gap-4 overflow-y-auto size-full relative">
+                        <div className="space-y-2">
+                            <h3 className="font-semibold text-sm flex items-center gap-2">
+                                🔐 Strong Encryption
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                                Your messages are encrypted with AES-256-GCM, the gold standard for data protection. All data is encrypted at rest and in transit.
+                            </p>
+                        </div>
 
-                <div className="flex flex-col gap-4 overflow-y-auto size-full relative">
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-sm flex items-center gap-2">
-                            🔐 End-to-End Encryption
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                            Your messages are encrypted to the highest standard (AES-256). Even I can&apos;t read them - they&apos;re completely private to you.
-                        </p>
-                    </div>
+                        <div className="space-y-2">
+                            <h3 className="font-semibold text-sm flex items-center gap-2">
+                                ⭐ Open Source Freedom
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                                Choose from 10+ AI providers (OpenAI, Claude, Gemini etc.). No vendor lock-in. Full transparency.
+                            </p>
+                        </div>
 
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-sm flex items-center gap-2">
-                            ⭐ Open Source Freedom
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                            Choose from 10+ AI providers (OpenAI, Claude, Gemini etc.). No vendor lock-in. Full transparency.
-                        </p>
-                    </div>
-
-                    <div className="space-y-2">
+                        <div className="space-y-2">
                         <h3 className="font-semibold text-sm flex items-center gap-2">
                             🛡️ Privacy by Design
                         </h3>

@@ -32,12 +32,12 @@ export default function News() {
     return (
         <>
         <Carousel>
-          <CarouselContent>            
+          <CarouselContent>             
             <NewsCard 
-              title="🔒 End-to-End Encrypted"
+              title="🔒 Strongly Encrypted"
               description={
                 <>
-                  <p>Your conversations are encrypted and only you can read them. Complete privacy guaranteed.</p>
+                  <p>Your conversations are protected with AES-256-GCM encryption at rest and in transit.</p>
                 </>
               }
             />
@@ -55,7 +55,7 @@ export default function News() {
               title="🛡️ Privacy First"
               description={
                 <>
-                  <p>Unlike other platforms, we can&apos;t read your messages - even if we wanted to.</p>
+                  <p>Your data stays secure and private. No selling, no tracking, no unwanted analysis.</p>
                 </>
               }
             />

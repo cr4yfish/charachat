@@ -21,10 +21,10 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 })
 
-const APP_NAME = "Charachat - Chat with your favorite characters";
-const APP_DEFAULT_TITLE = "Charachat - Chat with your favorite characters";
-const APP_TITLE_TEMPLATE = "%s - Charachat - Chat with your favorite characters";
-const APP_DESCRIPTION = "Charachat - Chat with your favorite characters";
+const APP_NAME = "Charachat";
+const APP_DEFAULT_TITLE = "Charachat - Private AI Character Chat Platform";
+const APP_TITLE_TEMPLATE = "%s - Charachat";
+const APP_DESCRIPTION = "Chat privately with AI characters using your choice of 10+ AI providers. Featuring strong AES-256 encryption, open-source transparency, and complete data privacy. No vendor lock-in, no data selling.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
