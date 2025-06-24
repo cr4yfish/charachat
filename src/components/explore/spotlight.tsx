@@ -9,9 +9,6 @@ import ImageWithBlur from "../image/imageWithBlur";
 import { Button } from "../ui/button";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
-import { setCharacterCookie } from "@/app/actions";
 import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 
 export type SpotlightData = {
@@ -27,7 +24,6 @@ export type SpotlightData = {
 }
 
 export default function Spotlight({ init } : { init: SpotlightData }) {
-    const router = useRouter();
     const { data, error } = useSWR<SpotlightData>("/api/spotlight", fetcher, 
         {
             dedupingInterval: TIMINGS_MILLISECONDS.ONE_DAY, // 1 hour
@@ -39,13 +35,6 @@ export default function Spotlight({ init } : { init: SpotlightData }) {
             fallbackData: init, // Use initial data if provided
         }
     )
-
-    const openChat = useCallback(async () => {
-        if(!data?.character.id) return;
-        await setCharacterCookie(data.character.id);
-        router.push(`/chat`);
-    }, [data, router]);
-
 
     if(error) {
         console.error("Error fetching spotlight data:", error);
@@ -75,10 +64,7 @@ export default function Spotlight({ init } : { init: SpotlightData }) {
                             <span className="truncate text-xs max-w-[66%]" style={{ color: ` color-mix(in srgb, black 70%, ${data?.palette?.Vibrant})` }} >{data?.character.description}</span>
                             {/* <span className="text-black/75 text-sm truncate font-medium" >By @{data?.character.owner?.username}</span> */}
                         </div>
-                        <Link href={`/chat?char=${data?.character.id}`} className="flex items-center gap-2" onClick={(e) => {
-                                e.preventDefault();
-                                openChat();
-                            }}>
+                        <Link href={`/chat?characterid=${data?.character.id}`} className="flex items-center gap-2">
                             <Button 
                                 variant={"ghost"} 
                                 size={"lg"} 
