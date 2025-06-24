@@ -7,6 +7,7 @@ import { Button } from "../button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSidebar } from "../sidebar";
+import SearchCard from "@/components/search/search-card";
 
 type TopBarAction = {
     
@@ -137,10 +138,9 @@ const PureTopBar = () => {
                         
                     </div>
 
-        
-
                     {activeActions.length > 0 &&
                         <div className="flex items-center gap-2 relative">
+                            {pathname === "/" && <SearchCard />}
                             {activeActions.map((action) => (
                                 <Link key={`top-bar-action-${action.pathname}-${action.icon}`} href={action.href} className=" cursor-pointer">
                                     <Button className=" cursor-pointer" >
