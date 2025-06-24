@@ -47,9 +47,11 @@ export default async function Home() {
           <GeneralSwiper initialData={initialTrending} apiUrl={API_ROUTES.GET_TRENDING_CHARACTERS} component={ImageCharacterCard} rows={1} />
         </div>
 
+        {/* Fold on iPhone 15 Browser  */}
+
         <News />
 
-        {/* Page break on iphone 15 */}
+        {/* Fold on iPhone 15 PWA */}
 
         <div className="flex flex-col gap-2 w-full relative">
           <div>
@@ -58,6 +60,8 @@ export default async function Home() {
           </div>
           <GeneralSwiper initialData={initialNewest} apiUrl={API_ROUTES.GET_NEWEST_CHARACTERS} component={ImageCharacterCard} rows={2} />
         </div>
+
+        {/* Fold on Desktop */}
 
         <div className="flex flex-row items-center gap-4 overflow-x-auto w-full relative">
           <RandomCharacters />
