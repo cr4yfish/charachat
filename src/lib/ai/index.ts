@@ -41,7 +41,7 @@ export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promi
 }
 
 type GetLanguageModelProps = {
-    modelId: string;
+    modelId: ModelId;
     baseURL?: string;
     apiKey?: string;
 }

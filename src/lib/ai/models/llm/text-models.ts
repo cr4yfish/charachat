@@ -82,15 +82,39 @@ export const LLMs: LLM[] = [
         "provider": "xAI",
         "tags": ["Fast", "Fuck Elon Musk", "Uncensored"],
     },
-    {
-        "key": "open-mistral-nemo",
-        "name": "Nemo",
-        "usecase": "Fast",
-        "provider": "Mistral",
-        "tags": ["Free", "Fast", "Privacy nightmare"],
-        isFree: true,
-    },
 
+    {
+        "key": "ministral-3b-latest",
+        "name": "Ministral 3b",
+        "usecase": "Used internally for search",
+        "provider": "Mistral",
+        "tags": ["Free", "Cheap", "Fast"],
+        isFree: true
+    },
+    {
+        "key": "ministral-8b-latest",
+        "name": "Ministral 3b",
+        "usecase": "Used internally for search",
+        "provider": "Mistral",
+        "tags": ["Free", "Cheap", "Fast"],
+        isFree: true
+    },
+    {
+        "key": "mistral-medium-latest",
+        "name": "Ministral Medium",
+        "usecase": "Capable",
+        "provider": "Mistral",
+        "tags": ["Free", "Cheap", "Fast"],
+        isFree: true
+    },
+    {
+        "key": "mistral-large-latest",
+        "name": "Ministral Large",
+        "usecase": "Still cheap but getting expensive",
+        "provider": "Mistral",
+        "tags": ["Free", "Cheap", "Fast"],
+        isFree: true
+    },
     {
         key: "claude-sonnet-4-20250514",
         name: "Claude Sonnet 4",

@@ -44,7 +44,9 @@ export type AudioModel = {
 }
 
 export type ModelId = 
-    // Groq
+    /**
+     *   Groq
+     */
     "meta-llama/llama-4-scout-17b-16e-instruct" |
     "meta-llama/llama-4-maverick-17b-128e-instruct" |
 
@@ -61,7 +63,9 @@ export type ModelId =
     "compound-beta" |
     "compound-beta-mini" | 
 
-    // OpenAI
+    /**
+     *  OpenAI
+     */
     "gpt-4o" |
     "gpt-4o-mini" |
     "gpt-4o-mini-realtime-preview-2024-12-17" |
@@ -78,16 +82,30 @@ export type ModelId =
 
     "codex-mini-latest" |
 
-    // Gemini
+    /**
+     *  Gemini
+     */
     "gemini-2.5-pro" |
     "gemini-2.5-flash" |
     "gemini-2.5-flash-lite-preview-06-17" |
 
 
-    // Mistral
-    "open-mistral-nemo" |
+    /**
+     * Mistral
+     */
 
-    // Anthropic
+    // Small mistral models
+    "ministral-3b-latest" | // Efficient, can be used for public use (currently used in search)
+    "ministral-8b-latest" | // A little more expensive than the 3B model, but more capable
+    "mistral-small-latest" | // Over 10x the price of 3B/8B
+ 
+    // Large mistral models
+    "mistral-medium-latest" |
+    "mistral-large-latest" |
+
+    /**
+     *  Anthropic
+     */
     "claude-3-5-haiku-latest" |
     "claude-sonnet-4-20250514" |
     "claude-opus-4-20250514" |
@@ -95,29 +113,39 @@ export type ModelId =
     "ollama" |
     "openai-compatible" |
 
-    // DeepSeek
+    /**
+     *  DeepSeek
+     */
     "deepseek-chat" |
     "deepseek-reasoner" |
 
-    // xAI
+    /**
+     * xAI
+     */
     "grok-3-latest" |
     "grok-3-mini-latest" |
 
-    // Cohere
+    /**
+     * Cohere
+     */
     "command-r-plus" |
     "command-r" |
 
 
     "c4ai-aya-expanse-32b" |
 
-    // Replicate
+    /**
+     * Replicate
+     */
     "black-forest-labs/flux-schnell" |
     "black-forest-labs/FLUX.1-schnell" |
     "xtts-v2" |
     "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0" |
     "fal-ai/ltx-video/image-to-video" |
 
-    // OpenRouter
+    /**
+     * OpenRouter
+     */
     "openrouter/custom" |
     "minimax/minimax-m1" |
     "microsoft/wizardlm-2-8x22b" |
