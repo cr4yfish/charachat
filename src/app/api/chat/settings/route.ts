@@ -2,8 +2,7 @@ import { updateChat } from "@/lib/db/chat";
 
 
 export async function POST(request: Request) {
-    const body = await request.json();
-    const { chat } = body;
+    const chat = await request.json();
 
     if (!chat || !chat.id) {
         return new Response(JSON.stringify({ error: "Chat ID is required" }), { status: 400 });
