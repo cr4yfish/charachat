@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react"
-import TextareaAutosize, { TextareaHeightChangeMeta } from 'react-textarea-autosize';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import { cn } from "@/lib/utils"
 import { Liquid } from "./liquid";
@@ -9,11 +9,8 @@ import { Liquid } from "./liquid";
 function TextareaWithAutosize({ className, endContent, ...props }: React.ComponentProps<typeof TextareaAutosize> & { endContent?: React.ReactNode }) {
   const [hasMultipleRows, setHasMultipleRows] = React.useState(false);
 
-  const handleHeightChange = (height: number, meta: TextareaHeightChangeMeta) => {
-    console.log("Height changed:", height, meta);
+  const handleHeightChange = (height: number) => {
     if(props.minRows === 1) {
-      const singleRowHeight = 56
-      console.log("Calculated height for single row:", singleRowHeight, { rowsHeight: meta.rowHeight, height, singleRowHeight, hasMultipleRows: height >= singleRowHeight });
       setHasMultipleRows(height > 56)
     }
   }
