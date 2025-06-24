@@ -9,6 +9,7 @@ import {
 
 import dynamic from "next/dynamic";
 import { Character } from "@/types/db"
+import MarketingCard from "./marketing-card";
 
 const LatestChat = dynamic(() => import("@/components/explore/latest-chat"));
 const NewCharacterFromScratch = dynamic(() => import("@/components/new-character/new-character-from-scratch")); 
@@ -31,12 +32,13 @@ type Props = {
  */
 export function PersonalizedSection(props: Props) {
 
-
     return (
         <div className="flex flex-col gap-2 w-full relative">
 
             <Carousel>
                 <CarouselContent>
+
+                    <MarketingCard />
 
                     <WelcomeCard />
 
