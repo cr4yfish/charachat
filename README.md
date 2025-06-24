@@ -22,10 +22,10 @@ Create or use pre-made characters and have dynamic, personal conversations. Char
 All messages are encrypted in the database using AES-256-GCM encryption with cryptographically secure keys, ensuring your conversations remain private and secure.
 
 <div style="width: 100%; display: flex; justify-content: center; gap: 1rem;">
-    <img src="https://i.imgur.com/IGnXd8c.png" style="height: 500px; width: auto;" >
-    <img src="https://i.imgur.com/7C9pvs8.png" style="height: 500px; width: auto;" >
-    <img src="https://i.imgur.com/iihuIdu.png" style="height: 500px; width: auto;" >
-    <img src="https://i.imgur.com/BvIPVry.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/1vDtUMH.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/wjBestD.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/wlYJ5mj.png" style="height: 500px; width: auto;" >
+    <img src="https://i.imgur.com/gUdrfIE.png" style="height: 500px; width: auto;" >
 </div>
 
 ## ✨ Features
