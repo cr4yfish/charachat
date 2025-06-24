@@ -1,8 +1,29 @@
 "use client";
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useCallback, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from './label';
 import { cn } from '@/lib/utils';
+
+const PureHeader = ({ label, description}: { label?: string | undefined, description?: string | undefined }) => {
+    return (
+        <div className='flex flex-col'>
+            {label && (
+                <Label className='text-sm '>{label}</Label>
+            )}
+            {description && (
+                <div className="text-xs text-muted-foreground">
+                    {description}
+                </div>
+            )}
+        </div>
+    );
+}
+
+const Header = memo(PureHeader, (prevProps, nextProps) => {
+    return prevProps.label === nextProps.label &&
+           prevProps.description === nextProps.description;
+});
+
 
 type Props = {
     value?: string;
@@ -17,33 +38,31 @@ type Props = {
     rows?: number;
     height?: number; // Optional height prop, not used in the component but can be passed
     name?: string; // Optional name prop, not used in the component but can be passed
+    disabled?: boolean; // Optional disabled prop, not used in the component but can be passed
 }
 
 export const PureTextareaWithCounter = (props: Props) => {
-    const [currentLength, setCurrentLength] = useState(props.value ? props.value.length : 0);
+    const { onChange, maxLength, value } = props;
+    const [currentLength, setCurrentLength] = useState(value ? value.length : 0);
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        if(!props.onChange) return;
+    // Sync currentLength with value prop changes
+    useEffect(() => {
+        setCurrentLength(value ? value.length : 0);
+    }, [value]);
+
+    const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if(!onChange) return;
         const newValue = e.target.value;
-        if (newValue.length <= props.maxLength) {
-            props.onChange(newValue);
+        if (newValue.length <= maxLength) {
+            onChange(newValue);
             setCurrentLength(newValue.length);
         }
-    };
+    }, [onChange, maxLength]);
 
     return (
         <div className="relative flex flex-col gap-1 h-full">
 
-            <div className='flex flex-col'>
-                {props.label && (
-                    <Label className='text-sm '>{props.label}</Label>
-                )}
-                {props.description && (
-                    <div className="text-xs text-muted-foreground">
-                        {props.description}
-                    </div>
-                )}
-            </div>
+            <Header label={props.label} description={props.description} />
 
             <div className='relative h-full'>
                 <Textarea
