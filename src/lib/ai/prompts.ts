@@ -1,5 +1,5 @@
 import { Character, Chat, Message, Persona, Profile } from "@/types/db"
-import { getChatVariables, replaceVariables } from "../utils"
+import { getChatVariables, replaceVariables } from "../utils/text";
 import { RAGMemory } from "./browser-rag/rag";
 
 // map response length to prompt content
