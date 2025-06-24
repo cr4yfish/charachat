@@ -60,7 +60,8 @@ async function generateAndSetKey(userId: string): Promise<Buffer | undefined> {
         // update the user metadata with the key
         await client.users.updateUserMetadata(userId, {
             privateMetadata: {
-                encryption_key: key
+                encryption_key: key,
+                key_generated_at: new Date().toISOString() // Store the key generation time
             }
         })
         return Buffer.from(key, "hex");
