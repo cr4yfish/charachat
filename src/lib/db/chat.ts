@@ -7,6 +7,7 @@ import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/s
 import { createServerSupabaseClient as createClient } from "./server";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptCharacter } from "./character";
+import { ERROR_MESSAGES } from "../errorMessages";
 
 const chatMatcher = `
     *
@@ -45,8 +46,8 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             if(decryptedChat.story?.character) {
                 decryptedChat.story.character = await decryptCharacter(decryptedChat.story.character, key)
             }
-        } catch (error) {
-            console.error("Error decrypting character", error);
+        } catch {
+            console.error(ERROR_MESSAGES.CRYPTO_ERROR);
             return decryptedChat;
         }
     }
@@ -81,8 +82,8 @@ export const decryptChat = async(chat: Chat, key: Buffer): Promise<Chat> => {
             title: await decryptMessageBackwardsCompatible(chat.title, key),
             description: await decryptMessageBackwardsCompatible(chat.description, key)
         }
-    } catch (error) {
-        console.error("Error decrypting chat:",error);
+    } catch {
+        console.error(ERROR_MESSAGES.CRYPTO_ERROR);
         return chat;
     }
 }

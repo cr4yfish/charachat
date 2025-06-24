@@ -15,6 +15,7 @@ import { LIMITS } from "../limits";
 import { TIMINGS } from "../timings";
 import { Vibrant } from "node-vibrant/node";
 import { getProfile } from "./profile";
+import { ERROR_MESSAGES } from "../errorMessages";
 
 const characterMatcher = `
     *,
@@ -104,8 +105,8 @@ export const decryptCharacter = async (character: Character, key: Buffer): Promi
             // tags_full: (character.tags_full) ? await Promise.all(character.tags_full.map(t => decryptTag(t))) : [],
             // loras: character.loras ? await Promise.all(character.loras.map(l => decryptLora(l, buffer))) : []
         }
-    } catch (error) {
-        console.error("Error decrypting character", error);
+    } catch {
+        console.error(ERROR_MESSAGES.CRYPTO_ERROR);
         return character;
     }
 
