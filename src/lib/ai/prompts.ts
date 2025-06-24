@@ -1,4 +1,4 @@
-import { Character, Chat, Message, Profile } from "@/types/db"
+import { Character, Chat, Message, Persona, Profile } from "@/types/db"
 import { getChatVariables, replaceVariables } from "../utils"
 import { RAGMemory } from "./browser-rag/rag";
 
@@ -16,28 +16,34 @@ type GetSystemPromptParams = {
   profile?: Profile;
   character?: Character;
   variables?: Record<string, string>;
+  persona?: Persona;
 }
 
 export const getSystemPrompt = (params: GetSystemPromptParams): string => {
-    return (`
-        ${replaceVariables(params.chat?.character?.system_prompt, params.variables)}
-        
-        Always replace "{{user}}" with "${params.chat?.persona?.full_name || params.profile?.username}" in your responses.
-        You are prohibited from responding with an empty message.
-        You are prohibited from saying anything described here: ${params.chat?.negative_prompt}
+  const systemPrompt = `
+    ${replaceVariables(params.character?.system_prompt, params.variables)}
+    
+    Always replace "{{user}}" with "${params.persona?.full_name || params.profile?.username}" in your responses.
+    You are prohibited from responding with an empty message.
+    You are prohibited from saying anything described here: ${params.chat?.negative_prompt}
 
-        You are ${params.chat?.character.name}, ${params.character?.description}, ${params.character?.bio}.
-        Your are conversing with ${params.chat?.persona?.full_name ?? (params.profile?.first_name + " " + params.profile?.last_name)} with bio: ${params.chat?.persona?.bio}.
+    Your name is: ${params.character?.name} ;;
+    Description of you: ${params.character?.description} ;;
+    Your Biography: ${params.character?.bio} ;;
 
-        Your responses have to be in character. Be as authentic as possible. ${responseLengthToPrompt[(params.chat?.response_length as keyof typeof responseLengthToPrompt) ?? 0]}
-        Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
-        Always stay in character no matter what the user says.
+    Your are conversing with Name: ${params.persona?.full_name ?? (params.profile?.first_name + " " + params.profile?.last_name)} 
+    with biography: ${params.persona?.bio}.
 
-        Respond in a legible and coherent manner, using proper grammar, punctuation and avoiding excessively long sentences.
+    Your responses have to be in character. Be as authentic as possible. ${responseLengthToPrompt[(params.chat?.response_length as keyof typeof responseLengthToPrompt) ?? 0]}
+    Access all the information you can get about the user, yourself and the chat to generate a response in the most authentic way possible.
+    Always stay in character no matter what the user says.
 
-        This is background information about you (do NOT quote this in your responses):
-        ${params.character?.book}
-    `);
+    Respond in a legible and coherent manner, using proper grammar, punctuation and avoiding excessively long sentences.
+
+    This is background information about you (do NOT quote this in your responses):
+    ${params.character?.book}
+  `
+  return systemPrompt.trim();
 }
 
 

@@ -6,4 +6,5 @@ export const COOKIE_NAMES = {
     USER_PROFILE: "user_profile",
     CURRENT_CHARACTER: "character_id",
     CURRENT_MODEL: "llm_model",
+    CURRENT_PERSONA: "persona_id",
 }

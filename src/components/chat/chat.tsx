@@ -22,11 +22,13 @@ import { TIMINGS_MILLISECONDS } from '@/lib/timings';
 import { Message as MessageComponent } from './message';
 import { TOOL_NAMES } from '@/lib/toolNames';
 import equal from 'fast-deep-equal';
+import { LLM } from '@/lib/ai/types';
 
 type Props = {
   shallowCharacter: ShallowCharacter | undefined;
   chatId: string;
   initialMessages: Message[];
+  defaultLLM?: LLM | undefined;
 }
 
 export const PureChat = (props: Props) => {
@@ -345,14 +347,15 @@ export const PureChat = (props: Props) => {
 
   return (
     <>
-    <div id='messages' className='h-dvh w-full'>
+    <div id='messages' className='h-dvh w-full overflow-hidden'>
 
       {(messages.length === 0) && !setupDone && (
-        <div className='flex items-center justify-center h-full'>
+        <div className='h-full overflow-hidden'>
 
             <ChatSetup 
               setDone={addIntroMessage} 
               append={append}
+              defaultLLM={props.defaultLLM}
             />
 
         </div>

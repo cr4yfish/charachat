@@ -1,5 +1,5 @@
 
-import { getLLMModelCookie } from "@/app/actions";
+import { getLLMModelCookie, getPersonaCookie } from "@/app/actions";
 import { getLanguageModel, getModelApiKey } from "@/lib/ai";
 import { generateImageAgent } from "@/lib/ai/agents/image";
 import { RAGMemory } from "@/lib/ai/browser-rag/rag";
@@ -10,10 +10,11 @@ import { getKeyServerSide } from "@/lib/crypto/server";
 import { getCharacter } from "@/lib/db/character";
 import { createChat, getChat } from "@/lib/db/chat";
 import { addMessage, addMessages } from "@/lib/db/messages";
+import { getPersona } from "@/lib/db/persona";
 import { getProfile } from "@/lib/db/profile";
 import { ERROR_MESSAGES } from "@/lib/errorMessages";
 import { getMostRecentUserMessage, sanitizeResponseMessages } from "@/lib/utils";
-import { Character, Chat, Message } from "@/types/db";
+import { Character, Chat, Message, Persona } from "@/types/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { CoreAssistantMessage, CoreToolMessage, createDataStreamResponse, Message as AIMessage, streamText, convertToCoreMessages } from "ai";
 import { v4 as uuidv4 } from "uuid";
@@ -72,6 +73,8 @@ export async function POST(req:Request) {
             
             if (!clientLLM) {  return new Response(ERROR_MESSAGES.LLM_MODEL_REQUIRED, { status: 400 }); }
 
+            const personaId = await getPersonaCookie();
+
             chat = await createChat({
                 chatId: chatId,
                 title: "New Chat",
@@ -79,6 +82,7 @@ export async function POST(req:Request) {
                 userId: user.id,
                 characterId: characterId,
                 llm: clientLLM as ModelId,
+                personaId: personaId
             })
 
         } catch (error) {
@@ -90,6 +94,19 @@ export async function POST(req:Request) {
 
     const character: Character | undefined = chat ? await getCharacter(chat.character.id) : undefined;
     //if (!character) { return new Response(ERROR_MESSAGES.CHARACTER_NOT_FOUND, { status: 404 }); }
+
+    let userPersona: Persona | undefined = undefined;
+    
+    // chat.persona is actually a string and not a Persona object
+    if(chat?.persona) {
+        userPersona = await getPersona((chat.persona as unknown as string));
+    }
+
+    if(!userPersona) {
+        // fallback to cookie
+        const personaId = await getPersonaCookie();
+        if(personaId) userPersona = await getPersona(personaId);
+    }
 
     const key = await getKeyServerSide();
 
@@ -145,7 +162,7 @@ export async function POST(req:Request) {
 
 
     const systemPrompt = getSystemPrompt({
-        character, chat
+        character, chat, persona: userPersona,
     });
     
     const bookPrompt = getDynamicBookPrompt(chat?.dynamic_book);

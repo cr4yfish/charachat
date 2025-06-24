@@ -33,6 +33,7 @@ export const API_ROUTES = {
 
     DELETE_MESSAGE: "/api/chat/message/delete?messageId=",
 
+    PERSONA_COOKIE: "/api/config/persona",
     LLM_COOKIE: "/api/config/llm",
 
     GET_PERSONAS: "/api/personas",

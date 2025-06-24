@@ -173,9 +173,10 @@ type CreateChatProps = {
     storyId?: string;
     llm?: string;
     negative_prompt?: string
+    personaId?: string;
 }
 
-export const createChat = async ({ chatId, userId, characterId, title, description, storyId, llm, negative_prompt } : CreateChatProps): Promise<Chat> => {
+export const createChat = async ({ chatId, userId, characterId, title, description, storyId, llm, negative_prompt, personaId } : CreateChatProps): Promise<Chat> => {
     const key = await getKeyServerSide();
     
     const { data, error } = await (await createClient())
@@ -190,6 +191,7 @@ export const createChat = async ({ chatId, userId, characterId, title, descripti
         llm: llm ?? "",
         clerk_user_id: userId,
         response_length: 1,
+        persona: personaId,
         
     }])
     .eq("id", chatId)

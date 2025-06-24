@@ -1,4 +1,6 @@
 import { getLLMModelCookie, setLLMModelCookie } from "@/app/actions";
+import { ModelId } from "@/lib/ai/types";
+import { getLLMById } from "@/lib/ai/utils";
 
 
 export async function GET() {
@@ -8,7 +10,9 @@ export async function GET() {
         return Response.json({ error: "LLM model cookie not found" }, { status: 404 });
     }
 
-    return Response.json({ llm: res });
+    const llm = getLLMById(res as ModelId);
+
+    return Response.json({ llm: llm });
 }
 
 

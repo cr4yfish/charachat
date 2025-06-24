@@ -40,3 +40,23 @@ export async function getLLMModelCookie() {
     const cookieStore = await cookies();
     return cookieStore.get(COOKIE_NAMES.CURRENT_MODEL)?.value;
 }
+
+
+/**
+ * Persona cookie management functions
+ */
+
+export async function setPersonaCookie(persona: string) {
+    const cookieStore = await cookies();
+    cookieStore.set(COOKIE_NAMES.CURRENT_PERSONA, persona);
+}
+
+export async function clearPersonaCookie() {
+    const cookieStore = await cookies();
+    cookieStore.delete(COOKIE_NAMES.CURRENT_PERSONA);
+}
+
+export async function getPersonaCookie() {
+    const cookieStore = await cookies();
+    return cookieStore.get(COOKIE_NAMES.CURRENT_PERSONA)?.value;
+}
