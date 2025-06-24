@@ -2,7 +2,7 @@ import SavedCharacters from "@/components/home/saved-characters";
 import { YourCharacters } from "@/components/home/your-characters";
 import { YourProfile } from "@/components/home/your-profile";
 import { getUserCharacters } from "@/lib/db/character";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 

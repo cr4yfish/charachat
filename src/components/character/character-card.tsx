@@ -2,7 +2,8 @@
 
 import { motion } from "motion/react"
 import { Character } from "@/types/db";
-import { cn, truncateText } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { truncateText } from "@/lib/utils/text";
 import ImageWithBlur from "../image/imageWithBlur";
 import Link from "next/link";
 import { Card, CardContent } from "../ui/card";

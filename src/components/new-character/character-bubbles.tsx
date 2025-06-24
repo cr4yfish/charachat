@@ -4,13 +4,14 @@
 
 "use client";
 
-import { API_ROUTES } from "@/lib/apiRoutes";
-import { fetcher, safeParseLink } from "@/lib/utils";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
+import { fetcher } from "@/lib/utils";
+import { safeParseLink } from "@/lib/utils/text";
 import useSWR from "swr";
 import { motion, AnimatePresence } from "motion/react";
 import { Character } from "@/types/db";
 import Image from "next/image";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 
 const Bubble = ({ char, index, totalCount }: { char: Character, index: number, totalCount: number }) => {
     const floatY = [-30, -10, -40, -20][index % 4];

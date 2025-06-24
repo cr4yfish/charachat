@@ -1,5 +1,5 @@
 import { getUserCharacters } from "@/lib/db/character";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 
 
 export async function GET(request: Request) {

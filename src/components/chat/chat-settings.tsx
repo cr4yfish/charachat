@@ -11,7 +11,7 @@ import ButtonGroup from "../ui/button-group";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { toast } from "sonner";
 import useSWR from "swr";
 import equal from "fast-deep-equal";

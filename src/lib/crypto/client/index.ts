@@ -11,7 +11,7 @@
 
 import crypto from "node:crypto";
 import { _ENCRYPTION_MARKER } from "..";
-import { ERROR_MESSAGES } from "@/lib/errorMessages";
+import { ERROR_MESSAGES } from "@/lib/constants/errorMessages";
 const _ENCRYPTION_STANDARD = "aes-256-gcm";
 
 /**

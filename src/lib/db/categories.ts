@@ -6,8 +6,8 @@ import { createServerSupabaseClient as createClient, createUnauthenticatedServer
 import { Category } from "@/types/db";
 import { LoadMoreProps } from "@/types/db";
 import { unstable_cache } from "next/cache";
-import { LIMITS } from "../limits";
-import { TIMINGS } from "../timings";
+import { LIMITS } from "../constants/limits";
+import { TIMINGS } from "../constants/timings";
 
 export const searchCategories = cache(async (search: string): Promise<Category[]> => {
     const { data, error } = await (await createClient())

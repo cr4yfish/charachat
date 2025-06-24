@@ -1,8 +1,8 @@
 "use server";
 
 import { ImportCharType } from "@/components/new-character/import/importer";
-import { COOKIE_NAMES } from "@/lib/cookieNames";
-import { TIMINGS } from "@/lib/timings";
+import { COOKIE_NAMES } from "@/lib/constants/cookieNames";
+import { TIMINGS } from "@/lib/constants/timings";
 import { Character } from "@/types/db";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";

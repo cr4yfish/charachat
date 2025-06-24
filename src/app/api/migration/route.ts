@@ -1,5 +1,5 @@
 import { generateKeyLegacy } from "@/lib/crypto/client/legacy";
-import { TIMINGS } from "@/lib/timings";
+import { TIMINGS } from "@/lib/constants/timings";
 import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";

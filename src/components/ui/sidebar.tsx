@@ -24,7 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { TIMINGS } from "@/lib/timings"
+import { TIMINGS } from "@/lib/constants/timings"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = TIMINGS.ONE_WEEK

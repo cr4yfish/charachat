@@ -1,6 +1,6 @@
 "use server";
 
-import { COOKIE_NAMES } from "@/lib/cookieNames";
+import { COOKIE_NAMES } from "@/lib/constants/cookieNames";
 import { cookies } from "next/headers";
 
 

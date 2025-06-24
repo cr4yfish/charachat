@@ -3,7 +3,7 @@ import News from "@/components/explore/news";
 import Spotlight, { SpotlightData } from "@/components/explore/spotlight";
 import GeneralSwiper from "@/components/swiper/general-swiper";
 import { getDraftCharacterFromCookie } from "./c/new/actions";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { PersonalizedSection } from "@/components/explore/personalized-section";
 import { CurrentCategoryProvider } from "@/hooks/use-current-category";
 import CategoryScroller from "@/components/categories/category-scroller";

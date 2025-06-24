@@ -2,10 +2,10 @@ import { Chat } from "@/components/chat/chat";
 import { ChatTopBar } from "@/components/ui/top-bar/chat-top-bar";
 import { getMessages } from "@/lib/db/messages";
 import { getKeyServerSide } from "@/lib/crypto/server";
-import { convertToUIMessages } from "@/lib/utils";
+import { convertToUIMessages } from "@/lib/utils/message";
 import { getShallowChat } from "@/lib/db/chat";
 import { ShallowCharacter } from "@/types/db";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 
 export default async function ExistingChatPage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;

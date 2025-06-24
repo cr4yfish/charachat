@@ -1,7 +1,8 @@
 "use client";
 
-import { API_ROUTES } from "@/lib/apiRoutes";
-import { fetcher, safeParseLink, truncateText } from "@/lib/utils";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
+import { fetcher } from "@/lib/utils";
+import { safeParseLink, truncateText } from "@/lib/utils/text";
 import { memo, useCallback, useEffect, useState } from "react";
 import useSWR from "swr";;
 import { Profile } from "@/types/db";
@@ -21,7 +22,7 @@ import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { Skeleton } from "../ui/skeleton";
 import { motion } from "motion/react";
 import { Vibrant } from "node-vibrant/browser";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 
 type Props = {
     userid: string;

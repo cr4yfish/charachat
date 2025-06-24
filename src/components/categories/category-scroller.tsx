@@ -3,15 +3,15 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { Category, Character } from "@/types/db";
 import InfiniteSwiperLoader from "../swiper/infinite-swiper-loader";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import CategoryCardWithContext from "./category-card-with-context";
 import { useCurrentCategory } from "@/hooks/use-current-category";
 import ImageCharacterCard from "../character/character-card-image";
 import { Skeleton } from "../ui/skeleton";
 import { fetcher } from "@/lib/utils";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import useSWRInfinite from "swr/infinite";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 
 const limit = LIMITS.MAX_CHARACTERS_PER_PAGE;
 

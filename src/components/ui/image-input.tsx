@@ -1,12 +1,13 @@
 "use client";
 
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { memo, useRef, useState } from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import Image from "next/image";
 import { CloudUploadIcon, SparkleIcon } from "lucide-react";
-import { cn, safeParseLink } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { safeParseLink } from "@/lib/utils/text";
 import { toast } from "sonner";
 
 type Props = {

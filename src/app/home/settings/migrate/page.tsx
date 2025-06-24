@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { InputWithLabel } from "@/components/ui/input-with-label";
 import Spinner from "@/components/ui/spinner";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import Form from "next/form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

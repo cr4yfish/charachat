@@ -1,5 +1,5 @@
 import { getBookmarkedCharacters } from "@/lib/db/character";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 import {
   Carousel,
   CarouselContent,

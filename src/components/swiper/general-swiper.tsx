@@ -1,6 +1,6 @@
 "use server";
 
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 import InfiniteSwiperLoader from "./infinite-swiper-loader";
 import InfiniteSwiperLoaderFallback from "./infinite-swiper-loader-fallback";
 import { FC, Suspense } from "react";

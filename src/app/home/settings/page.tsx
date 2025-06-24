@@ -5,7 +5,7 @@ import APIKeyInputCard from "@/components/settings/api-key-input.card";
 import { BetterSwitch } from "@/components/ui/better-switch";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { _DEFAULT_LLM } from "@/lib/defaults";
+import { _DEFAULT_LLM } from "@/lib/constants/defaults";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";

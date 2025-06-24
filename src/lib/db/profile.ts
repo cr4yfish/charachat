@@ -7,7 +7,7 @@ import { Profile } from "@/types/db";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { currentUser } from "@clerk/nextjs/server";
-import { ERROR_MESSAGES } from "../errorMessages";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 const publicTableName = "profiles_view";
 

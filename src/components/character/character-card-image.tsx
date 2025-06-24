@@ -1,7 +1,8 @@
 "use client";
 
 import { Character } from "@/types/db";
-import { cn, truncateText } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { truncateText } from "@/lib/utils/text";
 import ImageWithBlur from "../image/imageWithBlur";
 import { Card, CardContent } from "../ui/card";
 import { memo } from "react";

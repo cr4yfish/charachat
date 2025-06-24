@@ -1,6 +1,7 @@
 "use client";
 
-import { cn, safeParseLink } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { safeParseLink } from "@/lib/utils/text";
 import Image from "next/image";
 import { useState } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio"

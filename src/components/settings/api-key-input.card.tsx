@@ -9,7 +9,7 @@ import { LLMs } from "@/lib/ai/models/llm/text-models";
 import { InputWithLabel } from "../ui/input-with-label";
 import { Providers } from "@/lib/ai/models/providers/providers";
 import useSWR from "swr";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { useDebounce } from "use-debounce";
 import { ProviderId } from "@/lib/ai/types";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ import { fetcher } from "@/lib/utils";
 import equal from 'fast-deep-equal';
 import Spinner from "../ui/spinner";
 import { CheckIcon } from "lucide-react";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 
 const PureAPIKeyInputCard = () => {
     const { data: profile, mutate, isLoading, isValidating, } = useSWR<Profile>(API_ROUTES.GET_OWN_PROFILE, fetcher, {

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect, useRef, useMemo, useCallback, memo } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback, memo, useState } from 'react';
 import { Skeleton } from '../ui/skeleton';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { LoadMoreProps } from '@/types/db';
 import { JSONObject } from '@ai-sdk/provider';
 import useSWRInfinite from "swr/infinite";
 import { fetcher } from '@/lib/utils';
-import { TIMINGS_MILLISECONDS } from '@/lib/timings';
+import { TIMINGS_MILLISECONDS } from '@/lib/constants/timings';
 
 interface Props {
     loadMore?: (props : LoadMoreProps) => Promise<any[]>;
@@ -28,7 +28,7 @@ interface Props {
 
 const PureInfiniteSwiperLoader = (props: Props) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
-
+    const [hasMore, setHasMore] = useState(true);
     const {
         data,
         isLoading,
@@ -37,7 +37,7 @@ const PureInfiniteSwiperLoader = (props: Props) => {
         setSize,
     } = useSWRInfinite<any[]>(
         (pageIndex, prevPageData) => {
-            if(prevPageData && !prevPageData.length) return null; // reached the end
+            if((prevPageData && !prevPageData.length) || !hasMore) return null; // reached the end
             const cursor = pageIndex * props.limit;
             return props.apiUrl + `?cursor=${cursor}&limit=${props.limit}` + (props.args ? `&args=${JSON.stringify(props.args)}` : '');
         },
@@ -53,6 +53,20 @@ const PureInfiniteSwiperLoader = (props: Props) => {
         },
 
     )
+
+    useEffect(() => {
+        // Check if we have data and if the last page has less than the limit, set hasMore to false
+        if (data && data.length > 0) {
+            const lastPage = data[data.length - 1];
+            if (lastPage.length < props.limit) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
+        } else {
+            setHasMore(false);
+        }
+    }, [setHasMore, data, props.limit]);
 
     const items = useMemo(() => {
         return data ? data.flat() : [];
@@ -151,7 +165,6 @@ const InfiniteSwiperLoader = memo(PureInfiniteSwiperLoader, (prevProps, nextProp
     return (
         prevProps.apiUrl === nextProps.apiUrl &&
         prevProps.limit === nextProps.limit &&
-        JSON.stringify(prevProps.args) === JSON.stringify(nextProps.args) &&
         prevProps.component === nextProps.component &&
         prevProps.componentProps === nextProps.componentProps &&
         prevProps.rows === nextProps.rows &&

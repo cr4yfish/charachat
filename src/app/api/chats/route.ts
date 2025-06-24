@@ -1,5 +1,5 @@
 import { getChats } from "@/lib/db/chat";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 
 
 export async function GET(request: Request) {

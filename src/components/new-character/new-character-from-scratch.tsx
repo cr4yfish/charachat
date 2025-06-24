@@ -20,7 +20,7 @@ import { clearDraftCharacterCookie, saveDraftCharacterInCookie } from "@/app/c/n
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 import { ImageInput } from "../ui/image-input";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { useRouter } from "next/navigation";
 import equal from "fast-deep-equal";
 import { InputWithLabel } from "../ui/input-with-label";
@@ -28,7 +28,7 @@ import SmallCharacterCard from "../character/character-card-small";
 import { Progress } from "../ui/progress";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { safeParseLink } from "@/lib/utils";
+import { safeParseLink } from "@/lib/utils/text";
 
 type Step = "initial" | "details" | "metadata" | "review";
 

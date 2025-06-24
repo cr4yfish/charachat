@@ -1,7 +1,7 @@
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { getMessages } from "@/lib/db/messages";
-import { LIMITS } from "@/lib/limits";
-import { convertToUIMessages } from "@/lib/utils";
+import { LIMITS } from "@/lib/constants/limits";
+import { convertToUIMessages } from "@/lib/utils/message";
 
 
 

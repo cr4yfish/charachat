@@ -5,7 +5,7 @@ import { Loader2Icon, RefreshCwIcon, SendIcon } from "lucide-react";
 import { cn, fetcher } from "@/lib/utils";
 import { Suggestion as SuggestionType } from "@/lib/ai/suggestions";
 import useSWR from "swr";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { AnimatePresence, motion } from "motion/react";
 
 const PureSuggestion = ({ suggestion, onClick }: { suggestion: SuggestionType, onClick: (suggestion: string) => void }) => {

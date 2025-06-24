@@ -3,10 +3,10 @@
 import React from "react";
 import { Category } from "@/types/db";
 import { createContext, useContext, useState, ReactNode } from "react";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 
 interface CategoryContextProps {
     currentCategory: Category | null;

@@ -1,5 +1,5 @@
 import { getPersonas } from "@/lib/db/persona";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 
 
 export async function GET() {

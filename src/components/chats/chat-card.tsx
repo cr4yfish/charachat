@@ -3,7 +3,9 @@
 import Link from "next/link"
 import { memo } from "react"
 import { motion } from "motion/react"
-import { prettyPrintDate, prettyRenderSingleMessageContent, truncateText } from "@/lib/utils"
+import { prettyPrintDate } from "@/lib/utils/date"
+import { prettyRenderSingleMessageContent } from "@/lib/utils/message";
+import { truncateText } from "@/lib/utils/text"
 import { Card, CardContent, CardTitle, CardDescription, CardFooter } from "../ui/card"
 import Image from "next/image"
 import { Chat } from "@/types/db"

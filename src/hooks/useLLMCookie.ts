@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { LLM } from "@/lib/ai/types";
 
 function useLLMCookie(defaultLLM?: LLM) {

@@ -1,5 +1,5 @@
 import { getProfile } from "@/lib/db/profile";
-import { TIMINGS } from "@/lib/timings";
+import { TIMINGS } from "@/lib/constants/timings";
 import { unstable_cache } from "next/cache";
 
 /**

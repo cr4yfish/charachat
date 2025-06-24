@@ -7,7 +7,7 @@ import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/s
 import { createServerSupabaseClient as createClient } from "./server";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptCharacter } from "./character";
-import { ERROR_MESSAGES } from "../errorMessages";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 const chatMatcher = `
     *

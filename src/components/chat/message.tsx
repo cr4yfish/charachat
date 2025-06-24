@@ -5,11 +5,12 @@ import { Markdown } from "../ui/markdown";
 import { Button } from "../ui/button";
 import { CopyIcon, EditIcon, ImageIcon, LogInIcon, TrashIcon, VolumeIcon } from "lucide-react";
 import { motion } from "motion/react";
-import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/defaults";
-import { TOOL_NAMES } from "@/lib/toolNames";
+import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
+import { TOOL_NAMES } from "@/lib/constants/toolNames";
 import equal from 'fast-deep-equal';
-import { cn, getMessageIdFromAnnotations } from "@/lib/utils";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { cn } from "@/lib/utils";
+import { getMessageIdFromAnnotations } from "@/lib/utils/message";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { toast } from "sonner";
 import { SignInButton } from "@clerk/nextjs";
 

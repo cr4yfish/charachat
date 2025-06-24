@@ -1,7 +1,7 @@
 "use client";
 
 import { LLM } from "@/lib/ai/types";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { Persona } from "@/types/db";
 import { memo,  useState } from "react";
 import useSWR from "swr";
@@ -11,7 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { cn, fetcher, truncateText } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
+import { truncateText } from "@/lib/utils/text";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { ChatRequestOptions, Message } from "ai";

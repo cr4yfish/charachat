@@ -8,7 +8,7 @@ import { getCharacter } from "@/lib/db/character";
 import { getChat } from "@/lib/db/chat";
 import { getLatestChatMessage } from "@/lib/db/messages";
 import { getProfile } from "@/lib/db/profile";
-import { ERROR_MESSAGES } from "@/lib/errorMessages";
+import { ERROR_MESSAGES } from "@/lib/constants/errorMessages";
 import { currentUser } from "@clerk/nextjs/server";
 
 

@@ -2,7 +2,7 @@
 
 import { LLM } from "@/lib/ai/types";
 import { getLLMGroupedByProvider } from "@/lib/ai/utils";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { memo, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import {
@@ -16,7 +16,7 @@ import { Badge } from "../ui/badge";
 import { cn, fetcher } from "@/lib/utils";
 import useLLMCookie from "@/hooks/useLLMCookie";
 import LLMIcon from "../llm/llm-icon";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import Spinner from "../ui/spinner";
 import {
   Accordion,

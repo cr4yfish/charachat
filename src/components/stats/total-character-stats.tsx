@@ -1,7 +1,7 @@
 "use client";
 
-import { API_ROUTES } from "@/lib/apiRoutes";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import { fetcher } from "@/lib/utils";
 import useSWR from "swr";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";

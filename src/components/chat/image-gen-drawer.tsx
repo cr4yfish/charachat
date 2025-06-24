@@ -14,7 +14,8 @@ import { Button } from "../ui/button";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { ImageModel } from "@/lib/ai/types";
 import { toast } from "sonner";
-import { cn, isValidURL } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { isValidURL } from "@/lib/utils/text";
 import { imageModels } from "@/lib/ai/models/image/image-models";
 import Image from "next/image";
 

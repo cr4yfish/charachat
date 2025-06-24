@@ -9,7 +9,7 @@ import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { getKeyServerSideLegacy } from "./legacy";
 import { decryptMessageLegacy } from "../client/legacy";
 import { decryptMessage } from "../client";
-import { ERROR_MESSAGES } from "@/lib/errorMessages";
+import { ERROR_MESSAGES } from "@/lib/constants/errorMessages";
 
 /**
  * Gets the users's key from the cookies using cookies() from the header.

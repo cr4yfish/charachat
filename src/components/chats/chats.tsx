@@ -1,14 +1,14 @@
 "use client";
 
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { fetcher } from "@/lib/utils";
 import { Chat } from "@/types/db";
 import { ChatCard } from "./chat-card";
 import { useMemo } from "react";
-import { TIMINGS_MILLISECONDS } from "@/lib/timings";
+import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import useSWRInfinite from "swr/infinite";
 import { Button } from "../ui/button";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 import Spinner from "../ui/spinner";
 import ChatCardSkeleton from "./chat-card-skeleton";
 import { motion, AnimatePresence } from "motion/react";

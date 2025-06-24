@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getShallowCharacter } from "@/lib/db/character";
 import { currentUser } from "@clerk/nextjs/server";
 import { Character } from "@/types/db";
-import { COOKIE_NAMES } from "@/lib/cookieNames";
+import { COOKIE_NAMES } from "@/lib/constants/cookieNames";
 import { ModelId } from "@/lib/ai/types";
 import { getLLMById } from "@/lib/ai/utils";
 

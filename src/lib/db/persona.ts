@@ -6,7 +6,7 @@ import { createServerSupabaseClient as createClient } from "./server";
 import { LoadMoreProps, Persona } from "@/types/db";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
-import { ERROR_MESSAGES } from "../errorMessages";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 const personaMatcher = `
     *,

@@ -1,6 +1,6 @@
 import { Profile } from "@/types/db"
 import ConditionalLink from "../conditional-link"
-import { safeParseLink } from "@/lib/utils"
+import { safeParseLink } from "@/lib/utils/text"
 import { Avatar, AvatarImage } from "../ui/avatar"
 
 type Props = {

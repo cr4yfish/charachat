@@ -2,7 +2,7 @@
 import SearchBar from "@/components/ui/searchbar";
 import { unstable_cache } from "next/cache";
 import { searchCharactersByAITags } from "@/lib/db/character";
-import { TIMINGS } from "@/lib/timings";
+import { TIMINGS } from "@/lib/constants/timings";
 import SmallCharacterCard from "@/components/character/character-card-small";
 import { SearchCategories } from "@/components/search/search-categories";
 import { getLanguageModel } from "@/lib/ai";

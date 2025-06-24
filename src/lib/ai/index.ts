@@ -7,7 +7,7 @@ import { Profile } from "@/types/db";
 import { ModelId } from "./types";
 import { LanguageModelV1 } from "ai";
 import { getAnthropic, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getXai } from "./providers";
-import { ERROR_MESSAGES } from "../errorMessages";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promise<string> {
     const selectedModelId = modelid || profile.default_llm as ModelId;

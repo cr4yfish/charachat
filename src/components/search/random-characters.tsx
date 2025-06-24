@@ -34,7 +34,7 @@ import { useState } from "react";
 import { Character } from "@/types/db";
 import ImageCharacterCard from "../character/character-card-image";
 import useSWR from "swr";
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { cn, fetcher, shuffleArray } from "@/lib/utils";
 import Spinner from "../ui/spinner";
 import { useRouter } from "next/navigation";

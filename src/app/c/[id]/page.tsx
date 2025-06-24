@@ -1,6 +1,6 @@
 import { Character } from "@/types/db";
 import Markdown from "react-markdown";
-import { safeParseLink } from "@/lib/utils";
+import { safeParseLink } from "@/lib/utils/text";
 import Image from "next/image";
 import { Metadata } from "next";
 import { getCharacter } from "@/lib/db/character";

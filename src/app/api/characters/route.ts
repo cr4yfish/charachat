@@ -1,6 +1,6 @@
 import { getCharacter, getCharacters } from "@/lib/db/character";
-import { LIMITS } from "@/lib/limits";
-import { TIMINGS } from "@/lib/timings";
+import { LIMITS } from "@/lib/constants/limits";
+import { TIMINGS } from "@/lib/constants/timings";
 import { unstable_cache } from "next/cache";
 
 

@@ -1,5 +1,5 @@
 import { getRandomCharacters } from "@/lib/db/character";
-import { TIMINGS } from "@/lib/timings";
+import { TIMINGS } from "@/lib/constants/timings";
 import { unstable_cache } from 'next/cache';
 
 export async function GET() {

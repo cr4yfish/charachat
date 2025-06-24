@@ -1,6 +1,6 @@
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { decryptProfile, getProfile } from "@/lib/db/profile";
-import { TIMINGS } from "@/lib/timings";
+import { TIMINGS } from "@/lib/constants/timings";
 import { currentUser } from "@clerk/nextjs/server";
 import { unstable_cache } from "next/cache";
 

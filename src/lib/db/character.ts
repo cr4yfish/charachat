@@ -6,16 +6,16 @@ import { cache } from "react";
 import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
 import { Character } from "@/types/db";
 import { LoadMoreProps } from "@/types/db";
-import { safeParseLink } from "@/lib/utils";
+import { safeParseLink } from "@/lib/utils/text";
 import { encryptMessage } from "../crypto/client";
 import { currentUser } from "@clerk/nextjs/server";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { revalidateTag, unstable_cache } from "next/cache";
-import { LIMITS } from "../limits";
-import { TIMINGS } from "../timings";
+import { LIMITS } from "../constants/limits";
+import { TIMINGS } from "../constants/timings";
 import { Vibrant } from "node-vibrant/node";
 import { getProfile } from "./profile";
-import { ERROR_MESSAGES } from "../errorMessages";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 const characterMatcher = `
     *,

@@ -1,9 +1,9 @@
 "use client";
 
-import { API_ROUTES } from "@/lib/apiRoutes";
+import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import ImageCharacterCard from "../character/character-card-image";
 import InfiniteSwiperLoader from "../swiper/infinite-swiper-loader";
-import { LIMITS } from "@/lib/limits";
+import { LIMITS } from "@/lib/constants/limits";
 import { memo, Suspense } from "react";
 import InfiniteSwiperLoaderFallback from "../swiper/infinite-swiper-loader-fallback";
 import { Character } from "@/types/db";
