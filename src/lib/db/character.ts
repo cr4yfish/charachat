@@ -639,3 +639,181 @@ export const getBookmarkedCharacters = cache(async (props: LoadMoreProps): Promi
         return await privateCharacterFormatter(db.characters as any);
     }));
 })
+
+export const searchCharactersByTags = cache(async (
+    tags: string[], 
+    sort: 'newest' | 'likes' | 'relevance' | 'popular' = 'relevance',
+    limit: number = 20
+): Promise<Character[]> => {
+    if (!tags || tags.length === 0) {
+        return [];
+    }
+
+    // Create search conditions for each tag across multiple fields
+    const searchConditions = tags.map(tag => 
+        `name.ilike.*${tag}*,description.ilike.*${tag}*,bio.ilike.*${tag}*,intro.ilike.*${tag}*,book.ilike.*${tag}*,personality.ilike.*${tag}*,scenario.ilike.*${tag}*,tags_full.cs.{${tag}}`
+    ).join(',');
+
+    let query = (await createUnauthenticatedServerSupabaseClient())
+        .from(publicTableName)
+        .select("*")
+        .or(searchConditions)
+        .limit(limit);
+
+    // Apply sorting based on the sort parameter
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+            query = query.order('likes', { ascending: false });
+            break;
+        case 'popular':
+            query = query.order('chats', { ascending: false });
+            break;
+        case 'relevance':
+        default:
+            // For relevance, we could implement text search ranking if available
+            // For now, fall back to newest as default
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        throw error;
+    }
+
+    return Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
+})
+
+export const searchCharactersByAITags = cache(async (
+    keywords: string[], 
+    options: {
+        sort?: 'newest' | 'likes' | 'relevance' | 'popular';
+        limit?: number;
+        includeNSFW?: boolean;
+        exactMatch?: boolean;
+    } = {}
+): Promise<Character[]> => {
+    const { 
+        sort = 'relevance', 
+        limit = 20, 
+        includeNSFW = false,
+        exactMatch = false 
+    } = options;
+
+    if (!keywords || keywords.length === 0) {
+        return [];
+    }
+
+    // Clean and prepare keywords
+    const cleanedKeywords = keywords
+        .map(keyword => keyword.trim().toLowerCase())
+        .filter(keyword => keyword.length > 0);
+
+    if (cleanedKeywords.length === 0) {
+        return [];
+    }
+
+    // Build search conditions based on match type
+    let searchConditions: string;
+    
+    if (exactMatch) {
+        // Exact match for more precise results
+        searchConditions = cleanedKeywords.map(keyword => 
+            `name.ilike.%${keyword}%,description.ilike.%${keyword}%,personality.ilike.%${keyword}%,scenario.ilike.%${keyword}%,bio.ilike.%${keyword}%`
+        ).join(',');
+    } else {
+        // Fuzzy match for broader results
+        searchConditions = cleanedKeywords.map(keyword => 
+            `name.ilike.*${keyword}*,description.ilike.*${keyword}*,bio.ilike.*${keyword}*,intro.ilike.*${keyword}*,book.ilike.*${keyword}*,personality.ilike.*${keyword}*,scenario.ilike.*${keyword}*`
+        ).join(',');
+    }
+
+    let query = (await createUnauthenticatedServerSupabaseClient())
+        .from(publicTableName)
+        .select("*")
+        .or(searchConditions)
+        .limit(limit);
+
+    // Filter NSFW content if not included
+    if (!includeNSFW) {
+        query = query.eq('is_nsfw', false);
+    }
+
+    // Apply sorting
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+            query = query.order('likes', { ascending: false });
+            break;
+        case 'popular':
+            query = query.order('chats', { ascending: false });
+            break;
+        case 'relevance':
+        default:
+            // Order by created_at for now, could be enhanced with actual relevance scoring
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        throw error;
+    }
+
+    const characters = await Promise.all(data.map(async (db: any) => {
+        return await characterFormatter(db);
+    }));
+
+    // If using relevance sort, we could add client-side scoring here
+    if (sort === 'relevance') {
+        return characters.sort((a, b) => {
+            const scoreA = calculateRelevanceScore(a, cleanedKeywords);
+            const scoreB = calculateRelevanceScore(b, cleanedKeywords);
+            return scoreB - scoreA;
+        });
+    }
+
+    return characters;
+})
+
+// Helper function to calculate relevance score based on keyword matches
+const calculateRelevanceScore = (character: Character, keywords: string[]): number => {
+    let score = 0;
+    const searchableText = [
+        character.name,
+        character.description,
+        character.personality,
+        character.scenario,
+        character.bio,
+        character.intro,
+        character.book
+    ].filter(Boolean).join(' ').toLowerCase();
+
+    keywords.forEach(keyword => {
+        const keywordLower = keyword.toLowerCase();
+        // Count occurrences of keyword
+        const matches = (searchableText.match(new RegExp(keywordLower, 'g')) || []).length;
+        score += matches;
+        
+        // Bonus points for matches in name (more relevant)
+        if (character.name?.toLowerCase().includes(keywordLower)) {
+            score += 5;
+        }
+        
+        // Bonus points for matches in description
+        if (character.description?.toLowerCase().includes(keywordLower)) {
+            score += 3;
+        }
+    });
+
+    return score;
+}

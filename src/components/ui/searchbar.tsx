@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 type Props = {
     initialQuery: string;
+    placeholder?: string;
 }
 
 const PureSearchBar = ({ initialQuery } : Props) => {
