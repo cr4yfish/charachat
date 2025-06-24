@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useState } from "react";
 import { ImportSearch } from "./import-search";
-import { ImporterSearchResults } from "./impoter-search-results";
+import { ImporterSearchResults } from "./importer-search-results";
 import { ChevronLeftIcon, LoaderCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
