@@ -43,15 +43,6 @@ const PureSettings = ({ chatId }: Props) => {
 
     const router = useRouter();
 
-    
-    // Incoming changes to chat
-    useEffect(() => {
-        if(!chat) return;
-        console.log("Chat updated:", chat);
-        setInternalChat(chat);
-    }, [chat])
-
-
     const handleSaveChanges = useCallback(() => {
         setIsSaving(true);
         const updatePromise = fetch(API_ROUTES.UPDATE_CHAT, {
@@ -76,7 +67,6 @@ const PureSettings = ({ chatId }: Props) => {
 
     useEffect(() => {
         if(!debouncedChat || equal(debouncedChat, chat)) return;
-        console.log("Debounced chat updated:", debouncedChat);
         handleSaveChanges();
     }, [debouncedChat, chat, handleSaveChanges]);
 
