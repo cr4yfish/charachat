@@ -197,7 +197,7 @@ const PureNewCharacterFromScratch = ({ initCharacter, small, defaultOpen }: Prop
                 {small ? 
                 <div className="flex flex-row text-violet-200/80 justify-between items-center gap-2 rounded-3xl bg-violet-800 p-4 cursor-pointer hover:bg-violet-700 transition-all duration-200">
                     <div className="flex flex-col gap-1">
-                        <p className="text-xs">Continue editing</p>
+                        <p className="text-xs">Continue editing your Character</p>
                         <div className="flex items-center gap-1">
                             {newChar.image_link &&
                             <div className="relative size-[24px] shrink-0 rounded-full overflow-hidden border border-violet-200/80">
