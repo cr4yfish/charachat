@@ -217,7 +217,7 @@ const PureNewCharacterFromScratch = ({ initCharacter, small, defaultOpen }: Prop
                     </div>
                 </div> 
                 : 
-                <div className="flex flex-col gap-2 rounded-3xl bg-transparent text-white/90 p-4 cursor-pointer transition-all duration-200">
+                <div className="flex flex-col gap-2 rounded-3xl bg-transparent text-white/90 p-4 cursor-pointer transition-all duration-200 z-20">
 
 
                     <div className="flex flex-col items-center justify-center gap-2 w-full">
@@ -235,7 +235,7 @@ const PureNewCharacterFromScratch = ({ initCharacter, small, defaultOpen }: Prop
 
                         <InputWithLabel 
                             placeholder="Enter character name" value={newChar.name || ""}
-                            fullWidth className="pointer-events-none" readonly
+                            fullWidth className="pointer-events-none backdrop-blur" readonly
                         />
                     </div>
 

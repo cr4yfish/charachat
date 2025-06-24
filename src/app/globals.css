@@ -272,3 +272,14 @@
                 0 0 80px rgba(139, 92, 246, 0.3);
   }
 }
+
+@keyframes gradient {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
