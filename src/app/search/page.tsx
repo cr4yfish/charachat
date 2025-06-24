@@ -24,7 +24,7 @@ export default async function SearchPage({
     const startTime = performance.now();
 
     try {
-        const mistral = await getLanguageModel({ modelId: "ministral-3b-latest", apiKey: process.env.PUBLIC_SEARCH_MISTRAL_API_KEY })
+        const mistral = await getLanguageModel({ modelId: "ministral-3b-latest", apiKey: process.env.SEARCH_MISTRAL_API_KEY })
 
         const { object: { tags } } = await generateObject({
             model: mistral,
