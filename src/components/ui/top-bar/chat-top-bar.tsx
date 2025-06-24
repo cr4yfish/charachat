@@ -16,16 +16,17 @@ import { ChatSettingsDrawer } from "@/components/chat/chat-settings-drawer";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "../sidebar";
+import { useAuth } from "@clerk/nextjs";
 
 type Props = {
     shallowCharacter: ShallowCharacter | undefined;
     chatId: string;
-    isLoggedIn: boolean;
 }
 
 const PureTopBar = (props: Props) => {
     const router = useRouter();
     const { isMobile } = useSidebar();
+    const { isSignedIn } = useAuth();
     
     return (
         <>
@@ -61,7 +62,7 @@ const PureTopBar = (props: Props) => {
             
                 </div>
                 
-                {props.isLoggedIn && props.shallowCharacter?.id &&
+                {isSignedIn && props.shallowCharacter?.id &&
                 <ChatSettingsDrawer
                     chatId={props.chatId} 
                     characterId={props.shallowCharacter.id} 
@@ -77,7 +78,6 @@ const PureTopBar = (props: Props) => {
 export const ChatTopBar = memo(PureTopBar, (prev, next) => {
     if (prev.shallowCharacter?.id !== next.shallowCharacter?.id) return false;
     if (prev.chatId !== next.chatId) return false;
-    if (prev.isLoggedIn !== next.isLoggedIn) return false;
     
     return true;
 });
