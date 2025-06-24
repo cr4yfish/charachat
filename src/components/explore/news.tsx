@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button";
 import React from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel"
 
 type NewCardProps = {
   title: string;
@@ -10,29 +15,56 @@ type NewCardProps = {
 
 const NewsCard = (props: NewCardProps) => {
   return (
-    <>
-      <Alert className="rounded-3xl  dark:prose-invert prose-p:m-0 w-[300px] h-[90px] flex flex-col gap-1 justify-start">
-        <AlertTitle className="m-0" >{props.title}</AlertTitle>
-        <AlertDescription className="text-xs">
+    <CarouselItem className="min-lg:basis-1/3 min-sm:max-lg:basis-1/2  min-h-[100px]">
+      <Alert className="rounded-3xl dark:prose-invert prose-p:m-0 flex flex-col gap-1 justify-start">
+        <AlertTitle className="m-0 select-none" >{props.title}</AlertTitle>
+        <AlertDescription className="text-xs select-none">
           {props.description}
         </AlertDescription>
       </Alert>
-    </>
+    </CarouselItem>
   )
 }
 
 export default function News() {
 
+
     return (
         <>
-        <div className="w-full overflow-y-auto pb-3">
-          <div className="flex flex-row items-center gap-4 w-fit">
+        <Carousel>
+          <CarouselContent>            
+            <NewsCard 
+              title="🔒 End-to-End Encrypted"
+              description={
+                <>
+                  <p>Your conversations are encrypted and only you can read them. Complete privacy guaranteed.</p>
+                </>
+              }
+            />
+
+            <NewsCard 
+              title="⭐ Open Source Freedom"
+              description={
+                <>
+                  <p>Fully transparent code. Choose your AI provider. Your data, your control.</p>
+                </>
+              }
+            />
+
+            <NewsCard 
+              title="🛡️ Privacy First"
+              description={
+                <>
+                  <p>Unlike other platforms, we can&apos;t read your messages - even if we wanted to.</p>
+                </>
+              }
+            />
 
             <NewsCard 
               title="🚀 Join our community!"
               description={
                 <>
-                  <div className="flex flex-row items-center gap-2">
+                  <div className="flex flex-row flex-wrap items-center gap-2">
                     <Link target="_blank" href={"https://www.reddit.com/r/Charachat"}>
                       <Button variant={"link"} className="text-red-400" >Reddit</Button>
                     </Link>
@@ -44,26 +76,8 @@ export default function News() {
               }
             />
 
-            <NewsCard 
-              title="🔥 v2!"
-              description={
-                <>
-                  <p>Welcome to Charachat v2!</p>
-                </>
-              }
-            />
-
-            <NewsCard 
-              title="😭 Come on people"
-              description={
-                <>
-                  <p>Remember to mark stuff as NSFW please</p>
-                </>
-              }
-            />
-
-          </div>
-        </div>
+          </CarouselContent>
+        </Carousel>
         </>
     )
 }
