@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils"
 import { memo } from "react"
-import { Noise, } from "react-noise"
 import { motion } from "motion/react";
 import "react-noise/css";
 
@@ -26,8 +25,6 @@ export const PureLiquid = (props: { children: React.ReactNode, className?: strin
             <div className="liquid-filter "></div>
             <div className="liquid-overlay"></div>
             <div className="liquid-specular"></div>
-            <Noise opacity={100} className="card-noise absolute size-full top-0 left-0 bg-transparent rounded-[inherit] " />
-
             <div className={cn("liquid-content", props.glassContentClassNames)}>
                 {props.children}
             </div>

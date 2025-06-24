@@ -51,10 +51,10 @@ function Button({
 
     if(variant=== "liquid" || variant === undefined || variant === "default" || variant === null) {
       return (
-        <Liquid className={cn(buttonVariants({ variant, size, className }))} glassContentClassNames="size-full" >
+        <Liquid className={cn(buttonVariants({ variant, size, className }))} glassContentClassNames="size-full cursor-pointer" >
           <Comp 
             data-slot="button"
-            className="w-full h-full flex items-center justify-center gap-2"
+            className="w-full h-full flex items-center justify-center gap-2 cursor-pointer"
             {...props}
           />
         </Liquid>
