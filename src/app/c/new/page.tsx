@@ -46,7 +46,7 @@ export default async function NewCharPage({ searchParams }: { searchParams: Prom
             </div>
 
             {/* Link to importers */}
-            <div className="w-full flex items-center justify-center mt-8 pb-4">
+            <div className="w-full flex items-center justify-center mt-8 pb-4 z-20">
                 <Link href={"/c/new/import"} className=" text-muted-foreground flex items-center gap-1" >
                     Import instead
                     <ChevronRightIcon size={14} />
