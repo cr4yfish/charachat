@@ -8,7 +8,6 @@ import { Character } from "@/types/db";
 import { COOKIE_NAMES } from "@/lib/cookieNames";
 import { ModelId } from "@/lib/ai/types";
 import { getLLMById } from "@/lib/ai/utils";
-import { ChatSettingsProvider } from "@/hooks/use-chat-settings";
 
 export default async function NewChatPage({
     searchParams,
@@ -41,11 +40,8 @@ export default async function NewChatPage({
 
     return (
         <>
-
-        <ChatSettingsProvider>
-            <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} isLoggedIn={isLoggedIn} />
-            <Chat shallowCharacter={shallowCharacter} chatId={chatId} initialMessages={[]} defaultLLM={defaultLLM} />
-        </ChatSettingsProvider>
+        <ChatTopBar shallowCharacter={shallowCharacter} chatId={chatId} isLoggedIn={isLoggedIn} />
+        <Chat shallowCharacter={shallowCharacter} chatId={chatId} initialMessages={[]} defaultLLM={defaultLLM} />
         </>
     )
 }

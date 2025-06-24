@@ -12,7 +12,7 @@ import { ChevronLeftIcon } from "lucide-react";
 import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChatSettings } from "@/components/chat/chat-settings";
+import { ChatSettingsDrawer } from "@/components/chat/chat-settings-drawer";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "../sidebar";
@@ -62,7 +62,7 @@ const PureTopBar = (props: Props) => {
                 </div>
                 
                 {props.isLoggedIn && props.shallowCharacter?.id &&
-                <ChatSettings 
+                <ChatSettingsDrawer
                     chatId={props.chatId} 
                     characterId={props.shallowCharacter.id} 
                 />}

@@ -21,6 +21,7 @@ import useSWR from "swr";
 import { API_ROUTES } from "@/lib/apiRoutes";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
 
 const PureFancyLLM = ({ llm, showIcon, showProvider }: { llm: LLM | undefined, showIcon?: boolean, showProvider?: boolean}) => {
     if(!llm) {
@@ -81,6 +82,7 @@ type Props = {
     label?: string;
     description?: string;
     showLink?: boolean;
+    isLoading?: boolean;
 }
 
 const PureLLMSelect = (props: Props) => {
@@ -107,11 +109,27 @@ const PureLLMSelect = (props: Props) => {
 
             </Label>
             <Select disabled={props.disabled} name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as ModelId)}  >
+
                 <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border">
                     <SelectValue aria-label="Select a LLM" className="!h-fit !border-border">
-                        <FancyLLM llm={getLLMById(props.selectedKey || _DEFAULT_LLM)} showIcon showProvider  />
+
+
+                       {!props.isLoading && <FancyLLM llm={getLLMById(props.selectedKey || _DEFAULT_LLM)} showIcon showProvider  />}
+
+                        {(props.isLoading || !props.selectedKey) && (
+                            <div className="flex flex-col justify-start gap-1 w-full h-[63px]">
+                                <Skeleton className="w-[70px] h-[16px] bg-muted/50 pb-0.5" />
+                                <Skeleton className="w-[140px] h-[20px] bg-muted/50" />
+                                <div className="flex flex-row flex-wrap gap-1">
+                                    <Skeleton className="w-[50px] h-[16px] bg-muted/50" />
+                                    <Skeleton className="w-[50px] h-[16px] bg-muted/50" />
+                                </div>
+                            </div>
+                        )}
+
                     </SelectValue>
                 </SelectTrigger>
+                
                 <SelectContent className="rounded-2xl bg-background/80 backdrop-blur-xl">
                     {llmGroups?.map((group) => (
                         <SelectGroup key={group.provider}>
@@ -147,6 +165,7 @@ const LLMSelect = memo(PureLLMSelect, (prevProps, nextProps) => {
     if (prevProps.label !== nextProps.label) return false;
     if (prevProps.description !== nextProps.description) return false;
     if (prevProps.showLink !== nextProps.showLink) return false;
+    if (prevProps.isLoading !== nextProps.isLoading) return false;
 
     return true;
 });

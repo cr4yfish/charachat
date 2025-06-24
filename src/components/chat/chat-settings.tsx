@@ -1,263 +1,271 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { SettingsIcon, TrashIcon } from "lucide-react";
-import { cn, fetcher } from "@/lib/utils";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+import { TrashIcon } from "lucide-react";
+import { fetcher } from "@/lib/utils";
 import LLMSelect from "./llm-select";
-import useSWR from "swr";
-import { API_ROUTES } from "@/lib/apiRoutes";
 import { Chat } from "@/types/db";
 import { ModelId } from "@/lib/ai/types";
 import ButtonGroup from "../ui/button-group";
-import { useDebounce } from "use-debounce";
-import Spinner from "../ui/spinner";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
-import { BetterSwitch } from "../ui/better-switch";
 import { useRouter } from "next/navigation";
+import { useDebounce } from "use-debounce";
+import { API_ROUTES } from "@/lib/apiRoutes";
+import { toast } from "sonner";
+import useSWR from "swr";
+import equal from "fast-deep-equal";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import Spinner from "../ui/spinner";
 
 type Props = {
-    characterId?: string | undefined;
-    chatId: string | undefined;
+    chatId?: string;
 }
 
-export const PureChatSettings = (props: Props) => {
+const PureSettings = ({ chatId }: Props) => {
 
-    // const { data: character, isLoading } = useSWR<Character>(API_ROUTES.GET_CHARACTER_BY_ID + props.characterId, fetcher);
-    const { data: chat, mutate } = useSWR<Chat>(API_ROUTES.GET_CHAT + props.chatId, fetcher, {
+    const { data: chat, isLoading, isValidating, mutate } = useSWR(API_ROUTES.GET_CHAT + chatId, fetcher, {
         revalidateOnFocus: false,
-        revalidateIfStale: false,
         revalidateOnReconnect: false,
         keepPreviousData: true,
-    })
-    const [isSyncing, setIsSyncing] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [debouncedChat] = useDebounce(chat, 2000);
+    });
+
+    const [internalChat, setInternalChat] = useState<Chat | null>(chat);
+    const [debouncedChat] = useDebounce(internalChat, 1500);
+
+    const [isDeleting, setIsDeleting] = useState<boolean>(false);
+    const [isSaving, setIsSaving] = useState<boolean>(false);
+
     const router = useRouter();
 
+    
+    // Incoming changes to chat
     useEffect(() => {
-        if (debouncedChat) {
-            fetch(API_ROUTES.UPDATE_CHAT, {
-                method: "POST",
-                body: JSON.stringify({
-                    chat: debouncedChat
-                })
-            }).catch((err) => {
-                console.error("Error updating chat:", err);
-            }).finally(() => {
-                mutate(debouncedChat, {
-                    revalidate: true
-                }).finally(() => {
-                    setIsSyncing(false);
-                });
-            })
-        }
+        if(!chat) return;
+        console.log("Chat updated:", chat);
+        setInternalChat(chat);
+    }, [chat])
+
+
+    const handleSaveChanges = useCallback(() => {
+        setIsSaving(true);
+        const updatePromise = fetch(API_ROUTES.UPDATE_CHAT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(debouncedChat)
+        }).finally(() => {
+            setIsSaving(false); 
+            mutate(debouncedChat, true); // Revalidate the chat data
+        });
+
+        toast.promise(updatePromise, {
+            loading: "Saving changes...",
+            success: "Changes saved successfully!",
+            error: "Failed to save changes.",
+            position: "bottom-right"
+        });
+
     }, [debouncedChat, mutate]);
 
-    const handleLLMChange = (llm: ModelId) => {
+    useEffect(() => {
+        if(!debouncedChat || equal(debouncedChat, chat)) return;
+        console.log("Debounced chat updated:", debouncedChat);
+        handleSaveChanges();
+    }, [debouncedChat, chat, handleSaveChanges]);
+
+    const handleLLMChange = useCallback((llm: ModelId) => {
         const updatedChat = {
             ...chat,
             llm: llm
         } as Chat
+        mutate(updatedChat, false);
+    }, [chat, mutate]);
 
-        mutate(updatedChat, {
-            revalidate: false,
-            optimisticData: updatedChat,
-        })
+    const handleChatChange = useCallback((updates: Partial<Chat>) => {
+        const updatedChat = {
+            ...internalChat,
+            ...updates
+        } as Chat;
+        setInternalChat(updatedChat);
+    }, [internalChat]);
 
-        fetch(API_ROUTES.UPDATE_CHAT, {
-            method: "POST",
-            body: JSON.stringify({
-                chat: updatedChat
-            })
-        }).catch((err) => {
-            console.error("Error updating chat:", err);
-        })
-    }
-
-    const handleChatChange = (chat: Chat) => {
-        setIsSyncing(true);
-        mutate(chat, {
-            revalidate: false,
-            optimisticData: chat,
-        });
-    }
 
     return (
-        <Drawer>
-            <DrawerTrigger asChild>
-                <Button variant={"liquid"} className={cn("rounded-full w-fit bg-transparent ")} >
-                    <SettingsIcon />
-                </Button>
-            </DrawerTrigger>
-            <DrawerContent className="h-screen pt-0">
-                <DrawerHeader>
-                    <DrawerTitle className="w-full text-start">Chat Settings</DrawerTitle>
-                </DrawerHeader>
-                <div className="flex flex-col gap-4 justify-between overflow-auto p-4 pt-0 pb-12">
-                    <span className="text-muted-foreground text-sm">General settings</span>
-                    <LLMSelect 
-                        selectedKey={chat?.llm as ModelId | undefined}
-                        onSelect={handleLLMChange} 
-                        showLink
-                    />
+        <div className="flex flex-col gap-4 justify-between overflow-auto p-4 pt-0 pb-12">
+            
+            <span className="text-xs text-muted-foreground">
+                {(isLoading || isValidating || isSaving) ? <span className="flex items-center gap-1"><Spinner/> Syncing chat settings</span> : "All changes are saved automatically."}
+            </span>
 
-                    <TextareaWithCounter 
-                        label="📖 Dynamic Book"
-                        description="Add context for the AI to reference during conversations."
-                        placeholder="Add text here..."
-                        maxLength={10000}
-                        value={chat?.dynamic_book || ""}
-                        onChange={(value) => {
-                            const updatedChat = {
-                                ...chat,
-                                dynamic_book: value
-                            } as Chat;
-                            handleChatChange(updatedChat);
-                        }}
-                    />
+            <LLMSelect 
+                selectedKey={chat?.llm as ModelId | undefined}
+                onSelect={handleLLMChange} 
+                showLink isLoading={isLoading}
+            />
 
-                    <TextareaWithCounter
-                        label="📝 Negative Prompt"
-                        description="Tell the AI what to avoid generating."
-                        placeholder="Add text here..."
-                        maxLength={2000}
-                        value={chat?.negative_prompt}
-                        onChange={(value) => {
-                            const updatedChat = {
-                                ...chat,
-                                negative_prompt: value
-                            } as Chat;
-                            handleChatChange(updatedChat);
-                        }}
-                    />
+            <TextareaWithCounter 
+                label="📖 Dynamic Book"
+                description="Add context for the AI to reference during conversations."
+                placeholder="Add text here..."
+                maxLength={10000}
+                disabled={isLoading || isValidating}
+                value={internalChat?.dynamic_book || ""}
+                onChange={(val) => {
+                    setInternalChat(prev => {
+                        if (!prev) return prev;
+                        return {
+                            ...prev,
+                            dynamic_book: val
+                        } as Chat;
+                    })
+                }}
+            />
+
+            <TextareaWithCounter
+                label="📝 Negative Prompt"
+                description="Tell the AI what to avoid generating."
+                placeholder="Add text here..."
+                maxLength={2000}
+                disabled={isLoading || isValidating}
+                value={internalChat?.negative_prompt || ""}
+                onChange={(val) => {
+                    setInternalChat(prev => {
+                        if (!prev) return prev;
+                        return {
+                            ...prev,
+                            negative_prompt: val
+                        } as Chat;
+                    })
+                }}
+            />
+            
+            <Accordion type="single" collapsible>
+                <AccordionItem value="Response">
+                    <AccordionTrigger>🎛️ Advanced Response Controls</AccordionTrigger>
+                    <AccordionContent className="flex flex-col gap-4 p-1">
+                        <ButtonGroup 
+                            label="📝 Response Length"
+                            description="Control how long the AI's responses will be."
+                            options={[{
+                                value: "1",
+                                label: "Chat"
+                            }, {
+                                value: "2",
+                                label: "Story"
+                            }, {
+                                value: "3",
+                                label: "Novel"
+                            }]}
+                            disabled={isLoading || isValidating}
+                            value={chat?.response_length?.toString()}
+                            onValueChange={(value) => {
+                                const updatedChat = {
+                                    ...chat,
+                                    response_length: parseFloat(value)
+                                } as Chat;
+                                handleChatChange(updatedChat);
+                            }}
+                        />
+
+                        <ButtonGroup 
+                            label="💡 Creativity"
+                            description="Increase this to make the AI more creative and less factual."
+                            options={[{
+                                value: "0.6",
+                                label: "Assistant"
+                            }, {
+                                value: "0.7",
+                                label: "Author"
+                            }, {
+                                value: "0.8",
+                                label: "On Drugs"
+                            }]}
+                            disabled={isLoading || isValidating}
+                            value={chat?.temperature?.toString()}
+                            onValueChange={(value) => {
+                                const updatedChat = {
+                                    ...chat,
+                                    temperature: parseFloat(value)
+                                } as Chat;
+                                handleChatChange(updatedChat);
+                            }}
+                        />    
+
+                        <ButtonGroup 
+                            label="👮 Repetition Police"
+                            description="Increase this if the AI tends to repeat itself."
+                            options={[{
+                                value: "0",
+                                label: "Default"
+                            }, {
+                                value: "0.5",
+                                label: "Medium"
+                            }, {
+                                value: "0.9",
+                                label: "Extreme"
+                            }]}
+                            disabled={isLoading || isValidating}
+                            value={chat?.frequency_penalty?.toString()}
+                            onValueChange={(value) => {
+                                const updatedChat = {
+                                    ...chat,
+                                    frequency_penalty: parseFloat(value)
+                                } as Chat;
+                                handleChatChange(updatedChat);
+                            }}
+                        />                                            
+                    </AccordionContent>
+                </AccordionItem>
+
+            </Accordion>
+
+
+            <Button 
+                variant={"destructive"} 
+                className="rounded-3xl"
+                disabled={isLoading || isValidating || !chat?.id  || isDeleting}
+                onClick={() => {
+                    if (!chat?.id) {
+                        toast.error("Chat is not available for deletion.");
+                        return;
+                    }
+                    setIsDeleting(true);
                     
-                    <span className="text-muted-foreground text-sm">Adjust the AI</span>
+                    const deletePromise = fetch(API_ROUTES.DELETE_CHAT + chat.id, {
+                        method: "DELETE"
+                    }).then(() => {
+                        router.push("/chats");
+                    }).catch((err) => {
+                        console.error("Error deleting chat:", err);
+                    }).finally(() => {
+                        setIsDeleting(false);
+                    });
 
-                    <BetterSwitch 
-                        label="🔍 Context Awareness"
-                        description="Makes the AI more responsive to conversation context."
-                        disabled
-                        checked
-                    />
+                    toast.promise(deletePromise, {
+                        loading: "Deleting chat...",
+                        success: "Chat deleted successfully!",
+                        error: "Failed to delete chat."
+                    })
+                }}
+            >
+                <TrashIcon color="currentColor" />
+                Delete Chat
+            </Button>
+        </div>
 
-                    <ButtonGroup 
-                        label="📝 Response Length"
-                        description="Control how long the AI's responses will be."
-                        options={[{
-                            value: "1",
-                            label: "Chat"
-                        }, {
-                            value: "2",
-                            label: "Story"
-                        }, {
-                            value: "3",
-                            label: "Novel"
-                        }]}
-                        value={chat?.response_length.toString()}
-                        onValueChange={(value) => {
-                            const updatedChat = {
-                                ...chat,
-                                responseLength: value
-                            } as Chat;
-                            handleChatChange(updatedChat);
-                        }}  
-                    />
-
-                    <ButtonGroup 
-                        label="💡 Creativity"
-                        description="Increase this to make the AI more creative and less factual."
-                        options={[{
-                            value: "0.6",
-                            label: "Assistant"
-                        }, {
-                            value: "0.7",
-                            label: "Author"
-                        }, {
-                            value: "0.8",
-                            label: "On Drugs"
-                        }]}
-                        value={chat?.temperature.toString()}
-                        onValueChange={(value) => {
-                            const updatedChat = {
-                                ...chat,
-                                temperature: parseFloat(value)
-                            } as Chat;
-                            handleChatChange(updatedChat);
-                        }}
-                    />
-
-                    <ButtonGroup 
-                        label="👮 Repetition Police"
-                        description="Increase this if the AI tends to repeat itself."
-                        options={[{
-                            value: "0",
-                            label: "Default"
-                        }, {
-                            value: "0.5",
-                            label: "Medium"
-                        }, {
-                            value: "0.9",
-                            label: "Extreme"
-                        }]}
-                        value={chat?.frequency_penalty.toString()}
-                        onValueChange={(value) => {
-                            const updatedChat = {
-                                ...chat,
-                                frequency_penalty: parseFloat(value)
-                            } as Chat;
-                            handleChatChange(updatedChat);
-                        }}
-                    />
-
-                    <Button 
-                        variant={"destructive"} 
-                        className="rounded-3xl"
-                        disabled={isDeleting}
-                        onClick={() => {
-                            if (!props.chatId) return;
-                            setIsDeleting(true);
-                            fetch(API_ROUTES.DELETE_CHAT + props.chatId, {
-                                method: "DELETE"
-                            }).then(() => {
-                                mutate(undefined, {
-                                    revalidate: true
-                                });
-                                router.push("/chats");
-                            }).catch((err) => {
-                                console.error("Error deleting chat:", err);
-                            }).finally(() => {
-                                setIsDeleting(false);
-                            });
-                        }}
-                    >
-                        <TrashIcon color="currentColor" />
-                        Delete Chat
-                    </Button>
-                </div>
-
-                <DrawerFooter className="fixed bottom-0 left-0 w-full h-fit bg-gradient-to-t from-background via-background/75 to-background/0 pb-2 pt-3 flex justify-end">
-                    <span className="text-xs text-muted-foreground">
-                        {isSyncing ? <div className="flex items-center gap-1"><Spinner /> <span>Saving changes...</span></div> : "All changes are saved automatically."}
-                    </span>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
     )
 }
 
-
-export const ChatSettings = memo(PureChatSettings, (prevProps, nextProps) => {
-    if (prevProps.characterId !== nextProps.characterId) return false;
-    if (prevProps.chatId !== nextProps.chatId) return false;
-
-    return true;
+const ChatSettings = memo(PureSettings, (prevProps, nextProps) => {
+    // Prevent re-rendering if chatId is the same
+    return prevProps.chatId === nextProps.chatId;
 });
+
+export default ChatSettings;

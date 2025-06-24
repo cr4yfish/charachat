@@ -6,7 +6,6 @@ import { convertToUIMessages } from "@/lib/utils";
 import { getShallowChat } from "@/lib/db/chat";
 import { ShallowCharacter } from "@/types/db";
 import { LIMITS } from "@/lib/limits";
-import { ChatSettingsProvider } from "@/hooks/use-chat-settings";
 
 export default async function ExistingChatPage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
@@ -37,10 +36,8 @@ export default async function ExistingChatPage(props: { params: Promise<{ id: st
 
     return (
         <>
-        <ChatSettingsProvider chatId={id}>
-            <ChatTopBar chatId={id} shallowCharacter={shallowCharacter} isLoggedIn />
-            <Chat shallowCharacter={shallowCharacter} chatId={id} initialMessages={uiMessages} />
-        </ChatSettingsProvider>
+        <ChatTopBar chatId={id} shallowCharacter={shallowCharacter} isLoggedIn />
+        <Chat shallowCharacter={shallowCharacter} chatId={id} initialMessages={uiMessages} />
         </>
     )
 }
