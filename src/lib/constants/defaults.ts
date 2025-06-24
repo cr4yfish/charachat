@@ -1,6 +1,6 @@
 // import { ModelId } from "./ai";
 
-import { ModelId } from "./ai/types";
+import { ModelId } from "@/lib/ai/types";
 
 // export const defaultLLM: ModelId = "meta-llama/llama-4-scout-17b-16e-instruct"
 
