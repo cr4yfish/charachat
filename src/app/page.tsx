@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import TotalCharacterStats from "@/components/stats/total-character-stats";
 import { getCachedNewestCharacters, getCachedPopularCharacters, getCachedSpotlight, getCachedTrendingInitialCharacters, getInitialCachedCharactersByCategory } from "@/lib/db/character";
 import { getCachedInitialCategories } from "@/lib/db/categories";
+import RandomCharacters from "@/components/search/random-characters";
+import Image from "next/image";
+import { ChevronRightIcon } from "lucide-react";
 
 export default async function Home() {
   const draftChar = await getDraftCharacterFromCookie();
@@ -56,7 +59,8 @@ export default async function Home() {
           <GeneralSwiper initialData={initialNewest} apiUrl={API_ROUTES.GET_NEWEST_CHARACTERS} component={ImageCharacterCard} rows={2} />
         </div>
 
-        <div>
+        <div className="flex flex-row items-center gap-4 overflow-x-auto w-full relative">
+          <RandomCharacters />
           <TotalCharacterStats />
         </div>
 
@@ -73,21 +77,30 @@ export default async function Home() {
         </div>
 
         {/* Create new character. Totally not copied the layout from cai */}
-        <div className="flex flex-col items-center gap-6 pt-6 w-full relative px-4">
+        <div className="flex flex-col gap-4 p-6 w-full relative">
 
-          <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0 flex flex-col items-center justify-center text-center">
+          <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0 flex flex-col z-20">
             <h2 className="dark:prose-invert text-lg font-bold">Looking for something else?</h2>
-            <p className="text-xs text-muted-foreground">Create your own character and start chatting with it!</p>
+            <p className="text-sm text-white/75">Create your own character and start chatting with it!</p>
           </div>
 
-          <Link href={"/c/new"} className="w-full relative max-w-xs">
-            <Button variant={"secondary"} className=" relative w-full rounded-3xl font-bold p-0 h-fit  " >
-              <div className="animated-shadow pointer-events-none absolute size-full left-0 bottom-0 rounded-3xl"></div>
-              <div className=" bg-white text-black size-full z-10 flex items-center justify-center gap-2 py-4 rounded-3xl">
+          <Link href={"/c/new"} className="w-full relative max-w-[15rem] z-20 cursor-pointer">
+            <Button  className=" cursor-pointer relative w-full rounded-3xl font-bold p-0 h-fit  " >
+              <div className="  size-full z-10 flex items-center justify-between gap-2 py-4 px-6 rounded-3xl">
                 <span>Create a character</span>
+                <ChevronRightIcon />
               </div>
             </Button>
           </Link>
+          <div className="absolute top-0 left-0 size-full rounded-3xl overflow-hidden">
+            <div className="absolute top-0 left-0 size-full bg-gradient-to-r from-background/70 via-background/50 to-background/20 backdrop-blur-[1px] z-10"></div>
+            <Image 
+              alt=""
+              fill
+              src={"/images/rep.webp"}
+              className="object-cover object-center"
+            />
+          </div>
 
         </div>
 
