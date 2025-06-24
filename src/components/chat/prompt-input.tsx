@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from "react";
-import { Textarea } from "../ui/textarea";
+import { TextareaWithAutosize } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Loader2Icon, RefreshCwIcon, SendIcon } from "lucide-react";
 import { cn, fetcher } from "@/lib/utils";
@@ -169,7 +169,7 @@ const PurePromptInput = (props: Props) => {
                     className={cn("relative w-full")}
                     animate={{ width: isFocused ? "100%" : "250px" }}
                 >
-                    <Textarea 
+                    <TextareaWithAutosize 
                         className={cn("!bg-slate-950/50 border-none focus:ring-0 focus:border-none pr-12")}
                         minRows={1}
                         placeholder="Send a message"

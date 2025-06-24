@@ -6,7 +6,7 @@ import TextareaAutosize, { TextareaHeightChangeMeta } from 'react-textarea-autos
 import { cn } from "@/lib/utils"
 import { Liquid } from "./liquid";
 
-function Textarea({ className, endContent, ...props }: React.ComponentProps<typeof TextareaAutosize> & { endContent?: React.ReactNode }) {
+function TextareaWithAutosize({ className, endContent, ...props }: React.ComponentProps<typeof TextareaAutosize> & { endContent?: React.ReactNode }) {
   const [hasMultipleRows, setHasMultipleRows] = React.useState(false);
 
   const handleHeightChange = (height: number, meta: TextareaHeightChangeMeta) => {
@@ -42,4 +42,18 @@ function Textarea({ className, endContent, ...props }: React.ComponentProps<type
   )
 }
 
-export { Textarea }
+function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-2xl border bg-transparent px-3 py-5 pt-3 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+
+export { Textarea, TextareaWithAutosize }
