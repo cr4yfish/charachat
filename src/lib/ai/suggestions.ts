@@ -34,7 +34,7 @@ export async function generateSuggestions({ chat, recentMessages, userProfile: p
     }
 
     const apiKey = await getModelApiKey(profile, chat.llm as ModelId);
-    const model = await getLanguageModel({ modelId: chat.llm, apiKey })
+    const model = await getLanguageModel({ modelId: chat.llm as ModelId, apiKey })
 
     const prompt = getSuggestionsPrompt({
         profile, character,recentMessages,
