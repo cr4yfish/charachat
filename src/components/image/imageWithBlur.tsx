@@ -42,7 +42,7 @@ const PureImageWithBlur = (props: Props) => {
                 layout={props.layout}
                 width={props.width}
                 height={props.height}
-                className={cn("transition-all size-full object-cover overflow-visible", { "filter blur-lg": isBlurred } )}
+                className={cn("transition-all size-full object-cover object-center overflow-visible", { "filter blur-lg": isBlurred } )}
             />
         </AspectRatio>
     )
