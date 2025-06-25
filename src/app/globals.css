@@ -285,3 +285,36 @@
     transform: scale(1.05);
   }
 }
+
+/* 
+  iOS Safe Area Header Fix for PWA
+  Automatically adjusts fixed headers to avoid iOS status bar overlap
+  Only applies when safe area insets are available (iOS in fullscreen/standalone mode)
+*/
+.ios-safe-header {
+  /* Default top position - adjust as needed for your header height */
+  top: 0;
+  
+  /* Add safe area inset to top when available */
+  top: max(0px, env(safe-area-inset-top));
+  
+  /* Alternative: if you need additional padding beyond safe area */
+  /* top: max(0px, calc(env(safe-area-inset-top) + 0px)); */
+}
+
+/* Optional: Additional padding variant for headers that need extra space */
+.ios-safe-header-padded {
+  top: 0;
+  top: max(16px, calc(env(safe-area-inset-top) + 16px));
+}
+
+/* Support for headers that use padding instead of top positioning */
+.ios-safe-header-padding {
+  padding-top: 0;
+  padding-top: max(0px, env(safe-area-inset-top));
+}
+
+.ios-safe-header-padding-extra {
+  padding-top: 16px;
+  padding-top: max(16px, calc(env(safe-area-inset-top) + 16px));
+}
