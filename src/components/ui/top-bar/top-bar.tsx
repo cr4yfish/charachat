@@ -112,9 +112,10 @@ const PureTopBar = () => {
     
     return (
         <>
-        <div className={cn("fixed z-50 top-0 left-0 h-[75px] ml-0 w-full transition-all overflow-hidden", {
+        <div className={cn("fixed z-50 left-0 h-[75px] ml-0 w-full transition-all overflow-hidden", {
             "bg-transparent":activeTitle === undefined,
             "ml-[255px]": !isMobile,
+            "top-[var(--status-bar-height)]": true, // Position below status bar
             // "ml-[60px]": !sidebarOpen  && !isMobile,
         })} >
             <div className={cn("bg-gradient-to-b from-black/50 to-transparent w-full relative overflow-hidden flex flex-row justify-center ", {

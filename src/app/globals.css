@@ -285,3 +285,106 @@
     transform: scale(1.05);
   }
 }
+
+/* iOS PWA Safe Area and Status Bar Support */
+
+/* Set up CSS environment variables for safe areas */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --status-bar-height: env(safe-area-inset-top, 20px);
+}
+
+/* iOS PWA viewport setup */
+html {
+  /* Allow content to extend into status bar area */
+  padding-top: 0;
+  /* Ensure the viewport covers the full screen */
+  height: 100vh;
+  height: 100dvh; /* Use dynamic viewport height for better mobile support */
+}
+
+/* Body adjustments for iOS PWA */
+body {
+  /* Remove default overflow and use safe areas */
+  overflow: auto;
+  /* Don't add padding-top here as we want content in status bar */
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+  padding-bottom: var(--safe-area-inset-bottom);
+  /* Use full dynamic viewport height */
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Status bar overlay styles */
+.status-bar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--status-bar-height);
+  background: rgba(2, 6, 24, 0.8); /* Semi-transparent version of your theme color */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Adjust content to account for status bar when needed */
+.content-with-status-bar {
+  padding-top: var(--status-bar-height);
+}
+
+/* SidebarInset adjustments for status bar */
+.sidebar-inset-with-status {
+  margin-top: var(--status-bar-height);
+}
+
+/* iOS PWA specific media query */
+@media (display-mode: fullscreen) {
+  /* Remove body padding top in fullscreen mode to allow content in status bar */
+  body {
+    padding-top: 0;
+  }
+  
+  /* Make sure the main content starts below the status bar if needed */
+  .main-content {
+    margin-top: var(--safe-area-inset-top);
+  }
+}
+
+/* Standalone PWA mode adjustments */
+@media (display-mode: standalone) {
+  body {
+    padding-top: var(--safe-area-inset-top);
+  }
+}
+
+/* Specific adjustments for your app structure */
+.sidebar-provider-root {
+  /* Account for safe areas in sidebar layout */
+  padding-top: var(--safe-area-inset-top);
+}
+
+/* TopBar component adjustments for status bar area */
+.top-bar-in-status {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--status-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  z-index: 10000;
+  pointer-events: auto;
+}
+
+/* Ensure proper spacing for elements that should not overlap with status bar */
+.avoid-status-bar {
+  margin-top: var(--status-bar-height);
+}
