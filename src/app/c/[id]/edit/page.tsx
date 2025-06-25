@@ -11,7 +11,7 @@ export default async function EditPage({ params }: { params: Params }) {
     const char = await getCharacter(id)
     return (
         <div className="relative w-full h-full min-h-full">
-            <CharacterEditTopHeader character={char} />
+            <CharacterEditTopHeader name={char.name} href={"/c/" + char.id} />
             <div className="relative size-full overflow-x-hidden">
                 <CharacterEdit character={char} />
             </div>
