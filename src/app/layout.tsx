@@ -13,7 +13,6 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/ui/app-sidebar'
 import { PWAInstallPrompt } from '@/components/ui/pwa-install-prompt'
 import { ServiceWorkerRegistration } from '@/components/ui/service-worker-registration'
-import { StatusBar } from '@/components/ui/status-bar'
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -51,7 +50,7 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: APP_DEFAULT_TITLE,
-    startupImage: [],
+    //startupImage: [],
   },
   formatDetection: {
     telephone: false,
@@ -91,12 +90,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className='dark' >
         
-        <body className={`${montserrat.className} ${geistMono.variable} ${leckerliOne.variable} antialiased h-screen`}>
-          <StatusBar />
-          <SidebarProvider className="sidebar-provider-root">
+        <body className={`${montserrat.className} ${geistMono.variable} ${leckerliOne.variable} antialiased h-screen overflow-hidden`}>
+          <SidebarProvider>
             <AppSidebar />
             <TopBar />
-            <SidebarInset className="sidebar-inset-with-status">
+            <SidebarInset>
               <ServiceWorkerRegistration />
               <Toaster position={"top-center"} />
               <NextTopLoader color='#00a6f4' showSpinner={false} />
