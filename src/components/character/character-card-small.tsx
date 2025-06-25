@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
 import {  EyeOffIcon, LockIcon, MessageCircleIcon, ShieldIcon } from "lucide-react";
 import { memo, useState } from "react";
+import equal from "fast-deep-equal";
 
 type Props = {
     data: Character,
@@ -56,7 +57,7 @@ function PureCharacterCard(props: Props) {
                         </div>
 
                         
-                        <div className="flex flex-row items-center justify-between gap-2 text-muted-foreground w-full ">
+                        <div className="flex flex-row items-center justify-between gap-2 text-muted-foreground/75 w-full ">
                             {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
                             <>
                                 <div className="flex items-center gap-1 text-xs">
@@ -99,7 +100,7 @@ function PureCharacterCard(props: Props) {
 
 const SmallCharacterCard =  memo(PureCharacterCard, (prevProps, nextProps) => {
     // Prevent re-render if the data is the same
-    return prevProps.data.id === nextProps.data.id &&
+    return equal(prevProps.data, nextProps.data) &&
         prevProps.hasLink === nextProps.hasLink;
 });
 
