@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 import { Character } from "@/types/db";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { MessageCircleIcon } from "lucide-react";
+import { EditIcon, MessageCircleIcon } from "lucide-react";
 import { useSidebar } from "../ui/sidebar";
 
 
-export default function CharacterTopHeader({ character} : { character: Character }) {
+export default function CharacterTopHeader({ character, isOwner } : { character: Character, isOwner?: boolean }) {
     const { isMobile } = useSidebar();
 
     return (
@@ -17,7 +17,15 @@ export default function CharacterTopHeader({ character} : { character: Character
                 <span className="text-3xl font-bold">
                     {/* {character.name} */}
                 </span> 
-                <div>
+                <div className="flex flex-row gap-2 items-center justify-center">
+                    {isOwner && 
+                    <Link href={"/c/" + character.id + "/edit"}>
+                        <Button>
+                            <EditIcon />
+                            <span>Edit Char</span> 
+                        </Button>
+                    </Link>
+                    }
                     <Link href={"/chat?characterid=" + character.id}>
                         <Button>
                             <MessageCircleIcon />

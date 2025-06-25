@@ -10,6 +10,7 @@ import {LockIcon } from "lucide-react";
 import CharacterPageTabs from "@/components/character/character-page-tabs";
 import CharacterPageActions from "@/components/character/character-page-actions";
 import CharacterTopHeader from "@/components/character/character-top-header";
+import { currentUser } from "@clerk/nextjs/server";
 
 type Params = Promise<{ id: string }>
 
@@ -51,12 +52,20 @@ export default async function CharacterView({ params }: { params: Params }) {
         transformedCharacter.image_prompt = "";
     }
 
+    const user = await currentUser();
+
+    let userIsOwner = false;
+
+    if(user?.id && user.id === character.owner_clerk_user_id) {
+        userIsOwner = true;
+    }
+
 
     return (
         <>
         <div className="relative w-full h-full min-h-full">
 
-            <CharacterTopHeader character={character} />
+            <CharacterTopHeader isOwner={userIsOwner} character={character} />
 
             <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden pt-[75px]">
 
