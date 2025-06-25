@@ -12,6 +12,7 @@ import { fetcher } from "@/lib/utils";
 import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import useSWRInfinite from "swr/infinite";
 import { LIMITS } from "@/lib/constants/limits";
+import { Character } from "@/lib/db/types/character";
 
 const limit = LIMITS.MAX_CHARACTERS_PER_PAGE;
 
