@@ -19,6 +19,30 @@ export const truncateText = (text: string | undefined, maxLength=40) => {
 };
 
 /**
+ * Prints to local strings, but with extra details:
+ * 
+ * adds shorthands, like "k" or "m" for thousands and millions
+ * @param num 
+ * @returns 
+ */
+export const truncateNumber = (num: number | undefined) => {
+  if (num === undefined || num === null) return '';
+
+  if (num < 1000) {
+      return num.toString();
+  } else if (num < 1000000) {
+      const truncated = (num / 1000).toFixed(0);
+      return `${truncated}k`;
+  } else if (num < 1000000000) {
+      const truncated = (num / 1000000).toFixed(0);
+      return `${truncated}m`;
+  } else {
+      const truncated = (num / 1000000000).toFixed(0);
+      return `${truncated}b`;
+  }
+}
+
+/**
  * Holy shit this is so stupid
  * @param string 
  * @returns 
