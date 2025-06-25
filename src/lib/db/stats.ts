@@ -1,5 +1,5 @@
 
-import type { Stats, API_Count, Leaderboard } from "@/lib/db/types";
+import type { Stats, API_Count, Leaderboard, LoadMoreProps } from "@/lib/db/types";
 import { createUnauthenticatedServerSupabaseClient as createClient } from "./server";
 import { cache } from "react";
 
@@ -28,13 +28,13 @@ export const getAPIKeyCount = cache(async (): Promise<API_Count[]> => {
     return data
 })
 
-export const getLeaderboard = cache(async (): Promise<Leaderboard[]> => {
+export const getLeaderboard = cache(async (props: LoadMoreProps): Promise<Leaderboard[]> => {
     const { data, error } = await (await createClient())
         .from('character_creator_leaderboard')
         .select('*')
         .neq("total_chat_count", 0)
         .order("total_chat_count", { ascending: false })
-        .range(0, 9)
+        .range(props.cursor, props.cursor + props.limit - 1)
 
     if (error) {
         throw new Error(error.message)

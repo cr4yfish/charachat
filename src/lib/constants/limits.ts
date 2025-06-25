@@ -17,7 +17,7 @@ export const LIMITS = {
 
     // Used e.g. in /search
     MAX_CHARACTERS_PAGINATION: 50,
-    
+    MAX_LEADERBOARD_PAGINATION: 30,
     
     
     MAX_MESSAGES_PER_PAGE: 100,

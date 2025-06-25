@@ -17,6 +17,7 @@ import { ChevronRightIcon } from "lucide-react";
 import { getCachedInitialPersonas } from "@/lib/db/persona";
 import PersonaImageCard from "@/components/personas/persona-image-card";
 import Footer from "@/components/ui/footer";
+import Leaderboard from "@/components/explore/leaderboard";
 
 export default async function Home() {
   
@@ -125,6 +126,18 @@ export default async function Home() {
           <GeneralSwiper initialData={initialPersonas} apiUrl={API_ROUTES.GET_PERSONAS} component={PersonaImageCard} rows={1} />
         </div>
 
+
+        <div className="flex flex-col gap-2 w-full relative">
+          <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0">
+              <p className="text-xs text-muted-foreground">Creators whose characters have the most chats</p>
+              <Link href={"/leaderboard"} className="flex gap-2 w-full items-center">
+                <h2 className="dark:prose-invert text-lg font-bold">Creator Leaderboard</h2>
+                <ChevronRightIcon size={14} />
+              </Link>
+              
+          </div>
+          <Leaderboard />
+        </div>
 
         <Footer />
       </div>
