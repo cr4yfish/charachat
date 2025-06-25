@@ -28,6 +28,19 @@ const personaFormatter = async (data: any): Promise<Persona> => {
         creator: profile
     }
 
+    return persona;
+}
+
+const privatePersonaFormatter = async (data: any): Promise<Persona> => {
+    const profile = data.profiles;
+    
+    delete data.profiles;
+
+    const persona: Persona = {
+        ...data,
+        creator: profile
+    }
+
     if(persona.is_private) {
 
         if(!checkIsEncrypted(persona.full_name)) {
@@ -98,6 +111,7 @@ export const getPersonas = cache(async (props: LoadMoreProps) => {
     const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(tableName)
         .select(personaMatcher)
+        .eq("is_private", false) // Only fetch public personas
         .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1)
         
@@ -140,7 +154,7 @@ export const getUserPersonas = cache(async (props: LoadMoreProps) => {
         throw error;
     }
 
-    return await Promise.all(data.map(personaFormatter));
+    return await Promise.all(data.map(privatePersonaFormatter));
 })
 
 export const getPublicUserPersonas = cache(async (props: LoadMoreProps) => {
