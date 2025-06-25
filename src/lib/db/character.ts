@@ -255,12 +255,29 @@ export const getShallowCharacter = cache(async (characterId: string): Promise<Ch
 })
 
 
-export const getCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
-    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
+export const getCharacters = cache(async (props: LoadMoreProps, sort: 'newest' | 'likes' | 'popular' | "relevance" = "newest"): Promise<Character[]> => {
+    let query = (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
-        .select(characterMatcher)
-        .order("created_at", { ascending: false })
-        .range(props.cursor, props.cursor + props.limit - 1);
+        .select(characterMatcher);
+
+    // Apply sorting based on the sort parameter
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+            query = query.order('likes', { ascending: false });
+            break;
+        case 'relevance':
+        case 'popular':
+            query = query.order('chats', { ascending: false });
+            break;
+        default:
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query.range(props.cursor, props.cursor + props.limit - 1);
         
     if (error) {
         throw error;

@@ -55,6 +55,8 @@ type TopBarTitle = {
      * This can be used for branding or to represent the current page visually.
      */
     showBackButton?: boolean; // Whether to show the back button in the top bar
+
+    showHomeButton?: boolean; // Whether to show the home button in the top bar
 }
 
 const titles: TopBarTitle[] = [
@@ -64,7 +66,7 @@ const titles: TopBarTitle[] = [
     { title: "New Character", pathname: "/c/new", showBackButton: true },
     { title: "Import Character", pathname: "/c/new/import", showBackButton: true },
     { title: "Settings", pathname: "/home/settings", showBackButton: true },
-    { title: "Search", pathname: "/search", showBackButton: true },
+    { title: "Search", pathname: "/search", showHomeButton: true },
     { title: "Your Characters", pathname: "/c/own", showBackButton: true },
     { title: "Migrate", pathname: "/home/settings/migrate", showBackButton: true },
     { title: "Leaderboard", pathname: "/leaderboard", showBackButton: true },
@@ -122,6 +124,7 @@ const PureTopBar = () => {
 
                 <div className="flex items-center justify-between px-4 py-2  w-full relative max-w-[1920px]">
                     <div className="flex flex-row items-center gap-1">
+
                         { activeTitle?.showBackButton &&
                             <Link href={"/"} onClick={(e) => {
                             e.preventDefault();
@@ -131,6 +134,14 @@ const PureTopBar = () => {
                                 <ChevronLeftIcon size={12} />
                             </Button>
                         </Link>}
+
+                        { activeTitle?.showHomeButton &&
+                            <Link href={"/"} className="flex flex-row items-center gap-1">
+                                <Button size={"icon"} variant={"ghost"} className="cursor-pointer">
+                                     <ChevronLeftIcon size={12} />
+                                </Button>
+                            </Link>
+                        }
 
                         {activeTitle && 
                             <div className="flex flex-col">
