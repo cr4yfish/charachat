@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
-import { Geist_Mono, Montserrat } from 'next/font/google'
+import { Geist_Mono, Montserrat, Leckerli_One } from 'next/font/google'
 import './globals.css'
 import { AppTabBar } from '@/components/ui/tab-bar/app-tabbar'
 import { TopBar } from '@/components/ui/top-bar/top-bar'
@@ -21,6 +21,16 @@ const geistMono = Geist_Mono({
 
 const montserrat = Montserrat({
   subsets: ["latin"],
+  variable: '--font-montserrat',
+  display: 'swap',
+})
+
+const leckerliOne = Leckerli_One({
+  weight: "400",
+  subsets: ["latin"],
+  variable: '--font-leckerli-one',
+  display: 'swap',
+  fallback: ['cursive'],
 })
 
 const APP_NAME = "Charachat";
@@ -79,7 +89,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className='dark' >
         
-        <body className={`${montserrat.className} ${geistMono.variable} antialiased h-screen overflow-hidden`}>
+        <body className={`${montserrat.className} ${geistMono.variable} ${leckerliOne.variable} antialiased h-screen overflow-hidden`}>
           <SidebarProvider>
             <AppSidebar />
             <TopBar />

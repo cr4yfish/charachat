@@ -22,7 +22,7 @@ const PureCharacterEditTopHeader = ({ character } : { character: Character }) =>
                     </Link>
 
                 
-                <span className="text-xl font-bold">
+                <span className="text-xl font-bold font-leckerli">
                     {character.name}
                 </span> 
 

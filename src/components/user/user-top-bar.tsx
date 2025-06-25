@@ -22,7 +22,7 @@ export default function UserTopHeader({ profile, isOwner } : { profile: Profile,
                             <ChevronLeftIcon size={12} />
                         </Button>
                     </Link>
-                    <span className="text-3xl font-bold">
+                    <span className="text-3xl font-bold font-leckerli">
                         User
                     </span> 
                 </div>

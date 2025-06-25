@@ -145,7 +145,7 @@ const PureTopBar = () => {
 
                         {activeTitle && 
                             <div className="flex flex-col">
-                                <span className=" text-3xl font-bold " >{activeTitle?.title}</span>
+                                <span className=" text-3xl font-bold font-leckerli " >{activeTitle?.title}</span>
                             </div>
                         }
                         
