@@ -16,6 +16,7 @@ import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
 import { getCachedInitialPersonas } from "@/lib/db/persona";
 import PersonaImageCard from "@/components/personas/persona-image-card";
+import Footer from "@/components/ui/footer";
 
 export default async function Home() {
   
@@ -71,7 +72,7 @@ export default async function Home() {
 
         {/* Fold on Desktop */}
 
-        <div className="flex flex-row items-center gap-4 overflow-x-auto w-full relative">
+        <div className="flex flex-row items-center gap-4 overflow-x-auto overflow-y-hidden w-full relative">
           <RandomCharacters />
           <TotalCharacterStats />
         </div>
@@ -124,6 +125,8 @@ export default async function Home() {
           <GeneralSwiper initialData={initialPersonas} apiUrl={API_ROUTES.GET_PERSONAS} component={PersonaImageCard} rows={1} />
         </div>
 
+
+        <Footer />
       </div>
     </div>
   );
