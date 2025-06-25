@@ -20,7 +20,7 @@ export const tabs: NavItem[] = [
     { name: "Home", href: "/home", icon: <HomeIcon /> }
 ]
 
-const disabledPaths = ["/chat", "/search", "/edit/"];
+const disabledPaths = ["/chat", "/search", "/edit/", "/c/own"];
 
 function checkIsPathDisabled(pathname: string, disabledPaths: string[]): boolean {
     return disabledPaths.some(path => {
