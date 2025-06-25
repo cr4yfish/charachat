@@ -143,11 +143,12 @@ const PurePersonaEdit = ({ persona } : { persona: Persona }) => {
     return (
         <div className="size-full flex flex-col gap-4 px-4 overflow-y-auto max-h-screen pt-[75px] pb-24">
             
-            <div className="fixed bottom-[40px] right-[40px] z-50 flex items-center">
-                <Button onClick={handleUpdatePersona}  size={"icon"} className="rounded-full size-[50px] bg-primary/75 backdrop-blur shadow-2xl" >
+            <div className="fixed bottom-0 left-0 z-50 flex items-center justify-center w-full p-4">
+                <Button onClick={handleUpdatePersona} className="rounded-full w-full bg-primary/25 backdrop-blur shadow-2xl" >
                     {
                         isSaving ? <Spinner /> : <SaveIcon size={20} />
                     }
+                    Save Persona
                 </Button>
             </div>
 
