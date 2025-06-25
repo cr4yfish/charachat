@@ -31,7 +31,7 @@ const PureTopBar = (props: Props) => {
     return (
         <>
         <header className={cn("fixed z-50 top-0 left-0 h-[75px] w-full flex flex-row justify-center items-center bg-gradient-to-b from-black/50 to-transparent", { "ml-[260px] pr-[280px]": !isMobile })} >
-            <div className="px-4 py-2 flex items-center justify-between w-full relative max-w-[1920px] ">
+            <div className="px-4 py-2 ios-safe-header-padding  flex items-center justify-between w-full relative max-w-[1920px] ">
                 <div className="flex flex-row items-center gap-1">
                     <Link href={"/"} onClick={(e) => {
                         e.preventDefault();

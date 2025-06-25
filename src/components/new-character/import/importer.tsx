@@ -46,7 +46,7 @@ const PureImporter = ({ label, searchAction }: Props) => {
     return (
         <>
         <div className="fixed top-0 left-0 w-full h-[75px] bg-gradient-to-b from-background/80 to-background/80 z-50">
-            <div className="relative size-full px-4 py-2 flex items-center justify-start">
+            <div className="relative size-full px-4 py-2 ios-safe-header-padding  flex items-center justify-start">
                 <Link href={"/c/new"}>
                     <Button variant={"ghost"}><ChevronLeftIcon /></Button>
                 </Link>

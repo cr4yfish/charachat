@@ -13,7 +13,7 @@ const PureCharacterEditTopHeader = ({ name, href } : { name: string, href: strin
 
     return (
         <div className={cn("fixed top-0 left-0 w-full h-[75px] bg-gradient-to-b from-black/50 to-transparent z-50", { "ml-[260px] pr-[280px]": !isMobile })}>
-            <div className="relative size-full px-4 py-2 flex items-center justify-start overflow-hidden">
+            <div className="relative size-full px-4 py-2 ios-safe-header-padding  flex items-center justify-start overflow-hidden">
                     <Link href={href}>
                         <Button variant={"ghost"}>
                             <ChevronLeftIcon />
