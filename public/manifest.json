@@ -1,6 +1,9 @@
 {
   "name": "Charachat",
   "short_name": "Chara",
+  "description": "Chat privately with AI characters using your choice of 10+ AI providers",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -13,9 +16,32 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
-  "theme_color": "#00a6f4",
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "580x1272",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Charachat mobile"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "2853x1611",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Charachat Desktop"
+    }
+  ],
+  "theme_color": "#020618",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait-primary"
 }

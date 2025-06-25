@@ -11,6 +11,8 @@ import { Toaster } from 'sonner'
 import NextTopLoader from 'nextjs-toploader';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/ui/app-sidebar'
+import { PWAInstallPrompt } from '@/components/ui/pwa-install-prompt'
+import { ServiceWorkerRegistration } from '@/components/ui/service-worker-registration'
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -82,11 +84,13 @@ export default function RootLayout({
             <AppSidebar />
             <TopBar />
             <SidebarInset>
+              <ServiceWorkerRegistration />
               <Toaster position={"top-center"} />
               <NextTopLoader color='#00a6f4' showSpinner={false} />
               <AppTabBar />
               <GlobalLiquidFilter />
               {children}
+              <PWAInstallPrompt />
             </SidebarInset>
           </SidebarProvider>
         </body>
