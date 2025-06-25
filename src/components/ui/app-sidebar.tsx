@@ -18,7 +18,7 @@ import { usePathname } from "next/navigation";
 import { memo } from "react";
 import { cn } from "@/lib/utils";
 import { BotIcon } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
+import { SignInButton, useAuth } from "@clerk/nextjs";
 import SidebarUser from "./sidebar-user";
 
 const PureNavbarItem = (props: NavItem & { isActive?: boolean, sidebarOpen: boolean }) => {
@@ -79,8 +79,8 @@ export function AppSidebar() {
                 </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
-                  {isSignedIn && <SidebarUser />}
+            <SidebarFooter className="p-4 flex flex-col gap-2">
+              {isSignedIn ? <SidebarUser /> : <SignInButton />}
 
             </SidebarFooter>
         </Sidebar>
