@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import React, { memo, } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
-import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import CodeBlock from './code-block';
 import remarkGfm from 'remark-gfm';
@@ -94,12 +93,10 @@ const components: Partial<Components> = {
     );
   },
   p: ({ node, children, ...props }) => {
-    const index: number = node?.properties["data-paragraph-index"] as number;
-
     return (
-      <motion.p className="text-ellipsis " >
+      <p className="text-ellipsis " >
         {children}
-      </motion.p>
+      </p>
     );
   },
   img: ({ node, children, ...props }) => {
