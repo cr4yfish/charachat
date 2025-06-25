@@ -32,9 +32,9 @@ export default async function News() {
           <div className="flex flex-row items-center gap-4 w-fit">
 
             <NewsCard 
-              title="🎉 Welcome to Charachat! 🎉"
+              title="⚠️ Attention ⚠️"
               description={
-                <p>Charachat: Create, share & chat with AI characters from you & the community.</p>
+                <p>Charachat v2 is coming soon. See Reddit/Discord for more info.</p>
               }
             />
 
