@@ -18,7 +18,7 @@ export default async function SavedCharacters() {
 
     return (
         <div className="flex flex-col">
-            <h2 className="text-lg font-bold">Saved Characters</h2>
+            <h2 className="text-lg font-bold">Bookmarked Characters</h2>
 
             <div>
                 <Carousel>
