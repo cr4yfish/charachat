@@ -96,6 +96,14 @@ export function PWAInstallPrompt() {
     <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:max-w-sm">
       <Card className="bg-background/95 backdrop-blur-sm border shadow-lg">
         <CardContent className="p-4">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleDismiss}
+            className='absolute top-2 right-2 rounded-full'
+          >
+            <X className="h-4 w-4" />
+          </Button>
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0 mt-0.5">
               <Download className="h-5 w-5 text-primary" />
@@ -113,13 +121,7 @@ export function PWAInstallPrompt() {
                 >
                   Install
                 </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleDismiss}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+
               </div>
             </div>
           </div>
