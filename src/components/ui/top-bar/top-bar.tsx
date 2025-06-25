@@ -63,11 +63,11 @@ const titles: TopBarTitle[] = [
     { title: "Explore", pathname: "/" },
     { title: "Chats", pathname: "/chats" },
     { title: "Home", pathname: "/home" },
-    { title: "New Character", pathname: "/c/new", showBackButton: true },
-    { title: "Import Character", pathname: "/c/new/import", showBackButton: true },
+    { title: "New Char", pathname: "/c/new", showBackButton: true },
+    { title: "Import Chars", pathname: "/c/new/import", showBackButton: true },
     { title: "Settings", pathname: "/home/settings", showBackButton: true },
     { title: "Search", pathname: "/search", showHomeButton: true },
-    { title: "Your Characters", pathname: "/c/own", showBackButton: true },
+    { title: "Your Chars", pathname: "/c/own", showBackButton: true },
     { title: "Migrate", pathname: "/home/settings/migrate", showBackButton: true },
     { title: "Leaderboard", pathname: "/leaderboard", showBackButton: true },
 ];
@@ -78,6 +78,11 @@ const actions : TopBarAction[] = [
         icon: <PlusIcon color="currentColor" />,
         href: "/c/new",
         label: "Character",
+    },
+    {
+        pathname: "/c/own",
+        icon: <PlusIcon color="currentColor" />,
+        href: "/c/new",
     },
     {
         pathname: "/chats",
