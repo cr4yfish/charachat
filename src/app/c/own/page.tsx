@@ -32,17 +32,15 @@ export default async function OwnCharsPage({ searchParams }: { searchParams: Pro
     const hasMore = chars.length === LIMITS.MAX_CHARACTERS_PAGINATION; // Check if there are more characters to load
 
     return (
-        <div className=" h-screen max-w-screen overflow-x-hidden overflow-y-auto pt-[75px] pb-[120px] px-4 flex flex-col gap-4">
+        <div className=" w-full h-fit pt-[75px] px-4 flex flex-col gap-4">
             
-            <div className="flex flex-col gap-2 w-full">
-                {chars.map((char) => (
-                    <SmallCharacterCard
-                        key={char.id}
-                        data={char}
-                        hasLink={true}
-                    />
-                ))}
-            </div>
+            {chars.map((char) => (
+                <SmallCharacterCard
+                    key={char.id}
+                    data={char}
+                    hasLink={true}
+                />
+            ))}
             <Pagination>
                 <PaginationContent>
 
