@@ -12,8 +12,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { Character } from "@/lib/db/types/character";
 import Image from "next/image";
 import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
+import { memo } from "react";
+import { Persona } from "@/lib/db/types/persona";
 
-const Bubble = ({ char, index, totalCount }: { char: Character, index: number, totalCount: number }) => {
+const Bubble = ({ char, index, totalCount }: { char: Character | Persona, index: number, totalCount: number }) => {
     const floatY = [-30, -10, -40, -20][index % 4];
     const floatX = [15, -15, 20, -20][index % 4];
     const duration = [3, 4, 5, 3.5][index % 4];
@@ -26,6 +28,8 @@ const Bubble = ({ char, index, totalCount }: { char: Character, index: number, t
     const layerY = 15 + (index % 4) * 20; // 4 different Y layers
     const randomOffsetY = (index * 23) % 15 - 7; // -7 to +7 offset
     const screenY = Math.max(5, Math.min(85, layerY + randomOffsetY));
+
+    const avatarLink = 'avatar_link' in char ? char.avatar_link : 'image_link' in char ? char.image_link : "";
 
     return (
         <motion.div
@@ -51,7 +55,7 @@ const Bubble = ({ char, index, totalCount }: { char: Character, index: number, t
             }}
         >
             <Image 
-                src={safeParseLink(char.image_link)} 
+                src={safeParseLink(avatarLink)} 
                 alt="" 
                 fill
                 className="object-cover size-full" 
@@ -60,8 +64,12 @@ const Bubble = ({ char, index, totalCount }: { char: Character, index: number, t
     );
 }
 
-export default function CharacterBubbles() {
-    const { data: chars } = useSWR<Character[]>(API_ROUTES.GET_CHARACTERS + "?limit=100", fetcher, {
+type Props = {
+    variant: "character" | "persona";
+}
+
+function PureCharacterBubbles({ variant }: Props) {
+    const { data: chars } = useSWR<Character[] | Persona[]>((variant === "character" ? API_ROUTES.GET_CHARACTERS : API_ROUTES.GET_PERSONAS )+ "?limit=100", fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -78,3 +86,10 @@ export default function CharacterBubbles() {
         </AnimatePresence>
     )
 }
+
+const CharacterBubbles = memo(PureCharacterBubbles, (prevProps, nextProps) => {
+    // Only re-render if the variant changes
+    return prevProps.variant === nextProps.variant;
+});
+
+export default CharacterBubbles;

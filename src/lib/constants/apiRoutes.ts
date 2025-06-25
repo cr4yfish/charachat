@@ -42,6 +42,10 @@ export const API_ROUTES = {
     LLM_COOKIE: "/api/config/llm",
 
     GET_PERSONAS: "/api/personas",
+    GET_OWN_PERSONAS: "/api/personas/own",
+    CREATE_PERSONA: "/api/personas/create",
+    UPDATE_PERSONA: "/api/personas/update",
+    DELETE_PERSONA: "/api/personas/delete?id=",
 
     // User related routes
     UPLOAD_IMAGE: "/api/image/upload",

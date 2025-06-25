@@ -68,6 +68,7 @@ const titles: TopBarTitle[] = [
     { title: "Settings", pathname: "/home/settings", showBackButton: true },
     { title: "Search", pathname: "/search", showHomeButton: true },
     { title: "Your Chars", pathname: "/c/own", showBackButton: true },
+    { title: "Your Personas", pathname: "/p/own", showBackButton: true },
     { title: "Migrate", pathname: "/home/settings/migrate", showBackButton: true },
     { title: "Leaderboard", pathname: "/leaderboard", showBackButton: true },
 ];
@@ -83,6 +84,11 @@ const actions : TopBarAction[] = [
         pathname: "/c/own",
         icon: <PlusIcon color="currentColor" />,
         href: "/c/new",
+    },
+    {
+        pathname: "/p/own",
+        icon: <PlusIcon color="currentColor" />,
+        href: "/p/new",
     },
     {
         pathname: "/chats",

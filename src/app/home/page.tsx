@@ -5,6 +5,8 @@ import { getUserCharacters } from "@/lib/db/character";
 import { LIMITS } from "@/lib/constants/limits";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import { YourPersonas } from "@/components/home/your-personas";
+import { getOwnPersonas } from "@/lib/db/persona";
 
 export default async function ChatsPage() {
 
@@ -23,6 +25,11 @@ export default async function ChatsPage() {
         limit: LIMITS.MAX_CHARACTERS_PER_PAGE
     })
 
+    const initialOwnPersonas = await getOwnPersonas({
+        cursor: 0,
+        limit: LIMITS.MAX_PERSONAS_PER_PAGE
+    })
+
     return (
         <div className=" h-screen max-w-screen overflow-x-hidden overflow-y-auto pt-[75px] pb-[100px] px-4">     
             
@@ -32,6 +39,8 @@ export default async function ChatsPage() {
                 <YourProfile userid={user.id} />
 
                 <YourCharacters initialOwnCharacters={initialOwnCharacters} />
+
+                <YourPersonas initOwnPersonas={initialOwnPersonas} />
 
                 <SavedCharacters />
 

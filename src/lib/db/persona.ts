@@ -11,6 +11,7 @@ import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { unstable_cache } from "next/cache";
 import { LIMITS } from "../constants/limits";
 import { TIMINGS } from "../constants/timings";
+import { currentUser } from "@clerk/nextjs/server";
 
 const personaMatcher = `
     *,
@@ -123,6 +124,29 @@ export const getPersonas = cache(async (props: LoadMoreProps) => {
 
     return await Promise.all(data.map(personaFormatter));
 })
+
+export const getOwnPersonas = cache(async (props: LoadMoreProps) => {
+    const user = await currentUser();
+
+    if( !user || !user.id) {
+        throw new Error("User not authenticated");
+    }
+
+    const { data, error } = await (await createClient())
+        .from(tableName)
+        .select(personaMatcher)
+        .eq("clerk_user_id", user.id)
+        .order("created_at", { ascending: false })
+        .range(props.cursor, props.cursor + props.limit - 1)
+        
+    if (error) {
+        console.error("Error fetching personas", error);
+        return [];
+    }
+
+    return await Promise.all(data.map(privatePersonaFormatter));
+})
+
 
 export async function getCachedInitialPersonas() {
     return await unstable_cache(
