@@ -18,6 +18,8 @@ import { usePathname } from "next/navigation";
 import { memo } from "react";
 import { cn } from "@/lib/utils";
 import { BotIcon } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
+import SidebarUser from "./sidebar-user";
 
 const PureNavbarItem = (props: NavItem & { isActive?: boolean, sidebarOpen: boolean }) => {
   return (
@@ -45,6 +47,7 @@ export const NavbarItem = memo(PureNavbarItem, (prevProps, nextProps) => {
 export function AppSidebar() {
     const { isMobile, open } = useSidebar();
     const currentPath = usePathname();
+    const { isSignedIn } = useAuth();
 
     // Disable sidebar on mobile devices
     if(isMobile) return null;
@@ -76,7 +79,10 @@ export function AppSidebar() {
                 </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter />
+            <SidebarFooter>
+                  {isSignedIn && <SidebarUser />}
+
+            </SidebarFooter>
         </Sidebar>
     </>
     )
