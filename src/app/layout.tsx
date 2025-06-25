@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: APP_DEFAULT_TITLE,
     // startUpImage: [],
   },
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#00a6f4",
   maximumScale: 1,
   userScalable: false,
 };
@@ -76,6 +76,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className='dark' >
+        
         <body className={`${montserrat.className} ${geistMono.variable} antialiased h-screen overflow-hidden`}>
           <SidebarProvider>
             <AppSidebar />
