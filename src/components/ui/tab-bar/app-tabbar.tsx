@@ -20,14 +20,17 @@ export const tabs: NavItem[] = [
     { name: "Home", href: "/home", icon: <HomeIcon /> }
 ]
 
-const disabledPaths = ["/chat", "/search", "/edit"];
+const disabledPaths = ["/chat", "/search", "/edit/"];
 
 function checkIsPathDisabled(pathname: string, disabledPaths: string[]): boolean {
     return disabledPaths.some(path => {
+
+        // Trailing slash is just to mark a more complicated path detection
+        // e.g. this handles /c/[id]/edit by disabling /edit/ path
         if (path.endsWith('/')) {
-            return pathname.startsWith(path);
+            return pathname.includes(path.slice(0, -1)); // Check if pathname includes the path without trailing slash
         }
-        return pathname.includes(path);
+        return pathname === path;
     });
 }
 
