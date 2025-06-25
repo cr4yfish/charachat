@@ -170,8 +170,7 @@ const PureNewCharacterFromScratch = ({ initCharacter, small, defaultOpen }: Prop
                 clearDraftCharacterCookie();
 
                 // Redirect to new character page
-                // TODO: Redirect to edit page instead of character page
-                router.push("/c/" + newChar.id);
+                router.push("/c/" + newChar.id +  "/edit");
 
 
             }).catch((error) => {
