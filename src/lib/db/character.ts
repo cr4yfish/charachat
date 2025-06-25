@@ -179,6 +179,50 @@ export const createCharacter = async (newChar: Character): Promise<Character> =>
     return await characterFormatter(data);
 }
 
+export const updateCharacter = async (updatedChar: Character): Promise<Character> => {
+    const user = await currentUser();
+    if(!user || !user.id) {
+        throw new Error("updateCharacter: User not found");
+    }
+    const key = await getKeyServerSide();
+    let char: Character = updatedChar;
+    if(updatedChar.is_private) {
+        char = await encryptCharacter(updatedChar, key);
+    }
+    const { data, error } = await (await createClient())
+        .from("characters")
+        .update({
+            name: char.name,
+            description: char.description,
+            intro: char.intro,
+            bio: char.bio,
+            book: char.book,
+            image_link: char.image_link,
+            personality: char.personality,
+            system_prompt: char.system_prompt,
+            image_prompt: char.image_prompt,
+            first_message: char.first_message,
+            speaker_link: char.speaker_link,
+            scenario: char.scenario,
+            tags_full: char.tags_full,
+            loras: char.loras,
+            is_private: char.is_private,
+            is_unlisted: char.is_unlisted,
+            is_nsfw: char.is_nsfw,
+            category: char.category?.id,
+        })
+        .eq("id", updatedChar.id)
+        .select(characterMatcher)
+        .single();
+        revalidateTag("characters");
+        revalidateTag("spotlight");
+    if (error) {
+        console.error("Error updating character", error);
+        throw error;
+    }
+    return await characterFormatter(data);
+}
+
 
 export const getCharacter = cache(async (characterId: string): Promise<Character> => {
     const { data, error } = await (await createClient())

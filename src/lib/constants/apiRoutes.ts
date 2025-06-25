@@ -16,6 +16,9 @@ export const API_ROUTES = {
     GET_POPULAR_CHARACTERS: "/api/characters/popular",
     CREATE_CHARACTER: "/api/characters/create",
     UPDATE_CHARACTER: "/api/characters/update",
+    DELETE_CHARACTER: "/api/characters/delete?id=",
+
+    AUTHOR: "/api/author",
 
     GET_CATEGORIES: "/api/categories",
 
