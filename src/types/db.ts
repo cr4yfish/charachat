@@ -118,9 +118,13 @@ export type Profile = {
     api_keys?: APIKey[];
 
     /**
-     * @deprecated
+     * Used for authoring and other AI-related features
      */
     default_llm?: string;
+    /**
+     * @deprecated
+     */
+    
     ollama_base_url?: string;
     ollama_encrypted_api_key?: string;
     groq_base_url?: string;
