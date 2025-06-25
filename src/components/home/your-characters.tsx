@@ -6,7 +6,7 @@ import InfiniteSwiperLoader from "../swiper/infinite-swiper-loader";
 import { LIMITS } from "@/lib/constants/limits";
 import { memo, Suspense } from "react";
 import InfiniteSwiperLoaderFallback from "../swiper/infinite-swiper-loader-fallback";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import equal from "fast-deep-equal";
 import Link from "next/link";
 import { ChevronRightIcon } from "lucide-react";

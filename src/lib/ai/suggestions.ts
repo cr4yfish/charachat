@@ -3,7 +3,10 @@
  * based on the chat context.
  */
 
-import { Character, Chat, Message, Profile } from "@/types/db";
+import { Chat } from "@/lib/db/types/chat";
+import { Message } from "@/lib/db/types/message";
+import { Profile } from "@/lib/db/types/profile";
+import { Character } from "@/lib/db/types/character";
 import { getLanguageModel, getModelApiKey } from ".";
 import { generateObject } from "ai";
 import { z } from "zod";

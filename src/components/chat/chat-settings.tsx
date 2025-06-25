@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { TrashIcon } from "lucide-react";
 import { fetcher } from "@/lib/utils";
 import LLMSelect from "./llm-select";
-import { Chat } from "@/types/db";
+import { Chat } from "@/lib/db/types/chat";
 import { ModelId } from "@/lib/ai/types";
 import ButtonGroup from "../ui/button-group";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";

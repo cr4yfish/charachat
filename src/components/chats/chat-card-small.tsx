@@ -1,5 +1,5 @@
 import { safeParseLink } from "@/lib/utils/text";
-import { Chat } from "@/types/db";
+import { Chat } from "@/lib/db/types/chat";
 import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

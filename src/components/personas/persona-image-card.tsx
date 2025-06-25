@@ -1,6 +1,6 @@
 "use client";
 
-import { Persona } from "@/types/db";
+import { Persona } from "@/lib/db/types/persona";
 import { cn } from "@/lib/utils";
 import { truncateText } from "@/lib/utils/text";
 import ImageWithBlur from "../image/imageWithBlur";

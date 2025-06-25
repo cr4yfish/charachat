@@ -1,5 +1,5 @@
 
-import { API_Count, Leaderboard, Stats } from "@/types/db";
+import type { Stats, API_Count, Leaderboard } from "@/lib/db/types";
 import { createUnauthenticatedServerSupabaseClient as createClient } from "./server";
 import { cache } from "react";
 

@@ -4,8 +4,8 @@
 import { cache } from "react";
 
 import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
-import { Character } from "@/types/db";
-import { LoadMoreProps } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
+import { LoadMoreProps } from "@/lib/db/types";
 import { safeParseLink } from "@/lib/utils/text";
 import { encryptMessage } from "../crypto/client";
 import { currentUser } from "@clerk/nextjs/server";

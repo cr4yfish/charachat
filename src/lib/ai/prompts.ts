@@ -1,4 +1,8 @@
-import { Character, Chat, Message, Persona, Profile } from "@/types/db"
+import { Character } from "../db/types/character";
+import { Chat } from "../db/types/chat";
+import { Message } from "../db/types/message";
+import { Persona } from "../db/types/persona";
+import { Profile } from "../db/types/profile";
 import { getChatVariables, replaceVariables } from "../utils/text";
 import { RAGMemory } from "./browser-rag/rag";
 

@@ -10,7 +10,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { ERROR_MESSAGES } from '@/lib/constants/errorMessages';
 import { toast } from 'sonner';
 import { ImageGenDrawer } from './image-gen-drawer';
-import { ShallowCharacter } from '@/types/db';
+import { ShallowCharacter } from '@/lib/db/types/character';
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import useLLMCookie from '@/hooks/useLLMCookie';
 import { addMemoryToRAG, RAGMemory, searchRAG } from '@/lib/ai/browser-rag/rag';

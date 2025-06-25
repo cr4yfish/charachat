@@ -1,4 +1,5 @@
-import { Lora } from "@/types/db"
+import { Lora } from "../db/types";
+
 
 export type ImageModel = {
     id: ImageModelId;

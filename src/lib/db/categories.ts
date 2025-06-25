@@ -3,8 +3,8 @@
 import { cache } from "react";
 
 import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
-import { Category } from "@/types/db";
-import { LoadMoreProps } from "@/types/db";
+import { Category } from "@/lib/db/types/category";
+import { LoadMoreProps } from "@/lib/db/types";
 import { unstable_cache } from "next/cache";
 import { LIMITS } from "../constants/limits";
 import { TIMINGS } from "../constants/timings";

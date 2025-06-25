@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";
-import { Category, Character } from "@/types/db";
+import { Category } from "@/lib/db/types/category";
 import InfiniteSwiperLoader from "../swiper/infinite-swiper-loader";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import CategoryCardWithContext from "./category-card-with-context";

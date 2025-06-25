@@ -3,7 +3,7 @@
 import { Card, CardContent, CardTitle } from "../ui/card";
 import SpotlighFallback from "./spotlight-fallback";
 import useSWR from "swr";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import { fetcher } from "@/lib/utils";
 import ImageWithBlur from "../image/imageWithBlur";
 import { Button } from "../ui/button";

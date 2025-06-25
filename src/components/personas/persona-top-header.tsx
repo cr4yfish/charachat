@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Persona } from "@/types/db";
+import { Persona } from "@/lib/db/types/persona";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { DramaIcon, EditIcon } from "lucide-react";

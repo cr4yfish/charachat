@@ -14,7 +14,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { Button } from "../ui/button";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import { BetterSwitch } from "../ui/better-switch";
 import { clearDraftCharacterCookie, saveDraftCharacterInCookie } from "@/app/c/new/actions";
 import { toast } from "sonner";

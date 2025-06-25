@@ -3,7 +3,7 @@ import "server-only";
 import { checkIsEncrypted, decryptMessage } from "../crypto/client";
 import { getKeyServerSide } from "../crypto/server";
 import { getLLMById, getProviderAPIKey, isFreeLLM } from "./utils";
-import { Profile } from "@/types/db";
+import { Profile } from "../db/types/profile";
 import { ModelId } from "./types";
 import { LanguageModelV1 } from "ai";
 import { getAnthropic, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getXai } from "./providers";

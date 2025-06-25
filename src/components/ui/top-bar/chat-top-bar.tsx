@@ -6,7 +6,7 @@
  */
 
 import { cn } from "@/lib/utils";
-import { ShallowCharacter } from "@/types/db";
+import { ShallowCharacter } from "@/lib/db/types/character";
 import { Button } from "../button";
 import { ChevronLeftIcon } from "lucide-react";
 import { memo } from "react";

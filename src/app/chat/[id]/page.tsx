@@ -4,7 +4,7 @@ import { getMessages } from "@/lib/db/messages";
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { convertToUIMessages } from "@/lib/utils/message";
 import { getShallowChat } from "@/lib/db/chat";
-import { ShallowCharacter } from "@/types/db";
+import { ShallowCharacter } from "@/lib/db/types/character";
 import { LIMITS } from "@/lib/constants/limits";
 
 export default async function ExistingChatPage(props: { params: Promise<{ id: string }> }) {

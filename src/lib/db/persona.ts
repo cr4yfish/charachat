@@ -3,7 +3,8 @@
 
 import { cache } from "react";
 import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
-import { LoadMoreProps, Persona } from "@/types/db";
+import { LoadMoreProps } from "@/lib/db/types";
+import { Persona } from "@/lib/db/types/persona";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { ERROR_MESSAGES } from "../constants/errorMessages";

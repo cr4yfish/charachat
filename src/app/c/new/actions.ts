@@ -3,7 +3,7 @@
 import { ImportCharType } from "@/components/new-character/import/importer";
 import { COOKIE_NAMES } from "@/lib/constants/cookieNames";
 import { TIMINGS } from "@/lib/constants/timings";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 import * as cheerio from 'cheerio';

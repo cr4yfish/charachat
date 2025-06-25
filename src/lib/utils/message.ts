@@ -1,4 +1,4 @@
-import { Message as DBMessage } from "@/types/db";
+import { Message as DBMessage } from "../db/types/message";
 import { CoreAssistantMessage, CoreToolMessage, Message, ToolInvocation } from "ai";
 
 

@@ -1,4 +1,4 @@
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import {
   Accordion,
   AccordionContent,

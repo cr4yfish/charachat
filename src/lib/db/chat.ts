@@ -2,7 +2,8 @@
 import "server-only";
 
 import { cache } from "react";
-import { Chat, LoadMoreProps } from "@/types/db";
+import {  LoadMoreProps } from "@/lib/db/types";
+import { Chat } from "@/lib/db/types/chat";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { createServerSupabaseClient as createClient } from "./server";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";

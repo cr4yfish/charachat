@@ -1,4 +1,4 @@
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import Markdown from "react-markdown";
 import { safeParseLink } from "@/lib/utils/text";
 import Image from "next/image";

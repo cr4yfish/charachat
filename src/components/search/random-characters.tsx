@@ -31,7 +31,7 @@ import {
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import ImageCharacterCard from "../character/character-card-image";
 import useSWR from "swr";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";

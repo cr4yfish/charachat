@@ -1,4 +1,4 @@
-import { Profile } from "@/types/db";
+import { Profile } from "../db/types/profile";
 import { LLM, LLMGroup, ModelId, ProviderId } from "./types";
 import { LLMs } from "./models/llm/text-models";
 

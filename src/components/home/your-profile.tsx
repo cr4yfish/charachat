@@ -4,8 +4,8 @@ import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { fetcher } from "@/lib/utils";
 import { safeParseLink, truncateText } from "@/lib/utils/text";
 import { memo, useCallback, useEffect, useState } from "react";
-import useSWR from "swr";;
-import { Profile } from "@/types/db";
+import useSWR from "swr";
+import { Profile } from "@/lib/db/types/profile";
 import Image from "next/image";
 import {
   Drawer,

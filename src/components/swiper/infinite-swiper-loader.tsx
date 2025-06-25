@@ -4,7 +4,7 @@
 import React, { useEffect, useRef, useMemo, useCallback, memo, useState } from 'react';
 import { Skeleton } from '../ui/skeleton';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { LoadMoreProps } from '@/types/db';
+import { LoadMoreProps } from '@/lib/db/types';
 import { JSONObject } from '@ai-sdk/provider';
 import useSWRInfinite from "swr/infinite";
 import { fetcher } from '@/lib/utils';

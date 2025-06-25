@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Category } from "@/types/db";
+import { Category } from "@/lib/db/types/category";
 import { createContext, useContext, useState, ReactNode } from "react";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import useSWR from "swr";

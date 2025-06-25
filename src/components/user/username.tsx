@@ -1,4 +1,4 @@
-import { Profile } from "@/types/db"
+import { Profile } from "@/lib/db/types/profile"
 import ConditionalLink from "../conditional-link"
 import { safeParseLink } from "@/lib/utils/text"
 import { Avatar, AvatarImage } from "../ui/avatar"

@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { BookmarkIcon, HeartIcon, MessageCircleIcon } from "lucide-react";
 import { bookmarkCharacterAction } from "@/app/c/[id]/actions";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 
 export default function CharacterPageActions({ character }: { character: Character }) {
 

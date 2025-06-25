@@ -3,7 +3,7 @@
 import { cache } from "react";
 
 import { createServerSupabaseClient as createClient } from "./server";
-import { Message } from "@/types/db";
+import { Message } from "@/lib/db/types/message";
 import { encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { revalidateTag } from "next/cache";

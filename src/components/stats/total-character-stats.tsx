@@ -5,9 +5,7 @@ import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import { fetcher } from "@/lib/utils";
 import useSWR from "swr";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
-import { Stats } from "@/types/db";
-
-
+import { Stats } from "@/lib/db/types";
 
 export default function TotalCharacterStats() {
     const { data } = useSWR<Stats>(API_ROUTES.GET_TOTAL_CHARACTER_STATS, fetcher, {

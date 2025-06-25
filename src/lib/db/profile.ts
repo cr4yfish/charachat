@@ -3,7 +3,7 @@
 
 import { cache } from "react";
 import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
-import { Profile } from "@/types/db";
+import { Profile } from "@/lib/db/types/profile";
 import { checkIsEncrypted, decryptMessage, encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { currentUser } from "@clerk/nextjs/server";

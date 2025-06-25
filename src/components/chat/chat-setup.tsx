@@ -2,7 +2,7 @@
 
 import { LLM } from "@/lib/ai/types";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
-import { Persona } from "@/types/db";
+import { Persona } from "@/lib/db/types/persona";
 import { memo,  useState } from "react";
 import useSWR from "swr";
 import {

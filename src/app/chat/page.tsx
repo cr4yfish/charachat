@@ -3,7 +3,7 @@ import { Chat } from "@/components/chat/chat";
 import { ChatTopBar } from "@/components/ui/top-bar/chat-top-bar";
 import { v4 as uuidv4 } from "uuid";
 import { getShallowCharacter } from "@/lib/db/character";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import { COOKIE_NAMES } from "@/lib/constants/cookieNames";
 import { ModelId } from "@/lib/ai/types";
 import { getLLMById } from "@/lib/ai/utils";

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { EditIcon, MessageCircleIcon } from "lucide-react";

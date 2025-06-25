@@ -9,7 +9,7 @@ import { fetcher } from "@/lib/utils";
 import { safeParseLink } from "@/lib/utils/text";
 import useSWR from "swr";
 import { motion, AnimatePresence } from "motion/react";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import Image from "next/image";
 import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 

@@ -11,7 +11,7 @@ import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
 import { fetcher } from "@/lib/utils";
 import useSWR from "swr";
-import { Chat } from "@/types/db";
+import { Chat } from "@/lib/db/types/chat";
 import { CarouselItem } from "../ui/carousel";
 import ChatCardSmall from "../chats/chat-card-small";
 

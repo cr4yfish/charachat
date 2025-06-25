@@ -2,7 +2,7 @@
 
 const CharacterBubbles = dynamic(() => import('@/components/new-character/character-bubbles'));
 import NewCharacterFromScratch from "@/components/new-character/new-character-from-scratch";
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import { ChevronRightIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";

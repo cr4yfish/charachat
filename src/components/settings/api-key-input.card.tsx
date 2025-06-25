@@ -13,7 +13,7 @@ import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { useDebounce } from "use-debounce";
 import { ProviderId } from "@/lib/ai/types";
 import { toast } from "sonner";
-import { Profile } from "@/types/db";
+import { Profile } from "@/lib/db/types/profile";
 import { fetcher } from "@/lib/utils";
 import equal from 'fast-deep-equal';
 import Spinner from "../ui/spinner";

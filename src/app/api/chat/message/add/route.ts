@@ -1,6 +1,7 @@
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { addMessage } from "@/lib/db/messages";
-import { Chat, Message } from "@/types/db";
+import { Message } from "@/lib/db/types/message";
+import { Chat } from "@/lib/db/types/chat";
 import { currentUser } from "@clerk/nextjs/server";
 
 

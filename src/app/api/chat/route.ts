@@ -14,11 +14,14 @@ import { getPersona } from "@/lib/db/persona";
 import { getProfile } from "@/lib/db/profile";
 import { ERROR_MESSAGES } from "@/lib/constants/errorMessages";
 import { getMostRecentUserMessage, sanitizeResponseMessages } from "@/lib/utils/message";
-import { Character, Chat, Message, Persona } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
+import { Chat } from "@/lib/db/types/chat";
+import { Persona } from "@/lib/db/types/persona";
 import { currentUser } from "@clerk/nextjs/server";
 import { CoreAssistantMessage, CoreToolMessage, createDataStreamResponse, Message as AIMessage, streamText, convertToCoreMessages } from "ai";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { Message } from "@/lib/db/types/message";
 
 export const maxDuration = 30;
 

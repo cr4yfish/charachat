@@ -8,7 +8,7 @@ import { prettyRenderSingleMessageContent } from "@/lib/utils/message";
 import { truncateText } from "@/lib/utils/text"
 import { Card, CardContent, CardTitle, CardDescription, CardFooter } from "../ui/card"
 import Image from "next/image"
-import { Chat } from "@/types/db"
+import { Chat } from "@/lib/db/types/chat"
 import { ChevronRightIcon } from "lucide-react"
 import { Markdown } from "../ui/markdown"
 

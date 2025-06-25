@@ -8,6 +8,7 @@ import { SearchCategories } from "@/components/search/search-categories";
 import { getLanguageModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
 
 export type SearchType = "characters" | "creators";
 export type SortType = "likes" | "newest" | "popular" | "relevance";
@@ -21,15 +22,17 @@ export default async function SearchPage({
     // Let mistral create keywords for the search
     // If the query is empty, we can return early
     let splittedTags: string[] = [];
+    let suggestions: string[] = [];
     const startTime = performance.now();
 
     try {
         const mistral = await getLanguageModel({ modelId: "ministral-3b-latest", apiKey: process.env.SEARCH_MISTRAL_API_KEY })
 
-        const { object: { tags } } = await generateObject({
+        const { object: { tags, suggestedTags } } = await generateObject({
             model: mistral,
             schema: z.object({
                 tags: z.string().describe("A list of tags to search for, separated by commas. Example: 'tag1, tag2, tag3'"),
+                suggestedTags: z.string().describe("A different list of suggested tags to use for the filtering the tags, separated by commas. Should be more like categories. Example: 'roleplay, fantasy, sci-fi'"),
             }),
             prompt: `You are a helpful AI assistant. Given the search query "${q}", generate a list of tags that can be used to search for characters in a database. The tags should be relevant to the query and separated by spaces. The user could be searching in natural language. Use your knowledge of characters and their attributes to generate these tags. If the query is empty, return an empty list.`,
             maxTokens: 100,
@@ -37,6 +40,7 @@ export default async function SearchPage({
         });
         
         splittedTags = tags.split(",").filter(tag => tag.trim() !== "");
+        suggestions = suggestedTags.split(",").filter(tag => tag.trim() !== "");
     } catch {
         console.error("Failed to generate search tags using Mistral, falling back to original query.");
         // Fallback: use the original query as tags
@@ -68,23 +72,21 @@ export default async function SearchPage({
                <SearchBar initialQuery={q} /> 
 
                <SearchCategories initType={type} initSortType={sort} currentQuery={q} />
+
+                <div className="flex flex-row overflow-x-auto w-full gap-2 mt-2 backdrop-blur-lg rounded-3xl">
+                    {suggestions.map((tag) => (
+                        <Button variant={"ghost"} key={tag}>
+                            {tag}
+                        </Button>
+                    ))}
+                </div>
             </div>
             
 
-            <div className="max-h-screen overflow-y-auto overflow-x-hidden pt-[180px] pb-[100px]">
+            <div className="max-h-screen overflow-y-auto overflow-x-hidden pt-[230px] pb-[100px]">
                 <div className="h-fit w-full flex flex-col items-center justify-center gap-2">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground w-full">
                         <span>Used AI to find {searchResults.length} characters in {searchTime} seconds</span>
-                        {splittedTags.length > 0 && (
-                            <span>
-                                (AI generated Tags: {splittedTags.map((tag, index) => (
-                                    <span key={tag}>
-                                        <span className="font-semibold">{tag}</span>
-                                        {index < splittedTags.length - 1 && ", "}
-                                    </span>
-                                ))})
-                            </span>
-                        )}
                     </div>
 
                     {searchResults.length > 0 ? (

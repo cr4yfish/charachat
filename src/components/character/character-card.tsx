@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react"
-import { Character } from "@/types/db";
+import { Character } from "@/lib/db/types/character";
 import { cn } from "@/lib/utils";
 import { truncateText } from "@/lib/utils/text";
 import ImageWithBlur from "../image/imageWithBlur";

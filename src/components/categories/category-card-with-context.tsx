@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@/types/db"
+import { Category } from "@/lib/db/types/category";
 import { Card, CardContent as CardBody } from "@/components/ui/card";
 import { useCurrentCategory } from "@/hooks/use-current-category";
 
