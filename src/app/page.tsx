@@ -2,7 +2,6 @@ import ImageCharacterCard from "@/components/character/character-card-image";
 import News from "@/components/explore/news";
 import Spotlight, { SpotlightData } from "@/components/explore/spotlight";
 import GeneralSwiper from "@/components/swiper/general-swiper";
-import { getDraftCharacterFromCookie } from "./c/new/actions";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { PersonalizedSection } from "@/components/explore/personalized-section";
 import { CurrentCategoryProvider } from "@/hooks/use-current-category";
@@ -15,18 +14,27 @@ import { getCachedInitialCategories } from "@/lib/db/categories";
 import RandomCharacters from "@/components/search/random-characters";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
+import { getCachedInitialPersonas } from "@/lib/db/persona";
+import PersonaImageCard from "@/components/personas/persona-image-card";
 
 export default async function Home() {
-  const draftChar = await getDraftCharacterFromCookie();
+  
 
-  // Initial data thats aggressively cached
+  // Spotlight
   const spotlight: SpotlightData = await getCachedSpotlight();
+
+  // Chars
   const initialTrending = await getCachedTrendingInitialCharacters();
   const initialNewest = await getCachedNewestCharacters();
   const initialPopular = await getCachedPopularCharacters();
   const initCategories = await getCachedInitialCategories();
   const initialCurrentCategory = initCategories[0];
+
+  // Categories
   const intialCharactersForIntialCategory = await getInitialCachedCharactersByCategory(initialCurrentCategory.id);
+
+  // Personas
+  const initialPersonas = await getCachedInitialPersonas();
 
   return (
     <div className="h-full w-full">
@@ -36,7 +44,7 @@ export default async function Home() {
       <div className="flex flex-col gap-4 px-4 py-6 pt-1  pb-[120px]">
 
         {/* Personalized section */}
-        <PersonalizedSection draftChar={draftChar} />
+        <PersonalizedSection />
         
 
         <div className="flex flex-col gap-2 w-full relative">
@@ -80,6 +88,7 @@ export default async function Home() {
           <GeneralSwiper initialData={initialPopular} apiUrl={API_ROUTES.GET_POPULAR_CHARACTERS} component={ImageCharacterCard} rows={1} />
         </div>
 
+
         {/* Create new character. Totally not copied the layout from cai */}
         <div className="flex flex-col gap-4 p-6 w-full relative">
 
@@ -105,7 +114,14 @@ export default async function Home() {
               className="object-cover object-center"
             />
           </div>
+        </div>
 
+        <div className="flex flex-col gap-2 w-full relative">
+          <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0">
+                <p className="text-xs text-muted-foreground">Express yourself with unique personas</p>
+              <h2 className="dark:prose-invert text-lg font-bold">Personas</h2>
+          </div>
+          <GeneralSwiper initialData={initialPersonas} apiUrl={API_ROUTES.GET_PERSONAS} component={PersonaImageCard} rows={1} />
         </div>
 
       </div>

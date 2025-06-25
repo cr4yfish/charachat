@@ -196,6 +196,8 @@ export type Persona = {
     avatar_link?: string;
     creator: Profile;
     is_private: boolean;
+    description?: string;
+    clerk_user_id?: string;
 }
 
 export type Stats = {

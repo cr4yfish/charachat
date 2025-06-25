@@ -8,16 +8,13 @@ import {
 } from "@/components/ui/carousel"
 
 import dynamic from "next/dynamic";
-import { Character } from "@/types/db"
 import MarketingCard from "./marketing-card";
+import { getDraftCharacterFromCookie } from "@/app/c/new/actions";
 
 const LatestChat = dynamic(() => import("@/components/explore/latest-chat"));
 const NewCharacterFromScratch = dynamic(() => import("@/components/new-character/new-character-from-scratch")); 
 const WelcomeCard = dynamic(() => import("@/components/explore/welcome-card"));
 
-type Props = {
-    draftChar: Character | undefined | null;
-}
 
 /**
  * Show personalized content
@@ -27,10 +24,9 @@ type Props = {
  * - Recent chats if any
  * - Other personalized content (e.g. recommendations)
  * 
- * @param props 
- * @returns 
- */
-export function PersonalizedSection(props: Props) {
+*/
+export async function PersonalizedSection() {
+    const draftChar = await getDraftCharacterFromCookie();
 
     return (
         <div className="flex flex-col gap-2 w-full relative">
@@ -42,9 +38,9 @@ export function PersonalizedSection(props: Props) {
 
                     <WelcomeCard />
 
-                    {props.draftChar && (
+                    {draftChar && (
                         <CarouselItem className=" min-lg:basis-1/3">
-                            <NewCharacterFromScratch small initCharacter={props.draftChar} />
+                            <NewCharacterFromScratch small initCharacter={draftChar} />
                         </CarouselItem>
                     )}
 

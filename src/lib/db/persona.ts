@@ -2,11 +2,14 @@
 "use server";
 
 import { cache } from "react";
-import { createServerSupabaseClient as createClient } from "./server";
+import { createServerSupabaseClient as createClient, createUnauthenticatedServerSupabaseClient } from "./server";
 import { LoadMoreProps, Persona } from "@/types/db";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptMessageBackwardsCompatible, getKeyServerSide } from "../crypto/server";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
+import { unstable_cache } from "next/cache";
+import { LIMITS } from "../constants/limits";
+import { TIMINGS } from "../constants/timings";
 
 const personaMatcher = `
     *,
@@ -92,19 +95,32 @@ export const getPersona = cache(async (personaId: string) => {
 })
 
 export const getPersonas = cache(async (props: LoadMoreProps) => {
-    const { data, error } = await (await createClient())
+    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
         .from(tableName)
         .select(personaMatcher)
         .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1)
         
     if (error) {
-        // console.error("Error fetching personas", error);
+        console.error("Error fetching personas", error);
         return [];
     }
 
     return await Promise.all(data.map(personaFormatter));
 })
+
+export async function getCachedInitialPersonas() {
+    return await unstable_cache(
+        async () => await getPersonas({
+            cursor: 0, limit: LIMITS.MAX_PERSONAS_PER_PAGE
+        }),
+        ["personas-cursor-0"], // Cache key
+        {
+            revalidate: TIMINGS.ONE_DAY, // Revalidate every hour
+            tags: ["personas-cursor-0"] // Tag for cache invalidation
+        }
+    )();
+}
 
 export const getUserPersonas = cache(async (props: LoadMoreProps) => {
     const { data: { user } } = await (await createClient()).auth.getUser();
