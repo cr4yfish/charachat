@@ -18,6 +18,8 @@ export const API_ROUTES = {
     UPDATE_CHARACTER: "/api/characters/update",
     DELETE_CHARACTER: "/api/characters/delete?id=",
 
+    GET_CHARACTERS_BY_USER: "/api/characters/user?userId=",
+
     AUTHOR: "/api/author",
 
     GET_CATEGORIES: "/api/categories",
