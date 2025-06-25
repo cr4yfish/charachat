@@ -174,7 +174,10 @@ export async function POST(req:Request) {
 
     // Core messages strip them down to the essentials
     // -> saves tokens
-    const coreMessages = convertToCoreMessages(messages);
+    // Core messages strip them down to the essentials
+    // -> saves tokens
+    const activeContextLength = 40;
+    const coreMessages = convertToCoreMessages(messages).slice(-activeContextLength);
 
     const noCharPrompt = noCharacterSelectedPrompt(chat?.id === undefined);
     
