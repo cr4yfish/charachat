@@ -106,7 +106,7 @@ export const getPersona = cache(async (personaId: string) => {
         throw error;
     }
 
-    return await personaFormatter(data);
+    return await privatePersonaFormatter(data);
 })
 
 export const getPersonas = cache(async (props: LoadMoreProps) => {
