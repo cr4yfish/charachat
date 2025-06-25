@@ -41,7 +41,7 @@ const PureInputWithLabel = (props: Props) => {
         <div className={cn("flex flex-col gap-1", props.className, props.fullWidth ? "w-full" : "w-fit")}>
             <div className="flex flex-col">
                 <Label className="text-sm ">{props.label}</Label>
-                {props.description && <p className="text-xs text-muted-foreground">{props.description}</p>}
+                {props.description && <p className="text-xs text-muted-foreground/75">{props.description}</p>}
             </div>
            
            <div className="relative">
@@ -52,7 +52,7 @@ const PureInputWithLabel = (props: Props) => {
                     placeholder={props.placeholder}
                     value={props.value}
                     onChange={props.onChange}
-                    className={cn("py-6 rounded-2xl border-border text-sm", props.type === "password" && "pr-12")}
+                    className={cn("py-6 rounded-2xl border-border text-sm md:text-base", props.type === "password" && "pr-12")}
                     autoComplete="off"
                     disabled={props.disabled}
                     readOnly={props.readonly}

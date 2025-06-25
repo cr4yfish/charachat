@@ -5,10 +5,11 @@ import { memo, useRef, useState } from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import Image from "next/image";
-import { CloudUploadIcon, SparkleIcon } from "lucide-react";
+import { CloudUploadIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { safeParseLink } from "@/lib/utils/text";
 import { toast } from "sonner";
+import Spinner from "./spinner";
 
 type Props = {
     label?: string;
@@ -97,57 +98,56 @@ const PureImageInput = (props: Props) => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
         >
-            <div className="flex flex-col">
-                {props.label && <label className="text-sm font-medium">{props.label}</label>}
-                {props.description && <p className="text-xs text-muted-foreground">{props.description}</p>}
+            <div className="flex flex-col gap-1">
+                {props.label && <label className="text-xs text-white/90 font-medium">{props.label}</label>}
+                {props.description && <p className="text-xs text-muted-foreground/75">{props.description}</p>}
             </div>
 
 
-            <div 
-                className={cn("flex flex-row gap-2 items-center")}
-       
-            >
-                <div 
-                    className={`relative size-10 overflow-hidden rounded-full p-4 border-2 `}
-         
-                >
-                    {imageUrl && <Image 
-                        src={imageUrl} // Placeholder image if no image is uploaded
-                        alt=""
-                        fill
-                    />}
+            {/* Input wrappe */}
+            <div className={cn("flex flex-row gap-2 items-center border border-border bg-input/30 rounded-2xl p-2")}>
+
+                <div className="flex flex-row items-center gap-1 flex-1">
+                    <div className={`relative size-10 overflow-hidden rounded-full p-4 shrink-0 border border-border/10`}>
+                        {imageUrl && <Image 
+                            src={imageUrl} // Placeholder image if no image is uploaded
+                            alt=""
+                            fill
+                        />}
+                    </div>
+
+                    <Input 
+                        value={imageUrl || ""}
+                        onChange={(e) => {
+                            const link = safeParseLink(e.currentTarget.value);
+                            setImageUrl(link)
+                            if (props.onImageUpload) {
+                                props.onImageUpload(link); // Call the callback with the new URL
+                            }
+                        }}
+                        placeholder="https://example.com/image.jpg"
+                        className="border-none bg-transparent text-muted-foreground/75 text-sm md:text-base truncate"
+                    />
                 </div>
 
-                <Input 
-                    value={imageUrl || ""}
-                    onChange={(e) => {
-                        const link = safeParseLink(e.currentTarget.value);
-                        setImageUrl(link)
-                        if (props.onImageUpload) {
-                            props.onImageUpload(link); // Call the callback with the new URL
-                        }
-                    }}
-                    placeholder="https://example.com/image.jpg"
-                    className="border-border"
-                />
+                <div className="flex flex-row items-center gap-2">
+                    <Button
+                        onClick={() => inputRef.current?.click()}
+                        disabled={isUploading}
+                        className="w-fit"
+                        variant={"ghost"}
+                    >
+                        {isUploading ? <Spinner /> :<CloudUploadIcon />}
+                        {/* {isUploading ? "Uploading..." : "Upload Image"} */}
+                    </Button>
+                    {/* <Button disabled={true} className="w-fit" variant={"ghost"} >
+                        <SparkleIcon />
+                    </Button> */}
+
+                </div>
             </div>
 
-            <div className="flex flex-row items-center gap-2">
-                <Button
-                    onClick={() => inputRef.current?.click()}
-                    disabled={isUploading}
-                    className="grow w-fit"
-                    variant={"ghost"}
-                >
-                    <CloudUploadIcon />
-                    {isUploading ? "Uploading..." : "Upload Image"}
-                </Button>
-                <Button disabled={true} className="w-fit" variant={"ghost"} >
-                    <SparkleIcon />
-                    Generate
-                </Button>
 
-            </div>
 
 
             <input 
