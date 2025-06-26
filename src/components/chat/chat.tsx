@@ -40,7 +40,7 @@ export const PureChat = (props: Props) => {
   const [setupDone, setSetupDone] = useState(props.initialMessages ? props.initialMessages.length > 0 : false);
   const [imageGenOpen, setImageGenOpen] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true);
-  const { messages, setMessages, status, append } = useChat({
+  const { messages, setMessages, status, append, addToolResult } = useChat({
     maxSteps: 1,
     sendExtraMessageFields: true,
     body: {
@@ -393,6 +393,7 @@ export const PureChat = (props: Props) => {
                   deleteCallback={deleteCallback}
                   status={status}
                   latestMessage={messages[messages.length - 1]?.id === message.id}
+                  addToolResult={addToolResult}
                 />
               </div>
             )

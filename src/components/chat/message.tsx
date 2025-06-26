@@ -3,7 +3,7 @@ import Image from "next/image";
 import { memo, useMemo, useState } from "react";
 import { Markdown } from "../ui/markdown";
 import { Button } from "../ui/button";
-import { CopyIcon, EditIcon, ImageIcon, LogInIcon, TrashIcon, VolumeIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, EditIcon, ImageIcon, LogInIcon, TrashIcon, VolumeIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import { TOOL_NAMES } from "@/lib/constants/toolNames";
@@ -14,6 +14,10 @@ import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { toast } from "sonner";
 import { SignInButton } from "@clerk/nextjs";
 import { safeParseLink } from "@/lib/utils/text";
+import { ReasoningBlock } from "./reasoning-block";
+import { Character } from "@/lib/db/types/character";
+import ImageCharacterCard from "../character/character-card-image";
+import APIKeyInput from "../settings/api-key-input";
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
@@ -131,7 +135,11 @@ const Footer = memo(PureFooter, (prev, next) => {
     return true;
 });
 
-const PureAIContent = ({ message: { parts} }: { message: UIMessage }) => {
+const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessage, addToolResult: ({ toolCallId, result, }: {
+    toolCallId: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    result: any;
+}) => void }) => {
 
 
     if (!parts || parts.length === 0) {
@@ -150,6 +158,14 @@ const PureAIContent = ({ message: { parts} }: { message: UIMessage }) => {
                     <div key={part.text} >
                         <Markdown key={index}>{part.text}</Markdown>
                     </div>
+                );
+            }
+
+            if (part.type === "reasoning") {
+                return (
+                    <ReasoningBlock key={index}>
+                        {part.details.map((detail) => detail.type === "text" ? detail.text : null)}
+                    </ReasoningBlock>
                 );
             }
 
@@ -338,6 +354,78 @@ const PureAIContent = ({ message: { parts} }: { message: UIMessage }) => {
                         )
                     }
 
+                    case TOOL_NAMES.searchChars: {
+                        switch(part.toolInvocation?.state) {
+                            case "partial-call":
+                                return (
+                                    <div key={callId} className="bg-yellow-100 dark:bg-yellow-800 p-2 rounded-md mb-2">
+                                        <span className="font-semibold">Searching characters...</span>
+                                        <span className="text-neutral-500 dark:text-neutral-400">{part.toolInvocation?.args?.query}</span>
+                                    </div>
+                                )
+                            case "call":
+                                return (
+                                    <div key={callId}>
+                                        <span>{part.toolInvocation?.args.query}</span>
+                                        <span className="text-neutral-500 dark:text-neutral-400">Searching characters...</span>
+                                    </div>
+                                )
+
+                            case "result":
+                                if (!part.toolInvocation?.result) {
+                                    return (
+                                        <div key={callId} className="bg-red-100 dark:bg-red-800 p-2 rounded-md mb-2">
+                                            <span className="font-semibold">Character search failed</span>
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <div key={callId} className="p-2 w-full flex flex-col gap-2">
+                                        <span className="font-semibold">Found {part.toolInvocation.result.length} characters:</span>
+                                        <ul className="flex flex-row overflow-x-auto w-full gap-2">
+                                            {part.toolInvocation.result.map((character: Character) => (
+                                                <ImageCharacterCard data={character} key={character.id} />
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )
+                        }
+                    }
+
+                    case TOOL_NAMES.manageProviderTokens: {
+
+                        const callback = () => {
+                            if(!part.toolInvocation.toolCallId) {
+                                throw new Error("Tool invocation does not have a toolCallId")
+                            }
+                            addToolResult({
+                                toolCallId: part.toolInvocation.toolCallId,
+                                result: "done"
+                            })
+                        }
+
+                        const isDone = part.toolInvocation?.state === "result";
+
+                        switch(part.toolInvocation?.state) {
+                            case "partial-call":
+                            case "call":
+                            case "result":
+                                return (
+                                    <div key={callId} className="flex flex-col gap-4">
+                                        <span className="text-xs text-muted-foreground mb-2">Manage your {part.toolInvocation?.args?.provider} API Key</span>
+                                        <APIKeyInput providerId={part.toolInvocation?.args?.provider} />
+                                        <div className="flex w-fit"> 
+                                            <Button disabled={isDone} variant={"secondary"} className={cn("", { "bg-emerald-400": isDone })} onClick={callback}>
+                                                {isDone && <span><CheckIcon /></span>}
+                                                Done
+                                            </Button>
+                                        </div> 
+                                    </div>
+                                )
+
+                        }
+                    }
+
                     default:
                         return (   
                             <div key={`unhandled-${index}-${callId}-${part.toolInvocation.toolName}`} className="bg-neutral-100 dark:bg-neutral-800 p-2 rounded-md mb-2">
@@ -372,15 +460,19 @@ const AIContent = memo(PureAIContent, (prev, next) => {
     return false;
 });
 
-const PureAIMessage = ({ message, name, image }: 
-    { message: UIMessage, name?: string, image?: string, isLoading: boolean }) => {
+const PureAIMessage = ({ message, name, image, addToolResult }: 
+    { message: UIMessage, name?: string, image?: string, isLoading: boolean, addToolResult: ({ toolCallId, result, }: {
+    toolCallId: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    result: any;
+}) => void }) => {
 
     return (
         <div className="flex flex-col gap-2 p-1">
 
             <Header image={image} name={name} role={message.role} />
 
-            <AIContent message={message} />
+            <AIContent message={message} addToolResult={addToolResult} />
         </div>
     );
 }
@@ -391,6 +483,7 @@ const AIMessage = memo(PureAIMessage, (prev, next) => {
     if( prev.message.id !== next.message.id) return false;
     if( prev.name !== next.name) return false;
     if( prev.image !== next.image) return false;
+    if( prev.addToolResult !== next.addToolResult) return false;
 
     return true;
 });
@@ -434,6 +527,8 @@ type MessageProps = {
     chatId: string;
     status: "submitted" | "streaming" | "ready" | "error";
     latestMessage: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    addToolResult: ({ toolCallId, result, }: { toolCallId: string; result: any; }) => void
 }
 
 const PureMessage = (props: MessageProps) => {
@@ -460,6 +555,7 @@ const PureMessage = (props: MessageProps) => {
                         name={props.characterName} 
                         image={props.characterImage} 
                         isLoading={props.isLoading}
+                        addToolResult={props.addToolResult}
                     />
                 )
             }
@@ -497,6 +593,7 @@ export const Message = memo(PureMessage, (prev, next) => {
     if( prev.characterName !== next.characterName) return false;
     if( prev.characterImage !== next.characterImage) return false;
     if (prev.status !== next.status) return false;
+    if (prev.addToolResult !== next.addToolResult) return false;
     
     return true;
 

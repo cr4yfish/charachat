@@ -4,8 +4,8 @@ import { getLanguageModel, getModelApiKey } from "@/lib/ai";
 import { generateImageAgent } from "@/lib/ai/agents/image";
 import { RAGMemory } from "@/lib/ai/browser-rag/rag";
 import { _INTRO_MESSAGE, getDynamicBookPrompt, getMemoriesPrompt, getSystemPrompt, noCharacterSelectedPrompt } from "@/lib/ai/prompts";
-import { ModelId } from "@/lib/ai/types";
-import { llmSupportsTools } from "@/lib/ai/utils";
+import { ModelId, ProviderIdEnum} from "@/lib/ai/types";
+import { getLLMById, llmSupportsTools } from "@/lib/ai/utils";
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { getCharacter } from "@/lib/db/character";
 import { createChat, getChat } from "@/lib/db/chat";
@@ -22,6 +22,7 @@ import { CoreAssistantMessage, CoreToolMessage, createDataStreamResponse, Messag
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { Message } from "@/lib/db/types/message";
+import searchCharactersWithAIAgent from "@/lib/ai/agents/search";
 
 export const maxDuration = 30;
 
@@ -305,8 +306,37 @@ export async function POST(req:Request) {
                                 throw new Error("Image generation failed");
                             }
                         }
+                    },
+                    searchCharacters: {
+                        description: "Search for characters based on a query. Search is AI-powered and can perform complex queries.",
+                        parameters: z.object({
+                            query: z.string().describe("The query to search for characters. Can be natural language, tags, keywords, etc."),
+                        }),
+                        execute: async ({ query }) => {
+                            if (!query) {
+                                throw new Error("Query is required for character search.");
+                            }
+                            try {
+                                const characters = await searchCharactersWithAIAgent({
+                                    query, sort: "relevance", type: "characters"
+                                });
+                                return characters;
+                            } catch (error) {
+                                console.error("Error searching characters:", error);
+                                throw new Error("Character search failed");
+                            }
+                        }
+                    },
+
+                    // client-side only
+                    manageProviderTokens: {
+                        description: "Manage a provider API token. This will display a custom UI in the chat.",
+                        parameters: z.object({
+                            providerQuestion: ProviderIdEnum.describe("The provider for which to manage tokens."),
+                            provider: ProviderIdEnum.describe("The provider for which to manage tokens. This is used to display the correct UI."),
+                        }),
                     }
-                }
+                },
             })
             
             result.mergeIntoDataStream(dataStream, {
