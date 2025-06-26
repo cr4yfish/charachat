@@ -7,6 +7,7 @@ export const LLMs: LLM[] = [
         provider: "Groq",
         usecase: "Cool model",
         tags: ["Free", "Quality"],
+        features: ["tools"],
         isFree: true,
     },
     {
@@ -15,6 +16,7 @@ export const LLMs: LLM[] = [
         "provider": "Groq",
         "usecase": "Very fast",
         "tags": ["Free", "Quality"],
+        features: ["tools"],
         isFree: true,
     },
     {
@@ -23,6 +25,7 @@ export const LLMs: LLM[] = [
         "provider": "Groq",
         "usecase": "Fast, high quality",
         "tags": ["Free", "Thinking", "Uncensored"],
+        features: ["reasoning"],
         isFree: true,
     },
     {
@@ -31,6 +34,7 @@ export const LLMs: LLM[] = [
         "provider": "Groq",
         "usecase": "Fast, high quality",
         "tags": ["Free", "Thinking", "Uncensored"],
+        features: ["reasoning"],
         isFree: true,
     },
     {
@@ -39,6 +43,7 @@ export const LLMs: LLM[] = [
         "provider": "Groq",
         "usecase": "Fast, high quality",
         "tags": ["Free", "Thinking", "Uncensored"],
+        features: ["reasoning"],
         isFree: true,
     },
     {
@@ -74,6 +79,7 @@ export const LLMs: LLM[] = [
         "usecase": "Fascist AI",
         "provider": "xAI",
         "tags": ["Fast", "Fuck Elon Musk", "Uncensored"],
+        features: ["tools"],
     },
     {
         "key": "grok-3-mini-latest",
@@ -81,6 +87,7 @@ export const LLMs: LLM[] = [
         "usecase": "Smol fascist AI",
         "provider": "xAI",
         "tags": ["Fast", "Fuck Elon Musk", "Uncensored"],
+        features: ["tools"],
     },
 
     {
@@ -105,6 +112,7 @@ export const LLMs: LLM[] = [
         "usecase": "Capable",
         "provider": "Mistral",
         "tags": ["Free", "Cheap", "Fast"],
+        features: ["tools"],
         isFree: true
     },
     {
@@ -113,6 +121,7 @@ export const LLMs: LLM[] = [
         "usecase": "Still cheap but getting expensive",
         "provider": "Mistral",
         "tags": ["Free", "Cheap", "Fast"],
+        features: ["tools"],
         isFree: true
     },
     {
@@ -121,6 +130,7 @@ export const LLMs: LLM[] = [
         provider: "Anthropic",
         usecase: "Best model out there, expensive",
         tags: ["Quality", "Uncensored"],
+        features: ["tools"],
         contextLength: 200000
     },
     {
@@ -129,6 +139,7 @@ export const LLMs: LLM[] = [
         provider: "Anthropic",
         usecase: "Best model out there, expensive",
         tags: ["Quality", "Uncensored"],
+        features: ["tools"],
         contextLength: 200000
     },
     {
@@ -137,6 +148,7 @@ export const LLMs: LLM[] = [
         "provider": "Anthropic",
         "usecase": "Much cheaper than Sonnet, still good",
         "tags": ["Quality", "Fast", "Uncensored"],
+        features: ["tools"],
         contextLength: 200000
     },
 
@@ -147,6 +159,7 @@ export const LLMs: LLM[] = [
         "provider": "DeepSeek",
         "usecase": "New model",
         "tags": ["Quality", "Fast"],
+        features: ["tools"],
     },
     {
         "key": "deepseek-reasoner",
@@ -154,6 +167,7 @@ export const LLMs: LLM[] = [
         "provider": "DeepSeek",
         "usecase": "New model",
         "tags": ["Quality", "Fast"],
+        features: ["reasoning"],
     },
 
 
@@ -163,6 +177,7 @@ export const LLMs: LLM[] = [
         "usecase": "Unbeatable price, Incredibly accurate",
         "provider": "OpenAI",
         "tags": ["Quality", "Fast"],
+        features: ["tools"],
         contextLength: 128000
     },
 
@@ -184,6 +199,7 @@ export const LLMs: LLM[] = [
         "usecase": "Realtime, Incredibly accurate",
         "provider": "OpenAI",
         "tags": ["Quality", "Fast"],
+        features: ["tools"],
         contextLength: 128000
     },
     {
@@ -192,6 +208,7 @@ export const LLMs: LLM[] = [
         "usecase": "Search, Incredibly accurate",
         "provider": "OpenAI",
         "tags": ["Quality", "Fast"],
+        features: ["tools"],
         contextLength: 128000
     },
     {
@@ -208,6 +225,7 @@ export const LLMs: LLM[] = [
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools"],
         contextLength: 1047576
     },
     {
@@ -216,6 +234,7 @@ export const LLMs: LLM[] = [
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools"],
         contextLength: 1047576
     },
     {
@@ -224,6 +243,7 @@ export const LLMs: LLM[] = [
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools"],
         contextLength: 1047576
     },
     {
@@ -232,6 +252,7 @@ export const LLMs: LLM[] = [
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools", "reasoning"],
         contextLength: 200000
     },
     {
@@ -240,6 +261,7 @@ export const LLMs: LLM[] = [
         provider: "OpenAI",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools", "reasoning"],
         contextLength: 200000
     },
     {
@@ -259,6 +281,7 @@ export const LLMs: LLM[] = [
         provider: "Gemini",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools"],
     },
     {
         key: "gemini-2.5-flash",
@@ -266,6 +289,7 @@ export const LLMs: LLM[] = [
         provider: "Gemini",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools"],
     },
     {
         key: "gemini-2.5-flash-lite-preview-06-17",
@@ -273,6 +297,7 @@ export const LLMs: LLM[] = [
         provider: "Gemini",
         usecase: "",
         tags: ["Quality", "Fast"],
+        features: ["tools"],
     },
     
 
@@ -305,6 +330,7 @@ export const LLMs: LLM[] = [
         usecase: "Free, fast, high quality",
         provider: "OpenRouter",
         tags: ["Free", "Fast", "Quality"],
+        features: ["tools", "reasoning"],
         isFree: true,
     },
     {
@@ -313,6 +339,7 @@ export const LLMs: LLM[] = [
         usecase: "Free, fast, high quality",
         provider: "OpenRouter",
         tags: ["Free", "Fast", "Quality"],
+        features: ["tools", "reasoning"],
         isFree: true,
     },
     {
@@ -321,6 +348,7 @@ export const LLMs: LLM[] = [
         "usecase": "Free, fast, high quality",
         "provider": "OpenRouter",
         "tags": ["Free", "Fast", "Quality"],
+        features: ["tools"],
         isFree: true,
         contextLength: 163840
     },
@@ -330,6 +358,7 @@ export const LLMs: LLM[] = [
         "usecase": "Free, fast, high quality",
         "provider": "OpenRouter",
         "tags": ["Free", "Fast", "Quality"],
+        features: ["tools", "reasoning"],
         isFree: true,
         contextLength: 163840
     },
