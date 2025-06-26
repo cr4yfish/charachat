@@ -65,12 +65,44 @@ export function prettyPrintDate(date: Date | string, userOptions?: PrettyPrintDa
     dateObj = date;
   }
 
+  // Handle relative date formatting
+  const now = new Date();
+  const diffMs = now.getTime() - dateObj.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  // If today: Show time ago
+  if (isToday(dateObj)) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    
+    if (diffHours >= 1) {
+      return `${diffHours}h ago`;
+    } else if (diffMinutes >= 1) {
+      return `${diffMinutes}m ago`;
+    } else {
+      return "Just now";
+    }
+  }
+  
+  // If yesterday
+  if (isYesterday(dateObj)) {
+    return "Yesterday";
+  }
+  
+  // If within 7 days
+  if (diffDays >= 2 && diffDays <= 7) {
+    return `${diffDays} days ago`;
+  }
+    
+  
+
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    hour: '2-digit',
+    hour: 'numeric',
     minute: '2-digit',
+    hour12: true,
   };
 
   if (userOptions?.group === "day") {
@@ -90,5 +122,5 @@ export function prettyPrintDate(date: Date | string, userOptions?: PrettyPrintDa
     options.year = undefined;
   }
 
-  return new Intl.DateTimeFormat('en-US', options).format(dateObj);
+  return new Intl.DateTimeFormat('en-US', options).format(dateObj).replace(/(\d+(?::\d+)?)\s+(AM|PM)/g, (match, time, ampm) => time + ampm.toLowerCase());
 }
