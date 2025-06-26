@@ -21,18 +21,18 @@ function PureCharacterCard(props: Props) {
 
     return (
         <>
-        <Link href={`/c/${props.data.id}`} className="w-full" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <Link href={`/c/${props.data.id}`} className="w-full max-w-[560px]" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
             >
-                <Card className={cn("h-[72px] w-full overflow-hidden p-3 dark:bg-slate-800/5 border shadow-none dark:hover:bg-slate-800/30 flex flex-row items-center justify-start gap-3 transition-all", {
+                <Card className={cn("h-[72px] sm:h-[90px] w-full overflow-hidden p-3 dark:bg-slate-800/5 border sm:border-none shadow-none dark:hover:bg-slate-800/30 flex flex-row items-center justify-start gap-3 transition-all", {
                     "dark:bg-slate-800/40": isHovered,
                     "dark:border-emerald-400": props.data.is_private,
                 })}  >
 
-                    <div className="relative size-[52px] rounded-lg overflow-hidden shrink-0">
+                    <div className="relative size-[52px] sm:size-[90px] rounded-lg overflow-hidden shrink-0">
                         <ImageWithBlur 
                             src={safeParseLink(props.data.image_link)}
                             alt={props.data.name ?? "avatar"}
@@ -49,21 +49,21 @@ function PureCharacterCard(props: Props) {
 
                         <div className="flex flex-col">
                             <div className="flex flex-col">
-                                <h3 className="font-medium m-0 text-sm truncate ">{props.data.name}</h3>
+                                <h3 className="font-medium m-0 text-sm sm:text-lg truncate ">{props.data.name}</h3>
                                 {/* <span className="text-xs text-neutral-600 dark:text-neutral-400">@{props.data.owner?.username}</span> */}
                             </div>
-                            <p className="text-xs text-muted-foreground truncate w-[75%]">
+                            <p className="text-xs sm:text-sm text-muted-foreground truncate w-[75%]">
                                 {props.data.description}
                             </p>
                         </div>
 
                         
-                        <div className="flex flex-row items-center justify-between gap-2 text-muted-foreground/75 w-full ">
+                        <div className="flex flex-row items-center justify-between gap-2 text-xs sm:text-sm text-muted-foreground/75 w-full ">
                             {((props.data.chats !== undefined) && (props.data.likes !== undefined)) &&
                             <>
-                                <div className="flex items-center gap-1 text-xs">
+                                <div className="flex items-center gap-1">
                                     <MessageCircleIcon size={14} />
-                                    <span className="text-xs" >{props.data.chats}</span>
+                                    <span  >{props.data.chats}</span>
                                 </div>
                             </>
                             } 
@@ -71,21 +71,21 @@ function PureCharacterCard(props: Props) {
                                 {props.data.is_private &&
                                     <div className="flex gap-1 items-center text-emerald-400">
                                         <LockIcon size={12} color="currentColor" />
-                                        <span className="text-xs sr-only ">Private</span>
+                                        <span className="sr-only ">Private</span>
                                     </div>
                                 }
 
                                 {props.data.is_unlisted && 
                                     <div className="flex gap-1 items-center text-sky-400">
                                         <EyeOffIcon size={12} color="currentColor" />
-                                        <span className="text-xs sr-only ">Unlisted</span>
+                                        <span className="sr-only ">Unlisted</span>
                                     </div>
                                 }
                                 
                                 {props.data.hide_definition && 
                                     <div className="flex gap-1 items-center text-orange-400">
                                         <ShieldIcon size={12} color="currentColor" />
-                                        <span className="text-xs sr-only  ">Definition hidden</span>
+                                        <span className="sr-only  ">Definition hidden</span>
                                     </div>
                                 }
                             </div>
