@@ -6,7 +6,7 @@ import { getLLMById, getProviderAPIKey, isFreeLLM } from "./utils";
 import { Profile } from "../db/types/profile";
 import { ModelId } from "./types";
 import { LanguageModelV1 } from "ai";
-import { getAnthropic, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getXai } from "./providers";
+import { getAnthropic, getArliAI, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getPerplexity, getXai } from "./providers";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promise<string> {
@@ -83,19 +83,15 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
         case "OpenRouter":
             return getOpenRouter(modelId, apiKey);
 
-        // case "openrouter":
-        //     const profile = await getCurrentUser();
-        //     const model = profile.openrouter_model;
-        //     if(!model) {
-        //         throw new Error("OpenRouter Model not found");
-        //     }
-        //     const key = await getKeyServerSide();
-        //     const decryptedModel = decryptMessage(model, Buffer.from(key, 'hex'));
-        //     return getOpenRouter(decryptedModel, apiKey);
+        case "Perplexity":
+            return getPerplexity(modelId, apiKey);
 
         case "DeepSeek":
             return getDeepSeek(modelId, apiKey);
             
+        case "ArliAI":
+            return getArliAI(modelId, apiKey);
+
         default:
             throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
     }

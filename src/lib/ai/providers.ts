@@ -94,3 +94,21 @@ export async function getDeepSeek(modelId: string, apiKey?: string): Promise<Lan
 
     return deepSeek(modelId);
 }
+
+import { createPerplexity } from '@ai-sdk/perplexity';
+export async function getPerplexity(modelid: string, apiKey?: string): Promise<LanguageModelV1> {
+    const perplexity = createPerplexity({
+        apiKey: apiKey
+    });
+
+    return perplexity(modelid);
+}
+
+export async function getArliAI(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
+    const arliAI = createOpenAI({
+        baseURL: "https://api.arliai.com/v1",
+        apiKey: apiKey
+    });
+
+    return arliAI(modelId);
+}

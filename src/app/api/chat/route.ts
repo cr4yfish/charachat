@@ -190,10 +190,12 @@ export async function POST(req:Request) {
     // but they make message.content empty,
     // which will break the AI response
     // idiots
-    coreMessages.unshift({
-        role: "user",
-        content: "[ignore this message]",
-    });
+    if(coreMessages.length > 0 && coreMessages[0].role !== "user") {
+        coreMessages.unshift({
+            role: "user",
+            content: "[ignore this message]",
+        });
+    }
 
     return createDataStreamResponse({
         execute: (dataStream) => {

@@ -13,5 +13,6 @@ export const Providers: Provider[] = [
     { id: "OpenRouter", hasFreeTier: true, keyLink: "https://openrouter.ai/account/api-keys" },
     { id: "Replicate", keyLink: "https://replicate.com/account/api-tokens" },
     { id: "xAI", keyLink: "https://console.x.ai/" },
-    // { id: "You" }
+    { id: "Perplexity", keyLink: "https://www.perplexity.ai/api-keys" },
+    { id: "ArliAI" , keyLink: "https://www.arliai.com/", hasFreeTier: true },
 ]

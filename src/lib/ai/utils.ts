@@ -68,6 +68,13 @@ export const getProviderAPIKey = (providerId: ProviderId | string, profile: Prof
         case "DeepSeek":
             return profile.api_keys?.find(key => key.provider === "DeepSeek")?.encrypted_api_key;
 
+        case "Perplexity":
+            return profile.api_keys?.find(key => key.provider === "Perplexity")?.encrypted_api_key;
+
+        case "ArliAI":
+            return profile.api_keys?.find(key => key.provider === "ArliAI")?.encrypted_api_key;
+        
+
         default:
             return undefined;
     }
@@ -138,7 +145,7 @@ export const checkUserHasImageAPIKey = (profile: Profile): boolean => {
 
 export const LLMsWithAPIKeys = (profile?: Profile | undefined): LLM[] => {
     return LLMs.filter((llm) => {
-
+        
         if(
             llm.isFree ||
             (profile && getProviderAPIKey(llm.provider, profile)) 

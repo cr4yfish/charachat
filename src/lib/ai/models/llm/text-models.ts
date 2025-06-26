@@ -321,28 +321,79 @@ export const LLMs: LLM[] = [
     
 
     {
-        "key": "command-r-plus",
-        "name": "Command R Plus",
+        "key": "command-a-03-2025",
+        "name": "Command A",
         "provider": "Cohere",
-        "usecase": "Fast, high quality",
+        "usecase": "Cohere Flagship",
         "tags": ["Quality"],
-    },
-    {
-        "key": "command-r",
-        "name": "Command R",
-        "provider": "Cohere",
-        "usecase": "",
-        "tags": ["Cheap", "Fast"],
-    },
-    {
-        "key": "c4ai-aya-expanse-32b",
-        "name": "Aya Expanse 32b",
-        "provider": "Cohere",
-        "usecase": "",
-        "tags": ["Fast", "Old"],
+        contextLength: 256000,
+        features: [],
     },
 
+    /**
+     * ArliAI models
+     */
+    {
+        key: "DS-R1-Distill-70B-ArliAI-RpR-v4-Large",
+        name: "R1 RpR v4",
+        provider: "ArliAI",
+        contextLength: 65536
+    },
+    {
+        key: "Llama-3.3-70B-ArliAI-RPMax-v2",
+        name: "Llama RPMax v2",
+        provider: "ArliAI",
+        contextLength: 65536
+    },
+    {
+        key: "Gemma-3-27B-ArliAI-RPMax-v3",
+        name: "Gemma RPMax v3",
+        provider: "ArliAI",
+        contextLength: 65536
+    },
+    {
+        key: "Gemma-3-27B-CardProjector-v4",
+        name: "Gemma Card Projector",
+        provider: "ArliAI",
+        contextLength: 65536
+    },
+    {
+        key: "Llama-3.3-70B-Legion-V2.1",
+        name: "Llama Legion v2.1",
+        provider: "ArliAI",
+        contextLength: 65536
+    },
 
+    /**
+     * Perplexity models
+     */
+    {
+        key: "sonar-pro",
+        name: "Sonar Pro",
+        provider: "Perplexity",
+        usecase: "Perplexity flagship model",
+        tags: ["Quality", "Fast"],
+        features: ["tools"],
+    },
+    {
+        key: "sonar",
+        name: "Sonar",
+        provider: "Perplexity",
+        usecase: "Perplexity lite model",
+        tags: ["Quality", "Fast"],
+        features: ["tools"],
+    },
+    {
+        key: "sonar-deep-research",
+        name: "Sonar Deep Research",
+        provider: "Perplexity",
+        usecase: "Perplexity research model",
+        tags: ["Quality", "Fast"],
+    },
+
+    /**
+     * OpenRouter
+     */
     {
         key: "qwen/qwen3-14b:free",
         name: "Qwen 3 14B Free",
