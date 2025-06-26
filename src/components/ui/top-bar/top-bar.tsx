@@ -69,6 +69,7 @@ const titles: TopBarTitle[] = [
     { title: "Your Chars", pathname: "/c/own", showBackButton: true },
     { title: "Your Personas", pathname: "/p/own", showBackButton: true },
     { title: "Migrate", pathname: "/home/settings/migrate", showBackButton: true },
+    { title: "Fix encrypted data", pathname: "/home/settings/migrate/fix-encrypted-data", showBackButton: true },
     { title: "Leaderboard", pathname: "/leaderboard", showBackButton: true },
 ];
 

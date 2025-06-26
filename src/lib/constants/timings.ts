@@ -11,6 +11,7 @@ export const TIMINGS = {
     SIX_HOURS: 6 * 60 * 60, // 6 hours
     TWELVE_HOURS: 12 * 60 * 60, // 12 hours
     ONE_DAY: 24 * 60 * 60, // 1 day
+    THIRTY_DAYS: 30 * 24 * 60 * 60, // 30 days
     ONE_WEEK: 7 * 24 * 60 * 60, // 1 week
     ONE_YEAR: 365 * 24 * 60 * 60, // 1 year
 }

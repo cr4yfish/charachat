@@ -76,6 +76,9 @@ export default async function PureSettingsPage() {
             <Link href={"/home/settings/migrate"}>
               <Button>Migrate</Button>
             </Link>
+            <Link href={"/home/settings/migrate/fix-encrypted-data"}>
+              <Button>Fix encrypted Data</Button>
+            </Link>
           </CardContent>
         </Card>
 

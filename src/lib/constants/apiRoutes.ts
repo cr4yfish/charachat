@@ -58,5 +58,6 @@ export const API_ROUTES = {
     GET_TOTAL_CHAT_STATS: "/api/stats/total-chat-stats",
 
     MIGRATION: "/api/migration",
+    FIX_ENCRYPTION_KEY: "/api/migration/encryption-key",
     
 }
