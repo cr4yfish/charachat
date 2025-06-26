@@ -66,7 +66,6 @@ const titles: TopBarTitle[] = [
     { title: "New Char", pathname: "/c/new", showBackButton: true },
     { title: "Import Chars", pathname: "/c/new/import", showBackButton: true },
     { title: "Settings", pathname: "/home/settings", showBackButton: true },
-    { title: "Search", pathname: "/search", showHomeButton: true },
     { title: "Your Chars", pathname: "/c/own", showBackButton: true },
     { title: "Your Personas", pathname: "/p/own", showBackButton: true },
     { title: "Migrate", pathname: "/home/settings/migrate", showBackButton: true },

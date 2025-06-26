@@ -310,11 +310,11 @@
 
 /* Support for headers that use padding instead of top positioning */
 .ios-safe-header-padding {
-  padding-top: 0;
-  padding-top: max(0px, env(safe-area-inset-top));
+  padding-top: 8px;
+  padding-top: max(8px, env(safe-area-inset-top));
 }
 
-.ios-safe-header-padding-extra {
-  padding-top: 16px;
-  padding-top: max(16px, calc(env(safe-area-inset-top) + 16px));
+.ios-safe-header-padding-search {
+  padding-top: 170px;
+  padding-top: max(170px, calc(env(safe-area-inset-top) + 170px));
 }

@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/pagination"
 import { redirect } from "next/navigation";
 import { LIMITS } from "@/lib/constants/limits";
+import SearchTopBar from "@/components/ui/top-bar/search-top-bar";
+import Link from "next/link";
 
 export type SearchType = "characters" | "creators";
 export type SortType = "likes" | "newest" | "popular" | "relevance";
@@ -113,83 +115,103 @@ export default async function SearchPage({
     const endTime = performance.now();
     const searchTime = ((endTime - startTime) / 1000).toFixed(3);
 
+    const searchSuggestions: string[] = [
+        "Anime",
+        "Romance",
+        "Fantasy",
+        "Sci-Fi",
+        "Assistants",
+    ];
+
     return (
-        <div className="px-4 flex flex-col gap-4 relative h-full w-full overflow-hidden">
-            <div className="flex flex-col absolute top-[70px] left-0 w-full h-fit z-50 p-4 pt-0">
-               <SearchBar initialQuery={q} /> 
-               <SearchCategories initType={type} initSortType={sort} currentQuery={q} />
+        <div className="px-4 flex flex-col items-center gap-4 relative h-full w-full overflow-x-hidden max-h-screen ">
+            
+            <div className="fixed sm:absolute left-0 w-full h-fit z-50 p-4 pt-0 flex justify-center ">
+                <div className="w-full h-[75px] absolute bg-gradient-to-b from-black/50 to-transparent backdrop-blur-[1px] "></div>
+                <div className="relative flex flex-col items-center gap-2 z-10 w-full h-fit max-w-[567px] ios-safe-header-padding md:mt-[20px]  ">
+                    <SearchTopBar />
+                    <SearchBar initialQuery={q} /> 
+                    <SearchCategories initType={type} initSortType={sort} currentQuery={q} />
+
+                    {/* Search suggestions */}
+                    <div className="flex flex-row items-center justify-start overflow-auto gap-2 w-full text-xs sm:text-sm text-muted-foreground  transition-all duration-200 h-fit shrink-0">
+                        {searchSuggestions.map((suggestion, index) => (
+                            <Link key={index} href={`/search?q=${encodeURIComponent(suggestion)}`} className="hover:text-white cursor-pointer">
+                                {suggestion}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <div className="max-h-screen overflow-y-auto overflow-x-hidden pt-[180px] pb-[100px]">
-                <div className="h-fit w-full flex flex-col items-center justify-center gap-2">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground w-full">
-                        <span>Found {searchResults.length} characters in {searchTime} seconds</span>
-                    </div>
-
-                    {searchResults.length > 0 ? (
-                        searchResults.map(character => (
-                            <SmallCharacterCard
-                                key={character.id}
-                                data={character}
-                                hasLink
-                            />
-                        ))
-                    ) : (
-                        <div className="text-center text-slate-400">
-                            {q ? <>No results found for <span className="font-semibold">{q}</span></> : null}
-                        </div>
-                    )}
+            <div className="h-full w-full flex flex-col items-center justify-start gap-2 max-sm:mt-12 ios-safe-header-padding-search">
+                <div className="text-xs text-muted-foreground w-full text-start max-w-[567px]">
+                    <span>Found {searchResults.length} characters in {searchTime} seconds</span>
                 </div>
-                <Pagination className="mt-4">
 
-                    <PaginationContent className="text-muted-foreground">
+                {searchResults.length > 0 ? (
+                    searchResults.map(character => (
+                        <SmallCharacterCard
+                            key={character.id}
+                            data={character}
+                            hasLink
+                        />
+                    ))
+                ) : (
+                    <div className="text-center text-slate-400">
+                        {q ? <>No results found for <span className="font-semibold">{q}</span></> : null}
+                    </div>
+                )}
+            
+            <Pagination className="mt-4 pb-8">
 
-                        {hasPreviousPage && 
-                        <>
-                  
+                <PaginationContent className="text-muted-foreground">
 
-                            <PaginationItem>
-                                <PaginationPrevious href={buildPaginationUrl(currentPage-1)} />
-                            </PaginationItem>  
+                    {hasPreviousPage && 
+                    <>
+                
 
-                            { (currentPage > 1) &&
-                                <PaginationItem>
-                                    <PaginationLink href={buildPaginationUrl(currentPage-2)}>{currentPage-1}</PaginationLink>
-                                </PaginationItem>
-                            }
-
-                            <PaginationItem>
-                                <PaginationLink href={buildPaginationUrl(currentPage-1)}>{currentPage}</PaginationLink>
-                            </PaginationItem>
-
-                        </>
-                        }
-                        
                         <PaginationItem>
-                            <PaginationLink className="text-white/90" href="#">{currentPage+1}</PaginationLink>
+                            <PaginationPrevious href={buildPaginationUrl(currentPage-1)} />
+                        </PaginationItem>  
+
+                        { (currentPage > 1) &&
+                            <PaginationItem>
+                                <PaginationLink href={buildPaginationUrl(currentPage-2)}>{currentPage-1}</PaginationLink>
+                            </PaginationItem>
+                        }
+
+                        <PaginationItem>
+                            <PaginationLink href={buildPaginationUrl(currentPage-1)}>{currentPage}</PaginationLink>
+                        </PaginationItem>
+
+                    </>
+                    }
+                    
+                    <PaginationItem>
+                        <PaginationLink className="text-white/90" href="#">{currentPage+1}</PaginationLink>
+                    </PaginationItem>
+
+
+                    {hasNextPage &&
+                    <>
+
+                        <PaginationItem>
+                            <PaginationLink href={buildPaginationUrl(currentPage+1)}>{currentPage+2}</PaginationLink>
+                        </PaginationItem>
+
+                        <PaginationItem>
+                            <PaginationNext href={buildPaginationUrl(currentPage+1)} />
                         </PaginationItem>
 
 
-                        {hasNextPage &&
-                        <>
+                    </>
+                    }
 
-                            <PaginationItem>
-                                <PaginationLink href={buildPaginationUrl(currentPage+1)}>{currentPage+2}</PaginationLink>
-                            </PaginationItem>
-
-                            <PaginationItem>
-                                <PaginationNext href={buildPaginationUrl(currentPage+1)} />
-                            </PaginationItem>
-
-
-                        </>
-                        }
-
-                    </PaginationContent>
-                    
-                </Pagination>
+                </PaginationContent>
+                
+            </Pagination>
             </div>
-            
         </div>
     )
 }

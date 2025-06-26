@@ -100,10 +100,10 @@ const PureSearchBar = ({ initialQuery } : Props) => {
     }
 
     return (
-        <Form action={handleSearch} className="relative z-50" ref={searchBarRef}>
+        <Form action={handleSearch} className="relative z-50 w-full" ref={searchBarRef}>
 
             {/* Searchbar */}
-            <div className="relative bg-slate-800/50 border border-border rounded-full w-full h-fit flex items-center justify-center backdrop-blur-lg">
+            <div className="relative bg-slate-800/50 border border-border rounded-full w-full h-fit flex items-center justify-center backdrop-blur-lg ">
                 <Button type="submit" className="absolute left-0 top-0 h-full flex items-center justify-center text-slate-200/80 ml-1" variant={"link"}>
                     <SearchIcon />
                 </Button>

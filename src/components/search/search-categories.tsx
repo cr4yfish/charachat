@@ -16,7 +16,7 @@ const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchTy
     const router = useRouter();
 
     return (
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 w-full">
             <div className="flex items-center">
                 <ButtonGroup 
                     value={initType || "characters"}
@@ -27,7 +27,8 @@ const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchTy
                     }}
                     options={[
                         { label: "Characters", value: "characters" },
-                        { label: "Creators", value: "creators", disabled: true } , // creators is not implemented yet
+                        { label: "Collections", value: "collections", disabled: true } ,
+                        { label: "Creators", value: "creators", disabled: true } ,
                     ]}
                 />
             </div>
