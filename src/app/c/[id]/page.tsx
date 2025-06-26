@@ -63,7 +63,7 @@ export default async function CharacterView({ params }: { params: Params }) {
 
     return (
         <>
-        <div className="relative w-full h-full min-h-full">
+        <div className="relative w-full h-full min-h-full ios-safe-header-padding">
 
             <CharacterTopHeader isOwner={userIsOwner} character={character} />
 
