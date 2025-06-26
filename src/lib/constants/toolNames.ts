@@ -10,5 +10,9 @@ export const TOOL_NAMES = {
 
     generateImage: "imageGen",
 
+    searchChars: "searchCharacters",
+
+    manageProviderTokens: "manageProviderTokens",
+
     login: "login",
 }
