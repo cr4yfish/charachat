@@ -163,6 +163,8 @@ export async function POST(req:Request) {
         modelId: modelId, apiKey
     });
 
+    const internalModel = getLLMById(modelId);
+
 
     const systemPrompt = getSystemPrompt({
         character, chat, persona: userPersona,
@@ -200,6 +202,12 @@ export async function POST(req:Request) {
             });
 
             const result = streamText({
+                providerOptions: {
+                    groq: internalModel?.features?.includes("reasoning") ? { reasoningFormat: "parsed" } : {},
+                    openai: {
+                        reasoningSummary: "detailed"
+                    }
+                },
                 toolCallStreaming: true,
                 maxSteps: 3,
                 model: model,
@@ -302,7 +310,7 @@ export async function POST(req:Request) {
             })
             
             result.mergeIntoDataStream(dataStream, {
-                sendReasoning: false,
+                sendReasoning: true,
             });
         },
         onError(error) {
