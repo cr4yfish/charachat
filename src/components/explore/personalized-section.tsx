@@ -36,8 +36,6 @@ export async function PersonalizedSection() {
 
                     <MarketingCard />
 
-                    <WelcomeCard />
-
                     {draftChar && (
                         <CarouselItem className=" min-lg:basis-1/3">
                             <NewCharacterFromScratch small initCharacter={draftChar} />
@@ -45,7 +43,9 @@ export async function PersonalizedSection() {
                     )}
 
                     <LatestChat />
-     
+                    
+                    <WelcomeCard />
+
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
