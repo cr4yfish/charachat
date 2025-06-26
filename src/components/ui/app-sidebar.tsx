@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { BotIcon } from "lucide-react";
 import { SignInButton, useAuth } from "@clerk/nextjs";
 import SidebarUser from "./sidebar-user";
+import SidebarChatHistory from "./sidebar-chat-history";
 
 const PureNavbarItem = (props: NavItem & { isActive?: boolean, sidebarOpen: boolean }) => {
   return (
@@ -75,6 +76,10 @@ export function AppSidebar() {
                                 sidebarOpen={open}
                             />
                         ))}
+                    </SidebarMenu>
+
+                    <SidebarMenu>
+                      {isSignedIn && <SidebarChatHistory />}
                     </SidebarMenu>
                 </SidebarGroupContent>
                 </SidebarGroup>
