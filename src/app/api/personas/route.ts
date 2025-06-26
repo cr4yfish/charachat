@@ -17,8 +17,8 @@ export async function GET(request: Request) {
         }),
         [`personas-cursor-${cursor}`],
         {
-            revalidate: TIMINGS.ONE_DAY, // 1 hour
-            tags: ['personas'],
+            revalidate: TIMINGS.ONE_HOUR, // 1 hour
+            tags: [`personas`, `personas-cursor-${cursor}`],
         }
     )();
 

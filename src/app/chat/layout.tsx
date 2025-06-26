@@ -7,7 +7,7 @@ export default function ChatLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="flex flex-col items-center h-full w-full relative">
+        <div className="flex flex-col items-center h-full max-h-screen w-full relative overflow-hidden">
             {children}
         </div>
     );

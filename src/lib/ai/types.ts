@@ -20,14 +20,32 @@ export type VideoModel = {
 }
 
 export type LLM = {
+
+    /**
+     * Use for API calls, this is the unique identifier for the model.
+     */
     key: ModelId,
+
+    /**
+     * Actual model name
+     */
     name: string,
+
+    /**
+     * Optional Simple name for the model
+     */
+    alias?: string,
     usecase?: string
     provider: ProviderId,
     tags?: string[],
     features?: Feature[],
     isFree?: boolean,
     contextLength?: number,
+
+    /**
+     * Whether this model should show up in "simple mode".
+     */
+    recommended?: boolean,
 }
 
 

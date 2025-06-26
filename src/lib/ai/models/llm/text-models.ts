@@ -3,55 +3,64 @@ import { LLM } from "../../types"
 export const LLMs: LLM[] = [
     {
         key: "meta-llama/llama-4-maverick-17b-128e-instruct",
+        alias: "Llama",
         name: "Llama 4 Maverick",
         provider: "Groq",
-        usecase: "Cool model",
-        tags: ["Free", "Quality"],
+        usecase: "Excellent quality, makes mistakes sometimes",
+        tags: ["Quality"],
         features: ["tools"],
         isFree: true,
+        recommended: true,
+        contextLength: 131072
     },
     {
         "key": "meta-llama/llama-4-scout-17b-16e-instruct",
         "name": "Llama 4 Scout",
         "provider": "Groq",
         "usecase": "Very fast",
-        "tags": ["Free", "Quality"],
+        "tags": ["Quality"],
         features: ["tools"],
         isFree: true,
+        contextLength: 131072
     },
     {
         "key": "deepseek-r1-distill-llama-70b",
         "name": "DeepSeek R1",
+        alias: "DeepSeek Reasoning",
         "provider": "Groq",
         "usecase": "Fast, high quality",
-        "tags": ["Free", "Thinking", "Uncensored"],
+        "tags": ["Thinking", "Uncensored"],
         features: ["reasoning"],
         isFree: true,
+        contextLength: 131072,
+        recommended: true
     },
     {
         "key": "qwen/qwen3-32b",
         "name": "Qwen 3 32B",
         "provider": "Groq",
-        "usecase": "Fast, high quality",
-        "tags": ["Free", "Thinking", "Uncensored"],
-        features: ["reasoning"],
+        "usecase": "Reliable and efficient for complex tasks",
+        "tags": ["Quality", "Multilingual"],
+        features: ["reasoning", "tools"],
         isFree: true,
+        contextLength: 131072
     },
     {
         "key": "qwen-qwq-32b",
         "name": "QWQ 32B",
         "provider": "Groq",
         "usecase": "Fast, high quality",
-        "tags": ["Free", "Thinking", "Uncensored"],
+        "tags": ["Thinking", "Uncensored"],
         features: ["reasoning"],
         isFree: true,
+        contextLength: 131072
     },
     {
         key: "mistral-saba-24b",
         name: "Mistral Saba 24B",
         provider: "Groq",
         usecase: "",
-        tags: ["Free", "Quality"],
+        tags: ["Quality"],
         isFree: true,
     },
 
@@ -61,7 +70,7 @@ export const LLMs: LLM[] = [
     //     name: "Compound Beta",
     //     provider: "Groq",
     //     usecase: "Fast, high quality",
-    //     tags: ["Free", "Thinking", "Uncensored"],
+    //     tags: ["Thinking", "Uncensored"],
     //     isFree: true,
     // },
     // {
@@ -69,7 +78,7 @@ export const LLMs: LLM[] = [
     //     name: "Compound Beta Mini",
     //     provider: "Groq",
     //     usecase: "Fast, high quality",
-    //     tags: ["Free", "Thinking", "Uncensored"],
+    //     tags: ["Thinking", "Uncensored"],
     //     isFree: true,
     // },
     
@@ -95,7 +104,7 @@ export const LLMs: LLM[] = [
         "name": "Ministral 3b",
         "usecase": "Used internally for search",
         "provider": "Mistral",
-        "tags": ["Free", "Cheap", "Fast"],
+        "tags": ["Cheap", "Fast"],
         isFree: true
     },
     {
@@ -103,35 +112,41 @@ export const LLMs: LLM[] = [
         "name": "Ministral 3b",
         "usecase": "Used internally for search",
         "provider": "Mistral",
-        "tags": ["Free", "Cheap", "Fast"],
+        "tags": ["Cheap", "Fast"],
         isFree: true
     },
     {
         "key": "mistral-medium-latest",
-        "name": "Ministral Medium",
-        "usecase": "Capable",
+        "name": "Mistral Medium",
+        alias: "Mistral",
+        "usecase": "Flagship Mistral model",
         "provider": "Mistral",
-        "tags": ["Free", "Cheap", "Fast"],
+        "tags": ["Economic", "Fast"],
         features: ["tools"],
-        isFree: true
+        isFree: true,
+        contextLength: 128000,
+        recommended: true,
     },
     {
         "key": "mistral-large-latest",
-        "name": "Ministral Large",
-        "usecase": "Still cheap but getting expensive",
+        "name": "Mistral Large",
+        "usecase": "Largest Mistral model, older than Medium",
         "provider": "Mistral",
-        "tags": ["Free", "Cheap", "Fast"],
+        "tags": ["Cheap", "Fast"],
         features: ["tools"],
-        isFree: true
+        isFree: true,
+        contextLength: 128000
     },
     {
         key: "claude-sonnet-4-20250514",
         name: "Claude Sonnet 4",
+        alias: "Claude",
         provider: "Anthropic",
-        usecase: "Best model out there, expensive",
+        usecase: "Storytelling beast",
         tags: ["Quality", "Uncensored"],
         features: ["tools"],
-        contextLength: 200000
+        contextLength: 200000,
+        recommended: true,
     },
     {
         key: "claude-opus-4-20250514",
@@ -178,7 +193,7 @@ export const LLMs: LLM[] = [
         "provider": "OpenAI",
         "tags": ["Quality", "Fast"],
         features: ["tools"],
-        contextLength: 128000
+        contextLength: 128000,
     },
 
     /**
@@ -214,10 +229,12 @@ export const LLMs: LLM[] = [
     {
         key: "chatgpt-4o-latest",
         name: "ChatGPT 4o Latest",
+        alias: "ChatGPT",
         provider: "OpenAI",
-        usecase: "",
+        usecase: "Talks nicely",
         tags: ["Quality", "Fast"],
-        contextLength: 128000
+        contextLength: 128000,
+        recommended: true,
     },
     {
         key: "gpt-4.1-nano-2025-04-14",
@@ -231,11 +248,13 @@ export const LLMs: LLM[] = [
     {
         key: "gpt-4.1-mini-2025-04-14",
         name: "GPT 4.1 Mini",
+        alias: "GPT 4.1 mini",
         provider: "OpenAI",
-        usecase: "",
+        usecase: "General purpose",
         tags: ["Quality", "Fast"],
         features: ["tools"],
-        contextLength: 1047576
+        contextLength: 1047576,
+        recommended: true
     },
     {
         key: "gpt-4.1-2025-04-14",
@@ -326,38 +345,43 @@ export const LLMs: LLM[] = [
 
     {
         key: "qwen/qwen3-14b:free",
-        name: "Qwen 3 32B Free",
+        name: "Qwen 3 14B Free",
         usecase: "Free, fast, high quality",
         provider: "OpenRouter",
-        tags: ["Free", "Fast", "Quality"],
+        tags: ["Fast", "Quality"],
         features: ["tools", "reasoning"],
         isFree: true,
     },
     {
         key: "qwen/qwen3-32b:free",
         name: "Qwen 3 32B Free",
-        usecase: "Free, fast, high quality",
+        alias: "Qwen",
+        usecase: "Exceptional reasoning and multilingual capabilities",
         provider: "OpenRouter",
-        tags: ["Free", "Fast", "Quality"],
+        tags: ["Fast", "Quality", "Multilingual"],
         features: ["tools", "reasoning"],
         isFree: true,
+        recommended: true,
+        contextLength: 40960
     },
     {
         "key": "deepseek/deepseek-chat-v3-0324:free",
         "name": "DeepSeek Chat V3",
-        "usecase": "Free, fast, high quality",
+        alias: "DeepSeek Chat",
+        "usecase": "Versatile",
         "provider": "OpenRouter",
-        "tags": ["Free", "Fast", "Quality"],
+        "tags": ["Uncensored"],
         features: ["tools"],
         isFree: true,
-        contextLength: 163840
+        contextLength: 163840,
+        recommended: true
     },
     {
         "key": "deepseek/deepseek-r1-0528:free",
         "name": "DeepSeek R1",
         "usecase": "Free, fast, high quality",
         "provider": "OpenRouter",
-        "tags": ["Free", "Fast", "Quality"],
+        "tags": ["Fast", "Quality"],
         features: ["tools", "reasoning"],
         isFree: true,
         contextLength: 163840
@@ -367,7 +391,7 @@ export const LLMs: LLM[] = [
         name: "Gemini Flash Exp Free",
         usecase: "Free, fast, high quality",
         provider: "OpenRouter",
-        tags: ["Free", "Fast", "Quality"],
+        tags: ["Fast", "Quality"],
         contextLength: 1048576,
         isFree: true,
     },
@@ -376,7 +400,7 @@ export const LLMs: LLM[] = [
         "name": "MiniMax M1",
         "usecase": "Open Weight Reasoning",
         "provider": "OpenRouter",
-        "tags": ["Free", "Open Weight"],
+        "tags": ["Open Weight"],
         contextLength: 1000000
     },
     {

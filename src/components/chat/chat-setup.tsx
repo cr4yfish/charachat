@@ -3,8 +3,7 @@
 import { LLM } from "@/lib/ai/types";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { Persona } from "@/lib/db/types/persona";
-import { memo,  useState } from "react";
-import useSWR from "swr";
+import { memo,  useEffect,  useMemo,  useState } from "react";
 import {
   Card,
   CardDescription,
@@ -19,6 +18,8 @@ import { ChatRequestOptions, Message } from "ai";
 import LLMOverview from "./chat-llm-overview";
 import Spinner from "../ui/spinner";
 import { ChevronRightIcon } from "lucide-react";
+import useSWRInfinite from "swr/infinite";
+import { LIMITS } from "@/lib/constants/limits";
 
 type Props = {
     chatId?: string;
@@ -31,11 +32,35 @@ type Props = {
 const maxSteps = 2;
 
 const PureChatSetup = (props: Props) => {
-    
-    const { data: personas, isLoading: personasLoading, isValidating: personasValidating } = useSWR<Persona[]>(API_ROUTES.GET_PERSONAS, fetcher)
+    const [hasMore, setHasMore] = useState(true);
+    const { data, isLoading: personasLoading, isValidating: personasValidating, setSize } = useSWRInfinite<Persona[]>(
+        (index, prevPageData) => {
+            // If it's not the first page and the previous page was empty, stop loading
+            if (index > 0 && prevPageData && prevPageData.length === 0) return null;
+            
+            // If we've determined there are no more pages, stop loading (but allow first page)
+            if (!hasMore && index > 0) return null;
+            
+            const cursor = index * LIMITS.MAX_PERSONAS_PER_PAGE;
+            return API_ROUTES.GET_PERSONAS + `?limit=${LIMITS.MAX_PERSONAS_PER_PAGE}&cursor=${cursor}`;
+        }, 
+        fetcher
+    );
+
+
+    const personas = useMemo(() => {
+        return data ? data.flat() : [];
+    }, [data]);
     const [selectedPersona, setSelectedPersona] = useState<Persona| null>(null);
 
     const [step, setStep] = useState(1);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            const lastPage = data[data.length - 1];
+            setHasMore(lastPage.length === LIMITS.MAX_PERSONAS_PER_PAGE);
+        }
+    }, [data]);
 
     const handleNextStep = () => {
         if (step === maxSteps)  {
@@ -58,22 +83,25 @@ const PureChatSetup = (props: Props) => {
         });
     }
 
+    const handleLoadMorePersonas = () => {
+        setSize(prevSize => prevSize + 1);
+    }
+
     return (
-        <div className="flex flex-col justify-start p-4 size-full gap-4 pt-[100px]">
-            <div className="flex flex-col">
-                <h2 className="text-2xl font-bold">Chat Setup</h2>
-                <p className="text-xs dark:text-neutral-400">You can change your settings here or just start typing below.</p>
-            </div>
+        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 pt-[75px] max-h-full overflow-hidden max-w-[960px] mx-auto">
 
             {step === 1 && (
                 <LLMOverview defaultLLM={props.defaultLLM} nextStep={handleNextStep} />
             )}            
             {step === 2 && (
-                <div>
+                <div className="size-full relative flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-2">
-                        <div className="flex flex-col gap-1">
-                            <h3>2. Select a Persona</h3>
-                           {selectedPersona && <span className="text-xs text-emerald-400">✅ {selectedPersona.full_name}</span>}
+
+                        <div className="flex flex-col gap-1 text-sm font-bold">
+                            {selectedPersona ?
+                                <h3 className="text-emerald-400">✅ {selectedPersona.full_name}</h3>
+                             : 
+                                <h3>Select a Persona (optional)</h3>}
                         </div>
                         
 
@@ -84,16 +112,16 @@ const PureChatSetup = (props: Props) => {
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col gap-2 w-full overflow-y-auto max-h-[400px]">                        
-                        {personasLoading && (
+                    <div className="flex flex-col gap-2 w-full overflow-y-auto h-full max-h-full pb-[100px]">                        
+                        {(personasLoading || personasValidating) && (
                             <div className="flex items-center justify-center h-32">
                                 <Spinner size="large" />
                             </div>
                         )}
                         
-                        {!personasLoading && (personas?.length === 0 || !personas) && (
+                        {!personasLoading && !personasValidating && (personas?.length === 0 || !personas) && (
                             <div className="flex items-center justify-center h-full">
-                                <p className="text-sm text-neutral-500">No personas available. You can create one in your profile settings or start chatting without one.</p>
+                                <p className="text-sm text-muted-foreground">No personas available. You can create one in your profile settings or start chatting without one.</p>
                             </div>
                         )}
                         
@@ -115,6 +143,8 @@ const PureChatSetup = (props: Props) => {
 
                             </Card>
                         ))}
+
+                        {hasMore && <Button onClick={handleLoadMorePersonas} variant={"secondary"}>Load more</Button>}
                           {personasValidating && !personasLoading && (
                             <div className="flex items-center justify-center py-2">
                                 <Spinner size="small" />
@@ -124,16 +154,17 @@ const PureChatSetup = (props: Props) => {
                     </div>
                 </div>
             )}            
-            <div className="flex flex-row items-center justify-center gap-2 w-full overflow-hidden self-end">
+            <div className="flex flex-row items-center justify-center gap-2 w-full overflow-hidden self-end shrink-0 max-w-[400px] px-4 mx-auto z-50 absolute bottom-[50px] left-0">
                 <Button onClick={() => setStep(prev => prev-1)} disabled={step === 1} variant="ghost">
                     Back
                 </Button>
                 <Button 
                     onClick={handleNextStep} 
+                    variant={"secondary"}
                     className="grow w-fit flex justify-between items-center"
                     disabled={step === 2 && personasLoading}
                 >
-                    {step === maxSteps ? "Start Chat" : "Next Step"}
+                    {step === maxSteps ? "Start Chat" : "Choose Persona"}
                     {step === maxSteps ? null : <ChevronRightIcon size={16} />}
                 </Button>
             </div>

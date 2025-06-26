@@ -347,7 +347,7 @@ export const PureChat = (props: Props) => {
 
   return (
     <>
-    <div id='messages' className='h-dvh w-full overflow-hidden'>
+    <div id='messages' className='h-dvh max-h-screen w-full overflow-hidden'>
 
       {(messages.length === 0) && !setupDone && (
         <div className='h-full overflow-hidden'>
@@ -400,11 +400,13 @@ export const PureChat = (props: Props) => {
           }}
         />
 
-      <PromptInput
-        submitMiddleWare={submitMiddleWare}
-        isLoading={isLoading}
-        chatId={props.chatId}
-      />
+      {setupDone &&
+        <PromptInput
+          submitMiddleWare={submitMiddleWare}
+          isLoading={isLoading}
+          chatId={props.chatId}
+        />
+      }
 
       <div className='fixed bottom-0 left-0 w-full h-[20px] bg-gradient-to-t from-background to-transparent backdrop-blur-[1px] pointer-events-none '></div>
 
