@@ -28,4 +28,5 @@ export const TIMINGS_MILLISECONDS = {
     SIX_HOURS: 6 * 60 * 60 * 1000, // 6 hours
     TWELVE_HOURS: 12 * 60 * 60 * 1000, // 12 hours
     ONE_DAY: 24 * 60 * 60 * 1000, // 1 day
+    THIRTY_DAYS: 30 * 24 * 60 * 60 * 1000, // 30 days
 }

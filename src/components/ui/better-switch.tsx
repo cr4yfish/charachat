@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Switch } from "./switch";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
@@ -23,6 +23,13 @@ export const PureBetterSwitch = (props: Props) => {
         setInternalChecked(checked);
         props.onCheckedChange?.(checked);
     };
+
+    useEffect(() => {
+        if (props.checked !== undefined && props.checked !== internalChecked) {
+            setInternalChecked(props.checked);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.checked]);
 
     return (
         <Card 

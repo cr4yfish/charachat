@@ -8,4 +8,6 @@ export const COOKIE_NAMES = {
     CURRENT_CHARACTER: "character_id",
     CURRENT_MODEL: "llm_model",
     CURRENT_PERSONA: "persona_id",
+
+    PROFILE_SETTINGS: "profile_settings",
 }

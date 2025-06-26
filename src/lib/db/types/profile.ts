@@ -2,6 +2,8 @@ import { ProviderId } from "@/lib/ai/types";
 
 export type ProfileSettings = {
     show_nsfw?: boolean;
+    default_llm?: string;
+    default_persona_id?: string;
 }
 
 export type APIKey = {

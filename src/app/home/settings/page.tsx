@@ -1,14 +1,12 @@
 "use server";
 
-import LLMSelect from "@/components/chat/llm-select";
 import APIKeyInputCard from "@/components/settings/api-key-input.card";
-import { BetterSwitch } from "@/components/ui/better-switch";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { _DEFAULT_LLM } from "@/lib/constants/defaults";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import UserSettingsPage from "@/components/settings/user-settings";
 
 export default async function PureSettingsPage() {
 
@@ -22,30 +20,7 @@ export default async function PureSettingsPage() {
 
       <div className="flex flex-col gap-4">
 
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              Personal Settings
-            </CardTitle>
-            <CardDescription>
-              These settings are specific to your account and will be applied across all your chats. You can change them at any time.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <BetterSwitch 
-              label="Unblur NSFW"
-              disabled
-              description="Enable this to unblur NSFW content in images by default."
-            />
-
-            <LLMSelect 
-              disabled
-              selectedKey={_DEFAULT_LLM}
-              label="Select the Author Model"
-              description="The model used for writing help (e.g. generating descriptions)"
-            />
-          </CardContent>
-        </Card>
+        <UserSettingsPage />
 
         <APIKeyInputCard />
 
