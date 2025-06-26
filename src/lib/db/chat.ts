@@ -9,6 +9,7 @@ import { createServerSupabaseClient as createClient } from "./server";
 import { checkIsEncrypted, encryptMessage } from "../crypto/client";
 import { decryptCharacter } from "./character";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
+import { decryptPersona } from "./persona";
 
 const chatMatcher = `
     *
@@ -32,6 +33,12 @@ const chatFormatter = async (db: any): Promise<Chat> => {
             is_nsfw: db.character_is_nsfw || false,
             is_unlisted: db.character_is_unlisted || false,
         },
+        persona: {
+            id: db.persona,
+            full_name: db.persona_full_name,
+            avatar_link:  db.persona_avatar_link,
+            is_private: db.persona_is_private || false,
+        }
     } as Chat;
 
     if(chat.story) {
@@ -42,11 +49,19 @@ const chatFormatter = async (db: any): Promise<Chat> => {
 
     if(decryptedChat.character.is_private) {
         try {
-            const key = await getKeyServerSide();
             decryptedChat.character = await decryptCharacter(decryptedChat.character, key);
             if(decryptedChat.story?.character) {
                 decryptedChat.story.character = await decryptCharacter(decryptedChat.story.character, key)
             }
+        } catch {
+            console.error(ERROR_MESSAGES.CRYPTO_ERROR);
+            return decryptedChat;
+        }
+    }
+
+    if(decryptedChat.persona?.is_private) {
+        try {
+            decryptedChat.persona = await decryptPersona(decryptedChat.persona, key);
         } catch {
             console.error(ERROR_MESSAGES.CRYPTO_ERROR);
             return decryptedChat;
