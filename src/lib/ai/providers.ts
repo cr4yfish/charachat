@@ -2,9 +2,9 @@ import "server-only";
 
 import { LanguageModelV1 } from '@ai-sdk/provider';
 
-import { createOpenAI } from '@ai-sdk/openai';
+import { createGroq } from '@ai-sdk/groq';
 export async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
-    const groq = createOpenAI({
+    const groq = createGroq({
         baseURL: baseURL || "https://api.groq.com/openai/v1",
         apiKey: apiKey
     })
@@ -12,6 +12,7 @@ export async function getGroq(modelId: string, baseURL?: string, apiKey?: string
     return groq(modelId);
 }
 
+import { createOpenAI } from '@ai-sdk/openai';
 export async function getOpenAI(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
     const openai = createOpenAI({
         apiKey: apiKey,
