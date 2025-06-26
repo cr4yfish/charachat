@@ -88,7 +88,7 @@ const PureChatSetup = (props: Props) => {
     }
 
     return (
-        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 pt-[75px] max-h-full overflow-hidden max-w-[960px] mx-auto">
+        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 pt-[75px] ios-safe-header-padding-chat max-h-full overflow-hidden max-w-[960px] mx-auto">
 
             {step === 1 && (
                 <LLMOverview defaultLLM={props.defaultLLM} nextStep={handleNextStep} />
