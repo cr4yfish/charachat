@@ -52,7 +52,7 @@ const privatePersonaFormatter = async (data: any): Promise<Persona> => {
 
         try {
             const key = await getKeyServerSide();
-            return await decryptPersona(persona, key.toString());
+            return await decryptPersona(persona, key);
         } catch {
             console.error(ERROR_MESSAGES.CRYPTO_ERROR);
             return persona;
@@ -63,15 +63,14 @@ const privatePersonaFormatter = async (data: any): Promise<Persona> => {
     return persona;
 }
 
-export const decryptPersona = async (persona: Persona, key: string): Promise<Persona> => {
+export const decryptPersona = async (persona: Persona, key: Buffer): Promise<Persona> => {
 
     try {
-        const keyBuffer = Buffer.from(key, "hex");
         return {
             ...persona,
-            full_name: await decryptMessageBackwardsCompatible(persona.full_name, keyBuffer),
-            bio: persona.bio ? await decryptMessageBackwardsCompatible(persona.bio, keyBuffer) : undefined,
-            avatar_link: persona.avatar_link ? await decryptMessageBackwardsCompatible(persona.avatar_link, keyBuffer) : undefined
+            full_name: await decryptMessageBackwardsCompatible(persona.full_name, key),
+            bio: persona.bio ? await decryptMessageBackwardsCompatible(persona.bio, key) : undefined,
+            avatar_link: persona.avatar_link ? await decryptMessageBackwardsCompatible(persona.avatar_link, key) : undefined
         }
     } catch {
         console.error(ERROR_MESSAGES.CRYPTO_ERROR);
