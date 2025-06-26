@@ -18,7 +18,7 @@ export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promi
     }
 
     // This can be undefined if user has no API key for this model
-    const encryptedAPIKey = getProviderAPIKey(selectedModel.key, profile);
+    const encryptedAPIKey = getProviderAPIKey(selectedModel.provider, profile);
 
     // User doesnt have one and also no env variable set
     if(!encryptedAPIKey) {

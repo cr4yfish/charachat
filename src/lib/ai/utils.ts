@@ -9,22 +9,21 @@ import { LLMs } from "./models/llm/text-models";
  * encrypted API key in the user's profile. For some providers like Groq and Mistral, it falls back
  * to public environment variables if no user key is found.
  * 
- * @param modelId - The unique identifier of the AI model to get the API key for
+ * @param providerId - The unique identifier of the AI model to get the API key for
  * @param profile - The user profile containing encrypted API keys for various providers
  * @returns The encrypted API key for the provider, or undefined if no key is found
  * 
  * @example
  * ```typescript
- * const apiKey = getProviderAPIKey("gpt-4", userProfile);
+ * const apiKey = getProviderAPIKey("openAI", userProfile);
  * if (apiKey) {
  *   // Use the API key for requests
  * }
  * ```
  */
-export const getProviderAPIKey = (modelId: ModelId | string, profile: Profile): string | undefined => {
-    const provider = LLMs.find(llm => llm.key === modelId)?.provider;
+export const getProviderAPIKey = (providerId: ProviderId | string, profile: Profile): string | undefined => {
 
-    switch(provider as ProviderId) {
+    switch(providerId) {
         case "Groq":
             const key = profile.api_keys?.find(key => key.provider === "Groq")?.encrypted_api_key;
             if(key && key.length > 0) {
@@ -142,7 +141,7 @@ export const LLMsWithAPIKeys = (profile?: Profile | undefined): LLM[] => {
 
         if(
             llm.isFree ||
-            (profile && getProviderAPIKey(llm.key, profile)) 
+            (profile && getProviderAPIKey(llm.provider, profile)) 
         ) {
             return llm;
         }
