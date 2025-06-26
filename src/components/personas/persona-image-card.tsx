@@ -2,7 +2,7 @@
 
 import { Persona } from "@/lib/db/types/persona";
 import { cn } from "@/lib/utils";
-import { truncateText } from "@/lib/utils/text";
+import { safeParseLink, truncateText } from "@/lib/utils/text";
 import ImageWithBlur from "../image/imageWithBlur";
 import { Card, CardContent } from "../ui/card";
 import { memo } from "react";
@@ -39,7 +39,7 @@ const PureImageCard = (props: CardProps) => {
 
                     <div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
                         <ImageWithBlur 
-                            src={props.data.avatar_link}
+                            src={safeParseLink(props.data.avatar_link)}
                             alt={props.data.full_name ?? "avatar"}
                             fill
                             sizes="100px"

@@ -110,7 +110,7 @@ const PureImageInput = (props: Props) => {
                 <div className="flex flex-row items-center gap-1 flex-1">
                     <div className={`relative size-10 overflow-hidden rounded-full p-4 shrink-0 border border-border/10`}>
                         {imageUrl && <Image 
-                            src={imageUrl} // Placeholder image if no image is uploaded
+                            src={safeParseLink(imageUrl)} // Placeholder image if no image is uploaded
                             alt=""
                             fill
                         />}

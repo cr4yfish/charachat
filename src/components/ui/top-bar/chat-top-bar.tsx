@@ -17,6 +17,7 @@ import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "../sidebar";
 import { useAuth } from "@clerk/nextjs";
+import { safeParseLink } from "@/lib/utils/text";
 
 type Props = {
     shallowCharacter: ShallowCharacter | undefined;
@@ -46,7 +47,7 @@ const PureTopBar = (props: Props) => {
                         {props.shallowCharacter?.image_link && 
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="size-[28px] rounded-full overflow-hidden relative">
                                 <Image 
-                                    src={props.shallowCharacter?.image_link}
+                                    src={safeParseLink(props.shallowCharacter?.image_link)}
                                     alt=""
                                     fill
                                     className="object-cover rounded-full"

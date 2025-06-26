@@ -79,7 +79,7 @@ export default async function CharacterView({ params }: { params: Params }) {
                         <div className="flex flex-col gap-2 items-center justify-center">
                             <div className="w-32 h-32">
                                 <ImageWithBlur 
-                                    src={character.image_link} 
+                                    src={safeParseLink(character.image_link)} 
                                     className="w-32 h-32 overflow-hidden p-0" 
                                     alt={character.name} 
                                     sizes="128px" 

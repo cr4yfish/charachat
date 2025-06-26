@@ -57,7 +57,7 @@ export default async function PersonaPage({ params }: { params: Params }) {
                         <div className="flex flex-col gap-2 items-center justify-center">
                             <div className="w-32 h-32">
                                 <ImageWithBlur 
-                                    src={persona.avatar_link} 
+                                    src={safeParseLink(persona.avatar_link)} 
                                     className="w-32 h-32 overflow-hidden p-0" 
                                     alt={persona.full_name ?? "avatar"} 
                                     sizes="128px" 

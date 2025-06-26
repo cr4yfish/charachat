@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { cn, fetcher } from "@/lib/utils";
-import { truncateText } from "@/lib/utils/text";
+import { safeParseLink, truncateText } from "@/lib/utils/text";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { ChatRequestOptions, Message } from "ai";
@@ -104,7 +104,7 @@ const PureChatSetup = (props: Props) => {
                                 onClick={() => handleSetPersona(persona)}>
                                 {persona.avatar_link && (
                                     <div className="relative size-16 rounded-xl overflow-hidden shrink-0">
-                                        <Image fill src={persona.avatar_link} alt={persona.full_name} className="object-cover" />
+                                        <Image fill src={safeParseLink(persona.avatar_link)} alt={persona.full_name} className="object-cover" />
                                     </div>
                                 )}
                                 

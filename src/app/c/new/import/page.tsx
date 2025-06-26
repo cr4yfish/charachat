@@ -1,3 +1,4 @@
+import { safeParseLink } from "@/lib/utils/text";
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +11,7 @@ const PureImportOption = (props : { title: string, description: string, image?: 
             {props.image && 
                 <div className="relative overflow-hidden rounded-2xl w-16 h-16 mr-3">
                     <Image
-                        src={props.image}
+                        src={safeParseLink(props.image)}
                         alt=""
                         fill
                         className="object-cover size-full"

@@ -15,7 +15,7 @@ import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { ImageModel } from "@/lib/ai/types";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { isValidURL } from "@/lib/utils/text";
+import { isValidURL, safeParseLink } from "@/lib/utils/text";
 import { imageModels } from "@/lib/ai/models/image/image-models";
 import Image from "next/image";
 
@@ -144,7 +144,7 @@ const PureImageGenDrawer = (props: Props) => {
                                     {!internalImageLink && <span className="text-gray-500">Generated image will appear here</span>}
                                     {internalImageLink && (
                                         <Image 
-                                            src={internalImageLink} 
+                                            src={safeParseLink(internalImageLink)} 
                                             alt="Generated Image" 
                                             fill
                                             className="object-cover"

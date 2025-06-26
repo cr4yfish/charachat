@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
+import { safeParseLink } from "@/lib/utils/text";
 
 export type SpotlightData = {
     character: Character,
@@ -49,7 +50,7 @@ export default function Spotlight({ init } : { init: SpotlightData }) {
                     <div className="max-h-[180px] ">
                         <div className="absolute top-0 left-0 size-full bg-gradient-to-b z-0" style={{ backgroundImage: `linear-gradient(transparent, ${data?.palette?.Vibrant ?? "black"})` }} ></div>
                         <ImageWithBlur 
-                            src={data?.character.image_link}
+                            src={safeParseLink(data?.character.image_link)}
                             aspectRatio={9/10}
                             alt=""
                             fill

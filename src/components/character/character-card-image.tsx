@@ -2,7 +2,7 @@
 
 import { Character } from "@/lib/db/types/character";
 import { cn } from "@/lib/utils";
-import { truncateText } from "@/lib/utils/text";
+import { safeParseLink, truncateText } from "@/lib/utils/text";
 import ImageWithBlur from "../image/imageWithBlur";
 import { Card, CardContent } from "../ui/card";
 import { memo } from "react";
@@ -45,7 +45,7 @@ const PureImageCard = (props: CardProps) => {
 
                     <div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-2xl">
                         <ImageWithBlur 
-                            src={props.data.image_link}
+                            src={safeParseLink(props.data.image_link)}
                             alt={props.data.name ?? "avatar"}
                             fill
                             sizes="100px"

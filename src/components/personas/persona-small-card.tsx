@@ -9,6 +9,7 @@ import { LockIcon } from "lucide-react";
 import { memo, useState } from "react";
 import equal from "fast-deep-equal";
 import { Persona } from "@/lib/db/types/persona";
+import { safeParseLink } from "@/lib/utils/text";
 
 type Props = {
     data: Persona,
@@ -33,7 +34,7 @@ function PurePersonaSmallCard(props: Props) {
 
                     <div className="relative size-[52px] rounded-lg overflow-hidden shrink-0">
                         <ImageWithBlur 
-                            src={props.data.avatar_link}
+                            src={safeParseLink(props.data.avatar_link)}
                             alt={props.data.full_name ?? "avatar"}
                             width={52} height={52}
                             sizes="52px"

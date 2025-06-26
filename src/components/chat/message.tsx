@@ -13,6 +13,7 @@ import { getMessageIdFromAnnotations } from "@/lib/utils/message";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { toast } from "sonner";
 import { SignInButton } from "@clerk/nextjs";
+import { safeParseLink } from "@/lib/utils/text";
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
@@ -23,7 +24,7 @@ const PureHeader = ({ image, name}: { image?: string, name?: string, role: strin
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} 
                         className="rounded-full relative size-[20px] overflow-hidden"
                     >
-                        <Image alt="" fill src={image} /> 
+                        <Image alt="" fill src={safeParseLink(image)} /> 
                     </motion.div>
                 }
                 <span>{name ?? "Charachat"}</span>
@@ -210,7 +211,7 @@ const PureAIContent = ({ message: { parts} }: { message: UIMessage }) => {
                                     <div key={callId} className="p-2 w-full flex flex-col gap-2">
                                         <div className="h-[250px] overflow-hidden relative rounded-3xl">
                                             <Image 
-                                                src={part.toolInvocation.result} 
+                                                src={safeParseLink(part.toolInvocation.result)} 
                                                 alt={part.toolInvocation.args.prompt || "Generated Image"}
                                                 fill
                                                 className="object-cover rounded-md"
