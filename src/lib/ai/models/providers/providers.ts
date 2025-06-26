@@ -1,6 +1,6 @@
-import { ProviderId } from "../../types";
+import { Provider } from "../../types";
 
-export const Providers: { id: ProviderId, keyLink?: string, hasFreeTier?: boolean, description?: string }[] = [
+export const Providers: Provider[] = [
     { id: "Anthropic", keyLink: "https://console.anthropic.com/settings/keys", description: "Anthropic provides a range of models including Claude 3 and 4, with various capabilities for text generation and understanding." },
     { id: "Cohere", keyLink: "https://dashboard.cohere.com/api-keys" },
     { id: "DeepSeek", keyLink: "https://platform.deepseek.com/" },
