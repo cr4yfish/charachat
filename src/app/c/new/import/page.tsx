@@ -39,7 +39,7 @@ const ImportOption = memo(PureImportOption, (prevProps, nextProps) => {
 
 export default function ImportPage() {
     return (
-        <div className="flex flex-col items-center justify-center gap-6 p-4 pt-[75px]">
+        <div className="flex flex-col items-center justify-center gap-6 p-4 ios-safe-header-padding-chats">
             <p className="text-sm text-muted-foreground">Choose how you want to import your character.</p>
 
             <div className="flex flex-col gap-2">

@@ -1,5 +1,8 @@
 import { ProviderId } from "@/lib/ai/types";
 
+export type ProfileSettings = {
+    show_nsfw?: boolean;
+}
 
 export type APIKey = {
     encrypted_api_key: string;
@@ -19,6 +22,7 @@ export type Profile = {
     avatar_link?: string;
     tokens?: number;
     api_keys?: APIKey[];
+    settings?: ProfileSettings;
 
     /**
      * Used for authoring and other AI-related features

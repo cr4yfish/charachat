@@ -45,29 +45,30 @@ const PureImporter = ({ label, searchAction }: Props) => {
 
     return (
         <>
-        <div className="fixed top-0 left-0 w-full h-[75px] bg-gradient-to-b from-background/80 to-background/80 z-50">
+        <div className="fixed top-0 left-0 w-full min-h-[75px] h-fit bg-gradient-to-b from-background/80 to-background/80 z-50">
             <div className="relative size-full px-4 py-2 ios-safe-header-padding  flex items-center justify-start">
                 <Link href={"/c/new"}>
                     <Button variant={"ghost"}><ChevronLeftIcon /></Button>
                 </Link>
                 <span className="text-3xl font-black">{label}</span>
             </div>
-            <div className="absolute top-0 left-0 -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
-        </div>
-        <div className="flex flex-col gap-2 h-full relative overflow-hidden max-h-full">
-            <div className="absolute top-[75px] left-0 w-full bg-gradient-to-b from-background/80 to-background/0 px-4 backdrop-blur-[1px] z-50">
+            <div className="w-full px-4 py-2 h-fit">
                 <ImportSearch 
                     onSearchChange={handleSearch}
                     label="Search for a character"
                     placeholder="Type a character name..."
                 />
             </div>
-
-            
+            <div className="absolute top-0 left-0 -z-10 size-full backdrop-blur-[1px] pointer-events-none " ></div>
+        </div>
+        <div className="flex flex-col gap-2 h-full relative overflow-hidden max-h-full">
+    
             <ImporterSearchResults searchResults={searchResults} />
-            {loading && <div className="mt-[75px] w-full flex justify-center animate-spin text-muted-foreground ">
-                <LoaderCircleIcon />
-            </div>}
+            {loading && 
+                <div className="mt-[75px] w-full flex justify-center animate-spin text-muted-foreground ">
+                    <LoaderCircleIcon />
+                </div>
+            }
     
         </div>
         </>

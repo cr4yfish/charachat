@@ -100,7 +100,7 @@ const PureImageGenDrawer = (props: Props) => {
 
     return (
         <Drawer open={props.isOpen} onOpenChange={props.onOpenChange}>
-            <DrawerContent className="h-screen">
+            <DrawerContent className="h-screen ios-safe-header-padding">
                 <DrawerHeader>
                     <DrawerTitle>Image Generator</DrawerTitle>
                     <DrawerDescription>This action cannot be undone.</DrawerDescription>

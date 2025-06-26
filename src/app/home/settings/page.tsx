@@ -18,7 +18,7 @@ export default async function PureSettingsPage() {
   });
 
   return (
-    <div className="flex flex-col h-full w-full px-4 pt-[75px] pb-[100px] overflow-y-auto">
+    <div className="flex flex-col h-full w-full px-4 ios-safe-header-padding-chats pb-[100px] overflow-y-auto">
 
       <div className="flex flex-col gap-4">
 

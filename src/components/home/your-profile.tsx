@@ -157,7 +157,7 @@ const PureYourProfile = ({ userid }: Props) => {
                         </div>
                     </div>
                 </DrawerTrigger>
-                <DrawerContent className="max-w-screen max-h-screen overflow-hidden">
+                <DrawerContent className="max-w-screen max-h-screen overflow-hidden ios-safe-header-padding">
                     <DrawerHeader className="flex flex-col gap-0 pb-0">
                         <DrawerTitle className="text-start">Profile Settings</DrawerTitle>
                         <DrawerDescription className="text-start">

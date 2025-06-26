@@ -84,7 +84,7 @@ const PureImporterSearchResults = ({ searchResults }: Props) => {
             {searchResults.length === 0 ? (
                 <p className="text-muted-foreground text-xs italic mt-[175px] text-center w-full ">No results found.</p>
             ) : (
-                <ul className="space-y-2 w-full relative h-full max-h-full overflow-y-auto pt-[135px] pb-[175px]">
+                <ul className="space-y-2 w-full relative h-full max-h-full overflow-y-auto ios-safe-header-padding-search pb-[175px]">
                     {searchResults.map((character) => (
                         <ResultCard
                             key={`${character.name}-${character.imageLink}-${character.sourceId}`}

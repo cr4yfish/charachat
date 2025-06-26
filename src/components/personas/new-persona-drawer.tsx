@@ -248,7 +248,7 @@ const PureNewPersonaDrawer = ({ initPersona, small, defaultOpen }: Props) => {
 
 
             </DrawerTrigger>
-            <DrawerContent className="h-screen !max-h-screen" >
+            <DrawerContent className="h-screen !max-h-screen ios-safe-header-padding" >
                 <DrawerHeader className="flex flex-col items-start pb-0">
                     <DrawerTitle>
                         {step === "initial" && "Name and Avatar"}
