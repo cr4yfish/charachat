@@ -79,7 +79,7 @@ export function AppSidebar() {
                     </SidebarMenu>
 
                     <SidebarMenu>
-                      {isSignedIn && <SidebarChatHistory />}
+                      <SidebarChatHistory />
                     </SidebarMenu>
                 </SidebarGroupContent>
                 </SidebarGroup>
