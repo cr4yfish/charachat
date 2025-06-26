@@ -132,7 +132,8 @@ const PureAPIKeyInputCard = () => {
                     ))}
                   </div>
                 </AccordionContent>
-              </AccordionItem>              {Providers.map(provider => {
+              </AccordionItem>              
+              {Providers.map(provider => {
                 const hasApiKey = profile?.api_keys?.some(key => key.provider === provider.id && key.encrypted_api_key.length > 1);
                 const isProviderDisabled = isLoading || isUpdating;
                 
