@@ -128,7 +128,7 @@ export default async function SearchPage({
             
             <div className="fixed sm:absolute left-0 w-full h-fit z-50 p-4 pt-0 flex justify-center ">
                 <div className="w-full h-[75px] absolute bg-gradient-to-b from-black/50 to-transparent backdrop-blur-[1px] "></div>
-                <div className="relative flex flex-col items-center gap-2 z-10 w-full h-fit max-w-[567px] ios-safe-header-padding md:mt-[20px]  ">
+                <div className="relative flex flex-col items-center gap-2 z-10 w-full h-fit max-w-[567px]  md:mt-[20px]  ">
                     <SearchTopBar />
                     <SearchBar initialQuery={q} /> 
                     <SearchCategories initType={type} initSortType={sort} currentQuery={q} />
