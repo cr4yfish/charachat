@@ -17,7 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { memo } from "react";
 import { cn } from "@/lib/utils";
-import { BotIcon } from "lucide-react";
+import { BotIcon, SearchIcon } from "lucide-react";
 import { SignInButton, useAuth } from "@clerk/nextjs";
 import SidebarUser from "./sidebar-user";
 import SidebarChatHistory from "./sidebar-chat-history";
@@ -56,10 +56,11 @@ export function AppSidebar() {
     return (
     <>
         <Sidebar collapsible={"icon"} variant={"floating"}>
-            <SidebarHeader className="p-4 flex flex-row items-center gap-2">
+            <SidebarHeader className="">
+              <Link href={"/"} className="px-4 pt-4 flex flex-row items-center gap-2">
                 <BotIcon />
                 <span className="font-bold">Charachat</span>
-                {/* <SidebarToggle /> */}
+              </Link>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
@@ -67,15 +68,23 @@ export function AppSidebar() {
                 <SidebarGroupContent>
                     <SidebarMenu className="flex flex-col gap-2">
                         {tabs.map((item) => (
-                            <NavbarItem
-                                key={item.name}
-                                name={item.name}
-                                href={item.href}
-                                icon={item.icon}
-                                isActive={currentPath === item.href}
-                                sidebarOpen={open}
-                            />
+                          <NavbarItem
+                              key={item.name}
+                              name={item.name}
+                              href={item.href}
+                              icon={item.icon}
+                              isActive={currentPath === item.href}
+                              sidebarOpen={open}
+                          />
                         ))}
+                        {/* Search is not a tab */}
+                        <NavbarItem
+                          name={"Search"}
+                          href={"/search"}
+                          icon={<SearchIcon />}
+                          isActive={currentPath === "/search"}
+                          sidebarOpen={open}
+                      />
                     </SidebarMenu>
 
                     <SidebarMenu>
