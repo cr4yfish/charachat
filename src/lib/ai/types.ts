@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { Lora } from "../db/types";
 
 
@@ -159,7 +160,7 @@ export type ModelId =
 
     
 
-export type Feature = "tools"
+export type Feature = "tools" | "reasoning"
 
 export type ProviderId = 
     "OpenAI" |
@@ -175,6 +176,30 @@ export type ProviderId =
     "FAL" |
     "OpenRouter" |
     "DeepSeek"
+
+export type Provider = {
+    id: ProviderId;
+    keyLink?: string; // Link to get the API key
+    hasFreeTier?: boolean; // Indicates if the provider has a free tier
+    description?: string; // Optional description of the provider
+}
+
+export const ProviderIDs = [
+    "OpenAI",
+    "Groq",
+    "Mistral",
+    "Anthropic",
+    "Gemini",
+    "Cohere",
+    "xAI",
+    "Replicate",
+    "DeepSeek",
+    "OpenRouter",
+    "FAL",
+    "Huggingface",
+] as const;
+
+export const ProviderIdEnum = z.enum(ProviderIDs);
 
 export const DeveloperIconMap = new Map<ProviderId, string>([
     ["OpenAI", "openai.svg"],
