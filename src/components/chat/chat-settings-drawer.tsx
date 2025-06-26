@@ -28,7 +28,7 @@ export const PureChatSettings = ({chatId}: Props) => {
                     <SettingsIcon />
                 </Button>
             </DrawerTrigger>
-            <DrawerContent className="h-screen pt-0 max-h-screen min-h-screen">
+            <DrawerContent className="h-screen ios-safe-header-padding max-h-screen min-h-screen">
                 <DrawerHeader>
                     <DrawerTitle className="w-full text-start">Chat Settings</DrawerTitle>
                 </DrawerHeader>
