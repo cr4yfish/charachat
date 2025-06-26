@@ -49,7 +49,7 @@ export default async function Leaderboard({
 
     return (
         <div className="size-full relative overflow-hidden">
-            <div className=" overflow-y-auto max-h-screen pt-[75px] pb-[100px]">
+            <div className=" overflow-y-auto max-h-screen ios-safe-header-padding-chats pb-[100px]">
                 <div className="relative size-full flex flex-col gap-2 px-4 h-full overflow-y-hidden">
                     {initialData.map((item, index) => (
                         <div key={index} className="flex items-center justify-between p-2 border-b">

@@ -21,6 +21,7 @@ export const tabs: NavItem[] = [
 ]
 
 const disabledPaths = ["/chat/", "/search", "/edit/", "/c/own"];
+const overwriteEnable = ["/chats"] // Paths that should not be disabled even if they match the disabled paths
 
 function checkIsPathDisabled(pathname: string, disabledPaths: string[]): boolean {
     return disabledPaths.some(path => {
@@ -28,6 +29,9 @@ function checkIsPathDisabled(pathname: string, disabledPaths: string[]): boolean
         // Trailing slash is just to mark a more complicated path detection
         // e.g. this handles /c/[id]/edit by disabling /edit/ path
         if (path.endsWith('/')) {
+            // If the path is in overwriteEnable, we do not disable it
+            const overwriteEnabled = overwriteEnable.some(overwritePath => pathname === overwritePath);
+            if (overwriteEnabled) return false; // If the path is in overwriteEnable, do
             return pathname.includes(path.slice(0, -1)); // Check if pathname includes the path without trailing slash
         }
         return pathname === path;

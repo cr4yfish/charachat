@@ -61,7 +61,7 @@ const PureSuggestions = ({ onClick, chatId }: { onClick: (suggestion: string) =>
             exit={{ opacity: 0  }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
             layout 
-            className="absolute top-0 left-0 -translate-y-[30px] flex flex-row flex-nowrap gap-2 overflow-x-auto z-10 w-full transition-all ">
+            className="absolute bottom-8 left-0 -translate-y-[30px] min-h-[36px] flex flex-row flex-nowrap gap-2 overflow-x-auto z-10 w-full transition-all ">
             <motion.div layout className="transition-normal">
                 <Button className="text-muted-foreground transition-all" disabled={isLoading || isValidating} onClick={handleMutate} size={"icon"} variant={"ghost"}>
                     {(isLoading || isValidating) ? <RefreshCwIcon className="animate-spin" /> : <RefreshCwIcon />}
@@ -160,7 +160,7 @@ const PurePromptInput = (props: Props) => {
 
     return (
         <div className={cn('absolute bottom-0 max-sm:bottom-8 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1')}>
-            <div className={cn("flex flex-col items-center gap-2 w-full")}>
+            <div className={cn("flex flex-col items-center gap-2 w-full max-w-[500px] relative")}>
                 <AnimatePresence presenceAffectsLayout>
                     {props.chatId && isFocused && <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />}
                 </AnimatePresence>
@@ -181,7 +181,7 @@ const PurePromptInput = (props: Props) => {
                         onBlur={handleBlur}
                         endContent={
                             <motion.div layout className=''>
-                                <Button variant={"secondary"} disabled={props.isLoading} className='z-10 rounded-full p-4 transition-all' size={"icon"} type='submit'>
+                                <Button variant={"secondary"} disabled={props.isLoading} className='z-10 rounded-full p-4 transition-all shrink-0 min-h-[36px] !size-[36px]' size={"icon"} type='submit'>
                                     {props.isLoading ? <Loader2Icon className="animate-spin text-primary" /> : <SendIcon />}
                                 </Button>
                             </motion.div>

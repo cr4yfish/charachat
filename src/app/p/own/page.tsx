@@ -32,7 +32,7 @@ export default async function OwnCharsPage({ searchParams }: { searchParams: Pro
     const hasMore = chars.length === LIMITS.MAX_PERSONAS_PER_PAGE; // Check if there are more characters to load
 
     return (
-        <div className=" w-full h-fit pt-[75px] px-4 flex flex-col gap-4">
+        <div className=" w-full h-fit ios-safe-header-padding-chats px-4 flex flex-col gap-4">
             
             {chars.map((char) => (
                 <PersonaSmallCard
