@@ -55,13 +55,16 @@ const PureFancyLLM = ({ llm, showIcon, showProvider }: { llm: LLM | undefined, s
                     <Badge 
                         variant={"outline"} 
                         key={index} 
-                        className={cn("text-xs text-muted-foreground", {
-                            "text-emerald-400 ": tag === "Free"
-                        })}
+                        className={cn("text-xs text-muted-foreground")}
                     >
                         {tag}
                     </Badge>
                 ))}
+                {llm.isFree && (
+                    <Badge variant="outline" className="text-xs text-emerald-400">
+                        Free
+                    </Badge>
+                )}
             </div>
         </div>
     )

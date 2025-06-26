@@ -1,6 +1,5 @@
 import { DeveloperIconMap, invertIcons, ProviderId } from "@/lib/ai/types";
 import { cn } from "@/lib/utils";
-import { safeParseLink } from "@/lib/utils/text";
 import Image from "next/image";
 import { memo } from "react";
 
@@ -19,7 +18,7 @@ const PureLLMIcon = ({ provider, width } : Props) => {
             width={width || 12}
             height={width || 12}
             alt=""
-            src={safeParseLink("/images/ai_providers/" + DeveloperIconMap.get(provider) || "/images/ai_providers/openai.svg")}
+            src={"/images/ai_providers/" + DeveloperIconMap.get(provider) || "/images/ai_providers/openai.svg"}
             className={cn("object-fit", {
                 "invert": invertIcons.includes(provider)
             })}
