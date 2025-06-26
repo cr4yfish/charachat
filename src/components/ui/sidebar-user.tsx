@@ -15,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Spinner from "./spinner";
+import Link from "next/link";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 
 const PureSidebarUser = () => {
     const { user} = useUser();
@@ -36,6 +38,10 @@ const PureSidebarUser = () => {
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                        <Link href={"/home/settings"}>Account Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem><SignOutButton /></DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
