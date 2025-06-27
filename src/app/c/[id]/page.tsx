@@ -63,15 +63,16 @@ export default async function CharacterView({ params }: { params: Params }) {
 
     return (
         <>
+
+        <div className="absolute top-0 left-0 size-full blur-3xl opacity-15 overflow-hidden">
+            <Image src={safeParseLink(character.image_link)} layout="fill" className="object-cover" alt="" />
+        </div>
         <div className="relative w-full h-full min-h-full ios-safe-header-padding-chats lg:!pt-0 ">
 
             <CharacterTopHeader isOwner={userIsOwner} character={character} />
 
-            <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden pt-[75px]">
+            <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden pt-[75px] z-10">
 
-                <div className=" -z-10 absolute top-0 left-0 w-full h-full blur-3xl opacity-15 overflow-hidden">
-                    <Image src={safeParseLink(character.image_link)} layout="fill" className="object-cover" alt="" />
-                </div>
 
                 <div className="flex flex-row max-lg:flex-col gap-6 items-start max-lg:items-center justify-center w-full">
 
@@ -106,8 +107,8 @@ export default async function CharacterView({ params }: { params: Params }) {
                     </div>
 
     
-                    <div className="flex flex-col gap-4 w-full max-w-xl max-lg:max-w-full">
-                        <div className="prose dark:prose-invert max-w-[690px] !select-none">
+                    <div className="flex flex-col w-full max-w-xl max-lg:max-w-full prose dark:prose-invert">
+                        <div className=" max-w-[690px] !select-none">
                             <h2>Description</h2>
                             <Markdown>{character.description}</Markdown>
                         </div>
