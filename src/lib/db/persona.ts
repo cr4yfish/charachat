@@ -272,7 +272,7 @@ const searchPrivatePersonas = async (
         exactMatch?: boolean;
     } = {}
 ): Promise<Persona[]> => {
-    const { limit = 20, exactMatch = false } = options;
+    const { limit = 100, exactMatch = false } = options;
     
     const user = await currentUser();
     if (!user?.id) {
@@ -326,7 +326,7 @@ export const searchPersonasByAITags = cache(async (
 ): Promise<Persona[]> => {
     const { 
         sort = 'relevance', 
-        limit = 20, 
+        limit = 100, 
         includePrivate = false,
         exactMatch = false 
     } = options;

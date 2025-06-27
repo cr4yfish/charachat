@@ -893,7 +893,7 @@ const searchPrivateCharacters = async (
         exactMatch?: boolean;
     } = {}
 ): Promise<Character[]> => {
-    const { limit = 20, includeNSFW = false, exactMatch = false } = options;
+    const { limit = 100, includeNSFW = false, exactMatch = false } = options;
     
     const user = await currentUser();
     if (!user?.id) {
@@ -957,7 +957,7 @@ export const searchCharactersByAITags = cache(async (
 ): Promise<Character[]> => {
     const { 
         sort = 'relevance', 
-        limit = 20, 
+        limit = 100, 
         includeNSFW = false,
         exactMatch = false,
         includePrivate = false
