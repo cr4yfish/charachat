@@ -6,7 +6,6 @@ import { Metadata } from "next";
 import { getCharacter } from "@/lib/db/character";
 import ImageWithBlur from "@/components/image/imageWithBlur";
 import Username from "@/components/user/username";
-import {LockIcon } from "lucide-react";
 import CharacterPageTabs from "@/components/character/character-page-tabs";
 import CharacterPageActions from "@/components/character/character-page-actions";
 import CharacterTopHeader from "@/components/character/character-top-header";
@@ -40,6 +39,7 @@ export default async function CharacterView({ params }: { params: Params }) {
     const { id } = await params;
 
     const character = await getCharacter(id);
+    console.log("Character:", character);
 
     const transformedCharacter: Character = character;
     if(character.hide_definition) {
@@ -64,7 +64,7 @@ export default async function CharacterView({ params }: { params: Params }) {
 
     return (
         <>
-        <div className="relative w-full h-full min-h-full ios-safe-header-padding">
+        <div className="relative w-full h-full min-h-full ios-safe-header-padding-chats lg:!pt-0 ">
 
             <CharacterTopHeader isOwner={userIsOwner} character={character} />
 
@@ -93,63 +93,26 @@ export default async function CharacterView({ params }: { params: Params }) {
                             <h1 className="text-xl font-bold">{character.name}</h1>
                             <Username profile={character.owner} hasLink textSize="sm" />
                         </div>
-
-                        <div className="w-full flex items-center justify-center gap-2">
-                            {/* <CharacterPageActions characterId={character.id} /> */}
-                        </div>
-
-                        {character.is_private && 
-                            <div className="flex flex-col gap-1 border border-green-500 rounded-lg p-2">
-                                <div className="flex items-center gap-1 text-green-500">
-                                    <LockIcon color="currentColor" />
-                                    <span className="text-sm">Private</span>
-                                </div>
-                                <span className="text-xs dark:text-zinc-400">This Character is only accessible by you and otherwise encrypted.</span>
-                            </div>
-                        }
-
+                            
                         <CharacterPageActions character={character} />
 
+                        <div className="h-full min-h-[200px] max-h-[400px] shrink-0 flex flex-col gap-2">
+                            <div className="prose dark:prose-invert">
+                               <h2 >Test out {character.name}</h2> 
+                            </div>
+                            
+                            <SmallChat character={character} />
+                        </div>
+
+                    </div>
+
+    
+                    <div className="flex flex-col gap-4 w-full max-w-xl max-lg:max-w-full">
                         <div className="prose dark:prose-invert max-w-[690px] !select-none">
+                            <h2>Description</h2>
                             <Markdown>{character.description}</Markdown>
                         </div>
 
-                        <div className="h-full min-h-[200px] max-h-[400px] shrink-0 flex flex-col gap-2">
-                            <span className="font-bold">Try chatting with {character.name}</span>
-                            <SmallChat character={character} />
-                        </div>
-                        
-                        {/* <div className="flex flex-row flex-wrap items-center gap-2">
-                            <CategoryCard data={character.category} />
-                            {character.speaker_link &&
-                                <Card 
-                                    className={`
-                                        w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full bg-zinc-200/70 dark:bg-zinc-600/40
-                                        backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium
-                                    `}
-                                    >
-                                    <CardBody className="p-0 w-full min-w-max h-full flex flex-row items-center justify-center">
-                                        Has customized Voice
-                                    </CardBody>
-                                </Card>
-                            }
-                            {character.tags_full?.map(tag => (
-                            <Card 
-                                key={tag.id}
-                                className={`
-                                    w-full max-w-fit flex items-center justify-center px-4 py-3 rounded-full bg-zinc-200/70 dark:bg-zinc-600/40
-                                    backdrop-blur-xl border-1 dark:border-none shadow-none text-sm font-medium
-                                `}
-                            >
-                                <CardBody className="p-0 w-full min-w-max h-full flex flex-row items-center justify-center">
-                                    {tag.name}
-                                </CardBody>
-                            </Card>
-                            ))}
-                        </div> */}
-                    </div>
-
-                    <div className="flex flex-col w-full max-w-xl max-lg:max-w-full">
                         <CharacterPageTabs character={transformedCharacter} />
                     </div>
                 </div>
