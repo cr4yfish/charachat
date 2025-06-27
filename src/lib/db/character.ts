@@ -577,7 +577,8 @@ export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Cha
         .range(props.cursor, props.cursor + props.limit - 1);
 
     if (error) {
-        throw error;
+        console.error("Error fetching user characters", error);
+        return [];
     }
 
     return Promise.all(data.map(async (db: any) => {
