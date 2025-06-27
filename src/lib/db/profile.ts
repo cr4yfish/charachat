@@ -138,8 +138,16 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
         const { data, error } = await client
             .from("profiles")
             .insert({
-                ...profile,
                 clerk_user_id: profile.clerk_user_id,
+                username: profile.username,
+                first_name: profile.first_name,
+                last_name: profile.last_name,
+                bio: profile.bio,
+                public_bio: profile.public_bio,
+                avatar_link: profile.avatar_link,
+                api_keys: profile.api_keys,
+                settings: profile.settings,
+                default_llm: profile.default_llm,
             }).select("*")
             
         if (error || !data || data.length === 0) {
@@ -151,7 +159,17 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
     } else {
         const { error } = await client
             .from("profiles")
-            .update(profile)
+            .update({
+                username: profile.username,
+                first_name: profile.first_name,
+                last_name: profile.last_name,
+                bio: profile.bio,
+                public_bio: profile.public_bio,
+                avatar_link: profile.avatar_link,
+                api_keys: profile.api_keys,
+                settings: profile.settings,
+                default_llm: profile.default_llm,
+            })
             .eq("clerk_user_id", profile.clerk_user_id);
 
         if (error) {
