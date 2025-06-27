@@ -21,7 +21,7 @@ function PurePersonaSmallCard(props: Props) {
 
     return (
         <>
-        <Link href={`/c/${props.data.id}`} className="w-full max-w-[560px]" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <Link href={`/p/${props.data.id}`} className="w-full max-w-[560px]" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
