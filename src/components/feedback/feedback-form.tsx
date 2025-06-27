@@ -50,6 +50,7 @@ export default function FeedbackForm() {
                 <Button 
                     color={isSubmitted ? "success" : isError ? "danger" : "primary"}
                     type="submit" disabled={isLoading || feedback.length === 0}
+                    className="w-fit grow"
                 >
                     { isLoading && <Spinner />}
                     { isSubmitted ? "Submitted!" : isError ? "Error!" : "Submit" }
