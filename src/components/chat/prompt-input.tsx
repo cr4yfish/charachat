@@ -175,7 +175,7 @@ const PurePromptInput = (props: Props) => {
                     animate={{ width: isFocused ? "100%" : "250px" }}
                 >
                     <TextareaWithAutosize 
-                        className={cn("!bg-slate-950/50 border-none focus:ring-0 focus:border-none pr-12")}
+                        className={cn("!bg-background/50 border-none focus:ring-0 focus:border-none pr-12")}
                         minRows={1}
                         placeholder="Send a message"
                         name='prompt'
