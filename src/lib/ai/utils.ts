@@ -29,7 +29,7 @@ export const getProviderAPIKey = (providerId: ProviderId | string, profile: Prof
             if(key && key.length > 0) {
                 return key;
             }
-            return process.env.PUBLIC_GROQ_API_KEY; // fallback to free (rate-limited) Groq API key
+            return process.env.GROQ_PUBLIC_API_KEY; // fallback to free (rate-limited) Groq API key
 
         case "You":
             return profile.api_keys?.find(key => key.provider === "You")?.encrypted_api_key;
@@ -57,13 +57,13 @@ export const getProviderAPIKey = (providerId: ProviderId | string, profile: Prof
             if(mistralKey && mistralKey.length > 0) {
                 return mistralKey;
             }
-            return process.env.PUBLIC_MISTRAL_API_KEY; // fallback to free (rate-limited) Mistral API key
+            return process.env.MISTRAL_PUBLIC_API_KEY; // fallback to free (rate-limited) Mistral API key
 
         case "OpenRouter":
             if(profile.api_keys?.find(key => key.provider === "OpenRouter")) {
                 return profile.api_keys?.find(key => key.provider === "OpenRouter")?.encrypted_api_key;
             }
-            return process.env.PUBLIC_OPENROUTER_API_KEY; // fallback to free (rate-limited) OpenRouter API key
+            return process.env.OPENROUTER_PUBLIC_API_KEY; // fallback to free (rate-limited) OpenRouter API key
 
         case "DeepSeek":
             return profile.api_keys?.find(key => key.provider === "DeepSeek")?.encrypted_api_key;
