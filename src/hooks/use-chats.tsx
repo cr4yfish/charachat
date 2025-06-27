@@ -16,7 +16,7 @@ export function useChats(limit: number = 10) {
     API_ROUTES.GET_CHATS +  `?limit=${limit}`,
     fetcher,
     {
-      refreshInterval: TIMINGS_MILLISECONDS.ONE_MINUTE, // 1 minute
+      refreshInterval: TIMINGS_MILLISECONDS.FIVE_MINUTES,
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
