@@ -44,7 +44,7 @@ const Header = memo(PureHeader, (prev, next) => {
     return true;
 });
 
-const PureFooter = (props: { openImageGen?: () => void; message: MessageType, chatId: string, deleteCallback: (messageId: string) => void }) => {
+const PureFooter = (props: { openImageGen?: () => void; message: MessageType, chatId?: string, deleteCallback?: (messageId: string) => void }) => {
     const [state, setState] = useState<"init" | "deleting" | "editing" | "copying" | "generating-image" | "listening">("init");
 
     return (
@@ -58,10 +58,14 @@ const PureFooter = (props: { openImageGen?: () => void; message: MessageType, ch
             {/* <ClockIcon className="size-[12px]" /> */}
             {/* {prettyPrintDate(new Date())} */}
             
+            {/* Editing only available in a chat */}
+            {props.chatId &&
             <Button disabled size={"icon"} variant={"ghost"} >
                 <EditIcon color="currentColor" />
             </Button>
+            }
 
+            {props.deleteCallback && 
             <Button 
                 disabled={state === "deleting"}
                 size={"icon"} 
@@ -94,6 +98,7 @@ const PureFooter = (props: { openImageGen?: () => void; message: MessageType, ch
                     <TrashIcon color="currentColor" />
                 }
             </Button>
+            }
 
             <Button size={"icon"} variant={"ghost"} onClick={() => {
                 setState("copying");
@@ -120,9 +125,12 @@ const PureFooter = (props: { openImageGen?: () => void; message: MessageType, ch
             </Button>
             }
 
+            {/* Voice only available with a chat */}
+            {props.chatId &&
             <Button disabled size={"icon"} variant={"ghost"} >
                 <VolumeIcon color="currentColor" />
             </Button>
+            }
             
         </motion.div>
  
@@ -135,7 +143,7 @@ const Footer = memo(PureFooter, (prev, next) => {
     return true;
 });
 
-const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessage, addToolResult: ({ toolCallId, result, }: {
+const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessage, addToolResult?: ({ toolCallId, result, }: {
     toolCallId: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     result: any;
@@ -395,6 +403,8 @@ const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessag
                     case TOOL_NAMES.manageProviderTokens: {
 
                         const callback = () => {
+                            if(!addToolResult) return;
+
                             if(!part.toolInvocation.toolCallId) {
                                 throw new Error("Tool invocation does not have a toolCallId")
                             }
@@ -461,7 +471,7 @@ const AIContent = memo(PureAIContent, (prev, next) => {
 });
 
 const PureAIMessage = ({ message, name, image, addToolResult }: 
-    { message: UIMessage, name?: string, image?: string, isLoading: boolean, addToolResult: ({ toolCallId, result, }: {
+    { message: UIMessage, name?: string, image?: string, isLoading: boolean, addToolResult?: ({ toolCallId, result, }: {
     toolCallId: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     result: any;
@@ -522,13 +532,13 @@ type MessageProps = {
     isLoading: boolean;
     characterName?: string;
     characterImage?: string;
-    openImageGen: () => void;
-    deleteCallback: (messageId: string) => void;
-    chatId: string;
+    openImageGen?: () => void;
+    deleteCallback?: (messageId: string) => void;
+    chatId?: string;
     status: "submitted" | "streaming" | "ready" | "error";
     latestMessage: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    addToolResult: ({ toolCallId, result, }: { toolCallId: string; result: any; }) => void
+    addToolResult?: ({ toolCallId, result, }: { toolCallId: string; result: any; }) => void
 }
 
 const PureMessage = (props: MessageProps) => {

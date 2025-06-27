@@ -90,6 +90,7 @@ type Props = {
     submitMiddleWare: (input: string) => void;
     isLoading: boolean,
     chatId?: string;
+    relative?: boolean; // if true, the input will be positioned relative to the parent container
 }
 
 const PurePromptInput = (props: Props) => {
@@ -159,7 +160,11 @@ const PurePromptInput = (props: Props) => {
     }, [inputRef]);
 
     return (
-        <div className={cn('absolute bottom-0 max-sm:bottom-8 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1')}>
+        <div id="prompt-input" 
+            className={cn('absolute bottom-0 max-sm:bottom-8 left-0 w-full p-2 pb-6 max-md:pb-2 flex flex-col items-center gap-1', {
+                "relative": props.relative,
+            })}
+        >
             <div className={cn("flex flex-col items-center gap-2 w-full max-w-[500px] relative")}>
                 <AnimatePresence presenceAffectsLayout>
                     {props.chatId && isFocused && <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />}

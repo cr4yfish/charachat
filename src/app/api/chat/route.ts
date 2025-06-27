@@ -46,22 +46,26 @@ export async function GET(req:Request) {
 }
 
 export async function POST(req:Request) {
-    const { messages, chatId, isIntro, modelId: modelIdFromClient, characterId, isUserMessage, memories }: 
+    const { 
+        messages, chatId, isIntro, modelId: modelIdFromClient, 
+        characterId, isUserMessage, memories, isSmallChat
+    }: 
     { 
         messages: AIMessage[], chatId: string, isIntro?: boolean, 
-        modelId: string, characterId?: string, isUserMessage: boolean, memories?: RAGMemory[]
+        modelId: string, characterId?: string, isUserMessage: boolean, memories?: RAGMemory[],
+        isSmallChat?: boolean
     } = await req.json();
 
     /**
      * Access Controls and init stuff
      */
+    
+        // Some kind of chatId is always required
+        // even its a temporary chat
         if(!chatId) { return new Response(ERROR_MESSAGES.CHAT_ID_REQUIRED, { status: 400 }); }
 
         const user = await currentUser();
         if (!user) { return new Response(ERROR_MESSAGES.UNAUTHORIZED, { status: 401 });  }
-
-
-        const clientLLM = (await getLLMModelCookie()) || modelIdFromClient;
 
         const userMessage = getMostRecentUserMessage(messages);
         if(!userMessage) {  return new Response(ERROR_MESSAGES.USER_MESSAGE_NOT_FOUND, { status: 400 });  }
@@ -70,9 +74,14 @@ export async function POST(req:Request) {
      * End access controls and init stuff
      */
 
+    const clientLLM = (await getLLMModelCookie()) || modelIdFromClient;
     let chat: Chat | undefined = await getChat(chatId);
 
-    if(!chat && characterId) {
+    // only create chat if:
+    // - chat does not exist
+    // - characterId is provided
+    // - isSmallChat is not true (small chat does not create a new chat)
+    if(!chat && characterId && (isSmallChat !== true)) {
         try {
             
             if (!clientLLM) {  return new Response(ERROR_MESSAGES.LLM_MODEL_REQUIRED, { status: 400 }); }
@@ -96,8 +105,12 @@ export async function POST(req:Request) {
     }
 
 
-    const character: Character | undefined = chat ? await getCharacter(chat.character.id) : undefined;
-    //if (!character) { return new Response(ERROR_MESSAGES.CHARACTER_NOT_FOUND, { status: 404 }); }
+    // try to get the character by either:
+    // - chat.character.id (if chat exists)
+    // - characterId (if provided)
+    // character is optional, so it can be undefined
+    const character: Character | undefined = chat ? await getCharacter(chat.character.id) : characterId ? await getCharacter(characterId) : undefined;
+
 
     let userPersona: Persona | undefined = undefined;
     
@@ -116,7 +129,8 @@ export async function POST(req:Request) {
 
     // save user message
     // but only if it's NOT the intro message
-    if(!isIntro && isUserMessage && chat?.id) {
+    // or if it's a small chat
+    if(!isIntro && isUserMessage && chat?.id && (isSmallChat !== true)) {
         try {
             await addMessage({
                 id: userMessage.id,
@@ -133,8 +147,8 @@ export async function POST(req:Request) {
         }
     } 
     
+    // Add the intro message if needed
     else if(isIntro && character) {
-
         // modify the last user message to be the intro message
         const introMessageContent = _INTRO_MESSAGE(character, user.username || "User");
 
@@ -143,45 +157,40 @@ export async function POST(req:Request) {
             content: introMessageContent,
         })
     }
-
-    const modelId = (chat?.llm || clientLLM) as ModelId;
-
+    
     const profile = await getProfile(user.id);
     if (!profile) {
         console.error("Profile not found for user:", user.id);
         return new Response(ERROR_MESSAGES.PROFILE_NOT_FOUND, { status: 404 });
     }
-    let apiKey = undefined;
 
-    try {
-        apiKey = await getModelApiKey(profile, modelId)
-    } catch (error) {
+    // we have various methods to get the modelId:
+    // 1. chat.llm (if chat exists) <- User preference for this chat
+    // 2. clientLLM (from the request body) <- Only used on new chats
+    // 3. profile.default_llm (from the user's profile) <- Used for fallback
+    const modelId = (chat?.llm || clientLLM || profile.default_llm) as ModelId;
+
+    // Try to get the API key for the model
+    // If it fails, return a 400 error with the error message
+    let apiKey = undefined;
+    try { apiKey = await getModelApiKey(profile, modelId) } 
+    catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         return new Response(errorMessage, { status: 400 });
     }
 
-    const model = await getLanguageModel({
-        modelId: modelId, apiKey
-    });
-
+    const model = await getLanguageModel({  modelId: modelId, apiKey });
     const internalModel = getLLMById(modelId);
 
 
-    const systemPrompt = getSystemPrompt({
-        character, chat, persona: userPersona,
-    });
-    
+    const systemPrompt = getSystemPrompt({ character, chat, persona: userPersona });
     const bookPrompt = getDynamicBookPrompt(chat?.dynamic_book);
-
     const memoriesPrompt = getMemoriesPrompt(memories);
 
     // Core messages strip them down to the essentials
     // -> saves tokens
-    // Core messages strip them down to the essentials
-    // -> saves tokens
     const activeContextLength = 40;
     const coreMessages = convertToCoreMessages(messages).slice(-activeContextLength);
-
     const noCharPrompt = noCharacterSelectedPrompt(chat?.id === undefined);
     
     // make sure the first message is a user message
@@ -241,7 +250,7 @@ export async function POST(req:Request) {
                 ],
                 onFinish: async ({ response }) => {
 
-                    if(!chat?.id) return;
+                    if(!chat?.id || isSmallChat) return;
 
                     const responseMessagesWithoutIncompleteToolCalls = sanitizeResponseMessages(response.messages);
 

@@ -11,6 +11,7 @@ import CharacterPageTabs from "@/components/character/character-page-tabs";
 import CharacterPageActions from "@/components/character/character-page-actions";
 import CharacterTopHeader from "@/components/character/character-top-header";
 import { currentUser } from "@clerk/nextjs/server";
+import SmallChat from "@/components/chat/small-chat";
 
 type Params = Promise<{ id: string }>
 
@@ -107,12 +108,15 @@ export default async function CharacterView({ params }: { params: Params }) {
                             </div>
                         }
 
-                        <CharacterPageActions 
-                            character={character}
-                        />
+                        <CharacterPageActions character={character} />
 
-                        <div className="dark:prose-invert max-w-[690px] !select-none">
+                        <div className="prose dark:prose-invert max-w-[690px] !select-none">
                             <Markdown>{character.description}</Markdown>
+                        </div>
+
+                        <div className="h-full min-h-[200px] max-h-[400px] shrink-0 flex flex-col gap-2">
+                            <span className="font-bold">Try chatting with {character.name}</span>
+                            <SmallChat character={character} />
                         </div>
                         
                         {/* <div className="flex flex-row flex-wrap items-center gap-2">
