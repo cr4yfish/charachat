@@ -1,4 +1,3 @@
-import { Target } from "motion/react";
 import { Category } from "./category";
 import { Profile } from "./profile";
 import { Lora } from ".";
@@ -34,7 +33,7 @@ export type Character = {
     /**
      * Only used client-side to display the character in the UI
     */
-    tags_full?: Target[];
+    tags_full?: string[];
     is_liked?: boolean;
 
     /**

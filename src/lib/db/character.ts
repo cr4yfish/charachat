@@ -46,7 +46,6 @@ const characterFormatter = async (db: any | undefined): Promise<Character> => {
         ...db,
         owner: owner,
         category: category,
-        is_liked: false,
         tags_full: JSON.stringify(db?.tags_full) === "[null]" ? undefined : db?.tags_full
     } as Character;
 
