@@ -39,7 +39,6 @@ export default async function CharacterView({ params }: { params: Params }) {
     const { id } = await params;
 
     const character = await getCharacter(id);
-    console.log("Character:", character);
 
     const transformedCharacter: Character = character;
     if(character.hide_definition) {
