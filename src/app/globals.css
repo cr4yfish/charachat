@@ -160,6 +160,10 @@
   overflow-y: visible !important;
 }
 
+.text-trim {
+  text-box-trim: trim-both;
+}
+
 .liquid-card {
   position: relative;
   --highlight: rgba(255, 255, 255, 0.75);
