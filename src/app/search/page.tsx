@@ -21,7 +21,7 @@ import { LIMITS } from "@/lib/constants/limits";
 import SearchTopBar from "@/components/ui/top-bar/search-top-bar";
 import Link from "next/link";
 
-export type SearchType = "characters" | "creators";
+export type SearchType = "characters" | "creators" | "personas" | "collections"; 
 export type SortType = "likes" | "newest" | "popular" | "relevance";
 
 export default async function SearchPage({

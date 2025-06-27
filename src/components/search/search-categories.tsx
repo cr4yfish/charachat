@@ -27,8 +27,9 @@ const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchTy
                     }}
                     options={[
                         { label: "Characters", value: "characters" },
-                        { label: "Collections", value: "collections", disabled: true } ,
-                        { label: "Creators", value: "creators", disabled: true } ,
+                        { label: "Personas", value: "personas" },
+                        { label: "Collections", value: "collections", disabled: true },
+                        { label: "Creators", value: "creators", disabled: true },
                     ]}
                 />
             </div>

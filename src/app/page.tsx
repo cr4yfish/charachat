@@ -52,7 +52,10 @@ export default async function Home() {
         <div className="flex flex-col gap-2 w-full relative">
           <div>
               <p className="text-xs text-muted-foreground">Most chats in the last 3 days</p>
-              <h2 className="dark:prose-invert text-lg font-bold">Trending 🔥</h2>
+              <Link href={"/search?sort=relevance"} className="flex gap-2 w-full items-center">
+                <h2 className="dark:prose-invert text-lg font-bold">Trending 🔥</h2>
+                <ChevronRightIcon size={14} className="text-muted-foreground" />
+              </Link>
           </div>
           <GeneralSwiper initialData={initialTrending} apiUrl={API_ROUTES.GET_TRENDING_CHARACTERS} component={ImageCharacterCard} rows={1} />
         </div>
@@ -66,7 +69,10 @@ export default async function Home() {
         <div className="flex flex-col gap-2 w-full relative">
           <div>
             <p className="text-xs text-muted-foreground">Check out what the Community made</p>
-            <h2 className="dark:prose-invert text-lg font-bold">New</h2>
+            <Link href={"/search?sort=newest"} className="flex gap-2 w-full items-center">
+              <h2 className="dark:prose-invert text-lg font-bold">New</h2>
+              <ChevronRightIcon size={14} className="text-muted-foreground" />
+            </Link>
           </div>
           <GeneralSwiper initialData={initialNewest} apiUrl={API_ROUTES.GET_NEWEST_CHARACTERS} component={ImageCharacterCard} rows={2} />
         </div>
@@ -85,7 +91,10 @@ export default async function Home() {
         <div className="flex flex-col gap-2 w-full relative">
           <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0">
               <p className="text-xs text-muted-foreground">The hot stuff</p>
-              <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
+              <Link href={"/search?sort=popular"} className="flex gap-2 w-full items-center">
+                <h2 className="dark:prose-invert text-lg font-bold">Popular</h2>
+                <ChevronRightIcon size={14} className="text-muted-foreground" />
+            </Link>
           </div>
           <GeneralSwiper initialData={initialPopular} apiUrl={API_ROUTES.GET_POPULAR_CHARACTERS} component={ImageCharacterCard} rows={1} />
         </div>
@@ -120,8 +129,11 @@ export default async function Home() {
 
         <div className="flex flex-col gap-2 w-full relative">
           <div className="dark:prose-invert prose-p:m-0 prose-h2:m-0">
-                <p className="text-xs text-muted-foreground">Express yourself with unique personas</p>
+            <p className="text-xs text-muted-foreground">Express yourself with unique personas</p>
+            <Link href={"/search?type=personas"} className="flex gap-2 w-full items-center">
               <h2 className="dark:prose-invert text-lg font-bold">Personas</h2>
+              <ChevronRightIcon size={14} className="text-muted-foreground" />
+            </Link>
           </div>
           <GeneralSwiper initialData={initialPersonas} apiUrl={API_ROUTES.GET_PERSONAS} component={PersonaImageCard} rows={1} />
         </div>
