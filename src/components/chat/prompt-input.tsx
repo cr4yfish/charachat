@@ -1,7 +1,7 @@
 import { memo, useCallback, useRef, useState } from "react";
 import { TextareaWithAutosize } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Loader2Icon, RefreshCwIcon, SendIcon } from "lucide-react";
+import { PauseIcon, RefreshCwIcon, SendIcon } from "lucide-react";
 import { cn, fetcher } from "@/lib/utils";
 import { Suggestion as SuggestionType } from "@/lib/ai/suggestions";
 import useSWR from "swr";
@@ -186,8 +186,8 @@ const PurePromptInput = (props: Props) => {
                         onBlur={handleBlur}
                         endContent={
                             <motion.div layout className=''>
-                                <Button variant={"secondary"} disabled={props.isLoading} className='z-10 rounded-full p-4 transition-all shrink-0 min-h-[36px] !size-[36px]' size={"icon"} type='submit'>
-                                    {props.isLoading ? <Loader2Icon className="animate-spin text-primary" /> : <SendIcon />}
+                                <Button variant={"secondary"} className='z-10 rounded-full p-4 transition-all shrink-0 min-h-[36px] !size-[36px]' size={"icon"} type='submit'>
+                                    {props.isLoading ? <PauseIcon fill="currentColor" /> : <SendIcon />}
                                 </Button>
                             </motion.div>
                         }
