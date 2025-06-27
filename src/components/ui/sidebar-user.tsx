@@ -1,12 +1,8 @@
 "use client";
 
-import { API_ROUTES } from "@/lib/constants/apiRoutes";
-import { fetcher } from "@/lib/utils";
 import { safeParseLink } from "@/lib/utils/text";
-import { Profile } from "@/lib/db/types/profile";
 import Image from "next/image";
 import { memo } from "react";
-import useSWR from "swr";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import {
   DropdownMenu,
@@ -17,10 +13,11 @@ import {
 import Spinner from "./spinner";
 import Link from "next/link";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { useProfile } from "@/hooks/use-profile";
 
 const PureSidebarUser = () => {
-    const { user} = useUser();
-    const { data: profile, isLoading } = useSWR<Profile>(API_ROUTES.GET_OWN_PROFILE, fetcher)
+    const { user } = useUser();
+    const { profile, isLoading } = useProfile();
 
     return (
         <div className="flex flex-row items-center justify-center gap-2 h-full">

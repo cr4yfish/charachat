@@ -8,26 +8,18 @@ import LLMIcon from "../llm/llm-icon";
 import { LLMs } from "@/lib/ai/models/llm/text-models";
 import { InputWithLabel } from "../ui/input-with-label";
 import { Providers } from "@/lib/ai/models/providers/providers";
-import useSWR from "swr";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { useDebounce } from "use-debounce";
 import { ProviderId } from "@/lib/ai/types";
 import { toast } from "sonner";
 import { Profile } from "@/lib/db/types/profile";
-import { fetcher } from "@/lib/utils";
 import equal from 'fast-deep-equal';
 import Spinner from "../ui/spinner";
 import { CheckIcon } from "lucide-react";
-import { TIMINGS_MILLISECONDS } from "@/lib/constants/timings";
+import { useProfile } from "@/hooks/use-profile";
 
 const PureAPIKeyInputCard = () => {
-    const { data: profile, mutate, isLoading, isValidating, } = useSWR<Profile>(API_ROUTES.GET_OWN_PROFILE, fetcher, {
-      refreshInterval: TIMINGS_MILLISECONDS.ONE_MINUTE,
-      revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
-    })
+    const { profile, mutateProfile, isLoading, isValidating, } = useProfile();
     const [debouncedProfile] = useDebounce(profile, 1000);
     const initialProfileRef = useRef<Profile | null>(null);
     const hasInitializedRef = useRef(false);
@@ -83,7 +75,7 @@ const PureAPIKeyInputCard = () => {
         error: "Failed to update profile. Please try again later.",
       });
 
-    }, [debouncedProfile, mutate])
+    }, [debouncedProfile, mutateProfile])
 
     const handleKeyChange = (providerId: ProviderId, key: string) => {
       if (!profile) {
@@ -101,7 +93,7 @@ const PureAPIKeyInputCard = () => {
           }
         ]
       };
-      mutate(updatedProfile, {
+      mutateProfile(updatedProfile, {
         optimisticData: updatedProfile,
         revalidate: false,
       }); // Optimistically update the profile

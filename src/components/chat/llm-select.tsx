@@ -12,16 +12,15 @@ import {
 } from "@/components/ui/select"
 import { LLM, ModelId } from "@/lib/ai/types";
 import { getLLMById, getLLMGroupedByProvider } from "@/lib/ai/utils";
-import { cn, fetcher } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
 import { _DEFAULT_LLM } from "@/lib/constants/defaults";
 import LLMIcon from "../llm/llm-icon";
-import useSWR from "swr";
-import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { useProfile } from "@/hooks/use-profile";
 
 const PureFancyLLM = ({ llm, showIcon, showProvider }: { llm: LLM | undefined, showIcon?: boolean, showProvider?: boolean}) => {
     if(!llm) {
@@ -89,7 +88,7 @@ type Props = {
 }
 
 const PureLLMSelect = (props: Props) => {
-    const { data: profile } = useSWR(API_ROUTES.GET_OWN_PROFILE, fetcher)
+    const { profile } = useProfile();
 
     const llmGroups = useMemo(() => {
         return getLLMGroupedByProvider(profile);
