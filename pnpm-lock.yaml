@@ -173,9 +173,6 @@ importers:
       react-markdown:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.1.8)(react@19.1.0)
-      react-noise:
-        specifier: ^0.2.11
-        version: 0.2.11(react@19.1.0)
       react-syntax-highlighter:
         specifier: ^15.6.1
         version: 15.6.1(react@19.1.0)
@@ -4268,11 +4265,6 @@ packages:
     resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
     peerDependencies:
       '@types/react': '>=18'
-      react: '>=18'
-
-  react-noise@0.2.11:
-    resolution: {integrity: sha512-itnC74VudXE1lIjLnQ44uocbX0NQC+SEnGCqJoTiHk8p0qCXPa5V4R7caofXYPQezViXQgymEiU9K8dRWHTTkw==}
-    peerDependencies:
       react: '>=18'
 
   react-remove-scroll-bar@2.3.8:
@@ -9775,10 +9767,6 @@ snapshots:
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
-
-  react-noise@0.2.11(react@19.1.0):
-    dependencies:
-      react: 19.1.0
 
   react-remove-scroll-bar@2.3.8(@types/react@19.1.8)(react@19.1.0):
     dependencies:
