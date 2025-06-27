@@ -18,7 +18,7 @@ import { Character } from "@/lib/db/types/character";
 import { Chat } from "@/lib/db/types/chat";
 import { Persona } from "@/lib/db/types/persona";
 import { currentUser } from "@clerk/nextjs/server";
-import { CoreAssistantMessage, CoreToolMessage, createDataStreamResponse, Message as AIMessage, streamText, convertToCoreMessages } from "ai";
+import { CoreAssistantMessage, CoreToolMessage, createDataStreamResponse, Message as AIMessage, streamText, convertToCoreMessages, CoreMessage } from "ai";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { Message } from "@/lib/db/types/message";
@@ -183,15 +183,26 @@ export async function POST(req:Request) {
     const internalModel = getLLMById(modelId);
 
 
-    const systemPrompt = getSystemPrompt({ character, chat, persona: userPersona });
-    const bookPrompt = getDynamicBookPrompt(chat?.dynamic_book);
-    const memoriesPrompt = getMemoriesPrompt(memories);
+    let systemPrompt = getSystemPrompt({ character, chat, persona: userPersona });
 
     // Core messages strip them down to the essentials
     // -> saves tokens
     const activeContextLength = 40;
     const coreMessages = convertToCoreMessages(messages).slice(-activeContextLength);
-    const noCharPrompt = noCharacterSelectedPrompt(chat?.id === undefined);
+    const finalMessages: CoreMessage[] = [];
+    
+    // Decide which messages to include based on some conditions
+    if(characterId || chat?.character.id) {
+        const bookPrompt = getDynamicBookPrompt(chat?.dynamic_book);
+        const memoriesPrompt = getMemoriesPrompt(memories);
+        systemPrompt += `\n\n${memoriesPrompt}\n\n${bookPrompt}`;
+    } else {
+        const noCharPrompt = noCharacterSelectedPrompt(chat?.id === undefined);
+        systemPrompt += `\n\n${noCharPrompt}`;
+    }
+
+    finalMessages.push({ role: "system", content: systemPrompt }); // Only add ONE system message
+    
     
     // make sure the first message is a user message
     // some models will add an empty user message at the start
@@ -205,6 +216,8 @@ export async function POST(req:Request) {
             content: "[ignore this message]",
         });
     }
+    
+    finalMessages.push(...coreMessages);
 
     return createDataStreamResponse({
         execute: (dataStream) => {
@@ -223,31 +236,7 @@ export async function POST(req:Request) {
                 toolCallStreaming: true,
                 maxSteps: 3,
                 model: model,
-                messages: [
-                    {
-                        // System prompt for the AI character
-                        role: "system",
-                        content: systemPrompt
-                    },
-                    {
-                        // Dynamic book prompt for the AI character
-                        role: "system",
-                        content: memoriesPrompt
-                    },
-                    {
-                        // Dynamic book prompt for the AI character
-                        role: "system",
-                        content: bookPrompt
-                    },
-                    {
-                        // No character selected prompt
-                        // this is only used if the chat has no character
-                        role: "system",
-                        content: noCharPrompt
-                    },
-                    // User & AI messages
-                    ...coreMessages
-                ],
+                messages: finalMessages,
                 onFinish: async ({ response }) => {
 
                     if(!chat?.id || isSmallChat) return;
