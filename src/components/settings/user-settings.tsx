@@ -22,7 +22,6 @@ export default function UserSettingsPage() {
         if(!profile) return;
         // Initialize internal profile with the fetched profile
         setInternalProfile(profile);
-        console.log("Profile loaded:", profile);
     }, [profile]);
 
     const handleChangeLLM = useCallback((newLLM: string) => {

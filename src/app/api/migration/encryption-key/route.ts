@@ -14,11 +14,8 @@ export async function POST(request: Request) {
         return new Response("Email and password are required", { status: 400 });
     }
 
-    console.log("Generating legacy encryption key for email:", { email, password });
-
     try {
         const key = generateKeyLegacy(password, email); 
-        console.log("Generated key:", key.toString("hex"));
 
         if(!key) {
             return new Response("Failed to generate key", { status: 500 });

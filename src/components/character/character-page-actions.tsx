@@ -12,8 +12,7 @@ export default function CharacterPageActions({ character }: { character: Charact
 
     const handleLike = () => {
         setIsLiked(!isLiked);
-        toggleCharacterLikeAction(character.id, isLiked).then((res) => {
-            console.log("Character like status toggled:", res);
+        toggleCharacterLikeAction(character.id, isLiked).then(() => {
         }).catch((error) => {
             console.error("Error toggling character like status:", error);
         });

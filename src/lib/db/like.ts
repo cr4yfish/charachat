@@ -32,7 +32,6 @@ export async function likeCharacter({ like, charId }: Props): Promise<void> {
 }
 
 async function handleLike({ charId, userId }: { charId: string; userId: string }): Promise<void> {
-    console.log("Liking character:", charId, "for user:", userId);
     const { error } = await (await createClient())
         .from("character_likes")
         .insert({
@@ -46,7 +45,6 @@ async function handleLike({ charId, userId }: { charId: string; userId: string }
 }
 
 export async function unlikeCharacter({ charId, userId }: { charId: string; userId: string }): Promise<void> {
-    console.log("Unliking character:", charId, "for user:", userId);
     const { error } = await (await createClient())
         .from("character_likes")
         .delete()
