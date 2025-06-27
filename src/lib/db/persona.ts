@@ -144,12 +144,26 @@ export const getOwnPersonas = cache(async (props: LoadMoreProps, sort?: SortType
         throw new Error("User not authenticated");
     }
 
-    const { data, error } = await (await createClient())
+    let query = (await createClient())
         .from(tableName)
         .select(personaMatcher)
         .eq("clerk_user_id", user.id)
-        .order("created_at", { ascending: false })
         .range(props.cursor, props.cursor + props.limit - 1)
+
+    // Apply sorting
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+        case 'popular':
+        case 'relevance':
+        default:
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query;
         
     if (error) {
         console.error("Error fetching personas", error);
