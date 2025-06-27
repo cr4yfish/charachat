@@ -12,13 +12,14 @@ import ConditionalLink from "../conditional-link";
 type CardProps = {
     data: Persona;
     hasLink?: boolean; // Optional prop to determine if the card should be a link
+    onClick?: () => void; // Optional click handler
 }
 
 const PureImageCard = (props: CardProps) => {
 
     return (
-        <ConditionalLink active={props.hasLink || true} href={`/p/${props.data.id}`} className="w-fit overflow-visible">
-                <Card className={cn("h-[200px] w-[150px] relative py-3 border shadow-none transition-all", {  " border-emerald-400 ": props.data.is_private })} >
+        <ConditionalLink active={props.hasLink === true} href={`/p/${props.data.id}`} className="w-fit overflow-visible">
+                <Card onClick={props.onClick} className={cn("h-[200px] w-[150px] relative py-3 border shadow-none transition-all", {  " border-emerald-400 ": props.data.is_private })} >
                    {props.data.is_private && (
                     <div className="absolute top-0 right-0 text-emerald-400 pt-2 pr-2 z-10 flex items-center gap-1">
                         <LockIcon size={12} color="currentColor" />
