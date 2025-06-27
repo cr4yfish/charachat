@@ -1,0 +1,14 @@
+{
+  "typescript.preferences.noSemicolons": "off",
+  "typescript.preferences.quoteStyle": "double",
+  "typescript.validate.enable": true,
+  "typescript.format.enable": true,
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "typescript.preferences.importModuleSpecifier": "relative"
+}
