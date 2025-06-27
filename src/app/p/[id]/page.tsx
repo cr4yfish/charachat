@@ -1,11 +1,14 @@
 import ImageWithBlur from "@/components/image/imageWithBlur";
 import PersonaTopHeader from "@/components/personas/persona-top-header";
 import Username from "@/components/user/username";
+import { COOKIE_NAMES } from "@/lib/constants/cookieNames";
 import { getPersona } from "@/lib/db/persona";
+import { ProfileSettings } from "@/lib/db/types/profile";
 import { safeParseLink } from "@/lib/utils/text";
 import { currentUser } from "@clerk/nextjs/server";
 import { LockIcon } from "lucide-react";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Markdown from "react-markdown";
 
@@ -35,16 +38,17 @@ export async function generateMetadata(
 
 export default async function PersonaPage({ params }: { params: Params }) {
     const { id } = await params;
-
+    const cookieStore = await cookies();
+    const settings = JSON.parse(cookieStore.get(COOKIE_NAMES.PROFILE_SETTINGS)?.value || "") as ProfileSettings;
     const persona = await getPersona(id);
     const user = await currentUser();
-
+    const isDefault = settings.default_persona_id === persona.id;
     const isOwner = user?.id === persona.creator.id || user?.id === persona.clerk_user_id;
 
     return (
         <div className="relative w-full h-full min-h-full">
             
-            <PersonaTopHeader persona={persona} isOwner={isOwner} />
+            <PersonaTopHeader persona={persona} isOwner={isOwner} isDefault={isDefault} />
             
             <div className="flex flex-col items-center gap-4 pb-20 px-6 py-6 relative h-full overflow-x-hidden pt-[75px]">
                 <div className=" -z-10 absolute top-0 left-0 w-full h-full blur-3xl opacity-15 overflow-hidden">
@@ -85,7 +89,7 @@ export default async function PersonaPage({ params }: { params: Params }) {
                             </div>
                         }
 
-                        <div className="dark:prose-invert max-w-[690px] !select-none">
+                        <div className="prose dark:prose-invert max-w-[690px] !select-none">
                             <Markdown>{persona.bio}</Markdown>
                         </div>
                     </div>
