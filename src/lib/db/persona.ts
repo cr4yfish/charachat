@@ -228,6 +228,113 @@ export const searchPersonas = cache(async (search: string) => {
     return await Promise.all(data.map(personaFormatter));
 })
 
+// Helper function to search public personas (database search)
+const searchPublicPersonas = async (
+    keywords: string[], 
+    options: {
+        sort?: 'newest' | 'likes' | 'relevance' | 'popular';
+        limit?: number;
+        exactMatch?: boolean;
+    } = {}
+): Promise<Persona[]> => {
+    const { sort = 'relevance', limit = 20, exactMatch = false } = options;
+
+    // Build search conditions based on match type
+    let searchConditions: string;
+    
+    if (exactMatch) {
+        // Exact match for more precise results
+        searchConditions = keywords.map(keyword => 
+            `full_name.ilike.%${keyword}%,description.ilike.%${keyword}%,bio.ilike.%${keyword}%`
+        ).join(',');
+    } else {
+        // Fuzzy match for broader results
+        searchConditions = keywords.map(keyword => 
+            `full_name.ilike.*${keyword}*,description.ilike.*${keyword}*,bio.ilike.*${keyword}*`
+        ).join(',');
+    }
+
+    let query = (await createUnauthenticatedServerSupabaseClient())
+        .from(tableName)
+        .select(personaMatcher)
+        .or(searchConditions)
+        .eq('is_private', false)
+        .limit(limit);
+
+    // Apply sorting
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+        case 'popular':
+        case 'relevance':
+        default:
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error("Error searching public personas", error);
+        throw error;
+    }
+
+    return await Promise.all(data.map(personaFormatter));
+};
+
+// Helper function to search private personas (client-side search)
+const searchPrivatePersonas = async (
+    keywords: string[], 
+    options: {
+        sort?: 'newest' | 'likes' | 'relevance' | 'popular';
+        limit?: number;
+        exactMatch?: boolean;
+    } = {}
+): Promise<Persona[]> => {
+    const { limit = 20, exactMatch = false } = options;
+    
+    const user = await currentUser();
+    if (!user?.id) {
+        return []; // No private personas if not authenticated
+    }
+
+    // Fetch ALL private personas for this user
+    const { data, error } = await (await createClient())
+        .from(tableName)
+        .select(personaMatcher)
+        .eq("clerk_user_id", user.id)
+        .eq("is_private", true)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching private personas for search", error);
+        return [];
+    }
+
+    // Decrypt all personas
+    const decryptedPersonas = await Promise.all(data.map(privatePersonaFormatter));
+
+    // Client-side search
+    const filteredPersonas = decryptedPersonas.filter(persona => {
+        const searchableText = [
+            persona.full_name,
+            persona.description,
+            persona.bio
+        ].filter(Boolean).join(' ').toLowerCase();
+
+        return keywords.some(keyword => {
+            const keywordLower = keyword.toLowerCase();
+            return exactMatch 
+                ? searchableText.includes(keywordLower)
+                : searchableText.includes(keywordLower);
+        });
+    });
+
+    return filteredPersonas.slice(0, limit);
+};
+
 export const searchPersonasByAITags = cache(async (
     keywords: string[], 
     options: {
@@ -257,72 +364,36 @@ export const searchPersonasByAITags = cache(async (
         return [];
     }
 
-    // Build search conditions based on match type
-    let searchConditions: string;
-    
-    if (exactMatch) {
-        // Exact match for more precise results
-        searchConditions = cleanedKeywords.map(keyword => 
-            `full_name.ilike.%${keyword}%,description.ilike.%${keyword}%,bio.ilike.%${keyword}%`
-        ).join(',');
-    } else {
-        // Fuzzy match for broader results
-        searchConditions = cleanedKeywords.map(keyword => 
-            `full_name.ilike.*${keyword}*,description.ilike.*${keyword}*,bio.ilike.*${keyword}*`
-        ).join(',');
+    const results: Persona[] = [];
+
+    // Search public personas (database search)
+    console.log("Searching public personas with keywords:", cleanedKeywords);
+    const publicPersonas = await searchPublicPersonas(cleanedKeywords, { sort, limit, exactMatch });
+    results.push(...publicPersonas);
+
+    // Search private personas (client-side search) if requested
+    if (includePrivate) {
+        console.log("Searching private personas with keywords:", cleanedKeywords);
+        const privatePersonas = await searchPrivatePersonas(cleanedKeywords, { sort, limit, exactMatch });
+        results.push(...privatePersonas);
     }
 
-    let query = (await createUnauthenticatedServerSupabaseClient())
-        .from(tableName)
-        .select(personaMatcher)
-        .or(searchConditions)
-        .limit(limit);
-
-    // Filter private personas if not included
-    if (!includePrivate) {
-        query = query.eq('is_private', false);
-    }
-
-    // Apply sorting
-    switch (sort) {
-        case 'newest':
-            query = query.order('created_at', { ascending: false });
-            break;
-        case 'likes':
-            // Note: personas don't have likes, fallback to created_at
-            query = query.order('created_at', { ascending: false });
-            break;
-        case 'popular':
-            // Note: personas don't have chats, fallback to created_at
-            query = query.order('created_at', { ascending: false });
-            break;
-        case 'relevance':
-        default:
-            // Order by created_at for now, could be enhanced with actual relevance scoring
-            query = query.order('created_at', { ascending: false });
-            break;
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-        throw error;
-    }
-
-    const personas = await Promise.all(data.map(async (db: any) => {
-        return await personaFormatter(db);
-    }));
-
-    // If using relevance sort, we could add client-side scoring here
+    // Re-sort combined results if needed
     if (sort === 'relevance') {
-        return personas.sort((a, b) => {
+        results.sort((a, b) => {
             const scoreA = calculatePersonaRelevanceScore(a, cleanedKeywords);
             const scoreB = calculatePersonaRelevanceScore(b, cleanedKeywords);
             return scoreB - scoreA;
         });
+    } else if (sort === 'newest') {
+        results.sort((a, b) => {
+            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            return dateB - dateA;
+        });
     }
 
-    return personas;
+    return results.slice(0, limit);
 })
 // Helper function to calculate relevance score based on keyword matches
 const calculatePersonaRelevanceScore = (persona: Persona, keywords: string[]): number => {
