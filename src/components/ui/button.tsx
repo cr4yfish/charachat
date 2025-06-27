@@ -54,7 +54,7 @@ function Button({
         <Liquid className={cn(buttonVariants({ variant, size, className }))} glassContentClassNames="size-full cursor-pointer" >
           <Comp 
             data-slot="button"
-            className="w-full h-full flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-full flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:pointer-events-none"
             {...props}
           />
         </Liquid>
