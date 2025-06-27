@@ -281,34 +281,8 @@ const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessag
                                         ease: "easeInOut",
                                         times: [0, 0.3, 0.6, 0.8, 1]
                                     }}
-                                    whileHover={{
-                                        scale: 1.3,
-                                        rotate: [0, 10, -10, 5, -5, 0],
-                                        transition: { duration: 0.5, repeat: Infinity }
-                                    }}
                                     whileTap={{ scale: 0.8 }}
                                 >
-                                    <motion.div
-                                        animate={{ 
-                                            rotate: 360,
-                                            scale: [1, 1.5, 1]
-                                        }}
-                                        transition={{
-                                            rotate: { duration: 3, repeat: Infinity, ease: "linear" },
-                                            scale: { duration: 1, repeat: Infinity, repeatType: "reverse" }
-                                        }}
-                                        className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 opacity-20 rounded-full blur-sm"
-                                    />
-                                    
-                                    <motion.div
-                                        animate={{
-                                            x: [0, 100, -100, 50, -50, 0],
-                                            opacity: [0.3, 1, 0.3, 1, 0.3, 1]
-                                        }}
-                                        transition={{ duration: 4, repeat: Infinity }}
-                                        className="absolute inset-0 bg-rainbow-gradient opacity-10"
-                                    />
-
                                     <motion.div
                                         initial={{ x: -20, opacity: 0 }}
                                         animate={{ 
@@ -320,11 +294,6 @@ const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessag
                                             delay: 0.5,
                                             rotate: { duration: 2, repeat: Infinity }
                                         }}
-                                        whileHover={{ 
-                                            scale: 1.2, 
-                                            rotate: 45,
-                                            color: "#ff00ff"
-                                        }}
                                     >
                                         <LogInIcon className="mr-2 h-4 w-4 drop-shadow-lg filter brightness-150" />
                                     </motion.div>
@@ -333,29 +302,10 @@ const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessag
                                         initial={{ x: 20, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 0.8 }}
-                                        whileHover={{
-                                            scale: 1.1,
-                                            textShadow: "0px 0px 8px rgb(255,255,255)",
-                                            transition: { duration: 0.3 }
-                                        }}
                                         className="relative z-10"
                                     >
                                         <SignInButton />
                                     </motion.div>
-
-                                    <motion.div
-                                        animate={{
-                                            scale: [0, 2, 0],
-                                            rotate: [0, 360],
-                                            opacity: [0, 0.5, 0]
-                                        }}
-                                        transition={{
-                                            duration: 3,
-                                            repeat: Infinity,
-                                            repeatDelay: 1
-                                        }}
-                                        className="absolute inset-0 border-4 border-rainbow-500 rounded-full"
-                                    />
                                 </motion.div>
                                 
                             </div>
