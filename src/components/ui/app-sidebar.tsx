@@ -20,7 +20,12 @@ import { cn } from "@/lib/utils";
 import { BotIcon, SearchIcon } from "lucide-react";
 import { SignInButton, useAuth } from "@clerk/nextjs";
 import SidebarUser from "./sidebar-user";
-import SidebarChatHistory from "./sidebar-chat-history";
+import dynamic from "next/dynamic";
+
+
+const SidebarChatHistory = dynamic(() => import("./sidebar-chat-history"), {
+  ssr: false, 
+});
 
 const PureNavbarItem = (props: NavItem & { isActive?: boolean, sidebarOpen: boolean }) => {
   return (
