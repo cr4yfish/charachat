@@ -217,5 +217,10 @@ export const llmSupportsTools = (llmOrId: LLM | ModelId): boolean => {
  * @returns The LLM object if found, undefined otherwise
  */
 export const getLLMById = (id: ModelId): LLM | undefined => {
+    // Route nemo to mistral-medium-latest
+    // nemo isnt used anymore, but we keep it for backwards compatibility
+    if((id as string) === "open-mistral-nemo") {
+        return  LLMs.find((llm) => llm.key === "mistral-medium-latest");
+    }
     return LLMs.find((llm) => llm.key === id);
 }

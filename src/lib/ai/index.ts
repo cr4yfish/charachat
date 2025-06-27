@@ -11,7 +11,7 @@ import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promise<string> {
     const selectedModelId = modelid || profile.default_llm as ModelId;
-    const selectedModel = getLLMById(selectedModelId);
+    const selectedModel = getLLMById(selectedModelId); // will return mistral-medium-latest if nemo is selected
 
     if(!selectedModel) {
         throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
