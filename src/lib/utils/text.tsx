@@ -67,9 +67,33 @@ export function replaceVariables(text = "", variables?: Record<string, string>) 
   if(!text || !variables) {
     return text;
   }
-  return text?.replace(/\${(.*?)}/g, (_, match) => {
-    return variables[match] || '';
-  });
+  
+  let result = text;
+  
+  // Replace variables - handles both {{variable}} and ${variable} formats
+  for (const [key, value] of Object.entries(variables)) {
+    // If key is already in {{variable}} format, use it directly
+    if (key.startsWith('{{') && key.endsWith('}}')) {
+      const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedKey, 'g');
+      result = result.replace(regex, value);
+    } else {
+      // Handle plain variable names - replace both {{variable}} and ${variable} patterns
+      const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      
+      // Replace {{variable}} pattern
+      const doubleBracePattern = `\\{\\{${escapedKey}\\}\\}`;
+      const doubleBraceRegex = new RegExp(doubleBracePattern, 'g');
+      result = result.replace(doubleBraceRegex, value);
+      
+      // Replace ${variable} pattern
+      const dollarBracePattern = `\\$\\{${escapedKey}\\}`;
+      const dollarBraceRegex = new RegExp(dollarBracePattern, 'g');
+      result = result.replace(dollarBraceRegex, value);
+    }
+  }
+  
+  return result;
 }
 
 export const getChatVariables = (username: string, charName: string): Record<string, string> => {
