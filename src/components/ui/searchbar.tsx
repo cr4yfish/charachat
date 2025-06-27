@@ -112,12 +112,17 @@ const PureSearchBar = ({ initialQuery } : Props) => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onFocus={() => setIsFocused(true)}
-                    className="w-full bg-transparent pl-10 text-sm rounded-full"
+                    className="w-full bg-transparent pl-10 text-sm rounded-full pr-[50px]"
                     name="search"
                     autoComplete="off"
                     autoCorrect="off"
                     spellCheck="false"
                 />
+                {(input && input.length > 0) &&<Button variant={"link"} className="text-slate-200/80 absolute right-0 top-0 h-full flex items-center justify-center mr-1" onClick={() => { 
+                    setInput(""); // Clear input
+                }}>
+                    <XIcon />
+                </Button>}
             </div>
 
             {/* Popover: recents, suggestions etc */}
