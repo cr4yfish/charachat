@@ -5,7 +5,7 @@ import { Persona } from "@/lib/db/types/persona";
 import { memo,  useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ChatRequestOptions, Message } from "ai";
-import { ChevronRightIcon, EditIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import { useProfile } from "@/hooks/use-profile";
 import PersonaSmallCard, { PersonaSmallCardSkeleton } from "../personas/persona-small-card";
 import { Accordion } from "../ui/accordion";
