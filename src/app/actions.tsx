@@ -41,3 +41,21 @@ export async function getPersonaCookie() {
     const cookieStore = await cookies();
     return cookieStore.get(COOKIE_NAMES.CURRENT_PERSONA)?.value;
 }
+
+/**
+ * Settings cookie management functions
+ */
+export async function setSettingsCookie(settings: string) {
+    const cookieStore = await cookies();
+    cookieStore.set(COOKIE_NAMES.PROFILE_SETTINGS, settings);
+}
+
+export async function clearSettingsCookie() {
+    const cookieStore = await cookies();
+    cookieStore.delete(COOKIE_NAMES.PROFILE_SETTINGS);
+}
+
+export async function getSettingsCookie() {
+    const cookieStore = await cookies();
+    return cookieStore.get(COOKIE_NAMES.PROFILE_SETTINGS)?.value;
+}
