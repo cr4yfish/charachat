@@ -1,8 +1,7 @@
 "use client";
 
-import { LLM } from "@/lib/ai/types";
-import { getLLMGroupedByProvider } from "@/lib/ai/utils";
-import { API_ROUTES } from "@/lib/constants/apiRoutes";
+import { LLM, ModelId } from "@/lib/ai/types";
+import { getLLMById, getLLMGroupedByProvider } from "@/lib/ai/utils";
 import { memo, useEffect, useMemo, useState } from "react";
 import {
   Card,
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
-import useLLMCookie from "@/hooks/useLLMCookie";
 import LLMIcon from "../llm/llm-icon";
 import Spinner from "../ui/spinner";
 import {
@@ -74,51 +72,36 @@ const LLMCard = memo(PureLLMCard, (prevProps, nextProps) => {
     return true;
 });
 
-type LLMOverviewProps = {
-    nextStep: () => void;
-    defaultLLM?: LLM | undefined;
-}
 
-const PureLLMOverview = ({nextStep, defaultLLM} : LLMOverviewProps) => {
-    const { llmCookie } = useLLMCookie(defaultLLM);
-    const [selectedLLM, setSelectedLLM] = useState<LLM | null>(defaultLLM || null);
+const PureLLMOverview = () => {
+    const [selectedLLM, setSelectedLLM] = useState<LLM | undefined>(undefined);
     
     /**
      * Switches how the LLMs are displayed.
      * Simple only shows a small selection of recommended LLMs and different use cases instead of the actual names.
      */
     const [mode, setMode] = useState<"simple" | "advanced">("simple");
-    const { profile, isLoading, isValidating } = useProfile();
+    const { profile, isLoading, isValidating, mutateProfile } = useProfile();
+
+    useEffect(() => {
+        if(profile?.settings?.default_llm) {
+            setSelectedLLM(getLLMById(profile.settings.default_llm as ModelId));
+        }
+    }, [profile])
 
     const handleLLMSelected = async (llm: LLM) => {
         setSelectedLLM(llm);
-
-        // fetch instead
-        // setLLMModelCookie(llm.key);
-
-        fetch(API_ROUTES.LLM_COOKIE, {
-            body: JSON.stringify({ model: llm.key }),
-            method: "POST",
-        }).then(res => {
-            if (!res.ok) { throw new Error("Failed to set LLM model cookie");  }
-        }).catch(err => {
-            console.error("Error setting LLM model cookie:", err);
-        })
-        
+        mutateProfile(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                settings: {
+                    ...prev.settings,
+                    default_llm: llm.key
+                }
+            };
+        });
     }
-
-    /**
-     * If the LLM cookie is set and the selectedLLM is not set, then set the selectedLLM to the LLM from the cookie
-     * This is useful when the user has already selected an LLM in a previous session
-     */
-    useEffect(() => {
-        if(llmCookie && !selectedLLM) {;
-            if(llmCookie) {
-                setSelectedLLM(llmCookie);
-                //nextStep();
-            }
-        }
-    }, [llmCookie, setSelectedLLM, selectedLLM, nextStep])
 
     const groups = useMemo(() => {
         return getLLMGroupedByProvider(profile);
@@ -203,10 +186,7 @@ const PureLLMOverview = ({nextStep, defaultLLM} : LLMOverviewProps) => {
     )
 }
 
-const LLMOverview = memo(PureLLMOverview, (prevProps, nextProps) => {
-    if (prevProps.nextStep !== nextProps.nextStep) return false;
-    if (prevProps.defaultLLM !== nextProps.defaultLLM) return false;
-
+const LLMOverview = memo(PureLLMOverview, () => {
     return true;
 })
 

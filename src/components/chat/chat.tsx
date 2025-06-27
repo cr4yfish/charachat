@@ -12,7 +12,6 @@ import { toast } from 'sonner';
 import { ImageGenDrawer } from './image-gen-drawer';
 import { ShallowCharacter } from '@/lib/db/types/character';
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
-import useLLMCookie from '@/hooks/useLLMCookie';
 import { addMemoryToRAG, RAGMemory, searchRAG } from '@/lib/ai/browser-rag/rag';
 import useSWRInfinite from 'swr/infinite';
 import { API_ROUTES } from '@/lib/constants/apiRoutes';
@@ -22,19 +21,16 @@ import { TIMINGS_MILLISECONDS } from '@/lib/constants/timings';
 import { Message as MessageComponent } from './message';
 import { TOOL_NAMES } from '@/lib/constants/toolNames';
 import equal from 'fast-deep-equal';
-import { LLM } from '@/lib/ai/types';
 
 type Props = {
   shallowCharacter: ShallowCharacter | undefined;
   chatId: string;
   initialMessages: Message[];
-  defaultLLM?: LLM | undefined;
 }
 
 export const PureChat = (props: Props) => {
   const { id: pathnameID } = useParams();
   const router = useRouter();
-  const { llmCookie } = useLLMCookie();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const virtuosoRef = useRef<any>(null);
   const [setupDone, setSetupDone] = useState(props.initialMessages ? props.initialMessages.length > 0 : false);
@@ -46,7 +42,6 @@ export const PureChat = (props: Props) => {
     body: {
       chatId: props.chatId,
       characterId: props.shallowCharacter?.id,
-      modelId: llmCookie,
       isIntro: false,
     },
     initialMessages: props.initialMessages,
@@ -215,7 +210,6 @@ export const PureChat = (props: Props) => {
           allowEmptySubmit: false, 
           body: { 
             chatId: props.chatId, 
-            modelId: llmCookie, 
             isUserMessage: true,
             memories: memories
           } 
@@ -252,7 +246,7 @@ export const PureChat = (props: Props) => {
     });
 
     
-  }, [setupDone, append, props.chatId, llmCookie, scrollRef]);
+  }, [setupDone, append, props.chatId, scrollRef]);
 
   const addIntroMessage = useCallback(() => {
     setSetupDone(true);
@@ -273,12 +267,11 @@ export const PureChat = (props: Props) => {
         chatId: props.chatId,
         characterId: props.shallowCharacter?.id,
         isIntro: true,
-        modelId: llmCookie,
         isUserMessage: true,
       }
     });
 
-  }, [append, props.chatId, props.shallowCharacter?.id, llmCookie]);
+  }, [append, props.chatId, props.shallowCharacter?.id]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleLoadMore = useCallback(() => {
@@ -355,58 +348,58 @@ export const PureChat = (props: Props) => {
             <ChatSetup 
               setDone={addIntroMessage} 
               append={append}
-              defaultLLM={props.defaultLLM}
             />
 
         </div>
       )}
 
-        <Virtuoso 
-          className='w-full h-full'
-          ref={virtuosoRef}
-          scrollerRef={(ref) => {
-            if (scrollRef.current !== ref) {
-              scrollRef.current = ref as HTMLDivElement;
-            }
-          }}
-          data={messages}
-          atBottomStateChange={setIsAtBottom}
-          initialTopMostItemIndex={messages.length - 1}
-          overscan={10}
-          increaseViewportBy={{ top: 200, bottom: 200 }}
-          alignToBottom={true}
-          // startReached={handleLoadMore}
-          itemContent={(index, message) => {
-            return (
-              <div key={message.id} className={cn("h-fit w-full relative max-w-[760px] px-4 mx-auto", {
-                "pt-[100px]": index === 0 && messages.length > 0, // add padding to the first message
-                "pb-[40vh]": index === messages.length - 1, // add padding to the last message
-              })}>
-                <MessageComponent
-                  key={message.id} 
-                  message={message} 
-                  isLoading={isLoading && messages.length - 1 === index}
-                  characterName={props.shallowCharacter?.name}
-                  characterImage={props.shallowCharacter?.image_link}
-                  openImageGen={() => setImageGenOpen(true)}
-                  chatId={props.chatId}
-                  deleteCallback={deleteCallback}
-                  status={status}
-                  latestMessage={messages[messages.length - 1]?.id === message.id}
-                  addToolResult={addToolResult}
-                />
-              </div>
-            )
-          }}
-        />
+      <Virtuoso 
+        className='w-full h-full'
+        ref={virtuosoRef}
+        scrollerRef={(ref) => {
+          if (scrollRef.current !== ref) {
+            scrollRef.current = ref as HTMLDivElement;
+          }
+        }}
+        data={messages}
+        atBottomStateChange={setIsAtBottom}
+        initialTopMostItemIndex={messages.length - 1}
+        overscan={10}
+        increaseViewportBy={{ top: 200, bottom: 200 }}
+        alignToBottom={true}
+        // startReached={handleLoadMore}
+        itemContent={(index, message) => {
+          return (
+            <div key={message.id} className={cn("h-fit w-full relative max-w-[760px] px-4 mx-auto", {
+              "pt-[100px]": index === 0 && messages.length > 0, // add padding to the first message
+              "pb-[40vh]": index === messages.length - 1, // add padding to the last message
+            })}>
+              <MessageComponent
+                key={message.id} 
+                message={message} 
+                isLoading={isLoading && messages.length - 1 === index}
+                characterName={props.shallowCharacter?.name}
+                characterImage={props.shallowCharacter?.image_link}
+                openImageGen={() => setImageGenOpen(true)}
+                chatId={props.chatId}
+                deleteCallback={deleteCallback}
+                status={status}
+                latestMessage={messages[messages.length - 1]?.id === message.id}
+                addToolResult={addToolResult}
+              />
+            </div>
+          )
+        }}
+      />
 
-      {setupDone &&
-        <PromptInput
-          submitMiddleWare={submitMiddleWare}
-          isLoading={isLoading}
-          chatId={props.chatId}
-        />
+      {setupDone && 
+      <PromptInput
+        submitMiddleWare={submitMiddleWare}
+        isLoading={isLoading}
+        chatId={props.chatId}
+      />
       }
+      
 
       <div className='fixed bottom-0 left-0 w-full h-[20px] bg-gradient-to-t from-background to-transparent backdrop-blur-[1px] pointer-events-none '></div>
 

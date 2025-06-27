@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { TrashIcon } from "lucide-react";
 import { fetcher } from "@/lib/utils";
@@ -22,6 +22,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import Spinner from "../ui/spinner";
+import { useProfile } from "@/hooks/use-profile";
 
 type Props = {
     chatId?: string;
@@ -29,11 +30,17 @@ type Props = {
 
 const PureSettings = ({ chatId }: Props) => {
 
-    const { data: chat, isLoading, isValidating, mutate } = useSWR(API_ROUTES.GET_CHAT + chatId, fetcher, {
+    const { data: chat, isLoading: isChatLoading, isValidating, mutate } = useSWR(API_ROUTES.GET_CHAT + chatId, fetcher, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         keepPreviousData: true,
     });
+
+    // use for profile settings
+    const { profile, isLoading: isProfileLoading } = useProfile();
+    const profileDefaultLLM = useMemo(() => {
+        return profile?.settings?.default_llm as ModelId | undefined;
+    }, [profile]);
 
     const [internalChat, setInternalChat] = useState<Chat | null>(chat);
     const [debouncedChat] = useDebounce(internalChat, 1500);
@@ -91,13 +98,13 @@ const PureSettings = ({ chatId }: Props) => {
         <div className="flex flex-col gap-4 justify-between overflow-auto p-4 pt-0 pb-12">
             
             <span className="text-xs text-muted-foreground">
-                {(isLoading || isValidating || isSaving) ? <span className="flex items-center gap-1"><Spinner/> Syncing chat settings</span> : "All changes are saved automatically."}
+                {(isChatLoading || isValidating || isSaving || isProfileLoading) ? <span className="flex items-center gap-1 text-xs"><Spinner/> Syncing chat settings</span> : "All changes are saved automatically."}
             </span>
 
             <LLMSelect 
-                selectedKey={chat?.llm as ModelId | undefined}
+                selectedKey={(chat?.llm || profileDefaultLLM) as ModelId | undefined}
                 onSelect={handleLLMChange} 
-                showLink isLoading={isLoading}
+                showLink isLoading={isChatLoading}
             />
 
             <TextareaWithCounter 
@@ -105,7 +112,7 @@ const PureSettings = ({ chatId }: Props) => {
                 description="Add context for the AI to reference during conversations."
                 placeholder="Add text here..."
                 maxLength={10000}
-                disabled={isLoading || isValidating}
+                disabled={isChatLoading || isValidating}
                 value={internalChat?.dynamic_book || ""}
                 onChange={(val) => {
                     setInternalChat(prev => {
@@ -123,7 +130,7 @@ const PureSettings = ({ chatId }: Props) => {
                 description="Tell the AI what to avoid generating."
                 placeholder="Add text here..."
                 maxLength={2000}
-                disabled={isLoading || isValidating}
+                disabled={isChatLoading || isValidating}
                 value={internalChat?.negative_prompt || ""}
                 onChange={(val) => {
                     setInternalChat(prev => {
@@ -153,7 +160,7 @@ const PureSettings = ({ chatId }: Props) => {
                                 value: "3",
                                 label: "Novel"
                             }]}
-                            disabled={isLoading || isValidating}
+                            disabled={isChatLoading || isValidating}
                             value={chat?.response_length?.toString()}
                             onValueChange={(value) => {
                                 const updatedChat = {
@@ -177,7 +184,7 @@ const PureSettings = ({ chatId }: Props) => {
                                 value: "0.8",
                                 label: "On Drugs"
                             }]}
-                            disabled={isLoading || isValidating}
+                            disabled={isChatLoading || isValidating}
                             value={chat?.temperature?.toString()}
                             onValueChange={(value) => {
                                 const updatedChat = {
@@ -201,7 +208,7 @@ const PureSettings = ({ chatId }: Props) => {
                                 value: "0.9",
                                 label: "Extreme"
                             }]}
-                            disabled={isLoading || isValidating}
+                            disabled={isChatLoading || isValidating}
                             value={chat?.frequency_penalty?.toString()}
                             onValueChange={(value) => {
                                 const updatedChat = {
@@ -220,7 +227,7 @@ const PureSettings = ({ chatId }: Props) => {
             <Button 
                 variant={"destructive"} 
                 className="rounded-3xl"
-                disabled={isLoading || isValidating || !chat?.id  || isDeleting}
+                disabled={isChatLoading || isValidating || !chat?.id  || isDeleting}
                 onClick={() => {
                     if (!chat?.id) {
                         toast.error("Chat is not available for deletion.");
