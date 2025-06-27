@@ -6,7 +6,7 @@ import { createGroq } from '@ai-sdk/groq';
 export async function getGroq(modelId: string, baseURL?: string, apiKey?: string): Promise<LanguageModelV1> {
     const groq = createGroq({
         baseURL: baseURL || "https://api.groq.com/openai/v1",
-        apiKey: apiKey
+        apiKey: apiKey || process.env.GROQ_PUBLIC_API_KEY,
     })
 
     return groq(modelId);
@@ -43,7 +43,7 @@ export async function getGemini(modelId: string, apiKey?: string): Promise<Langu
 import { createMistral } from '@ai-sdk/mistral';
 export async function getMistral(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
     const mistral = createMistral({
-        apiKey: apiKey
+        apiKey: apiKey || process.env.MISTRAL_PUBLIC_API_KEY,
     });
 
     return mistral(modelId);
@@ -61,7 +61,7 @@ export async function getCohere(modelId: string, apiKey?: string): Promise<Langu
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 export async function getOpenRouter(modelName: string, apiKey?: string): Promise<LanguageModelV1> {
     const openRouter = createOpenRouter({
-        apiKey: apiKey,
+        apiKey: apiKey || process.env.OPENROUTER_PUBLIC_API_KEY,
     });
 
     return openRouter(modelName);
