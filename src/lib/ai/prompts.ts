@@ -247,150 +247,23 @@ export const noCharacterSelectedPrompt = (noCharSelected?: boolean): string => {
   return tmp + charachatIntroPrompt; 
 }
 
-export const charachatIntroPrompt =  `
-  Here is a ton of background information about the platform you are a part of and how it works:
+export const charachatIntroPrompt = `
+  Platform: Charachat - Open-source AI character chat platform with AES-256-GCM encryption.
 
-  # Charachat
+  Core Features:
+  - Multi-provider AI support (OpenAI, Claude, Gemini, Mistral, Ollama, etc.)
+  - Encrypted character profiles and messages
+  - Character creation with personality, bio, backstory
+  - Import from various sources (Anime/Manga, Wikipedia, SillyTavern)
+  - Advanced memory system for persistent conversations
+  - Message editing/deletion, AI-generated images
+  - Story scenarios and custom contexts
+  - User's own API keys, no data selling
+  - Cross-platform web application
 
-  [![Website](https://img.shields.io/badge/🌐_Website-charachat.app-blue?style=for-the-badge)](https://charachat.app)
-  [![Reddit](https://img.shields.io/badge/💬_Reddit-r/charachat-orange?style=for-the-badge)](https://www.reddit.com/r/Charachat)
-  [![Discord](https://img.shields.io/badge/💭_Discord-Join_Chat-purple?style=for-the-badge)](https://discord.gg/2HqqwcwGCy)
+  Tech Stack: Next.js, TypeScript, Supabase, Vercel AI SDK, Tailwind CSS
 
+  User Workflow: Account creation → Add API keys in profile → Select/create character → Start encrypted chat
 
-  ## Charachat - Private AI Character Chat Platform
-
-  **Chat with AI characters using your choice of 10+ providers, with strong encryption and complete privacy.**
-
-  Create or use pre-made characters and have dynamic, personal conversations. Characters respond based on their personality and remember your interactions, creating truly engaging AI relationships.
-
-  🔒 **Privacy-First**: All messages encrypted with AES-256-GCM  
-  ⭐ **Open Source**: Full transparency, no vendor lock-in  
-  🚀 **Multi-Provider**: Choose from OpenAI, Claude, Gemini, Ollama, and more  
-  🛡️ **No Data Selling**: Your conversations stay private
-
-  All messages are encrypted in the database using AES-256-GCM encryption with cryptographically secure keys, ensuring your conversations remain private and secure.
-
-  ## ✨ Features
-
-  ### 🎭 Character Creation & Management
-  - **Rich Character Profiles**: Create detailed characters with personality, backstory, and unique traits
-  - **Import from Popular Sources**: Anime/Manga, Wikipedia, Fandoms, SillyTavern formats
-  - **Private & Encrypted**: Your characters are encrypted and only accessible to you
-  - **Community Sharing**: Share your creations with others (optional)
-
-  ### 🤖 AI-Powered Conversations  
-  - **Multiple AI Providers**: Choose from OpenAI, Claude, Gemini, Mistral, Ollama, and more
-  - **Advanced Memory**: Characters remember your conversations and build relationships
-  - **Dynamic Responses**: Personalities adapt and evolve based on interactions
-  - **Agent Architecture**: Sophisticated AI system for realistic character behavior
-
-  ### 💬 Advanced Chat Experience
-  - **Real-time Messaging**: Smooth, responsive chat interface
-  - **Message Editing**: Edit or delete messages anytime
-  - **Rich Content**: Emojis, AI-generated images, and more
-  - **Story Integration**: Create and chat within custom story scenarios
-
-  ### 🔒 Privacy & Security
-  - **AES-256-GCM Encryption**: Military-grade encryption for all messages
-  - **No Data Selling**: Your conversations are never sold or analyzed
-  - **Open Source**: Fully transparent, auditable code
-
-  ### ⚙️ Customization & Control
-  - **Your API Keys**: Use your own AI provider accounts
-  - **Content Freedom**: No arbitrary censorship or content restrictions  
-  - **Cross-Platform**: Works on desktop, tablet, and mobile
-  - **Export (coming soon)/Import**: Full control over your data
-
-  ## Quick Start
-  1. Open the webapp
-  2. Create a new account
-  3. Go to your profile settings and add one or more API keys
-  4. When creating a new Chat, make sure to only use LLMs for which you have an API key
-
-  ## Privacy & Security
-
-  **Encryption**: All messages and private characters are encrypted in the database using AES-256-GCM encryption with cryptographically secure keys generated using crypto.randomBytes(). This ensures your data is protected at rest.
-
-  **Data Privacy**: Your conversations are private and secure. We don't sell your data or use it for advertising. Messages are transmitted over HTTPS for additional security in transit.
-
-  **Key Management**: Encryption keys are securely generated server-side and stored in your user metadata. Keys are not derived from passwords, ensuring cryptographic security.
-
-  **Open Source**: Full transparency through open-source code, allowing you to verify our security implementations.
-
-  **Security Transparency**: I welcome security researchers and developers to review the codebase and address any security concerns. Public pentesting of the source code is encouraged - if you find security issues, please reach out so we can address them promptly.
-
-  This is what an encrypted message looks like in the database:
-
-  As you can see, messages are stored in an encrypted format that cannot be read without the proper decryption key.
-
-  ## How Charachat Compares
-
-  | Feature | Charachat | Character.AI | JanitorAI |
-  |---------|-----------|--------------|-----------|
-  | **Encryption** | ✅ AES-256-GCM | ❌ None | ❌ None |
-  | **Open Source** | ✅ Free & Open | ❌ Closed | ❌ Closed |
-  | **AI Choice** | ✅ 10+ Providers | ❌ Locked In | ❌ Limited |
-  | **Private Characters** | ✅ Encrypted | ❌ Public | ❌ Public |
-  | **Content Policy** | ✅ User Choice | ❌ Censored | ⚠️ NSFW Only |
-  | **Data Selling** | ✅ Never | ❌ Unknown | ❌ Unknown |
-  | **Development** | ✅ Solo Dev | 🏢 Corp Team | 🏢 Corp Team |
-  | **Transparency** | ✅ Full Code Access | ❌ Black Box | ❌ Black Box |
-
-  *Choose the platform that respects your privacy and gives you control.*
-
-  ## Tech Stack
-  - Shadcn UI
-  - NextUI
-  - Tailwind CSS
-  - Next.js
-  - TypeScript
-  - Supabase
-  - Vercel AI SDK
-
-  ## Roadmap
-
-  ### Characters
-  - [x] Basic bio
-  - [x] Personality
-  - [x] Long Background story
-  - [x] Share Characters with other
-  - [x] Import Characters
-
-  ### Importers
-  - [x] Anime & Manga
-  - [x] Fandoms
-  - [x] Wikipedia
-  - [ ] Imdb
-  - [ ] C.ai
-  - [x] Silly Tavern
-
-  ### AI Features
-  - [x] Agent Structure
-  - [x] Memory Agent
-  - [x] LLMs
-      - [x] OpenAI
-      - [x] Mistral
-      - [x] Ollama
-      - [x] Gemini
-      - [x] Claude
-
-  ### AI Data Access in Chats
-  - [x] Character data
-  - [x] User data
-  - [x] Static Background information
-  - [x] Aquiring new information on its own
-
-  ### Stories
-  - [x] Create & Edit Stories with Characters
-  - [x] Create Chats based on Stories
-
-  ### Chat Features
-  - [x] Basic text chat
-  - [x] Emojis
-  - [ ] Images
-      - [x] From AI
-      - [ ] From User
-  - [ ] Gifs
-  - [x] Editing & deleting messages
-  - [x] Message Encryption
+  Privacy: All data encrypted at rest, open-source codebase, user controls their data and API keys.
 `
