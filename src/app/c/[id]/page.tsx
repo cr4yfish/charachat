@@ -96,7 +96,7 @@ export default async function CharacterView({ params }: { params: Params }) {
                             
                         <CharacterPageActions character={character} />
 
-                        <div className="h-full min-h-[200px] max-h-[400px] shrink-0 flex flex-col gap-2">
+                        <div className="min-h-[200px] h-fit shrink-0 flex flex-col gap-2">
                             <div className="prose dark:prose-invert">
                                <h2 >Test out {character.name}</h2> 
                             </div>
@@ -108,8 +108,8 @@ export default async function CharacterView({ params }: { params: Params }) {
 
     
                     <div className="flex flex-col w-full max-w-xl max-lg:max-w-full prose dark:prose-invert">
-                        <div className=" max-w-[690px] !select-none">
-                            <h2>Description</h2>
+                        <div className="max-w-[690px] !select-none">
+                            <h2 className="mt-0">Description</h2>
                             <Markdown>{character.description}</Markdown>
                         </div>
 
