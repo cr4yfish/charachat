@@ -57,25 +57,26 @@ export default function Spotlight({ init } : { init: SpotlightData }) {
                             className="object-cover object-top -z-10"
                         />
                     </div>
-                    
-                    <div className="w-full flex flex-col gap-2 p-4 z-20 backdrop-blur-[1px] ">
-                        <div className="relative flex flex-col justify-center  ">
-                            <span className="text-black/75 text-xs font-medium"  style={{ color: ` color-mix(in srgb, black 70%, ${data?.palette?.Vibrant})` }}>Spotlight</span>
-                            <CardTitle className="text-4xl font-black truncate " style={{ color: ` color-mix(in srgb, black 80%, ${data?.palette?.Vibrant})` }} >{data?.character.name}</CardTitle>
-                            <span className="truncate text-xs max-w-[66%]" style={{ color: ` color-mix(in srgb, black 70%, ${data?.palette?.Vibrant})` }} >{data?.character.description}</span>
-                            {/* <span className="text-black/75 text-sm truncate font-medium" >By @{data?.character.owner?.username}</span> */}
-                        </div>
-                        <Link href={`/chat?characterid=${data?.character.id}`} className="flex items-center gap-2">
-                            <Button 
-                                variant={"ghost"} 
-                                size={"lg"} 
-                                className="font-bold rounded-3xl " style={{ background: `color-mix(in srgb, black 80%, ${data?.palette?.Vibrant})`, color: ` color-mix(in srgb, white 90%, ${data?.palette?.Vibrant})` }} 
-                            >
-                                <span>Chat now</span>
-                                <ChevronRightIcon />
-                            </Button>
-                        </Link>
-             
+                    <div className="size-full flex flex-col items-center">
+                        <div className="w-full flex flex-col gap-2 p-4 z-20 backdrop-blur-[1px] max-w-[1920px] ">
+                            <div className="relative flex flex-col justify-center  ">
+                                <span className="text-black/75 text-xs font-medium"  style={{ color: ` color-mix(in srgb, black 70%, ${data?.palette?.Vibrant})` }}>Spotlight</span>
+                                <CardTitle className="text-4xl font-black truncate " style={{ color: ` color-mix(in srgb, black 80%, ${data?.palette?.Vibrant})` }} >{data?.character.name}</CardTitle>
+                                <span className="truncate text-xs max-w-[66%]" style={{ color: ` color-mix(in srgb, black 70%, ${data?.palette?.Vibrant})` }} >{data?.character.description}</span>
+                                {/* <span className="text-black/75 text-sm truncate font-medium" >By @{data?.character.owner?.username}</span> */}
+                            </div>
+                            <Link href={`/chat?characterid=${data?.character.id}`} className="flex items-center gap-2">
+                                <Button 
+                                    variant={"ghost"} 
+                                    size={"lg"} 
+                                    className="font-bold rounded-3xl " style={{ background: `color-mix(in srgb, black 80%, ${data?.palette?.Vibrant})`, color: ` color-mix(in srgb, white 90%, ${data?.palette?.Vibrant})` }} 
+                                >
+                                    <span>Chat now</span>
+                                    <ChevronRightIcon />
+                                </Button>
+                            </Link>
+                
+                    </div>
                    </div>
                 </CardContent>
             </Card>

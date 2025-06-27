@@ -138,7 +138,7 @@ export default function RandomCharacters({ onCharacterSelected }: RandomCharacte
             </div>
         </div>
       </DialogTrigger>
-      <DialogContent className="overflow-hidden !max-w-[90%] !w-full backdrop-blur-lg bg-background/75">
+      <DialogContent className="overflow-hidden max-xl:!max-w-[90%] xl:!max-w-[1920px] !w-full backdrop-blur-lg bg-background/75">
         <DialogHeader>
           <DialogTitle>Character Roulette</DialogTitle>          
           <DialogDescription>

@@ -39,11 +39,11 @@ export default async function Home() {
   const initialPersonas = await getCachedInitialPersonas();
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full flex flex-col items-center">
 
       <Spotlight init={spotlight} />
 
-      <div className="flex flex-col gap-4 px-4 py-6 pt-1  pb-[120px]">
+      <div className="flex flex-col gap-4 px-4 py-6 pt-1 pb-[120px] max-w-[1920px] w-full">
 
         {/* Personalized section */}
         <PersonalizedSection />

@@ -32,54 +32,56 @@ export default async function OwnCharsPage({ searchParams }: { searchParams: Pro
     const hasMore = chars.length === LIMITS.MAX_CHARACTERS_PAGINATION; // Check if there are more characters to load
 
     return (
-        <div className=" w-full h-fit ios-safe-header-padding-chats px-4 flex flex-col gap-4">
-            
-            {chars.map((char) => (
-                <SmallCharacterCard
-                    key={char.id}
-                    data={char}
-                    hasLink={true}
-                />
-            ))}
-            <Pagination>
-                <PaginationContent>
+        <div className="size-full flex flex-col items-center">
+            <div className=" w-full h-fit ios-safe-header-padding-chats px-4 flex flex-col gap-4 max-w-3xl">
+                
+                {chars.map((char) => (
+                    <SmallCharacterCard
+                        key={char.id}
+                        data={char}
+                        hasLink={true}
+                    />
+                ))}
+                <Pagination>
+                    <PaginationContent>
 
-                    {/* Show previous page if it exists */}
-                    {requestedPage > 1 &&
-                    <>
-                        <PaginationItem>
-                            <PaginationPrevious href={"/c/own?page=" + prevPage} />
-                        </PaginationItem>
+                        {/* Show previous page if it exists */}
+                        {requestedPage > 1 &&
+                        <>
+                            <PaginationItem>
+                                <PaginationPrevious href={"/c/own?page=" + prevPage} />
+                            </PaginationItem>
 
-                        <PaginationItem>
-                            <PaginationLink href={"/c/own?page=" + prevPage}>{prevPage}</PaginationLink>
-                        </PaginationItem>
-                        
-                    </>
-                    }
+                            <PaginationItem>
+                                <PaginationLink href={"/c/own?page=" + prevPage}>{prevPage}</PaginationLink>
+                            </PaginationItem>
+                            
+                        </>
+                        }
 
-                    {/* Show current page if there's a prev or next one */}
-                    {(requestedPage > 1 || hasMore) &&
-                        <PaginationItem>
-                            <PaginationLink href="#">{requestedPage}</PaginationLink>
-                        </PaginationItem>
-                    }
+                        {/* Show current page if there's a prev or next one */}
+                        {(requestedPage > 1 || hasMore) &&
+                            <PaginationItem>
+                                <PaginationLink href="#">{requestedPage}</PaginationLink>
+                            </PaginationItem>
+                        }
 
-                    {/* Show next pages if there are more pages */}
-                    {hasMore && 
-                    <>
-                        <PaginationItem>
-                            <PaginationLink href={"/c/own?page=" + nextPage}>{nextPage}</PaginationLink>
-                        </PaginationItem>
+                        {/* Show next pages if there are more pages */}
+                        {hasMore && 
+                        <>
+                            <PaginationItem>
+                                <PaginationLink href={"/c/own?page=" + nextPage}>{nextPage}</PaginationLink>
+                            </PaginationItem>
 
-                        <PaginationItem>
-                            <PaginationNext href={"/c/own?page=" + nextPage} />
-                        </PaginationItem>
-                    </>
-                    }
+                            <PaginationItem>
+                                <PaginationNext href={"/c/own?page=" + nextPage} />
+                            </PaginationItem>
+                        </>
+                        }
 
-                </PaginationContent>
-            </Pagination>
+                    </PaginationContent>
+                </Pagination>
+            </div>
         </div>
     )
 }

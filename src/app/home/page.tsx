@@ -31,9 +31,9 @@ export default async function ChatsPage() {
     })
 
     return (
-        <div className=" h-screen max-w-screen overflow-x-hidden overflow-y-auto ios-safe-header-padding-chats pb-[100px] px-4">     
+        <div className=" h-screen max-w-screen overflow-x-hidden overflow-y-auto ios-safe-header-padding-chats pb-[100px] px-4 flex flex-col items-center">     
             
-            <div className="flex flex-col gap-4 w-full h-fit">
+            <div className="flex flex-col gap-4 w-full h-fit max-w-3xl">
                 
             
                 <YourProfile userid={user.id} />
