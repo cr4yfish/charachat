@@ -100,7 +100,7 @@ const PureSmallChat = ({ character }: Props) => {
                         latestMessage={messages[messages.length - 1]?.id === message.id}
                     />
                 ))}
-                <div className="pb-[50px]" id="endpad"></div>
+                <div className="pb-[70px] sm:pb-[50px]" id="endpad"></div>
             </ScrollArea>
 
             {/* Prompt input */}
