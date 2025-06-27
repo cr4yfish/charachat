@@ -62,9 +62,8 @@ const PureSearchBar = ({ initialQuery } : Props) => {
     const searchLogic = (searchTerm: string) => {
         setIsFocused(false); // Close the search bar popover
         // Navigate to the search page with the clicked term
-        const searchParams = new URLSearchParams();
+        const searchParams = new URLSearchParams(window.location.search);
         searchParams.set("q", searchTerm);
-        searchParams.set("type", "characters"); // Default type, can be changed based on requirements
         router.push(`/search?${searchParams.toString()}`);
     }
 
@@ -120,6 +119,8 @@ const PureSearchBar = ({ initialQuery } : Props) => {
                 />
                 {(input && input.length > 0) &&<Button variant={"link"} className="text-slate-200/80 absolute right-0 top-0 h-full flex items-center justify-center mr-1" onClick={() => { 
                     setInput(""); // Clear input
+                    searchLogic(""); // Trigger search with empty query
+                    setIsFocused(false); // Close the popover
                 }}>
                     <XIcon />
                 </Button>}
