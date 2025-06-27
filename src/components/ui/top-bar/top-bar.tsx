@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useSidebar } from "../sidebar";
 import SearchCard from "@/components/search/search-card";
+import FeedbackButton from "@/components/feedback/feedback-button";
 
 type TopBarAction = {
     
@@ -173,13 +174,14 @@ const PureTopBar = () => {
                         <div className="flex items-center gap-2 relative">
                             {pathname === "/" && <SearchCard />}
                             {activeActions.map((action) => (
-                                <Link key={`top-bar-action-${action.pathname}-${action.icon}`} href={action.href} className=" cursor-pointer">
+                                <Link key={`top-bar-action-${action.pathname}-${action.icon}-${action.href}`} href={action.href} className=" cursor-pointer">
                                     <Button className=" cursor-pointer" >
                                         {action.icon}
                                         {action.label && <span className="">{action.label}</span>}
                                     </Button>
                                 </Link>
                             ))}
+                            <FeedbackButton />
                         </div>
                     }
                 </div>
