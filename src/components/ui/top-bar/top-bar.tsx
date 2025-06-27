@@ -144,7 +144,8 @@ const PureTopBar = () => {
                             <Button size={"icon"} variant={"ghost"} className="cursor-pointer">
                                 <ChevronLeftIcon size={12} />
                             </Button>
-                        </Link>}
+                        </Link>
+                        }
 
                         { activeTitle?.showHomeButton &&
                             <Link href={"/"} className="flex flex-row items-center gap-1">
