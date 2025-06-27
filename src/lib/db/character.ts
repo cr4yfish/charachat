@@ -49,6 +49,18 @@ const characterFormatter = async (db: any | undefined): Promise<Character> => {
         tags_full: JSON.stringify(db?.tags_full) === "[null]" ? undefined : db?.tags_full
     } as Character;
 
+    // Filter out duplicate tags by name
+    if (char.tags_full && Array.isArray(char.tags_full)) {
+        const seenTagNames = new Set<string>();
+        char.tags_full = char.tags_full.filter(tag => {
+            if (tag?.name && !seenTagNames.has(tag.name)) {
+                seenTagNames.add(tag.name);
+                return true;
+            }
+            return false;
+        });
+    }
+
     if(char.is_private) {
         return await decryptCharacter(char, await getKeyServerSide());
     }
