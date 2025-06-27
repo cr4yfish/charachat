@@ -5,6 +5,7 @@ import { safeParseLink } from "@/lib/utils/text";
 import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { useProfile } from "@/hooks/use-profile";
 
 type Props = {
     src?: string | undefined;
@@ -22,6 +23,15 @@ type Props = {
 
 const PureImageWithBlur = (props: Props) => {
     const [isBlurred, setIsBlurred] = useState(props.is_nsfw ?? false);
+    const { profile } = useProfile();
+
+    // Unblur from profile settings
+    // This is useful when the user has set the profile settings to show NSFW content
+    useEffect(() => {
+        if(profile?.settings && profile.settings.show_nsfw === true) {
+            setIsBlurred(false);
+        }
+    }, [profile]);
 
     // keep the blur state in sync with the is_nsfw prop
     // this is useful when the image is loaded and the nsfw state changes
