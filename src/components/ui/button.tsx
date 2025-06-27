@@ -19,7 +19,7 @@ const buttonVariants = cva(
         secondary:
           "bg-primary text-primary-foreground hover:bg-primary/80 backdrop-blur-lg rounded-3xl py-4 min-h-[48px]",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-3xl py-4 min-h-[48px] backdrop-blur-lg ",
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-3xl py-4 min-h-[36px] backdrop-blur-lg ",
         link: "text-primary underline-offset-4 hover:underline py-4 min-h-[48px]",
         liquid: "rounded-3xl overflow-hidden relative h-fit min-h-[48px] w-full",
       },
