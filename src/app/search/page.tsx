@@ -94,7 +94,7 @@ export default async function SearchPage({
         splittedTags = q.split(" ").filter(tag => tag.trim() !== "");
     }
 
-    let searchResults: any[] = [];
+    let searchResults: (Character | Persona)[] = [];
 
         if(splittedTags.length > 0) {
 
