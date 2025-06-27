@@ -24,7 +24,7 @@ type Props = {
 }
 
 const PureChatSetup = (props: Props) => {
-    const { profile, refreshProfile, isLoading } = useProfile(); // I expect this to be cached at this point and not take long to load in real use
+    const { profile, isLoading } = useProfile(); // I expect this to be cached at this point and not take long to load in real use
     const [selectedPersona, setSelectedPersona] = useState<Persona| null>(null);
     const { data: defaultPersona } = useSWR<Persona>(
         profile?.settings?.default_persona_id ? API_ROUTES.GET_PERSONA + profile.settings.default_persona_id : null, 
