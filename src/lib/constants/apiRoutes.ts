@@ -41,6 +41,8 @@ export const API_ROUTES = {
     PERSONA_COOKIE: "/api/config/persona",
     LLM_COOKIE: "/api/config/llm",
 
+    SEARCH_PERSONAS: "/api/personas/search?q=",
+    GET_PERSONA: "/api/persona?id=",
     GET_PERSONAS: "/api/personas",
     GET_OWN_PERSONAS: "/api/personas/own",
     CREATE_PERSONA: "/api/personas/create",
