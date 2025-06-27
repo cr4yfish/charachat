@@ -20,6 +20,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Message as MessageComponent } from "./message";
 import { ScrollArea } from "../ui/scroll-area";
 import { useEffect } from "react";
+import { replaceVariables } from "@/lib/utils/text";
 
 type Props = {
     character: Character;
@@ -41,16 +42,23 @@ const PureSmallChat = ({ character }: Props) => {
     useEffect(() => {
         // If the character has a first message, append it to the chat
         if (character.first_message || character.intro) {
+
+            let content = character.first_message || character.intro;
+
+            content = replaceVariables(content, {
+                "{{char}}": character.name,
+            })
+
             const firstMessage = {
                 id: uuidv4(),
                 role: "assistant",
-                content: character.first_message || character.intro,
+                content: content,
                 createdAt: new Date(),
             } as Message
 
             setMessages((prevMessages) => {
                 // If the last message is the first message, don't append it again
-                if(prevMessages.some(msg => msg.role === "assistant" && msg.content === firstMessage.content)) {
+                if(prevMessages.some(msg => msg.role === "assistant" && msg.content === content)) {
                     return prevMessages;
                 }
 
@@ -76,15 +84,14 @@ const PureSmallChat = ({ character }: Props) => {
     return (
         // Wrapper adjusts size based on parent container
         // max-w-2xl ensures it doesn't get absurdly large
-        <div id="small-chat" className="bg-background border border-border rounded-3xl size-full max-w-2xl relative flex flex-col gap-4 p-1" >
+        <div id="small-chat" className="bg-background/50 backdrop-blur border border-border rounded-3xl size-full max-w-2xl relative flex flex-col gap-4 p-1" >
 
 
             {/* Messages */}
-            <ScrollArea className="p-4 h-full flex flex-col min-h-[200px] max-h-[400px] pb-[70px]">
+            <ScrollArea className="p-4 h-full flex flex-col min-h-[200px] max-h-[400px]">
                 {messages.map((message) => (
                     <MessageComponent 
                         key={message.id}
-
                         message={message}
                         isLoading={status === "streaming" || status === "submitted"}
                         characterName={character.name}
@@ -93,6 +100,7 @@ const PureSmallChat = ({ character }: Props) => {
                         latestMessage={messages[messages.length - 1]?.id === message.id}
                     />
                 ))}
+                <div className="pb-[50px]" id="endpad"></div>
             </ScrollArea>
 
             {/* Prompt input */}
