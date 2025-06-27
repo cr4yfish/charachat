@@ -2,7 +2,7 @@ import "server-only";
 
 import { checkIsEncrypted, decryptMessage } from "../crypto/client";
 import { getKeyServerSide } from "../crypto/server";
-import { getLLMById, getProviderAPIKey, isFreeLLM } from "./utils";
+import { getLLMById, getProviderAPIKey } from "./utils";
 import { Profile } from "../db/types/profile";
 import { ModelId } from "./types";
 import { LanguageModelV1 } from "ai";
@@ -27,7 +27,7 @@ export async function getModelApiKey(profile: Profile, modelid?: ModelId): Promi
 
     // encryptedApiKey is set and model is free
     // key is also not encrypted -> env variable
-    if(isFreeLLM(selectedModel) && !checkIsEncrypted(encryptedAPIKey)) {
+    if(selectedModel.isFree && !checkIsEncrypted(encryptedAPIKey)) {
         return encryptedAPIKey;
     }
 

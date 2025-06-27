@@ -166,9 +166,9 @@ export async function POST(req:Request) {
 
     // we have various methods to get the modelId:
     // 1. chat.llm (if chat exists) <- User preference for this chat
-    // 2. clientLLM (from the request body) <- Only used on new chats
-    // 3. profile.default_llm (from the user's profile) <- Used for fallback
-    const modelId = (chat?.llm || clientLLM || profile.default_llm) as ModelId;
+    // 3. profileSettings.default_llm (from the user's profile) <- Default
+    // 2. clientLLM (from the request body) <- Cookie @deprecated
+    const modelId = (chat?.llm || profile.default_llm  || clientLLM) as ModelId;
 
     // Try to get the API key for the model
     // If it fails, return a 400 error with the error message
