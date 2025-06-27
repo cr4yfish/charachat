@@ -64,7 +64,7 @@ function PurePersonaTopHeader({ persona, isOwner, isDefault } : { persona: Perso
                         </Button>
                     </Link>
                     }
-                    <Button onClick={handleSetDefault} disabled={isSettingDefault} className={cn("", { "bg-emerald-400/50": internalIsDefault })} >
+                    <Button onClick={handleSetDefault} disabled={isSettingDefault} className={cn("w-fit", { "bg-emerald-400/50": internalIsDefault })} >
                         {isSettingDefault ? <Spinner /> : <DramaIcon />}
                         <span>
                         {internalIsDefault ? "Default Persona" : "Set as Default"}    
