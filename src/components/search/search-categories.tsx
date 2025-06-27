@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownUpIcon } from "lucide-react";
+import { ArrowDownUpIcon, FilterIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import ButtonGroup from "../ui/button-group";
 import { useRouter } from "next/navigation";
@@ -10,9 +10,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { SearchType, SortType } from "@/app/search/page";
+import { FilterType, SearchType, SortType } from "@/app/search/page";
 
-const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchType | undefined, currentQuery?: string, initSortType?: SortType }) => {
+const PureSearchCategories = ({ initType, initSortType, initFilterType } : { initType?: SearchType | undefined, currentQuery?: string, initSortType?: SortType, initFilterType?: FilterType }) => {
     const router = useRouter();
 
     return (
@@ -33,30 +33,59 @@ const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchTy
                     ]}
                 />
             </div>
-            <Popover>
-                <PopoverTrigger asChild>
-                    <Button variant={"ghost"}>
-                        <ArrowDownUpIcon />
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                    <ButtonGroup 
-                        dir="vertical"
-                        value={initSortType || "relevance"}
-                        onValueChange={(value) => {
-                            const currentSearchParams = new URLSearchParams(window.location.search);
-                            currentSearchParams.set("sort", value);
-                            router.push(`/search?` + currentSearchParams.toString());
-                        }}
-                        options={[
-                            { label: "Relevance", value: "relevance" },
-                            { label: "Newest", value: "newest" },
-                            { label: "Popular", value: "popular" },
-                            { label: "Likes", value: "likes" }
-                        ]}
-                    />
-                </PopoverContent>
-            </Popover>
+
+            <div className="flex items-center gap-2">
+
+                {/* Filter */}
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant={"ghost"}>
+                            <FilterIcon />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <ButtonGroup 
+                            dir="vertical"
+                            value={initFilterType || "all"}
+                            onValueChange={(value) => {
+                                const currentSearchParams = new URLSearchParams(window.location.search);
+                                currentSearchParams.set("filter", value);
+                                router.push(`/search?` + currentSearchParams.toString());
+                            }}
+                            options={[
+                                { label: "All", value: "all" },
+                                { label: "Mine", value: "own" },
+                            ]}
+                        />
+                    </PopoverContent>
+                </Popover>
+
+                {/* Sort */}
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant={"ghost"}>
+                            <ArrowDownUpIcon />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <ButtonGroup 
+                            dir="vertical"
+                            value={initSortType || "relevance"}
+                            onValueChange={(value) => {
+                                const currentSearchParams = new URLSearchParams(window.location.search);
+                                currentSearchParams.set("sort", value);
+                                router.push(`/search?` + currentSearchParams.toString());
+                            }}
+                            options={[
+                                { label: "Relevance", value: "relevance" },
+                                { label: "Newest", value: "newest" },
+                                { label: "Popular", value: "popular" },
+                                { label: "Likes", value: "likes" }
+                            ]}
+                        />
+                    </PopoverContent>
+                </Popover>
+            </div>
 
         </div>
     );
@@ -65,6 +94,8 @@ const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchTy
 export const SearchCategories = memo(PureSearchCategories, (prevProps, nextProps) => {
     if(prevProps.currentQuery !== nextProps.currentQuery) return false;
     if(prevProps.initType !== nextProps.initType) return false;
+    if(prevProps.initSortType !== nextProps.initSortType) return false;
+    if(prevProps.initFilterType !== nextProps.initFilterType) return false;
     
     return true;
 });

@@ -137,7 +137,7 @@ export const getPersonas = cache(async (props: LoadMoreProps, sort?: SortType) =
     return await Promise.all(data.map(personaFormatter));
 })
 
-export const getOwnPersonas = cache(async (props: LoadMoreProps) => {
+export const getOwnPersonas = cache(async (props: LoadMoreProps, sort?: SortType) => {
     const user = await currentUser();
 
     if( !user || !user.id) {
@@ -155,7 +155,7 @@ export const getOwnPersonas = cache(async (props: LoadMoreProps) => {
         console.error("Error fetching personas", error);
         return [];
     }
-
+    
     return await Promise.all(data.map(privatePersonaFormatter));
 })
 
@@ -172,27 +172,6 @@ export async function getCachedInitialPersonas() {
         }
     )();
 }
-
-export const getUserPersonas = cache(async (props: LoadMoreProps) => {
-    const { data: { user } } = await (await createClient()).auth.getUser();
-
-    if(!user?.id) {
-        throw new Error("User not authenticated");
-    }
-
-    const { data, error } = await (await createClient())
-        .from(tableName)
-        .select(personaMatcher)
-        .eq("creator", user.id)
-        .range(props.cursor, props.cursor + props.limit - 1);
-
-    if (error) {
-        console.error("Error fetching user personas", error);
-        throw error;
-    }
-
-    return await Promise.all(data.map(privatePersonaFormatter));
-})
 
 export const getPublicUserPersonas = cache(async (props: LoadMoreProps) => {
     if(!props.args?.userId) {
@@ -341,6 +320,7 @@ export const searchPersonasByAITags = cache(async (
         sort?: 'newest' | 'likes' | 'relevance' | 'popular';
         limit?: number;
         includePrivate?: boolean;
+        onlyPrivate?: boolean;
         exactMatch?: boolean;
     } = {}
 ): Promise<Persona[]> => {
@@ -367,13 +347,13 @@ export const searchPersonasByAITags = cache(async (
     const results: Persona[] = [];
 
     // Search public personas (database search)
-    console.log("Searching public personas with keywords:", cleanedKeywords);
-    const publicPersonas = await searchPublicPersonas(cleanedKeywords, { sort, limit, exactMatch });
-    results.push(...publicPersonas);
+    if(options.onlyPrivate !== true) {
+        const publicPersonas = await searchPublicPersonas(cleanedKeywords, { sort, limit, exactMatch });
+        results.push(...publicPersonas);
+    }
 
     // Search private personas (client-side search) if requested
-    if (includePrivate) {
-        console.log("Searching private personas with keywords:", cleanedKeywords);
+    if (includePrivate || options.onlyPrivate === true) {
         const privatePersonas = await searchPrivatePersonas(cleanedKeywords, { sort, limit, exactMatch });
         results.push(...privatePersonas);
     }

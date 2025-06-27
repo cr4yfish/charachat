@@ -1,7 +1,7 @@
 
 import SearchBar from "@/components/ui/searchbar";
 import { unstable_cache } from "next/cache";
-import { getCharacters, searchCharactersByAITags } from "@/lib/db/character";
+import { getCharacters, getUserCharacters, searchCharactersByAITags } from "@/lib/db/character";
 import { TIMINGS } from "@/lib/constants/timings";
 import SmallCharacterCard from "@/components/character/character-card-small";
 import { SearchCategories } from "@/components/search/search-categories";
@@ -20,20 +20,21 @@ import { redirect } from "next/navigation";
 import { LIMITS } from "@/lib/constants/limits";
 import SearchTopBar from "@/components/ui/top-bar/search-top-bar";
 import Link from "next/link";
-import { getPersonas, searchPersonasByAITags } from "@/lib/db/persona";
+import { getOwnPersonas, getPersonas, searchPersonasByAITags } from "@/lib/db/persona";
 import PersonaSmallCard from "@/components/personas/persona-small-card";
 import { Character } from "@/lib/db/types/character";
 import { Persona } from "@/lib/db/types/persona";
 
 export type SearchType = "characters" | "creators" | "personas" | "collections"; 
 export type SortType = "likes" | "newest" | "popular" | "relevance";
+export type FilterType = "all" | "own";
 
 export default async function SearchPage({
     searchParams,
 }: {
-    searchParams: Promise<{ q?: string, type?: SearchType, sort?: SortType, page?: string }>;
+    searchParams: Promise<{ q?: string, type?: SearchType, sort?: SortType, page?: string, filter?: FilterType }>;
     }) {
-    const { q="", type="characters", sort="relevance", page="0" } = await searchParams;
+    const { q="", type="characters", sort="relevance", page="0", filter="all" } = await searchParams;
     
     // Let mistral create keywords for the search
     // If the query is empty, we can return early
@@ -48,6 +49,7 @@ export default async function SearchPage({
         if (q) params.set('q', q);
         if (type !== 'characters') params.set('type', type);
         if (sort !== 'relevance') params.set('sort', sort);
+        if (filter !== 'all') params.set('filter', filter);
         params.set('page', pageNum.toString());
         return `/search?${params.toString()}`;
     };
@@ -58,6 +60,7 @@ export default async function SearchPage({
         params.set('q', suggestion);
         if (type !== 'characters') params.set('type', type);
         if (sort !== 'relevance') params.set('sort', sort);
+        if (filter !== 'all') params.set('filter', filter);
         // Reset page to 0 for new searches
         params.set('page', '0');
         return `/search?${params.toString()}`;
@@ -91,47 +94,84 @@ export default async function SearchPage({
         splittedTags = q.split(" ").filter(tag => tag.trim() !== "");
     }
 
-    const searchResults = splittedTags.length > 0 ? 
-        // if there are tags -> search
-        await unstable_cache(
-            async () => {
-                if (!q) return [];
-                if (type === "characters") {
-                    return searchCharactersByAITags(splittedTags, { sort: sort, includeNSFW: true });
-                }
-                if( type === "personas") {
-                    return searchPersonasByAITags(splittedTags, { sort: sort });
-                }
-                // Add other search types as needed
-                return [];
-            }, 
-            [`search-cursor-${cursor}-${sort}-${type}-${q}`],
-            {
-                tags: ["search", sort, type, q],
-                revalidate: TIMINGS.ONE_HOUR // Cache for 1 hour
-            }
-        )() 
-    
-    : 
-        // if no tags -> let user browse all characters
-        await unstable_cache(
-            async () => {
-                if (type === "characters") {
-                    return getCharacters({ cursor, limit  }, sort);
-                }
+    let searchResults: any[] = [];
 
-                if( type === "personas") {
-                    return getPersonas({  cursor, limit }, sort);
+        if(splittedTags.length > 0) {
+
+            // Search by AI-generated tags
+
+            // Search by AI-generated tags, but private
+            if(filter === "own") {
+                if(type === "characters") {
+                    searchResults = await searchCharactersByAITags(splittedTags, { sort: sort, includeNSFW: true, onlyPrivate: true });
                 }
-                // Add other search types as needed
-                return [];
-            },
-            [`browse-cursor-${cursor}-${sort}-${type}`],
-            {
-                tags: [`browse-cursor-${cursor}-${sort}`],
-                revalidate: TIMINGS.ONE_HOUR // Cache for 1 hour
+                if(type === "personas") {
+                    searchResults = await searchPersonasByAITags(splittedTags, { sort: sort, includePrivate: true, onlyPrivate: true });
+                }
+                
+            } 
+            
+            // Search by AI-generated tags, but public
+            else {
+                searchResults = await unstable_cache(
+                    async () => {
+                        if (!q) return [];
+                        if (type === "characters") {
+                            return searchCharactersByAITags(splittedTags, { sort: sort, includeNSFW: true });
+                        }
+                        if( type === "personas") {
+                            return searchPersonasByAITags(splittedTags, { sort: sort });
+                        }
+                        // Add other search types as needed
+                        return [];
+                    }, 
+                    [`search-cursor-${cursor}-${sort}-${type}-${q}-${filter}`],
+                    {
+                        tags: ["search", sort, type, q, filter],
+                        revalidate: TIMINGS.ONE_HOUR // Cache for 1 hour
+                    }
+                )();
             }
-        )();
+        } else {
+
+            // Browse all
+
+            // All private
+            if( filter === "own") {
+                if(type === "characters") {
+                    searchResults = await getUserCharacters({ cursor, limit }, sort);
+                } else if(type === "personas") {
+                    searchResults = await getOwnPersonas({ cursor, limit }, sort);
+                } else {
+                    // Handle other types if needed
+                    searchResults = [];
+                }
+            } 
+            
+            // All public
+            else {
+                // if no tags -> let user browse all characters
+                searchResults = await unstable_cache(
+                    async () => {
+                        if (type === "characters") {
+                            return getCharacters({ cursor, limit  }, sort);
+                        }
+
+                        if( type === "personas") {
+                            return getPersonas({  cursor, limit }, sort);
+                        }
+                        // Add other search types as needed
+                        return [];
+                    },
+                    [`browse-cursor-${cursor}-${sort}-${type}-${filter}`],
+                    {
+                        tags: [`browse-cursor-${cursor}-${sort}-${filter}`],
+                        revalidate: TIMINGS.ONE_HOUR // Cache for 1 hour
+                    }
+                )();
+            }
+        }
+
 
     const hasNextPage = searchResults.length === limit;
     const hasPreviousPage = currentPage > 0;
@@ -154,7 +194,7 @@ export default async function SearchPage({
                 <div className="relative flex flex-col items-center gap-2 z-10 w-full h-fit max-w-[567px]  md:mt-[20px]  ">
                     <SearchTopBar />
                     <SearchBar initialQuery={q} /> 
-                    <SearchCategories initType={type} initSortType={sort} currentQuery={q} />
+                    <SearchCategories initType={type} initSortType={sort} currentQuery={q} initFilterType={filter} />
 
                     {/* Search suggestions */}
                     <div className="flex flex-row items-center justify-start overflow-auto gap-2 w-full text-xs sm:text-sm text-muted-foreground  transition-all duration-200 h-fit shrink-0">

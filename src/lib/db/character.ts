@@ -562,20 +562,37 @@ export const searchCharactersInfinite = cache(async (props: LoadMoreProps): Prom
     }));
 })
 
-export const getUserCharacters = cache(async (props: LoadMoreProps): Promise<Character[]> => {
+export const getUserCharacters = cache(async (props: LoadMoreProps, sort?: SortType): Promise<Character[]> => {
     const user = await currentUser();
 
     if(!user?.id) {
         throw new Error("getUserChar: User not found");
     }
 
-    const { data, error } = await (await createClient())
+    let query = (await createClient())
         .from(characterTableName)
         .select(characterMatcher)
         .eq("owner_clerk_user_id", user.id)
-        .order("created_at", { ascending: false })
-        .range(props.cursor, props.cursor + props.limit - 1);
 
+    // Apply sorting based on the sort parameter
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+            query = query.order('likes', { ascending: false });
+            break;
+        case 'relevance':
+        case 'popular':
+            query = query.order('chats', { ascending: false });
+            break;
+        default:
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query.range(props.cursor, props.cursor + props.limit - 1);
+    
     if (error) {
         console.error("Error fetching user characters", error);
         return [];
@@ -798,7 +815,8 @@ export const searchCharactersByTags = cache(async (
     }));
 })
 
-export const searchCharactersByAITags = cache(async (
+// Helper function to search public characters (database search)
+const searchPublicCharacters = async (
     keywords: string[], 
     options: {
         sort?: 'newest' | 'likes' | 'relevance' | 'popular';
@@ -807,37 +825,19 @@ export const searchCharactersByAITags = cache(async (
         exactMatch?: boolean;
     } = {}
 ): Promise<Character[]> => {
-    const { 
-        sort = 'relevance', 
-        limit = 20, 
-        includeNSFW = false,
-        exactMatch = false 
-    } = options;
-
-    if (!keywords || keywords.length === 0) {
-        return [];
-    }
-
-    // Clean and prepare keywords
-    const cleanedKeywords = keywords
-        .map(keyword => keyword.trim().toLowerCase())
-        .filter(keyword => keyword.length > 0);
-
-    if (cleanedKeywords.length === 0) {
-        return [];
-    }
+    const { sort = 'relevance', limit = 20, includeNSFW = false, exactMatch = false } = options;
 
     // Build search conditions based on match type
     let searchConditions: string;
     
     if (exactMatch) {
         // Exact match for more precise results
-        searchConditions = cleanedKeywords.map(keyword => 
+        searchConditions = keywords.map(keyword => 
             `name.ilike.%${keyword}%,description.ilike.%${keyword}%,personality.ilike.%${keyword}%,scenario.ilike.%${keyword}%,bio.ilike.%${keyword}%`
         ).join(',');
     } else {
         // Fuzzy match for broader results
-        searchConditions = cleanedKeywords.map(keyword => 
+        searchConditions = keywords.map(keyword => 
             `name.ilike.*${keyword}*,description.ilike.*${keyword}*,bio.ilike.*${keyword}*,intro.ilike.*${keyword}*,book.ilike.*${keyword}*,personality.ilike.*${keyword}*,scenario.ilike.*${keyword}*`
         ).join(',');
     }
@@ -846,6 +846,7 @@ export const searchCharactersByAITags = cache(async (
         .from(publicTableName)
         .select("*")
         .or(searchConditions)
+        .eq('is_private', false)
         .limit(limit);
 
     // Filter NSFW content if not included
@@ -866,7 +867,6 @@ export const searchCharactersByAITags = cache(async (
             break;
         case 'relevance':
         default:
-            // Order by created_at for now, could be enhanced with actual relevance scoring
             query = query.order('created_at', { ascending: false });
             break;
     }
@@ -874,23 +874,146 @@ export const searchCharactersByAITags = cache(async (
     const { data, error } = await query;
 
     if (error) {
+        console.error("Error searching public characters", error);
         throw error;
     }
 
-    const characters = await Promise.all(data.map(async (db: any) => {
+    return await Promise.all(data.map(async (db: any) => {
         return await characterFormatter(db);
     }));
+};
 
-    // If using relevance sort, we could add client-side scoring here
+// Helper function to search private characters (client-side search)
+const searchPrivateCharacters = async (
+    keywords: string[], 
+    options: {
+        sort?: 'newest' | 'likes' | 'relevance' | 'popular';
+        limit?: number;
+        includeNSFW?: boolean;
+        exactMatch?: boolean;
+    } = {}
+): Promise<Character[]> => {
+    const { limit = 20, includeNSFW = false, exactMatch = false } = options;
+    
+    const user = await currentUser();
+    if (!user?.id) {
+        return []; // No private characters if not authenticated
+    }
+
+    // Fetch ALL private characters for this user
+    const { data, error } = await (await createClient())
+        .from(characterTableName)
+        .select(characterMatcher)
+        .eq("owner_clerk_user_id", user.id)
+        .eq("is_private", true)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching private characters for search", error);
+        return [];
+    }
+
+    // Decrypt all characters
+    const decryptedCharacters = await Promise.all(data.map(privateCharacterFormatter));
+
+    // Client-side search
+    const filteredCharacters = decryptedCharacters.filter(character => {
+        // Filter NSFW content if not included
+        if (!includeNSFW && character.is_nsfw) {
+            return false;
+        }
+
+        const searchableText = [
+            character.name,
+            character.description,
+            character.personality,
+            character.scenario,
+            character.bio,
+            character.intro,
+            character.book
+        ].filter(Boolean).join(' ').toLowerCase();
+
+        return keywords.some(keyword => {
+            const keywordLower = keyword.toLowerCase();
+            return exactMatch 
+                ? searchableText.includes(keywordLower)
+                : searchableText.includes(keywordLower);
+        });
+    });
+
+    return filteredCharacters.slice(0, limit);
+};
+
+export const searchCharactersByAITags = cache(async (
+    keywords: string[], 
+    options: {
+        sort?: 'newest' | 'likes' | 'relevance' | 'popular';
+        limit?: number;
+        includeNSFW?: boolean;
+        exactMatch?: boolean;
+        includePrivate?: boolean;
+        onlyPrivate?: boolean;
+    } = {}
+): Promise<Character[]> => {
+    const { 
+        sort = 'relevance', 
+        limit = 20, 
+        includeNSFW = false,
+        exactMatch = false,
+        includePrivate = false
+    } = options;
+
+    if (!keywords || keywords.length === 0) {
+        return [];
+    }
+
+    // Clean and prepare keywords
+    const cleanedKeywords = keywords
+        .map(keyword => keyword.trim().toLowerCase())
+        .filter(keyword => keyword.length > 0);
+
+    if (cleanedKeywords.length === 0) {
+        return [];
+    }
+
+    const results: Character[] = [];
+
+    if(options.onlyPrivate !== true) {
+        // Search public characters (database search)
+        const publicCharacters = await searchPublicCharacters(cleanedKeywords, { sort, limit, includeNSFW, exactMatch });
+        results.push(...publicCharacters);        
+    }
+    
+    // Search private characters (client-side search) if requested
+    if (includePrivate || options.onlyPrivate === true) {
+        const privateCharacters = await searchPrivateCharacters(cleanedKeywords, { sort, limit, includeNSFW, exactMatch });
+        results.push(...privateCharacters);
+    }
+
+    // Re-sort combined results if needed
     if (sort === 'relevance') {
-        return characters.sort((a, b) => {
+        results.sort((a, b) => {
             const scoreA = calculateRelevanceScore(a, cleanedKeywords);
             const scoreB = calculateRelevanceScore(b, cleanedKeywords);
             return scoreB - scoreA;
         });
+    } else if (sort === 'newest') {
+        results.sort((a, b) => {
+            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            return dateB - dateA;
+        });
+    } else if (sort === 'likes') {
+        results.sort((a, b) => {
+            return (b.likes || 0) - (a.likes || 0);
+        });
+    } else if (sort === 'popular') {
+        results.sort((a, b) => {
+            return (b.chats || 0) - (a.chats || 0);
+        });
     }
 
-    return characters;
+    return results.slice(0, limit);
 })
 
 // Helper function to calculate relevance score based on keyword matches

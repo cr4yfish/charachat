@@ -19,7 +19,7 @@ export const PureYourPersonas = ({ initOwnPersonas }: Props) => {
 
     return (
         <div className="flex flex-col gap-4 h-full">
-            <Link href={"/p/own"} className="w-full flex items-center justify-start gap-2 hover:underline">
+            <Link href={"/search?type=personas&filter=own"} className="w-full flex items-center justify-start gap-2 hover:underline">
                 <h2 className="text-lg font-bold">Your Personas</h2>
                 <ChevronRightIcon size={14} />
             </Link>

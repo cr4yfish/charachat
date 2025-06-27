@@ -19,7 +19,7 @@ export const PureYourCharacters = ({ initialOwnCharacters }: Props) => {
 
     return (
         <div className="flex flex-col gap-4 h-full">
-            <Link href={"/c/own"} className="w-full flex items-center justify-start gap-2 hover:underline">
+            <Link href={"/search?type=characters&filter=own"} className="w-full flex items-center justify-start gap-2 hover:underline">
                 <h2 className="text-lg font-bold">Your Characters</h2>
                 <ChevronRightIcon size={14} />
             </Link>
