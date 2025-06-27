@@ -20,7 +20,7 @@ import { redirect } from "next/navigation";
 import { LIMITS } from "@/lib/constants/limits";
 import SearchTopBar from "@/components/ui/top-bar/search-top-bar";
 import Link from "next/link";
-import { getPersonas } from "@/lib/db/persona";
+import { getPersonas, searchPersonasByAITags } from "@/lib/db/persona";
 import PersonaSmallCard from "@/components/personas/persona-small-card";
 import { Character } from "@/lib/db/types/character";
 import { Persona } from "@/lib/db/types/persona";
@@ -49,6 +49,17 @@ export default async function SearchPage({
         if (type !== 'characters') params.set('type', type);
         if (sort !== 'relevance') params.set('sort', sort);
         params.set('page', pageNum.toString());
+        return `/search?${params.toString()}`;
+    };
+
+    // Helper function to build suggestion URLs while preserving search params except query
+    const buildSuggestionUrl = (suggestion: string) => {
+        const params = new URLSearchParams();
+        params.set('q', suggestion);
+        if (type !== 'characters') params.set('type', type);
+        if (sort !== 'relevance') params.set('sort', sort);
+        // Reset page to 0 for new searches
+        params.set('page', '0');
         return `/search?${params.toString()}`;
     };
 
@@ -87,6 +98,9 @@ export default async function SearchPage({
                 if (!q) return [];
                 if (type === "characters") {
                     return searchCharactersByAITags(splittedTags, { sort: sort, includeNSFW: true });
+                }
+                if( type === "personas") {
+                    return searchPersonasByAITags(splittedTags, { sort: sort });
                 }
                 // Add other search types as needed
                 return [];
@@ -145,7 +159,7 @@ export default async function SearchPage({
                     {/* Search suggestions */}
                     <div className="flex flex-row items-center justify-start overflow-auto gap-2 w-full text-xs sm:text-sm text-muted-foreground  transition-all duration-200 h-fit shrink-0">
                         {searchSuggestions.map((suggestion, index) => (
-                            <Link key={index} href={`/search?q=${encodeURIComponent(suggestion)}`} className="hover:text-white cursor-pointer">
+                            <Link key={index} href={buildSuggestionUrl(suggestion)} className="hover:text-white cursor-pointer">
                                 {suggestion}
                             </Link>
                         ))}

@@ -228,6 +228,136 @@ export const searchPersonas = cache(async (search: string) => {
     return await Promise.all(data.map(personaFormatter));
 })
 
+export const searchPersonasByAITags = cache(async (
+    keywords: string[], 
+    options: {
+        sort?: 'newest' | 'likes' | 'relevance' | 'popular';
+        limit?: number;
+        includePrivate?: boolean;
+        exactMatch?: boolean;
+    } = {}
+): Promise<Persona[]> => {
+    const { 
+        sort = 'relevance', 
+        limit = 20, 
+        includePrivate = false,
+        exactMatch = false 
+    } = options;
+
+    if (!keywords || keywords.length === 0) {
+        return [];
+    }
+
+    // Clean and prepare keywords
+    const cleanedKeywords = keywords
+        .map(keyword => keyword.trim().toLowerCase())
+        .filter(keyword => keyword.length > 0);
+
+    if (cleanedKeywords.length === 0) {
+        return [];
+    }
+
+    // Build search conditions based on match type
+    let searchConditions: string;
+    
+    if (exactMatch) {
+        // Exact match for more precise results
+        searchConditions = cleanedKeywords.map(keyword => 
+            `full_name.ilike.%${keyword}%,description.ilike.%${keyword}%,bio.ilike.%${keyword}%`
+        ).join(',');
+    } else {
+        // Fuzzy match for broader results
+        searchConditions = cleanedKeywords.map(keyword => 
+            `full_name.ilike.*${keyword}*,description.ilike.*${keyword}*,bio.ilike.*${keyword}*`
+        ).join(',');
+    }
+
+    let query = (await createUnauthenticatedServerSupabaseClient())
+        .from(tableName)
+        .select(personaMatcher)
+        .or(searchConditions)
+        .limit(limit);
+
+    // Filter private personas if not included
+    if (!includePrivate) {
+        query = query.eq('is_private', false);
+    }
+
+    // Apply sorting
+    switch (sort) {
+        case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'likes':
+            // Note: personas don't have likes, fallback to created_at
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'popular':
+            // Note: personas don't have chats, fallback to created_at
+            query = query.order('created_at', { ascending: false });
+            break;
+        case 'relevance':
+        default:
+            // Order by created_at for now, could be enhanced with actual relevance scoring
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        throw error;
+    }
+
+    const personas = await Promise.all(data.map(async (db: any) => {
+        return await personaFormatter(db);
+    }));
+
+    // If using relevance sort, we could add client-side scoring here
+    if (sort === 'relevance') {
+        return personas.sort((a, b) => {
+            const scoreA = calculatePersonaRelevanceScore(a, cleanedKeywords);
+            const scoreB = calculatePersonaRelevanceScore(b, cleanedKeywords);
+            return scoreB - scoreA;
+        });
+    }
+
+    return personas;
+})
+// Helper function to calculate relevance score based on keyword matches
+const calculatePersonaRelevanceScore = (persona: Persona, keywords: string[]): number => {
+    let score = 0;
+    const searchableText = [
+        persona.full_name,
+        persona.description,
+        persona.bio
+    ].filter(Boolean).join(' ').toLowerCase();
+
+    keywords.forEach(keyword => {
+        const keywordLower = keyword.toLowerCase();
+        // Count occurrences of keyword
+        const matches = (searchableText.match(new RegExp(keywordLower, 'g')) || []).length;
+        score += matches;
+        
+        // Bonus points for matches in full_name (more relevant)
+        if (persona.full_name?.toLowerCase().includes(keywordLower)) {
+            score += 5;
+        }
+        
+        // Bonus points for matches in description
+        if (persona.description?.toLowerCase().includes(keywordLower)) {
+            score += 3;
+        }
+        
+        // Bonus points for matches in bio
+        if (persona.bio?.toLowerCase().includes(keywordLower)) {
+            score += 2;
+        }
+    });
+
+    return score;
+}
+
 export const updatePersona = async (persona: Persona) => {
     if(persona.is_private && !checkIsEncrypted(persona.full_name)) {
         const key = await getKeyServerSide();
