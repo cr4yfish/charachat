@@ -72,3 +72,5 @@ export const ChatCard = memo(PureChatCard, (prevProps, nextProps) => {
 
     return true;
 })
+
+export default ChatCard;
