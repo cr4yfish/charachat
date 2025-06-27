@@ -67,9 +67,9 @@ export default function CharacterPageActions({ character }: { character: Charact
                     {character.category.title}
                 </Badge>
                 }
-                {character.tags_full?.map(tag => (
-                    <Badge key={`tag-${tag}`} variant={"ghost"}>
-                        {tag}
+                {character.tags_full?.map((tag, index) => (
+                    <Badge key={`tag-${index}`} variant={"ghost"}>
+                        {tag.name}
                     </Badge>
                 ))}
             </div>
