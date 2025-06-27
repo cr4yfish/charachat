@@ -57,9 +57,9 @@ export function AppSidebar() {
     <>
         <Sidebar collapsible={"icon"} variant={"floating"}>
             <SidebarHeader className="">
-              <Link href={"/"} className="px-4 pt-4 flex flex-row items-center gap-2">
+              <Link href={"/"} className="px-4 pt-4 flex flex-row items-center gap-1">
                 <BotIcon />
-                <span className="font-bold">Charachat</span>
+                <span className="font-bold font-leckerli text-trim text-lg ">Charachat</span>
               </Link>
             </SidebarHeader>
             <SidebarContent>

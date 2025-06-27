@@ -11,7 +11,10 @@ export default function Footer() {
 
             <Separator />
             <div className="w-full flex items-start max-md:flex-col gap-6 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1 font-bold text-white/90"><BotIcon />Charachat </span>
+                <span className="flex items-center gap-1 font-bold text-white/90 font-leckerli text-lg ">
+                    <BotIcon />
+                    <span className="text-trim">Charachat</span> 
+                </span>
 
                 <div className="flex flex-col gap-3 sm:gap-2">
                     <span className="font-medium text-white/90 ">About Charachat</span>
