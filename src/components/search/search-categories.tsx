@@ -17,7 +17,7 @@ const PureSearchCategories = ({ initType, initSortType } : { initType?: SearchTy
 
     return (
         <div className="flex items-center justify-between gap-2 w-full">
-            <div className="flex items-center">
+            <div className="flex items-center overflow-x-auto w-full">
                 <ButtonGroup 
                     value={initType || "characters"}
                     onValueChange={(value) => {

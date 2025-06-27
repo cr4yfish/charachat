@@ -12,6 +12,7 @@ import { unstable_cache } from "next/cache";
 import { LIMITS } from "../constants/limits";
 import { TIMINGS } from "../constants/timings";
 import { currentUser } from "@clerk/nextjs/server";
+import { SortType } from "@/app/search/page";
 
 const personaMatcher = `
     *,
@@ -108,13 +109,25 @@ export const getPersona = cache(async (personaId: string) => {
     return await privatePersonaFormatter(data);
 })
 
-export const getPersonas = cache(async (props: LoadMoreProps) => {
-    const { data, error } = await (await createUnauthenticatedServerSupabaseClient())
+export const getPersonas = cache(async (props: LoadMoreProps, sort?: SortType) => {
+    let query = (await createUnauthenticatedServerSupabaseClient())
         .from(tableName)
         .select(personaMatcher)
         .eq("is_private", false) // Only fetch public personas
-        .order("created_at", { ascending: false })
-        .range(props.cursor, props.cursor + props.limit - 1)
+
+    // Apply sorting based on the sort parameter
+    switch (sort) {
+        // not implemented yet
+        case 'newest':
+        case 'likes':
+        case 'relevance':
+        case 'popular':
+        default:
+            query = query.order('created_at', { ascending: false });
+            break;
+    }
+
+    const { data, error } = await query.range(props.cursor, props.cursor + props.limit - 1)
         
     if (error) {
         console.error("Error fetching personas", error);

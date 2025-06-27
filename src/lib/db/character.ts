@@ -16,6 +16,7 @@ import { TIMINGS } from "../constants/timings";
 import { Vibrant } from "node-vibrant/node";
 import { getProfile } from "./profile";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
+import { SortType } from "@/app/search/page";
 
 const characterMatcher = `
     *,
@@ -266,7 +267,7 @@ export const getShallowCharacter = cache(async (characterId: string): Promise<Ch
 })
 
 
-export const getCharacters = cache(async (props: LoadMoreProps, sort: 'newest' | 'likes' | 'popular' | "relevance" = "newest"): Promise<Character[]> => {
+export const getCharacters = cache(async (props: LoadMoreProps, sort?: SortType): Promise<Character[]> => {
     let query = (await createUnauthenticatedServerSupabaseClient())
         .from(publicTableName)
         .select(characterMatcher);

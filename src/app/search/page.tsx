@@ -20,6 +20,10 @@ import { redirect } from "next/navigation";
 import { LIMITS } from "@/lib/constants/limits";
 import SearchTopBar from "@/components/ui/top-bar/search-top-bar";
 import Link from "next/link";
+import { getPersonas } from "@/lib/db/persona";
+import PersonaSmallCard from "@/components/personas/persona-small-card";
+import { Character } from "@/lib/db/types/character";
+import { Persona } from "@/lib/db/types/persona";
 
 export type SearchType = "characters" | "creators" | "personas" | "collections"; 
 export type SortType = "likes" | "newest" | "popular" | "relevance";
@@ -30,6 +34,7 @@ export default async function SearchPage({
     searchParams: Promise<{ q?: string, type?: SearchType, sort?: SortType, page?: string }>;
     }) {
     const { q="", type="characters", sort="relevance", page="0" } = await searchParams;
+    
     // Let mistral create keywords for the search
     // If the query is empty, we can return early
     let splittedTags: string[] = [];
@@ -86,9 +91,9 @@ export default async function SearchPage({
                 // Add other search types as needed
                 return [];
             }, 
-            ["search", q, sort, type],
+            [`search-cursor-${cursor}-${sort}-${type}-${q}`],
             {
-                tags: ["search", sort, type],
+                tags: ["search", sort, type, q],
                 revalidate: TIMINGS.ONE_HOUR // Cache for 1 hour
             }
         )() 
@@ -100,10 +105,14 @@ export default async function SearchPage({
                 if (type === "characters") {
                     return getCharacters({ cursor, limit  }, sort);
                 }
+
+                if( type === "personas") {
+                    return getPersonas({  cursor, limit }, sort);
+                }
                 // Add other search types as needed
                 return [];
             },
-            [`browse-cursor-${cursor}-${sort}`],
+            [`browse-cursor-${cursor}-${sort}-${type}`],
             {
                 tags: [`browse-cursor-${cursor}-${sort}`],
                 revalidate: TIMINGS.ONE_HOUR // Cache for 1 hour
@@ -146,16 +155,26 @@ export default async function SearchPage({
 
             <div className="h-full w-full flex flex-col items-center justify-start gap-2 max-sm:mt-12 ios-safe-header-padding-search">
                 <div className="text-xs text-muted-foreground w-full text-start max-w-[567px]">
-                    <span>Found {searchResults.length} characters in {searchTime} seconds</span>
+                    <span>Found {searchResults.length} results in {searchTime} seconds</span>
                 </div>
 
                 {searchResults.length > 0 ? (
-                    searchResults.map(character => (
+                    searchResults.map(data => (
+                        type === "characters" ?
                         <SmallCharacterCard
-                            key={character.id}
-                            data={character}
+                            key={data.id}
+                            data={data as Character}
                             hasLink
                         />
+                        : 
+                        type === "personas" ? (
+                            <PersonaSmallCard 
+                                key={data.id}
+                                data={data as Persona}
+                                hasLink
+                            />
+                        ) 
+                        : null
                     ))
                 ) : (
                     <div className="text-center text-slate-400">
