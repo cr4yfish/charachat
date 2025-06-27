@@ -94,8 +94,8 @@ export default function UserSettingsPage() {
               selectedKey={internalProfile?.default_llm as ModelId}
               onSelect={handleChangeLLM}
               isLoading={isLoading}
-              label="Select the Author Model"
-              description="The model used for writing help (e.g. generating descriptions)"
+              label="Select the default LLM "
+              description="The is the default LLM that will be used for new chats. You can change it per-chat in the chat settings."
             />
 
             <Button onClick={handleSave} disabled={isUpdating || isLoading} variant={"secondary"}>
