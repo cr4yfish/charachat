@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils"
 import { memo } from "react"
 import { motion } from "motion/react";
-import "react-noise/css";
 
 export const GlobalLiquidFilter = () => {
     return (
