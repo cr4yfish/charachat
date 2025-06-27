@@ -349,13 +349,13 @@ export const LLMs: LLM[] = [
         key: "Gemma-3-27B-ArliAI-RPMax-v3",
         name: "Gemma RPMax v3",
         provider: "ArliAI",
-        contextLength: 65536
+        contextLength: 32768
     },
     {
         key: "Gemma-3-27B-CardProjector-v4",
         name: "Gemma Card Projector",
         provider: "ArliAI",
-        contextLength: 65536
+        contextLength: 32768
     },
     {
         key: "Llama-3.3-70B-Legion-V2.1",
