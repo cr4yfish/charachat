@@ -81,6 +81,12 @@ const actions : TopBarAction[] = [
         label: "Character",
     },
     {
+        pathname: "/",
+        icon: <PlusIcon color="currentColor" />,
+        href: "/chat",
+        label: "Chat",
+    },
+    {
         pathname: "/c/own",
         icon: <PlusIcon color="currentColor" />,
         href: "/c/new",
