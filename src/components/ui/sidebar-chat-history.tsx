@@ -2,11 +2,12 @@
 
 import { useChats } from "@/hooks/use-chats"
 import Spinner from "./spinner";
-import { ChatCard } from "../chats/chat-card";
 import { SidebarMenu } from "./sidebar";
 import Link from "next/link";
 import { Button } from "./button";
 import { ChevronRightIcon } from "lucide-react";
+import dynamic from "next/dynamic";
+const ChatCard = dynamic(() => import("@/components/chats/chat-card"), { ssr: false });
 
 /**
  * Chat history for the sidebar.
