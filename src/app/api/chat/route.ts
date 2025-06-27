@@ -70,6 +70,13 @@ export async function POST(req:Request) {
         const userMessage = getMostRecentUserMessage(messages);
         if(!userMessage) {  return new Response(ERROR_MESSAGES.USER_MESSAGE_NOT_FOUND, { status: 400 });  }
 
+
+        const profile = await getProfile(user.id);
+        if (!profile) {
+            console.error("Profile not found for user:", user.id);
+            return new Response(ERROR_MESSAGES.PROFILE_NOT_FOUND, { status: 404 });
+        }
+        
     /**
      * End access controls and init stuff
      */
@@ -77,6 +84,9 @@ export async function POST(req:Request) {
     const clientLLM = (await getLLMModelCookie()) || modelIdFromClient;
     let chat: Chat | undefined = await getChat(chatId);
 
+    const personaIdFromCookie = await getPersonaCookie();
+    
+    const personaId = chat?.persona?.id || personaIdFromCookie || profile.settings?.default_persona_id;
     // only create chat if:
     // - chat does not exist
     // - characterId is provided
@@ -86,16 +96,14 @@ export async function POST(req:Request) {
             
             if (!clientLLM) {  return new Response(ERROR_MESSAGES.LLM_MODEL_REQUIRED, { status: 400 }); }
 
-            const personaId = await getPersonaCookie();
-
             chat = await createChat({
                 chatId: chatId,
                 title: "New Chat",
                 description: "A chat with the AI character",
                 userId: user.id,
                 characterId: characterId,
-                llm: clientLLM as ModelId,
-                personaId: personaId
+                llm: profile.default_llm || clientLLM as ModelId, // default_llm has priority over clientLLM
+                personaId: personaId // can be undefined
             })
 
         } catch (error) {
@@ -112,18 +120,7 @@ export async function POST(req:Request) {
     const character: Character | undefined = chat ? await getCharacter(chat.character.id) : characterId ? await getCharacter(characterId) : undefined;
 
 
-    let userPersona: Persona | undefined = undefined;
-    
-    // chat.persona is actually a string and not a Persona object
-    if(chat?.persona) {
-        userPersona = await getPersona((chat.persona as unknown as string));
-    }
-
-    if(!userPersona) {
-        // fallback to cookie
-        const personaId = await getPersonaCookie();
-        if(personaId) userPersona = await getPersona(personaId);
-    }
+    const userPersona: Persona | undefined = personaId ? await getPersona(personaId) : undefined;
 
     const key = await getKeyServerSide();
 
@@ -156,12 +153,6 @@ export async function POST(req:Request) {
             ...userMessage,
             content: introMessageContent,
         })
-    }
-    
-    const profile = await getProfile(user.id);
-    if (!profile) {
-        console.error("Profile not found for user:", user.id);
-        return new Response(ERROR_MESSAGES.PROFILE_NOT_FOUND, { status: 404 });
     }
 
     // we have various methods to get the modelId:
