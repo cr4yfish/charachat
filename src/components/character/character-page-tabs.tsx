@@ -37,7 +37,7 @@ export default function CharacterPageTabs(props: Props) {
                 <p>This Character&apos;s definition is hidden.</p>
             </div>
         :
-        <div className="w-full flex justify-start items-start flex-col dark:prose-invert prose-p:text-sm dark:prose-p:text-zinc-400 prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0 !select-none">
+        <div className="w-full flex justify-start items-start flex-col dark:prose-invert prose-p:text-sm prose-h3:mt-0 prose-h2:m-0 prose-hr:m-0 !select-none">
             <div className="prose dark:prose-invert">
                 <h2>More about {props.character.name}</h2>
             </div>
