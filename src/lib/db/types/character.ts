@@ -2,6 +2,12 @@ import { Category } from "./category";
 import { Profile } from "./profile";
 import { Lora } from ".";
 
+type Tag = {
+    id: string;
+    created_at?: string;
+    name: string;
+    description?: string;
+}
 
 
 export type Character = {
@@ -33,7 +39,7 @@ export type Character = {
     /**
      * Only used client-side to display the character in the UI
     */
-    tags_full?: string[];
+    tags_full?: Tag[];
     is_liked?: boolean;
 
     /**
