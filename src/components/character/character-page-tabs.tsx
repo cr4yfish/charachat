@@ -29,7 +29,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">Bio</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.bio}</Markdown>
                     </AccordionContent>
                 </AccordionItem>}
@@ -39,7 +39,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">Introduction</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.intro}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
@@ -50,7 +50,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">Personality</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.personality}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
@@ -61,7 +61,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">Scenario</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.scenario}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
@@ -72,7 +72,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">First Message</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.first_message}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
@@ -83,7 +83,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">Character Book</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.book}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
@@ -94,7 +94,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">System Prompt</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.system_prompt}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
@@ -105,7 +105,7 @@ export default function CharacterPageTabs(props: Props) {
                     <AccordionTrigger className="cursor-pointer">
                         <h2 className="text-lg font-bold">Image Prompt</h2>
                     </AccordionTrigger>
-                    <AccordionContent className="dark:prose-invert prose-p:m-0">
+                    <AccordionContent className="prose dark:prose-invert prose-p:m-0">
                         <Markdown>{props.character.image_prompt}</Markdown>
                     </AccordionContent>
                 </AccordionItem>
