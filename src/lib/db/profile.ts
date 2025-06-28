@@ -111,10 +111,10 @@ export const getPublicProfile = cache(async (userId: string): Promise<Profile> =
 })
 
 export const updateProfile = async (profile: Profile): Promise<Profile | void> => {
-    if(!profile.clerk_user_id) {
-        throw new Error("updateProfile: clerk_user_id is required");
+    const user = await currentUser();
+    if(!user || !user.id) {
+        throw new Error("updateProfile: User not found");
     }
-
     // make sure any api keys are encrypted
     // or encrypt them now if they are not
     try {
@@ -129,7 +129,8 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
         throw new Error(ERROR_MESSAGES.CRYPTO_ERROR);
     }
 
-    const res = await getProfile(profile.clerk_user_id);
+
+    const res = await getProfile(user.id);
 
     const client = await createClient()
 
@@ -138,7 +139,7 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
         const { data, error } = await client
             .from("profiles")
             .insert({
-                clerk_user_id: profile.clerk_user_id,
+                clerk_user_id: user.id,
                 username: profile.username,
                 first_name: profile.first_name,
                 last_name: profile.last_name,
@@ -170,7 +171,7 @@ export const updateProfile = async (profile: Profile): Promise<Profile | void> =
                 settings: profile.settings,
                 default_llm: profile.default_llm,
             })
-            .eq("clerk_user_id", profile.clerk_user_id);
+            .eq("clerk_user_id", user.id);
 
         if (error) {
             console.error("Error updating profile", error);
