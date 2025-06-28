@@ -216,7 +216,10 @@ export const llmSupportsTools = (llmOrId: LLM | TextModelId): boolean => {
  * @param id - The unique model identifier to search for
  * @returns The LLM object if found, undefined otherwise
  */
-export const getLLMById = (id: TextModelId): LLM | undefined => {
+export const getLLMById = (id: TextModelId | undefined): LLM | undefined => {
+    if(!id) {
+        return undefined;
+    }
     // Route nemo to mistral-medium-latest
     // nemo isnt used anymore, but we keep it for backwards compatibility
     if((id as string) === "open-mistral-nemo") {

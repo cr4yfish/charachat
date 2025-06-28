@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -21,6 +21,7 @@ import Link from "next/link";
 import { LinkIcon } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { useProfile } from "@/hooks/use-profile";
+import { setLLMModelCookie } from "@/app/actions";
 
 const PureFancyLLM = ({ llm, showIcon, showProvider }: { llm: LLM | undefined, showIcon?: boolean, showProvider?: boolean}) => {
     if(!llm) {
@@ -89,10 +90,25 @@ type Props = {
 
 const PureLLMSelect = (props: Props) => {
     const { profile } = useProfile();
+    const [internalKey, setInternalKey] = useState<TextModelId | undefined>(props.selectedKey);
+
+    const internalHandleSelect = (key: TextModelId) => {
+        if (props.onSelect) {
+            props.onSelect(key);
+            return;
+        }
+
+        setLLMModelCookie(key)
+        setInternalKey(key);
+    }
 
     const llmGroups = useMemo(() => {
         return getLLMGroupedByProvider(profile);
     }, [profile])
+
+    const selectedLLM = useMemo(() => {
+        return getLLMById(internalKey);
+    }, [internalKey]);
 
     return (
         <div className="flex flex-col gap-2">
@@ -110,15 +126,14 @@ const PureLLMSelect = (props: Props) => {
                 <span className="text-xs text-muted-foreground">{props.description}</span>
 
             </Label>
-            <Select disabled={props.disabled} name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as TextModelId)}  >
+            <Select disabled={props.disabled} name="llm-select" value={internalKey} onValueChange={internalHandleSelect}  >
 
-                <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border">
-                    <SelectValue aria-label="Select a LLM" className="!h-fit !border-border">
+                <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border max-w-sm">
+                    <SelectValue aria-label="Select a LLM" className="!h-fit !border-border" placeholder="Select a model">
 
+                       {!props.isLoading && <FancyLLM llm={selectedLLM} showIcon showProvider  />}
 
-                       {!props.isLoading && <FancyLLM llm={getLLMById(props.selectedKey || _DEFAULT_LLM)} showIcon showProvider  />}
-
-                        {(props.isLoading || !props.selectedKey) && (
+                        {(props.isLoading) && (
                             <div className="flex flex-col justify-start gap-1 w-full h-[63px]">
                                 <Skeleton className="w-[70px] h-[16px] bg-muted/50 pb-0.5" />
                                 <Skeleton className="w-[140px] h-[20px] bg-muted/50" />
