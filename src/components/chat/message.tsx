@@ -25,7 +25,6 @@ const PureMessage = (props: MessageProps) => {
 
     const showLoading = useMemo(() => {
         return props.isLoading && props.message.role === "assistant" && props.status === "streaming";
-        ;
     }, [props.isLoading, props.message.role, props.status, props.chatId]);
 
     if(props.message.content === _INTRO_MESSAGE_PLACEHOLDER) {
