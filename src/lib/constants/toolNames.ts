@@ -15,4 +15,5 @@ export const TOOL_NAMES = {
     manageProviderTokens: "manageProviderTokens",
 
     login: "login",
+    chooseModel: "chooseModel",
 }

@@ -18,6 +18,8 @@ import { ReasoningBlock } from "./reasoning-block";
 import { Character } from "@/lib/db/types/character";
 import ImageCharacterCard from "../character/character-card-image";
 import APIKeyInput from "../settings/api-key-input";
+import LLMSelect from "./llm-select";
+import { TextModelId } from "@/lib/ai/models/llm";
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
@@ -384,6 +386,18 @@ const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessag
                                 )
 
                         }
+                    }
+
+                    case TOOL_NAMES.chooseModel: {
+                        return (
+                            <div id={callId} key={callId} className="max-w-lg">
+                                <LLMSelect 
+                                    label="You need to select a model to continue"
+                                    description="Please select a model to use for this chat. You can change it later in the settings."
+                                    showLink isLoading={false} selectedKey={undefined}
+                                />
+                            </div>
+                        )
                     }
 
                     default:

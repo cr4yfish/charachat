@@ -87,19 +87,39 @@ export const PureChat = (props: Props) => {
         case ERROR_MESSAGES.CHAT_ID_REQUIRED:
           toast.error( ERROR_MESSAGES.CHAT_ID_REQUIRED);
           break;
-        case ERROR_MESSAGES.LLM_MODEL_REQUIRED:
-          toast.error(ERROR_MESSAGES.LLM_MODEL_REQUIRED); 
-          break;
+
         case ERROR_MESSAGES.CHARACTER_NOT_FOUND:
           toast.error(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
           break;
 
         case ERROR_MESSAGES.LLM_MODEL_NOT_FOUND:
-          toast.error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
-          break;
-
+        case ERROR_MESSAGES.LLM_MODEL_REQUIRED:
         case ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED:
-          toast.error(ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED);
+          toast.error(ERROR_MESSAGES.LLM_GENERIC_ERROR);
+
+          // We're going to add a tool message to the chat where they can choose a model
+          setMessages((prev) => {
+            const newMsg: Message = {
+              id: uuidv4(),
+              role: "assistant",
+              content: "",
+              createdAt: new Date(),
+              parts: [
+                {
+                  type: "tool-invocation",
+                  toolInvocation: {
+                    toolName: TOOL_NAMES.chooseModel,
+                    toolCallId: uuidv4(),
+                    args: {},
+                    result: "",
+                    state: "result"
+                  }
+                }
+              ]
+            }
+            return [...prev, newMsg];
+          })
+
           break;
 
         case ERROR_MESSAGES.UNAUTHORIZED:
