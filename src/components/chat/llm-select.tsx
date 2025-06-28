@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -109,6 +109,13 @@ const PureLLMSelect = (props: Props) => {
     const selectedLLM = useMemo(() => {
         return getLLMById(internalKey);
     }, [internalKey]);
+
+    // sync with outside
+    useEffect(() => {
+        if (props.selectedKey && props.selectedKey !== internalKey) {
+            setInternalKey(props.selectedKey);
+        }
+    }, [props.selectedKey]);
 
     return (
         <div className="flex flex-col gap-2">
