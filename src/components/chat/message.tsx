@@ -19,7 +19,6 @@ import { Character } from "@/lib/db/types/character";
 import ImageCharacterCard from "../character/character-card-image";
 import APIKeyInput from "../settings/api-key-input";
 import LLMSelect from "./llm-select";
-import { TextModelId } from "@/lib/ai/models/llm";
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
