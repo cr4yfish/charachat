@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { ImageGenDrawer } from './image-gen-drawer';
 import { ShallowCharacter } from '@/lib/db/types/character';
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
-import { addMemoryToRAG, RAGMemory, searchRAG } from '@/lib/ai/browser-rag/rag';
+import { addMemoryToRAG, RAGMemory, searchRAG } from '@/lib/ai/agents/rag';
 import useSWRInfinite from 'swr/infinite';
 import { API_ROUTES } from '@/lib/constants/apiRoutes';
 import { LIMITS } from '@/lib/constants/limits';

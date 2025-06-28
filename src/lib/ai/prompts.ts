@@ -4,7 +4,7 @@ import { Message } from "../db/types/message";
 import { Persona } from "../db/types/persona";
 import { Profile } from "../db/types/profile";
 import { getChatVariables, replaceVariables } from "../utils/text";
-import { RAGMemory } from "./browser-rag/rag";
+import { RAGMemory } from "./agents/rag";
 
 // map response length to prompt content
 const responseLengthToPrompt = {

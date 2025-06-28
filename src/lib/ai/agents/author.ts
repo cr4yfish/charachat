@@ -1,11 +1,11 @@
 import { generateObject } from "ai";
 import { getLanguageModel } from ".."
-import { ModelId } from "../types"
 import { z } from "zod";
+import { TextModelId } from "../models/llm";
 
 type Params = {
     prompt: string,
-    modelId: ModelId,
+    modelId: TextModelId,
     apiKey?: string,
 }
 

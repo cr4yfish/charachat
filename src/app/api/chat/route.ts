@@ -2,7 +2,7 @@
 import { getLLMModelCookie, getPersonaCookie } from "@/app/actions";
 import { getLanguageModel, getModelApiKey } from "@/lib/ai";
 import { generateImageAgent } from "@/lib/ai/agents/image";
-import { RAGMemory } from "@/lib/ai/browser-rag/rag";
+import { RAGMemory } from "@/lib/ai/agents/rag";
 import { _INTRO_MESSAGE, getDynamicBookPrompt, getMemoriesPrompt, getSystemPrompt, noCharacterSelectedPrompt } from "@/lib/ai/prompts";
 import { TextModelId } from "@/lib/ai/models/llm";
 import { ProviderIdEnum } from "@/lib/ai/models/providers";

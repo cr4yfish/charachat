@@ -2,7 +2,7 @@
  * Generate suggestions based on chat context
  */
 
-import { generateSuggestions } from "@/lib/ai/suggestions";
+import { generateSuggestions } from "@/lib/ai/agents/suggestions";
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { getCharacter } from "@/lib/db/character";
 import { getChat } from "@/lib/db/chat";

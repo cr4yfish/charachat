@@ -1,8 +1,8 @@
 import { getModelApiKey } from "@/lib/ai";
-import { Author } from "@/lib/ai/author";
 import { TextModelId } from "../../../lib/ai/models/llm";
 import { getProfile } from "@/lib/db/profile";
 import { currentUser } from "@clerk/nextjs/server";
+import { Author } from "../../../lib/ai/agents/author";
 
 
 export async function POST(request: Request) {

@@ -3,7 +3,7 @@ import { TextareaWithAutosize } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { PauseIcon, RefreshCwIcon, SendIcon } from "lucide-react";
 import { cn, fetcher } from "@/lib/utils";
-import { Suggestion as SuggestionType } from "@/lib/ai/suggestions";
+import { Suggestion as SuggestionType } from "@/lib/ai/agents/suggestions";
 import useSWR from "swr";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { AnimatePresence, motion } from "motion/react";

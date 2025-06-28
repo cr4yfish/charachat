@@ -7,11 +7,12 @@ import { Chat } from "@/lib/db/types/chat";
 import { Message } from "@/lib/db/types/message";
 import { Profile } from "@/lib/db/types/profile";
 import { Character } from "@/lib/db/types/character";
-import { getLanguageModel, getModelApiKey } from ".";
+import { getLanguageModel, getModelApiKey } from "..";
 import { generateObject } from "ai";
 import { z } from "zod";
-import { getSuggestionsPrompt } from "./prompts";
-import { ModelId } from "./types";
+import { getSuggestionsPrompt } from "../prompts";
+import { TextModelId } from "../models/llm";
+
 
 export type Suggestion = {
     title: string;
@@ -36,8 +37,8 @@ export async function generateSuggestions({ chat, recentMessages, userProfile: p
         throw new Error("User profile is required to generate suggestions.");
     }
 
-    const apiKey = await getModelApiKey(profile, chat.llm as ModelId);
-    const model = await getLanguageModel({ modelId: chat.llm as ModelId, apiKey })
+    const apiKey = await getModelApiKey(profile, chat.llm as TextModelId);
+    const model = await getLanguageModel({ modelId: chat.llm as TextModelId, apiKey })
 
     const prompt = getSuggestionsPrompt({
         profile, character,recentMessages,
