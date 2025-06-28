@@ -1,6 +1,6 @@
 "use client";
 
-import { LLM } from "@/lib/ai/types";
+import { LLM } from "@/lib/ai/models/llm";
 import { memo } from "react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";

@@ -12,11 +12,11 @@ import {
 import { memo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
-import { ImageModel } from "@/lib/ai/types";
+import { ImageModel } from "@/lib/ai/models/image";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { isValidURL, safeParseLink } from "@/lib/utils/text";
-import { imageModels } from "@/lib/ai/models/image/image-models";
+import { imageModels } from "@/lib/ai/models/image";
 import Image from "next/image";
 
 type Step = "prompt" | "model" | "result";

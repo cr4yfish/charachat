@@ -1,4 +1,6 @@
-import { DeveloperIconMap, invertIcons, ProviderId } from "@/lib/ai/types";
+"use client";
+import { ProviderId } from "../../lib/ai/models/providers";
+import { DeveloperIconMap, invertIcons } from "../../lib/ai/models/providers";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { memo } from "react";

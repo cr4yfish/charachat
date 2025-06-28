@@ -1,6 +1,6 @@
 import { Profile } from "../db/types/profile";
-import { LLM, LLMGroup, ModelId, ProviderId } from "./types";
-import { LLMs } from "./models/llm/text-models";
+import { ProviderId } from "./models/providers";
+import { LLM, LLMGroup, LLMs, TextModelId } from "./models/llm";
 
 /**
  * Retrieves the API key for a specific AI model provider from the user's profile or environment variables.
@@ -95,7 +95,7 @@ export const getProviderAPIKey = (providerId: ProviderId | string, profile: Prof
  * const adjustedTemp = getCustomTemperature("deepseek-chat", 0.8); // Returns 1.5
  * ```
  */
-export const getCustomTemperature = (modelId: ModelId, temp: number): number | undefined => {
+export const getCustomTemperature = (modelId: TextModelId, temp: number): number | undefined => {
     switch(modelId) {
         case "deepseek-chat":
             // 0.6 -> 1.3, recommended by DeepSeek for General Conversation
@@ -199,7 +199,7 @@ export const isFreeLLM = (llm: LLM) => {
  * @param llm - The LLM object to check for tool support
  * @returns True if the LLM supports tools/function calling, false otherwise
  */
-export const llmSupportsTools = (llmOrId: LLM | ModelId): boolean => {
+export const llmSupportsTools = (llmOrId: LLM | TextModelId): boolean => {
     let llm: LLM | undefined = llmOrId as LLM;
     if(typeof llmOrId === "string") {
         llm = getLLMById(llmOrId);
@@ -216,7 +216,7 @@ export const llmSupportsTools = (llmOrId: LLM | ModelId): boolean => {
  * @param id - The unique model identifier to search for
  * @returns The LLM object if found, undefined otherwise
  */
-export const getLLMById = (id: ModelId): LLM | undefined => {
+export const getLLMById = (id: TextModelId): LLM | undefined => {
     // Route nemo to mistral-medium-latest
     // nemo isnt used anymore, but we keep it for backwards compatibility
     if((id as string) === "open-mistral-nemo") {

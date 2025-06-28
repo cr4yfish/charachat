@@ -5,7 +5,7 @@ import LLMSelect from "@/components/chat/llm-select";
 import { BetterSwitch } from "@/components/ui/better-switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useProfile } from "@/hooks/use-profile";
-import { ModelId } from "@/lib/ai/types";
+import { TextModelId } from "../../lib/ai/models/llm";
 import { Profile, ProfileSettings } from "@/lib/db/types/profile";
 import { useCallback, useEffect, useState } from "react";
 import Spinner from "../ui/spinner";
@@ -91,7 +91,7 @@ export default function UserSettingsPage() {
             />
 
             <LLMSelect 
-              selectedKey={internalProfile?.default_llm as ModelId}
+              selectedKey={internalProfile?.default_llm as TextModelId}
               onSelect={handleChangeLLM}
               isLoading={isLoading}
               label="Select the default LLM "

@@ -6,7 +6,7 @@ import { TrashIcon } from "lucide-react";
 import { fetcher } from "@/lib/utils";
 import LLMSelect from "./llm-select";
 import { Chat } from "@/lib/db/types/chat";
-import { ModelId } from "@/lib/ai/types";
+
 import ButtonGroup from "../ui/button-group";
 import { TextareaWithCounter } from "../ui/textarea-with-counter";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/accordion"
 import Spinner from "../ui/spinner";
 import { useProfile } from "@/hooks/use-profile";
+import { TextModelId } from "../../lib/ai/models/llm";
 
 type Props = {
     chatId?: string;
@@ -39,7 +40,7 @@ const PureSettings = ({ chatId }: Props) => {
     // use for profile settings
     const { profile, isLoading: isProfileLoading } = useProfile();
     const profileDefaultLLM = useMemo(() => {
-        return profile?.settings?.default_llm as ModelId | undefined;
+        return profile?.settings?.default_llm as TextModelId | undefined;
     }, [profile]);
 
     const [internalChat, setInternalChat] = useState<Chat | null>(chat);
@@ -77,7 +78,7 @@ const PureSettings = ({ chatId }: Props) => {
         handleSaveChanges();
     }, [debouncedChat, chat, handleSaveChanges]);
 
-    const handleLLMChange = useCallback((llm: ModelId) => {
+    const handleLLMChange = useCallback((llm: TextModelId) => {
         const updatedChat = {
             ...chat,
             llm: llm
@@ -102,7 +103,7 @@ const PureSettings = ({ chatId }: Props) => {
             </span>
 
             <LLMSelect 
-                selectedKey={(chat?.llm || profileDefaultLLM) as ModelId | undefined}
+                selectedKey={(chat?.llm || profileDefaultLLM) as TextModelId | undefined}
                 onSelect={handleLLMChange} 
                 showLink isLoading={isChatLoading}
             />

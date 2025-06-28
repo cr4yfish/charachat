@@ -1,6 +1,6 @@
 "use client";
 
-import { LLM, ModelId } from "@/lib/ai/types";
+import { LLM, TextModelId } from "@/lib/ai/models/llm";
 import { getLLMById, getLLMGroupedByProvider } from "@/lib/ai/utils";
 import { memo, useEffect, useMemo, useState } from "react";
 import {
@@ -85,7 +85,7 @@ const PureLLMOverview = () => {
 
     useEffect(() => {
         if(profile?.settings?.default_llm) {
-            setSelectedLLM(getLLMById(profile.settings.default_llm as ModelId));
+            setSelectedLLM(getLLMById(profile.settings.default_llm as TextModelId));
         }
     }, [profile])
 

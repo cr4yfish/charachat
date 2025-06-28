@@ -4,13 +4,13 @@ import { checkIsEncrypted, decryptMessage } from "../crypto/client";
 import { getKeyServerSide } from "../crypto/server";
 import { getLLMById, getProviderAPIKey } from "./utils";
 import { Profile } from "../db/types/profile";
-import { ModelId } from "./types";
 import { LanguageModelV1 } from "ai";
 import { getAnthropic, getArliAI, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getPerplexity, getXai } from "./providers";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
+import { TextModelId } from "./models/llm";
 
-export async function getModelApiKey(profile: Profile, modelId?: ModelId): Promise<string> {
-    const selectedModelId = modelId || profile.default_llm as ModelId;
+export async function getModelApiKey(profile: Profile, modelId?: TextModelId): Promise<string> {
+    const selectedModelId = modelId || profile.default_llm as TextModelId;
     const selectedModel = getLLMById(selectedModelId); // will return mistral-medium-latest if nemo is selected
 
     if(!selectedModel) {
@@ -41,7 +41,7 @@ export async function getModelApiKey(profile: Profile, modelId?: ModelId): Promi
 }
 
 type GetLanguageModelProps = {
-    modelId: ModelId;
+    modelId: TextModelId;
     baseURL?: string;
     apiKey?: string;
 }
@@ -49,7 +49,7 @@ type GetLanguageModelProps = {
 
 export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguageModelProps): Promise<LanguageModelV1> {
     
-    const model = getLLMById(modelId as ModelId);
+    const model = getLLMById(modelId as TextModelId);
     if(!model) {
         throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
     }

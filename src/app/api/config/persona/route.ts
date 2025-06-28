@@ -1,6 +1,6 @@
 import { getPersonaCookie, setPersonaCookie } from "@/app/actions";
-import { ModelId } from "@/lib/ai/types";
 import { getLLMById } from "@/lib/ai/utils";
+import { TextModelId } from "@/lib/ai/models/llm";
 
 
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
         return Response.json({ error: "Persona cookie not found" }, { status: 404 });
     }
 
-    const llm = getLLMById(res as ModelId);
+    const llm = getLLMById(res as TextModelId);
 
     return Response.json({ llm: llm });
 }

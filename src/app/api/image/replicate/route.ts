@@ -1,6 +1,7 @@
-import { ImageModelId } from "@/lib/ai/types";
+
 import { NextResponse } from "next/server";
 import { generateImageAgent } from "@/lib/ai/agents/image";
+import { ImageModelId } from "@/lib/ai/models/image";
 
 type RequestBody = {
     imagePrompt: string,

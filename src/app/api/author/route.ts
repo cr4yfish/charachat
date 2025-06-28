@@ -1,6 +1,6 @@
 import { getModelApiKey } from "@/lib/ai";
 import { Author } from "@/lib/ai/author";
-import { ModelId } from "@/lib/ai/types";
+import { TextModelId } from "../../../lib/ai/models/llm";
 import { getProfile } from "@/lib/db/profile";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -29,11 +29,11 @@ export async function POST(request: Request) {
         return new Response(JSON.stringify({ error: "Default LLM not set in profile." }), { status: 400 });
     }
 
-    const apiKey = await getModelApiKey(profile, profile.default_llm as ModelId);
+    const apiKey = await getModelApiKey(profile, profile.default_llm as TextModelId);
 
     const result = await Author({
         prompt, 
-        modelId: profile.default_llm as ModelId,
+        modelId: profile.default_llm as TextModelId,
         apiKey
     })
 

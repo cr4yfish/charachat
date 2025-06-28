@@ -4,11 +4,11 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { InputWithLabel } from "../ui/input-with-label";
 import Spinner from "../ui/spinner";
 import { useProfile } from "@/hooks/use-profile";
-import { ProviderId } from "@/lib/ai/types";
+import { ProviderId } from "@/lib/ai/models/providers";
 import { useDebounce } from "use-debounce";
 import equal from "fast-deep-equal";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
-import { Providers } from "@/lib/ai/models/providers/providers";
+import { Providers } from "@/lib/ai/models/providers";
 
 type Props = {
   providerId: ProviderId | undefined;

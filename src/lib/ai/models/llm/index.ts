@@ -1,4 +1,142 @@
-import { LLM } from "../../types"
+import { ProviderId } from "../providers"
+
+export type TextModelId = 
+    /**
+     *   Groq
+     */
+    "meta-llama/llama-4-scout-17b-16e-instruct" |  "meta-llama/llama-4-maverick-17b-128e-instruct" |
+
+    // "llama3-groq-70b-8192-tool-use-preview" |
+    // "llama-3.2-90b-vision-preview" |
+    // "llama-3.3-70b-versatile" |
+
+    "deepseek-r1-distill-llama-70b" |
+    
+    "qwen/qwen3-32b" | "qwen-qwq-32b" |
+    "mistral-saba-24b" |
+
+    "compound-beta" |  "compound-beta-mini" | 
+
+    /**
+     *  OpenAI
+     */
+    "gpt-4o" | "gpt-4o-mini" | "gpt-4o-mini-realtime-preview-2024-12-17" | "gpt-4o-mini-search-preview-2025-03-11" |
+    
+    "chatgpt-4o-latest" |
+
+    "gpt-4.1-nano-2025-04-14" |  "gpt-4.1-mini-2025-04-14"  |   "gpt-4.1-2025-04-14" |    
+
+    "o4-mini-2025-04-16" |  "o3-2025-04-16" |
+
+    "codex-mini-latest" |
+
+    /**
+     *  Gemini
+     */
+    "gemini-2.5-pro" | "gemini-2.5-flash" | "gemini-2.5-flash-lite-preview-06-17" |
+
+
+    /**
+     * Mistral
+     */
+
+    // Small mistral models
+    "ministral-3b-latest" | // Efficient, can be used for public use (currently used in search)
+    "ministral-8b-latest" | // A little more expensive than the 3B model, but more capable
+    "mistral-small-latest" | // Over 10x the price of 3B/8B
+ 
+    // Large mistral models
+    "mistral-medium-latest" |  "mistral-large-latest" |
+
+    /**
+     *  Anthropic
+     */
+    "claude-3-5-haiku-latest" | "claude-sonnet-4-20250514" |  "claude-opus-4-20250514" |
+
+    /**
+     * miscellaneous models
+     */
+    "ollama" |"openai-compatible" |
+
+    /**
+     *  DeepSeek
+     */
+    "deepseek-chat" | "deepseek-reasoner" |
+
+    /**
+     * xAI
+     */
+    "grok-3-latest" | "grok-3-mini-latest" |
+
+    /**
+     * Cohere
+     */
+    "command-r-plus" | "command-r" | "command-a-03-2025" | "c4ai-aya-expanse-32b" |
+
+    /**
+     * Perplexity
+     */
+    "sonar-pro" | "sonar" | "sonar-deep-research" |
+
+    /**
+     * Replicate
+     */
+    "black-forest-labs/flux-schnell" | "black-forest-labs/FLUX.1-schnell" |
+    "xtts-v2" |
+    "zsxkib/pulid:43d309c37ab4e62361e5e29b8e9e867fb2dcbcec77ae91206a8d95ac5dd451a0" |
+    "fal-ai/ltx-video/image-to-video" |
+
+    /**
+     * OpenRouter
+     */
+    "openrouter/custom" | "minimax/minimax-m1" | "microsoft/wizardlm-2-8x22b" | "deepseek/deepseek-chat-v3-0324:free" |
+    "deepseek/deepseek-r1-0528:free" |  "google/gemini-2.0-flash-exp:free" | "google/gemma-3-27b-it:free" |
+    "qwen/qwen3-14b:free" |  "qwen/qwen3-32b:free" |
+
+    /**
+     * ArliAI
+     */
+    "DS-R1-Distill-70B-ArliAI-RpR-v4-Large" | "Gemma-3-27B-ArliAI-RPMax-v3" | "Llama-3.3-70B-ArliAI-RPMax-v2" | "Gemma-3-27B-CardProjector-v4" |
+    "Llama-3.3-70B-Legion-V2.1"
+
+
+export type Feature = "tools" | "reasoning"
+
+export type LLM = {
+
+    /**
+     * Use for API calls, this is the unique identifier for the model.
+     */
+    key: TextModelId,
+
+    /**
+     * Actual model name
+     */
+    name: string,
+
+    /**
+     * Optional Simple name for the model
+     */
+    alias?: string,
+    usecase?: string
+    provider: ProviderId,
+    tags?: string[],
+    features?: Feature[],
+    isFree?: boolean,
+    contextLength?: number,
+
+    /**
+     * Whether this model should show up in "simple mode".
+     */
+    recommended?: boolean,
+}
+
+
+export type LLMGroup = {
+    provider: ProviderId,
+    llms: LLM[]
+}
+
 
 export const LLMs: LLM[] = [
     {

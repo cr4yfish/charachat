@@ -112,3 +112,11 @@ export async function getArliAI(modelId: string, apiKey?: string): Promise<Langu
 
     return arliAI(modelId);
 }
+
+export async function getChutes(modelId: string, apiKey?: string): Promise<LanguageModelV1> {
+    const chutes = createOpenAI({
+        baseURL: "https://llm.chutes.ai/v1",
+        apiKey: apiKey
+    });
+    return chutes(modelId);
+}

@@ -1,4 +1,5 @@
-import { ProviderId } from "@/lib/ai/types";
+import { ProviderId } from "../../ai/models/providers";
+
 
 export type ProfileSettings = {
     show_nsfw?: boolean;

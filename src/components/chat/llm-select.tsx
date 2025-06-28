@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { LLM, ModelId } from "@/lib/ai/types";
+import { LLM, TextModelId } from "@/lib/ai/models/llm";
 import { getLLMById, getLLMGroupedByProvider } from "@/lib/ai/utils";
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
@@ -78,8 +78,8 @@ const FancyLLM = memo(PureFancyLLM, (prevProps, nextProps) => {
 });
 
 type Props = {
-    onSelect?: (key: ModelId) => void;
-    selectedKey?: ModelId | undefined;
+    onSelect?: (key: TextModelId) => void;
+    selectedKey?: TextModelId | undefined;
     disabled?: boolean;
     label?: string;
     description?: string;
@@ -110,7 +110,7 @@ const PureLLMSelect = (props: Props) => {
                 <span className="text-xs text-muted-foreground">{props.description}</span>
 
             </Label>
-            <Select disabled={props.disabled} name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as ModelId)}  >
+            <Select disabled={props.disabled} name="llm-select" value={props.selectedKey} onValueChange={(val) => props.onSelect?.(val as TextModelId)}  >
 
                 <SelectTrigger size={"removesizingcss"} className="h-fit rounded-2xl w-full border-border">
                     <SelectValue aria-label="Select a LLM" className="!h-fit !border-border">

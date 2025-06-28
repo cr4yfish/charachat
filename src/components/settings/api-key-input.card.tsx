@@ -5,12 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import LLMBadge from "../llm/llm-badge";
 import LLMIcon from "../llm/llm-icon";
-import { LLMs } from "@/lib/ai/models/llm/text-models";
+import { LLMs } from "@/lib/ai/models/llm";
 import { InputWithLabel } from "../ui/input-with-label";
-import { Providers } from "@/lib/ai/models/providers/providers";
+import { Providers } from "@/lib/ai/models/providers";
 import { API_ROUTES } from "@/lib/constants/apiRoutes";
 import { useDebounce } from "use-debounce";
-import { ProviderId } from "@/lib/ai/types";
+import { ProviderId } from "@/lib/ai/models/providers";
 import { toast } from "sonner";
 import { Profile } from "@/lib/db/types/profile";
 import equal from 'fast-deep-equal';

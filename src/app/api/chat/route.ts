@@ -4,7 +4,8 @@ import { getLanguageModel, getModelApiKey } from "@/lib/ai";
 import { generateImageAgent } from "@/lib/ai/agents/image";
 import { RAGMemory } from "@/lib/ai/browser-rag/rag";
 import { _INTRO_MESSAGE, getDynamicBookPrompt, getMemoriesPrompt, getSystemPrompt, noCharacterSelectedPrompt } from "@/lib/ai/prompts";
-import { ModelId, ProviderIdEnum} from "@/lib/ai/types";
+import { TextModelId } from "@/lib/ai/models/llm";
+import { ProviderIdEnum } from "@/lib/ai/models/providers";
 import { getLLMById, llmSupportsTools } from "@/lib/ai/utils";
 import { getKeyServerSide } from "@/lib/crypto/server";
 import { getCharacter } from "@/lib/db/character";
@@ -102,7 +103,7 @@ export async function POST(req:Request) {
                 description: "A chat with the AI character",
                 userId: user.id,
                 characterId: characterId,
-                llm: profile.default_llm || clientLLM as ModelId, // default_llm has priority over clientLLM
+                llm: profile.default_llm || clientLLM as TextModelId, // default_llm has priority over clientLLM
                 personaId: personaId // can be undefined
             })
 
@@ -159,7 +160,7 @@ export async function POST(req:Request) {
     // 1. chat.llm (if chat exists) <- User preference for this chat
     // 3. profileSettings.default_llm (from the user's profile) <- Default
     // 2. clientLLM (from the request body) <- Cookie @deprecated
-    const modelId = (chat?.llm || profile.default_llm  || clientLLM) as ModelId;
+    const modelId = (chat?.llm || profile.default_llm  || clientLLM) as TextModelId;
 
     // Try to get the API key for the model
     // If it fails, return a 400 error with the error message
