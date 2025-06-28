@@ -193,16 +193,16 @@ export async function searchSillyTavern(search: string): Promise<ImportCharType[
     
     const listItems = $(".list-group a");
 
-    listItems.each((i, el) => {
+    listItems.each((_, el) => {
         const $el = $(el);
 
-        const tags = $el.find("small").map((i, tagEl) => $(tagEl).text().trim()).get();
+        const tags = $el.find("small").map((_, tagEl) => $(tagEl).text().trim()).get();
 
         results.push({
             name: $el.find("h5").text().trim(),
             description: $el.find("p").text().trim(),
             imageLink: $el.find("img").attr("src") || "",
-            tags: $el.find("small").map((i, tagEl) => $(tagEl).text().trim()).get(),
+            tags: $el.find("small").map((_, tagEl) => $(tagEl).text().trim()).get(),
             source: "SillyTavern",
             sourceId: $el.find("h5").text().trim() || "",
             nsfw: tags.some(tag => tag.toLowerCase().includes("nsfw")) // Check if any tag includes "nsfw",
@@ -240,10 +240,10 @@ export async function searchJanitor(search: string): Promise<ImportCharType[]> {
 
     const listItems = $("body .grid a");
 
-    listItems.each((i, el) => {
+    listItems.each((_, el) => {
         const $el = $(el);
 
-        const tags = $el.find("li").map((i, tagEl) => $(tagEl).find("span").text().trim()).get();
+        const tags = $el.find("li").map((_, tagEl) => $(tagEl).find("span").text().trim()).get();
         results.push({
             name: $el.find("h5").text().trim(),
             description: $el.find("p").text().trim(),
