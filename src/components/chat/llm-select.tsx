@@ -15,7 +15,6 @@ import { getLLMById, getLLMGroupedByProvider } from "@/lib/ai/utils";
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
-import { _DEFAULT_LLM } from "@/lib/constants/defaults";
 import LLMIcon from "../llm/llm-icon";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
