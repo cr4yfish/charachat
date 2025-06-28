@@ -33,31 +33,31 @@ export default function CharacterPageActions({ character }: { character: Charact
         
 
             {character.is_private && 
-                <Button variant={"outline"} className="flex items-center gap-2 text-emerald-500">
+                <Badge variant={"ghost"} className="flex items-center gap-2 text-emerald-500">
                     <LockIcon color="currentColor" />
                     <span>Private</span>
-                </Button>
+                </Badge>
             }
 
             {character.is_unlisted && 
-                <Button variant={"outline"} className="flex items-center gap-2 text-sky-400">
+                <Badge variant={"ghost"} className="flex items-center gap-2 text-sky-400">
                     <EyeOffIcon color="currentColor" />
                     <span>Unlisted</span>
-                </Button>
+                </Badge>
             }
 
             {character.hide_definition && 
-                <Button variant={"outline"} className="flex items-center gap-2 text-orange-400">
+                <Badge variant={"ghost"} className="flex items-center gap-2 text-orange-400">
                     <ShieldIcon color="currentColor" />
                     <span>Theft Protected</span>
-                </Button>
+                </Badge>
             }
 
             {character.is_nsfw && 
-                <Button variant={"outline"} className="flex items-center gap-2 text-red-400">
+                <Badge variant={"ghost"} className="flex items-center gap-2 text-red-400">
                     <AlertTriangleIcon color="currentColor" />
                     <span>NSFW</span>
-                </Button>
+                </Badge>
             }
 
             <div className="flex flex-row items-center flex-wrap gap-2">
