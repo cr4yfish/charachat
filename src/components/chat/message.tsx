@@ -20,6 +20,7 @@ import ImageCharacterCard from "../character/character-card-image";
 import APIKeyInput from "../settings/api-key-input";
 import LLMSelect from "./llm-select";
 import Zoom from 'react-medium-image-zoom'
+import { useMessageEdit } from "@/hooks/use-message-edit";
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
@@ -48,6 +49,11 @@ const Header = memo(PureHeader, (prev, next) => {
 
 const PureFooter = (props: { openImageGen?: () => void; message: MessageType, chatId?: string, deleteCallback?: (messageId: string) => void }) => {
     const [state, setState] = useState<"init" | "deleting" | "editing" | "copying" | "generating-image" | "listening">("init");
+    const { openMessageEdit } = useMessageEdit();
+
+    const handleEditMessage = () => {
+        openMessageEdit(props.message);
+    }
 
     return (
         <motion.div 
@@ -62,7 +68,7 @@ const PureFooter = (props: { openImageGen?: () => void; message: MessageType, ch
             
             {/* Editing only available in a chat */}
             {props.chatId &&
-            <Button disabled size={"icon"} variant={"ghost"} >
+            <Button onClick={handleEditMessage} size={"icon"} variant={"ghost"} >
                 <EditIcon color="currentColor" />
             </Button>
             }

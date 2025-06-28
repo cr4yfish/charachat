@@ -19,6 +19,8 @@ import { Virtuoso } from 'react-virtuoso';
 import { Message as MessageComponent } from './message';
 import { TOOL_NAMES } from '@/lib/constants/toolNames';
 import equal from 'fast-deep-equal';
+import { MessageEditDrawer } from './message-edit-drawer';
+import { MessageEditProvider } from '@/hooks/use-message-edit';
 
 type Props = {
   shallowCharacter: ShallowCharacter | undefined;
@@ -306,6 +308,34 @@ export const PureChat = (props: Props) => {
 
   }, [setMessages, props.chatId]);
 
+  const editMessageCallback = useCallback(({newText, messageId}: {newText: string, messageId: string}) => {
+    // Find the message to edit 
+    const messageIndex = messages.findIndex((msg) => msg.id === messageId);
+    if (messageIndex === -1) {
+      console.error("Message not found for editing:", messageId);
+      return;
+    }
+    // Create a new message object with the updated content
+    const updatedMessage: Message = {
+      ...messages[messageIndex],
+      content: newText,
+      parts: [
+        {
+          type: "text",
+          text: newText,
+        }
+      ]
+    };
+
+    // Update the messages state with the edited message
+    setMessages((prevMessages) => {
+      const newMessages = [...prevMessages];
+      newMessages[messageIndex] = updatedMessage; // Replace the old message with the updated one
+      return newMessages;
+    });
+
+  }, [messages, setMessages]);
+
   return (
     <>
     <div id='messages' className='h-dvh max-h-screen w-full overflow-hidden'>
@@ -320,7 +350,7 @@ export const PureChat = (props: Props) => {
 
         </div>
       )}
-
+      <MessageEditProvider>
       <Virtuoso 
         className='w-full h-full'
         ref={virtuosoRef}
@@ -380,6 +410,11 @@ export const PureChat = (props: Props) => {
         onOpenChange={setImageGenOpen}
         callback={imageCallback}
       />
+      
+      <MessageEditDrawer 
+        callback={editMessageCallback}
+      />
+      </MessageEditProvider>
     </div>
     </>
   );
