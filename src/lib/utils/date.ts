@@ -122,5 +122,5 @@ export function prettyPrintDate(date: Date | string, userOptions?: PrettyPrintDa
     options.year = undefined;
   }
 
-  return new Intl.DateTimeFormat('en-US', options).format(dateObj).replace(/(\d+(?::\d+)?)\s+(AM|PM)/g, (match, time, ampm) => time + ampm.toLowerCase());
+  return new Intl.DateTimeFormat('en-US', options).format(dateObj).replace(/(\d+(?::\d+)?)\s+(AM|PM)/g, (time, ampm) => time + ampm.toLowerCase());
 }
