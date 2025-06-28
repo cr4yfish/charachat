@@ -6,11 +6,8 @@ import { LIMITS } from "@/lib/constants/limits";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { YourPersonas } from "@/components/home/your-personas";
-import { getOwnPersonas, getPersona } from "@/lib/db/persona";
-import { getSettingsCookie } from "../actions";
-import { ProfileSettings } from "@/lib/db/types/profile";
-import { Persona } from "@/lib/db/types/persona";
-import PersonaImageCard from "@/components/personas/persona-image-card";
+import { getOwnPersonas } from "@/lib/db/persona";
+import DefaultPersona from "@/components/home/default-persona";
 
 export default async function ChatsPage() {
 
@@ -34,15 +31,11 @@ export default async function ChatsPage() {
         limit: LIMITS.MAX_PERSONAS_PER_PAGE
     })
 
-    const settingsCookie = await getSettingsCookie();
-    const settings = JSON.parse(settingsCookie || "{}") as ProfileSettings;
-    const defaultPersona: Persona | undefined = settings.default_persona_id ? await getPersona(settings.default_persona_id) : undefined;
-    
+
     return (
         <div className=" h-screen max-w-screen overflow-x-hidden overflow-y-auto ios-safe-header-padding-chats pb-[100px] px-4 flex flex-col items-center">     
             
             <div className="flex flex-col gap-4 w-full h-fit max-w-3xl">
-                
             
                 <YourProfile userid={user.id} />
 
@@ -50,17 +43,7 @@ export default async function ChatsPage() {
 
                 <YourPersonas initOwnPersonas={initialOwnPersonas} />
 
-                {defaultPersona && 
-                    <div className="flex flex-col gap-2">
-                        <h2 className="text-lg font-bold">Default Persona</h2>
-                        <div className="flex flex-col">
-                            <PersonaImageCard 
-                                data={defaultPersona}
-                                hasLink={true}
-                            />
-                        </div>
-                    </div>
-                }
+                <DefaultPersona />
 
                 <SavedCharacters />
 
