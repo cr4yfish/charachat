@@ -48,7 +48,7 @@ const PureChatSetup = (props: Props) => {
     }
 
     return (
-        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 ios-safe-header-padding-chat max-h-3/4 overflow-hidden max-w-[960px] mx-auto">
+        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 ios-safe-header-padding-chat max-h-full overflow-hidden max-w-[960px] mx-auto">
         
             <div className="flex flex-col prose dark:prose-invert prose-h2:m-0 prose-h2:mb-1">
                 <h2>Select a Persona (optional)</h2>
