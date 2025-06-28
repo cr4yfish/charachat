@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { ChevronLeftIcon, DramaIcon, EditIcon } from "lucide-react";
 import { useSidebar } from "../ui/sidebar";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Spinner from "../ui/spinner";
 import { setPersonaDefault } from "@/app/p/actions";
 import { useRouter } from "next/navigation";
@@ -17,8 +17,17 @@ function PurePersonaTopHeader({ persona, isOwner, isDefault } : { persona: Perso
     const { isMobile } = useSidebar();
     const [isSettingDefault, setIsSettingDefault] = useState(false);
     const [internalIsDefault, setInternalIsDefault] = useState(isDefault || false);
-    const { mutateProfile } = useProfile();
+    const { mutateProfile, profile, isLoading: isLoadingProfile } = useProfile();
     const router = useRouter();
+
+    // Improve accuracy of default persona state
+    // Passed by props is not always accurate, 
+    // as its from cookies and maybe stale
+    useEffect(() => {
+        if(profile?.settings?.default_persona_id === persona.id) {
+            setInternalIsDefault(true);
+        }
+    }, [profile])
 
     const handleSetDefault = () => {
         setIsSettingDefault(true);
@@ -64,8 +73,8 @@ function PurePersonaTopHeader({ persona, isOwner, isDefault } : { persona: Perso
                         </Button>
                     </Link>
                     }
-                    <Button onClick={handleSetDefault} disabled={isSettingDefault} className={cn("w-fit", { "bg-emerald-400/50": internalIsDefault })} >
-                        {isSettingDefault ? <Spinner /> : <DramaIcon />}
+                    <Button onClick={handleSetDefault} disabled={isSettingDefault || isLoadingProfile} className={cn("w-fit", { "bg-emerald-400/50": internalIsDefault })} >
+                        {(isSettingDefault || isLoadingProfile) ? <Spinner /> : <DramaIcon />}
                         <span>
                         {internalIsDefault ? "Default Persona" : "Set as Default"}    
                         </span> 
