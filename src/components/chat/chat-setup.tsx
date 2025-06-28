@@ -15,6 +15,7 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
 import { setPersonaCookie } from "@/app/actions";
 const PersonaSelector = dynamic(() => import("../personas/persona-selector"), { ssr: false });
+import { motion } from "motion/react";
 
 type Props = {
     chatId?: string;
@@ -47,13 +48,13 @@ const PureChatSetup = (props: Props) => {
     }
 
     return (
-        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 ios-safe-header-padding-chat max-h-full overflow-hidden max-w-[960px] mx-auto">
-         
+        <div id="chat-setup" className="flex flex-col justify-start p-4 size-full gap-2 ios-safe-header-padding-chat max-h-3/4 overflow-hidden max-w-[960px] mx-auto">
+        
             <div className="flex flex-col prose dark:prose-invert prose-h2:m-0 prose-h2:mb-1">
                 <h2>Select a Persona (optional)</h2>
             </div>
             <Accordion type="single" className="w-full" defaultValue="persona" collapsible>
-                <AccordionItem value="persona" className="w-full">
+                <AccordionItem value="persona" className="w-full h-[400px]">
                     <AccordionTrigger>
                         <div className="w-full flex flex-row items-center justify-between gap-2">
                             {selectedPersona && 
@@ -78,15 +79,24 @@ const PureChatSetup = (props: Props) => {
             </Accordion>
         
                    
-            <div className="flex flex-row items-center justify-end gap-2 w-full overflow-hidden self-end shrink-0 max-w-[400px] px-4 mx-auto z-50 left-0">
+            <div className="w-full relative overflow-visible max-w-[400px] mx-auto z-50 rounded-full mt-4">
                 <Button 
                     onClick={handleDone} 
                     variant={"secondary"}
-                    className="grow w-fit flex justify-between items-center"
+                    className="w-full flex justify-between items-center py-6 bg-white hover:bg-white/90 text-black font-bold"
                 >
                     {"Start Chat"}
-                    <ChevronRightIcon size={16} />
+                    <motion.div
+                        initial={{  x: 5 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: 5 }}
+                        transition={{ duration: 1, repeat: Infinity, repeatType: "reverse", type: "spring" }}
+
+                    >
+                        <ChevronRightIcon size={16} />
+                    </motion.div>
                 </Button>
+                <div className="absolute top-0 left-0 size-full animated-shadow rounded-full pointer-events-none"></div>
             </div>
 
         </div>
