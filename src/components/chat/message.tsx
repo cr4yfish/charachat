@@ -1,41 +1,11 @@
 import { UIMessage } from "ai";
 import { memo, useMemo } from "react";
-import { Markdown } from "../ui/markdown";
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import equal from 'fast-deep-equal';
 import { cn } from "@/lib/utils";
 import { AIMessage } from "./message/message-ai";
 import { Footer } from "./message/message-footer";
-
-
-const PureUserMessage = ({ message }: { message: UIMessage }) => {
-    return (
-        <div className="dark:bg-slate-800 rounded-3xl rounded-br-none p-3">
-            {/* <Markdown>{message.content}</Markdown> */}
-            {message.parts && message.parts.length > 0 && message.parts.map((part, index) => {
-                if(part.type === "text") {
-                    return <Markdown key={index}>{part.text}</Markdown>;
-                }
-
-                return (
-                    <div key={index} className=" p-2 rounded-md mb-2">
-                        <span className="font-semibold">Unknown part type: {part.type}</span>
-                        <span className="text-neutral-500 dark:text-neutral-400">{JSON.stringify(part)}</span>
-                    </div>
-                );
-            })}
-        </div>
-    );
-}
-
-const UserMessage = memo(PureUserMessage, (prev, next) => {
-    if( prev.message.content !== next.message.content) return false;
-    if( prev.message.role !== next.message.role) return false;
-    if( prev.message.id !== next.message.id) return false;
-    if (JSON.stringify(prev.message?.parts) !== JSON.stringify(next.message?.parts)) return false;
-
-    return true;
-});
+import { UserMessage } from "./message/message-user";
 
 type MessageProps = {
     message: UIMessage;
