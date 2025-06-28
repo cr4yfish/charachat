@@ -3,7 +3,7 @@ import Image from "next/image";
 import { memo, useMemo, useState } from "react";
 import { Markdown } from "../ui/markdown";
 import { Button } from "../ui/button";
-import { CheckIcon, CopyIcon, EditIcon, ImageIcon, LogInIcon, TrashIcon, VolumeIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, EditIcon, ImageIcon, LogInIcon, MaximizeIcon, TrashIcon, VolumeIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import { TOOL_NAMES } from "@/lib/constants/toolNames";
@@ -19,11 +19,12 @@ import { Character } from "@/lib/db/types/character";
 import ImageCharacterCard from "../character/character-card-image";
 import APIKeyInput from "../settings/api-key-input";
 import LLMSelect from "./llm-select";
+import Zoom from 'react-medium-image-zoom'
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {
     return (
         <div className="font-medium text-sm flex items-center gap-2">
-            <div className="flex items-center gap-2 dark:text-neutral-400 text-neutral-600">
+            <div className="flex items-center gap-2 text-sky-100">
                 {image && 
                     <motion.div 
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} 
@@ -234,13 +235,15 @@ const PureAIContent = ({ message: { parts}, addToolResult }: { message: UIMessag
 
                                 return (
                                     <div key={callId} className="p-2 w-full flex flex-col gap-2">
-                                        <div className="h-[250px] overflow-hidden relative rounded-3xl">
-                                            <Image 
-                                                src={safeParseLink(part.toolInvocation.result)} 
-                                                alt={part.toolInvocation.args.prompt || "Generated Image"}
-                                                fill
-                                                className="object-cover rounded-md"
-                                            />
+                                        <div className="h-[512px] max-sm:h-[300px] overflow-hidden relative rounded-3xl">
+                                            <Zoom IconZoom={MaximizeIcon} >
+                                                <Image 
+                                                    src={safeParseLink(part.toolInvocation.result)} 
+                                                    alt={part.toolInvocation.args.prompt || "Generated Image"}
+                                                    fill
+                                                    className="object-cover object-center rounded-md"
+                                                />
+                                            </Zoom>
                                         </div>
                                         {/* <span className="text-xs text-muted-foreground">{part.toolInvocation?.args?.prompt}</span> */}
                                     </div>
@@ -463,7 +466,7 @@ const AIMessage = memo(PureAIMessage, (prev, next) => {
 
 const PureUserMessage = ({ message }: { message: UIMessage }) => {
     return (
-        <div className="text-slate-100 dark:bg-slate-800 rounded-3xl rounded-tr-none p-3">
+        <div className="dark:bg-slate-800 rounded-3xl rounded-br-none p-3">
             {/* <Markdown>{message.content}</Markdown> */}
             {message.parts && message.parts.length > 0 && message.parts.map((part, index) => {
                 if(part.type === "text") {

@@ -5,6 +5,7 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import { cn } from '@/lib/utils';
 import CodeBlock from './code-block';
 import remarkGfm from 'remark-gfm';
+import Zoom from 'react-medium-image-zoom'
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
@@ -99,11 +100,20 @@ const components: Partial<Components> = {
       </p>
     );
   },
+  em: ({ node, children, ...props }) => {
+    return (
+      <span className="italic text-muted-foreground" {...props}>
+        {children}
+      </span>
+    );
+  },
   img: ({ node, children, ...props }) => {
     return (
-      <img className="rounded my-1" {...props}>
-        {children}
-      </img>
+      <Zoom>
+        <img className="rounded my-1" {...props}>
+          {children}
+        </img>
+      </Zoom>
     );
   },
   code: ({ node, children, ...props }) => {
@@ -121,7 +131,7 @@ const NonMemoizedMarkdown = ({ children, className }: { children?: string, class
   if (!children || children.length === 0) return null;
 
   return (
-    <div className={cn('prose dark:prose-invert', className)}>
+    <div className={cn('prose dark:prose-invert prose-p:m-0 prose-p:py-[10px]', className)}>
         <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
         {children}
         </ReactMarkdown>

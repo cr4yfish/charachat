@@ -4,6 +4,7 @@ import {
 } from '@clerk/nextjs'
 import { Geist_Mono, Montserrat, Leckerli_One } from 'next/font/google'
 import './globals.css'
+import "./zoom.css"
 import { AppTabBar } from '@/components/ui/tab-bar/app-tabbar'
 import { TopBar } from '@/components/ui/top-bar/top-bar'
 import { GlobalLiquidFilter } from '@/components/ui/liquid'
