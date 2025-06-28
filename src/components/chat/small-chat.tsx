@@ -21,6 +21,9 @@ import { Message as MessageComponent } from "./message";
 import { ScrollArea } from "../ui/scroll-area";
 import { useEffect } from "react";
 import { replaceVariables } from "@/lib/utils/text";
+import { chatErrorHandler } from "@/lib/utils/chat-helpers";
+import { Button } from "../ui/button";
+import { MessageCirclePlusIcon } from "lucide-react";
 
 type Props = {
     character: Character;
@@ -36,6 +39,12 @@ const PureSmallChat = ({ character }: Props) => {
             isIntro: false,
             characterId: character.id,
             isSmallChat: true,
+        },
+        onError: (error) => {
+            chatErrorHandler({
+                error: error,
+                setMessages: setMessages,
+            });
         }
     })
 
@@ -81,11 +90,22 @@ const PureSmallChat = ({ character }: Props) => {
         })
     }
 
+    const handleNewChat = () => {
+        // Reset messages to start a new chat
+        setMessages([]);
+    }
+
     return (
         // Wrapper adjusts size based on parent container
         // max-w-2xl ensures it doesn't get absurdly large
         <div id="small-chat" className="bg-background/50 backdrop-blur border border-border rounded-3xl size-full max-w-2xl relative flex flex-col gap-4 p-1" >
 
+            <div className="absolute top-2 left-2 z-20">
+                <Button onClick={handleNewChat} variant={"ghost"} className="text-muted-foreground">
+                    <MessageCirclePlusIcon size={16} />
+                    <span>Reset</span>
+                </Button>
+            </div>
 
             {/* Messages */}
             <ScrollArea className="p-4 h-full flex flex-col min-h-[200px] max-h-[400px]">
@@ -98,6 +118,7 @@ const PureSmallChat = ({ character }: Props) => {
                         characterImage={character.image_link}
                         status={status}
                         latestMessage={messages[messages.length - 1]?.id === message.id}
+                        chatId={undefined} // Small chat does not have a chatId
                     />
                 ))}
                 <div className="pb-[70px] sm:pb-[50px]" id="endpad"></div>

@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { cn } from '@/lib/utils';
 import { ChatSetup } from './chat-setup';
 import { useParams, useRouter } from 'next/navigation';
-import { ERROR_MESSAGES } from '@/lib/constants/errorMessages';
 import { toast } from 'sonner';
 import { ImageGenDrawer } from './image-gen-drawer';
 import { ShallowCharacter } from '@/lib/db/types/character';
@@ -21,6 +20,7 @@ import { TOOL_NAMES } from '@/lib/constants/toolNames';
 import equal from 'fast-deep-equal';
 import { MessageEditDrawer } from './message-edit-drawer';
 import { MessageEditProvider } from '@/hooks/use-message-edit';
+import { chatErrorHandler } from '@/lib/utils/chat-helpers';
 
 type Props = {
   shallowCharacter: ShallowCharacter | undefined;
@@ -74,87 +74,10 @@ export const PureChat = (props: Props) => {
     onError: (error) => {
       // console.error("Chat error:", error);
 
-      switch(error.message) {
-        case ERROR_MESSAGES.CHAT_NOT_FOUND:
-          toast.error(ERROR_MESSAGES.CHAT_NOT_FOUND);
-          break;
-        case ERROR_MESSAGES.CHAT_CREATION_FAILED:
-          toast.error(ERROR_MESSAGES.CHAT_CREATION_FAILED);
-          break;
-        case ERROR_MESSAGES.CHAT_UPDATE_FAILED:
-          toast.error(ERROR_MESSAGES.CHAT_UPDATE_FAILED);
-          break;
-        case ERROR_MESSAGES.CHAT_ID_REQUIRED:
-          toast.error( ERROR_MESSAGES.CHAT_ID_REQUIRED);
-          break;
-
-        case ERROR_MESSAGES.CHARACTER_NOT_FOUND:
-          toast.error(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
-          break;
-
-        case ERROR_MESSAGES.LLM_MODEL_NOT_FOUND:
-        case ERROR_MESSAGES.LLM_MODEL_REQUIRED:
-        case ERROR_MESSAGES.LLM_MODEL_ACCESS_DENIED:
-          toast.error(ERROR_MESSAGES.LLM_GENERIC_ERROR);
-
-          // We're going to add a tool message to the chat where they can choose a model
-          setMessages((prev) => {
-            const newMsg: Message = {
-              id: uuidv4(),
-              role: "assistant",
-              content: "",
-              createdAt: new Date(),
-              parts: [
-                {
-                  type: "tool-invocation",
-                  toolInvocation: {
-                    toolName: TOOL_NAMES.chooseModel,
-                    toolCallId: uuidv4(),
-                    args: {},
-                    result: "",
-                    state: "result"
-                  }
-                }
-              ]
-            }
-            return [...prev, newMsg];
-          })
-
-          break;
-
-        case ERROR_MESSAGES.UNAUTHORIZED:
-          // toast.error(ERROR_MESSAGES.UNAUTHORIZED);
-
-          // We're going to add a tool message to the chat where they can log in
-          
-          // add an assistant message to the chat
-          setMessages((prevMessages) => {
-            const newMessage: Message = {
-              id: uuidv4(),
-              role: "assistant",
-              content: "",
-              createdAt: new Date(),
-              parts: [
-                {
-                  type: "tool-invocation",
-                  toolInvocation: {
-                    toolName: TOOL_NAMES.login,
-                    toolCallId: uuidv4(),
-                    args: {},
-                    result: "",
-                    state: "result"
-                  }
-                }
-              ]
-            };
-            return [...prevMessages, newMessage];
-          });
-
-          break;
-
-        default:
-          toast.error(ERROR_MESSAGES.GENERIC_ERROR);
-      }
+      chatErrorHandler({
+        error: error,
+        setMessages: setMessages,
+      });
     },
   });
 
