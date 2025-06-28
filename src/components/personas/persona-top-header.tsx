@@ -27,7 +27,7 @@ function PurePersonaTopHeader({ persona, isOwner, isDefault } : { persona: Perso
         if(profile?.settings?.default_persona_id === persona.id) {
             setInternalIsDefault(true);
         }
-    }, [profile])
+    }, [profile, persona.id])
 
     const handleSetDefault = () => {
         setIsSettingDefault(true);

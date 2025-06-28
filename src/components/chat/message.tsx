@@ -25,7 +25,7 @@ const PureMessage = (props: MessageProps) => {
 
     const showLoading = useMemo(() => {
         return props.isLoading && props.message.role === "assistant" && props.status === "streaming";
-    }, [props.isLoading, props.message.role, props.status, props.chatId]);
+    }, [props.isLoading, props.message.role, props.status]);
 
     const showFooter = useMemo(() => {
         return props.chatId !== undefined;

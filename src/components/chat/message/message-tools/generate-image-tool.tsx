@@ -8,7 +8,7 @@ import Image from "next/image";
 import { memo } from "react";
 import Zoom from 'react-medium-image-zoom'
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const PureGenerateImage = ({ toolInvocation }: { toolInvocation: ToolInvocation & ToolResult<string, any, any> }) => {
     if (!toolInvocation?.result) {
         return (

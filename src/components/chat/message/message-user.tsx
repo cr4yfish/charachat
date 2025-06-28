@@ -2,7 +2,6 @@
 
 import { UIMessage } from "ai";
 import { memo } from "react";
-import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import { Markdown } from "@/components/ui/markdown";
 
 const PureUserMessage = ({ message }: { message: UIMessage }) => {
