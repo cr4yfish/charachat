@@ -53,49 +53,49 @@ const components: Partial<Components> = {
   },
   h1: ({ node, children, ...props }) => {
     return (
-      <h1 className="text-3xl font-semibold mt-6 mb-2" {...props}>
+      <h1 className="text-3xl font-semibold mt-6 pb-2" {...props}>
         {children}
       </h1>
     );
   },
   h2: ({ node, children, ...props }) => {
     return (
-      <h2 className="text-2xl font-semibold mt-6 mb-2" {...props}>
+      <h2 className="text-2xl font-semibold mt-6 pb-2" {...props}>
         {children}
       </h2>
     );
   },
   h3: ({ node, children, ...props }) => {
     return (
-      <h3 className="text-xl font-semibold mt-6 mb-2" {...props}>
+      <h3 className="text-xl font-semibold mt-6 pb-2" {...props}>
         {children}
       </h3>
     );
   },
   h4: ({ node, children, ...props }) => {
     return (
-      <h4 className="text-lg font-semibold mt-6 mb-2" {...props}>
+      <h4 className="text-lg font-semibold mt-6 pb-2" {...props}>
         {children}
       </h4>
     );
   },
   h5: ({ node, children, ...props }) => {
     return (
-      <h5 className="text-base font-semibold mt-6 mb-2" {...props}>
+      <h5 className="text-base font-semibold mt-6 pb-2" {...props}>
         {children}
       </h5>
     );
   },
   h6: ({ node, children, ...props }) => {
     return (
-      <h6 className="text-sm font-semibold mt-6 mb-2" {...props}>
+      <h6 className="text-sm font-semibold mt-6 pb-2" {...props}>
         {children}
       </h6>
     );
   },
   p: ({ children }) => {
     return (
-      <p className="text-ellipsis " >
+      <p className="text-ellipsis"  >
         {children}
       </p>
     );
@@ -131,10 +131,10 @@ const NonMemoizedMarkdown = ({ children, className }: { children?: string, class
   if (!children || children.length === 0) return null;
 
   return (
-    <div className={cn('prose dark:prose-invert prose-p:m-0 prose-p:py-[10px]', className)}>
-        <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
-        {children}
-        </ReactMarkdown>
+    <div className={cn('prose dark:prose-invert prose-p:m-0 prose-p:has-[+*]:pb-[1em]', className)}>
+      <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
+      {children}
+      </ReactMarkdown>
     </div>
   );
 };
