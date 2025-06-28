@@ -4,7 +4,6 @@
 import { UIMessage } from "ai";
 import { memo} from "react";
 import { CheckIcon } from "lucide-react";
-import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import { TOOL_NAMES } from "@/lib/constants/toolNames";
 import equal from 'fast-deep-equal';
 import { cn } from "@/lib/utils";

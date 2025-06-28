@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { memo } from "react";
 import { motion } from "motion/react";
-import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import { safeParseLink } from "@/lib/utils/text";
 
 const PureHeader = ({ image, name}: { image?: string, name?: string, role: string }) => {

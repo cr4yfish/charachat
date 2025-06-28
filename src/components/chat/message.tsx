@@ -27,13 +27,13 @@ const PureMessage = (props: MessageProps) => {
         return props.isLoading && props.message.role === "assistant" && props.status === "streaming";
     }, [props.isLoading, props.message.role, props.status, props.chatId]);
 
-    if(props.message.content === _INTRO_MESSAGE_PLACEHOLDER) {
-        return null; // don't render the intro message
-    }
-
     const showFooter = useMemo(() => {
         return props.chatId !== undefined;
     }, [props.chatId]);
+
+    if(props.message.content === _INTRO_MESSAGE_PLACEHOLDER) {
+        return null; // don't render the intro message
+    }
 
     return (
         <div id={props.message.id} className={cn("w-full overflow-hidden flex flex-col pb-4 relative", {
