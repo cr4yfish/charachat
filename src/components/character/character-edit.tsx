@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { Progress } from "../ui/progress";
 import SmallCharacterCard from "./character-card-small";
 import { authorPrompts } from "@/lib/ai/prompts";
+import SmallChat from "../chat/small-chat";
 
 const PureAccordionSection = ({title, description, children, value, active, completed } : 
     { title: string, description: string, value: string, children: React.ReactNode[], active: boolean, completed?: boolean }) => {
@@ -347,6 +348,7 @@ const PureCharacterEdit = ({ character } : { character: Character }) => {
             <div className="flex flex-col gap-2">
                 <span>Preview</span>
                 <SmallCharacterCard data={internalCharacter} hasLink={false} />
+                <SmallChat character={internalCharacter}  />
             </div>
 
             {/* Danger zone */}
