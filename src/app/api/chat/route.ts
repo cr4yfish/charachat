@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { Message } from "@/lib/db/types/message";
 import searchCharactersWithAIAgent from "@/lib/ai/agents/search";
+import { _DEFAULT_LLM } from "@/lib/constants/defaults";
 
 export const maxDuration = 30;
 
@@ -82,7 +83,15 @@ export async function POST(req:Request) {
      * End access controls and init stuff
      */
 
-    const clientLLM = (await getLLMModelCookie()) || modelIdFromClient;
+    /**
+     * ClientLLM are the default model options, used as long as the user doesn't specify another for this chat
+     * Priority:
+     * 1. Cookie (set by the client, more flexible option. This will be set by the fallback chat UI)
+     * 2. modelId from the client request (deprecated)
+     * 3. profile.settings.default_llm (user's default model)
+     * 4. _DEFAULT_LLM (app fallback model, used if no other model is set)
+     */
+    const clientLLM = (await getLLMModelCookie()) || modelIdFromClient || profile.settings?.default_llm  || _DEFAULT_LLM;
     let chat: Chat | undefined = await getChat(chatId);
 
     const personaIdFromCookie = await getPersonaCookie();
@@ -158,9 +167,8 @@ export async function POST(req:Request) {
 
     // we have various methods to get the modelId:
     // 1. chat.llm (if chat exists) <- User preference for this chat
-    // 3. profileSettings.default_llm (from the user's profile) <- Default
-    // 2. clientLLM (from the request body) <- Cookie @deprecated
-    const modelId = (chat?.llm || profile.default_llm  || clientLLM) as TextModelId;
+    // 2. clientLLM: Prio 1.Cookie -> 2.sent from chat -> 3.profile.settings.default_llm
+    const modelId = (chat?.llm || clientLLM) as TextModelId;
 
     // Try to get the API key for the model
     // If it fails, return a 400 error with the error message
