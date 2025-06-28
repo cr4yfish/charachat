@@ -92,7 +92,7 @@ const components: Partial<Components> = {
       </h6>
     );
   },
-  p: ({ node, children, ...props }) => {
+  p: ({ children }) => {
     return (
       <p className="text-ellipsis " >
         {children}

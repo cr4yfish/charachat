@@ -4,7 +4,7 @@ import { Message, useChat } from '@ai-sdk/react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';;
 import { PromptInput } from './prompt-input';
 import { v4 as uuidv4 } from 'uuid';
-import { cn, fetcher } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { ChatSetup } from './chat-setup';
 import { useParams, useRouter } from 'next/navigation';
 import { ERROR_MESSAGES } from '@/lib/constants/errorMessages';
@@ -13,11 +13,9 @@ import { ImageGenDrawer } from './image-gen-drawer';
 import { ShallowCharacter } from '@/lib/db/types/character';
 import { _INTRO_MESSAGE_PLACEHOLDER } from "@/lib/constants/defaults";
 import { addMemoryToRAG, RAGMemory, searchRAG } from '@/lib/ai/agents/rag';
-import useSWRInfinite from 'swr/infinite';
 import { API_ROUTES } from '@/lib/constants/apiRoutes';
 import { LIMITS } from '@/lib/constants/limits';
 import { Virtuoso } from 'react-virtuoso';
-import { TIMINGS_MILLISECONDS } from '@/lib/constants/timings';
 import { Message as MessageComponent } from './message';
 import { TOOL_NAMES } from '@/lib/constants/toolNames';
 import equal from 'fast-deep-equal';
@@ -157,50 +155,6 @@ export const PureChat = (props: Props) => {
       }
     },
   });
-  
-  const { setSize } = useSWRInfinite<Message[]>(
-    (pageIndex, previousPageData) => {
-      // If there are no previous pages, return null to stop fetching
-      if (previousPageData && previousPageData.length === 0) return null;
-
-      // pageIndex*Limit -> full number of messages fetched so far
-      // add one limit to offset for the initial server-side fetched messages
-      const cursor = pageIndex * LIMITS.MAX_MESSAGES_PER_PAGE + LIMITS.MAX_MESSAGES_PER_PAGE;
-      // Return the key for the next page
-      return `${API_ROUTES.GET_CHAT_MESSAGES}${props.chatId}&from=${cursor}&limit=${LIMITS.MAX_MESSAGES_PER_PAGE}`;
-    },
-    fetcher,
-    {
-      fallbackData: [props.initialMessages],
-      revalidateFirstPage: false,
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      keepPreviousData: true,
-      dedupingInterval: TIMINGS_MILLISECONDS.FIVE_MINUTES, // 5 minutes
-      focusThrottleInterval: TIMINGS_MILLISECONDS.FIVE_MINUTES, // 5 minutes
-      suspense: true
-    }
-  )
-
-  // useEffect(() => {
-  //   const flat = data ? data.flat() : []; 
-    
-  //   // add the new messages to the start of the messages array
-  //   setMessages((prevMessages) => {
-  //     // If the previous messages are empty, return the flat messages
-  //     if (!prevMessages || prevMessages.length === 0) return flat;
-
-  //     // there can be duplicate messages, so we need to filter them out
-  //     // filter by ID
-  //     const uniqueMessages = flat.filter((msg) => !prevMessages.some((prevMsg) => prevMsg.id === msg.id));
-
-  //     console.log("Unique messages:", uniqueMessages);
-  //     // Otherwise, return the flat messages with the previous messages
-  //     return uniqueMessages.concat(prevMessages);
-  //   });
-    
-  // }, [data, setMessages]);
 
   const isLoading = useMemo(() => {
     return status === 'streaming' || status === 'submitted';
@@ -292,12 +246,6 @@ export const PureChat = (props: Props) => {
     });
 
   }, [append, props.chatId, props.shallowCharacter?.id]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleLoadMore = useCallback(() => {
-    // Load more messages by increasing the size of the SWR infinite data 
-    setSize((prevSize) => prevSize + 1);
-  }, [setSize]);
 
   const deleteCallback = useCallback((messageId: string) => {
     // Filter out message
