@@ -33,7 +33,7 @@ const PureTopBar = (props: Props) => {
         <>
         <header className={cn("fixed z-50 top-0 left-0 h-[75px] w-full flex flex-row justify-center items-center bg-gradient-to-b from-black/50 to-transparent", { "ml-[260px] pr-[280px]": !isMobile })} >
             <div className="px-4 py-2 ios-safe-header-padding  flex items-center justify-between w-full relative max-w-[1920px] ">
-                <div className="flex flex-row items-center gap-1">
+                <div className="flex flex-row items-center gap-1 max-w-3/4 overflow-hidden">
                     <Link href={"/"} onClick={(e) => {
                         e.preventDefault();
                         router.back();
@@ -43,7 +43,7 @@ const PureTopBar = (props: Props) => {
                         </Button>
                     </Link>
 
-                    <div className="flex flex-row items-center gap-2">
+                    <div className="flex flex-row items-center gap-2 w-full overflow-hidden">
                         {props.shallowCharacter?.image_link && 
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="size-[28px] rounded-full overflow-hidden relative">
                                 <Image 
@@ -55,7 +55,7 @@ const PureTopBar = (props: Props) => {
                             </motion.div>
                         }
 
-                        {props.shallowCharacter?.id ?<Link href={"/c/" + props.shallowCharacter.id} className="font-bold truncate " >
+                        {props.shallowCharacter?.id ?<Link href={"/c/" + props.shallowCharacter.id} className="font-bold truncate w-full overflow-hiddene  " >
                             {props.shallowCharacter?.name}
                         </Link> :
                         <span>Charachat</span>}
