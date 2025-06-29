@@ -6,6 +6,8 @@ import { ImporterSearchResults } from "./importer-search-results";
 import { ChevronLeftIcon, LoaderCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 export type ImportCharType = {
     sourceId?: string; // Optional source ID for tracking
@@ -24,7 +26,8 @@ type Props<T = unknown> = {
 const PureImporter = ({ label, searchAction }: Props) => {
     const [searchResults, setSearchResults] = useState<ImportCharType[]>([]);
     const [loading, setLoading] = useState(false);
-
+    const { isMobile } = useSidebar();
+ 
     const handleSearch = useCallback(async (search: string) => {
         setLoading(true);
         try {
@@ -45,7 +48,9 @@ const PureImporter = ({ label, searchAction }: Props) => {
 
     return (
         <>
-        <div className="fixed top-0 left-0 w-full min-h-[75px] h-fit bg-gradient-to-b from-background/80 to-background/80 z-50">
+        <div className={cn("fixed top-0 left-0 w-full min-h-[75px] h-fit bg-gradient-to-b from-background/80 to-background/80 z-50", {
+             "ml-[255px]": !isMobile,
+        })}>
             <div className="relative size-full px-4 py-2 ios-safe-header-padding  flex items-center justify-start">
                 <Link href={"/c/new"}>
                     <Button variant={"ghost"}><ChevronLeftIcon /></Button>
