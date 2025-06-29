@@ -195,7 +195,9 @@ const PurePromptInput = (props: Props) => {
                                     size={"icon"} 
                                     type={isFocused ? "submit" : "button"}
                                     onClick={(e) => {
-                                        if (props.openImageDrawer) {
+                                        // Open image drawer if the input is not focused
+                                        // and the openImageDrawer prop is provided
+                                        if (props.openImageDrawer && !isFocused) {
                                             e.preventDefault();
                                             props.openImageDrawer();
                                         } else {
