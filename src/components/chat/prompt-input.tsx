@@ -1,7 +1,7 @@
 import { memo, useCallback, useRef, useState } from "react";
 import { TextareaWithAutosize } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { PauseIcon, RefreshCwIcon, SendIcon } from "lucide-react";
+import { ImageIcon, PauseIcon, RefreshCwIcon, SendIcon } from "lucide-react";
 import { cn, fetcher } from "@/lib/utils";
 import { Suggestion as SuggestionType } from "@/lib/ai/agents/suggestions";
 import useSWR from "swr";
@@ -91,6 +91,7 @@ type Props = {
     isLoading: boolean,
     chatId?: string;
     relative?: boolean; // if true, the input will be positioned relative to the parent container
+    openImageDrawer?: () => void; // function to open the image drawer
 }
 
 const PurePromptInput = (props: Props) => {
@@ -188,9 +189,24 @@ const PurePromptInput = (props: Props) => {
                         onBlur={handleBlur}
                         endContent={
                             <motion.div layout className='flex items-end h-full py-3'>
-                                <Button variant={"secondary"} className='z-10 rounded-full p-4 transition-all shrink-0 min-h-[36px] !size-[36px]' size={"icon"} type='submit'>
-                                    {props.isLoading ? <PauseIcon fill="currentColor" /> : <SendIcon />}
+                                <Button 
+                                    variant={"secondary"} 
+                                    className='z-10 rounded-full p-4 transition-all shrink-0 min-h-[36px] !size-[36px]' 
+                                    size={"icon"} 
+                                    type={isFocused ? "submit" : "button"}
+                                    onClick={(e) => {
+                                        if (props.openImageDrawer) {
+                                            e.preventDefault();
+                                            props.openImageDrawer();
+                                        }
+                                    }}
+                                >
+                                    {props.isLoading ? <PauseIcon fill="currentColor" /> : (
+                                    
+                                        isFocused ? <SendIcon /> : <ImageIcon />
+                                    )}
                                 </Button>
+                                
                             </motion.div>
                         }
                     />

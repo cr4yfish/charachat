@@ -316,6 +316,7 @@ export const PureChat = (props: Props) => {
       {setupDone && 
       <PromptInput
         submitMiddleWare={submitMiddleWare}
+        openImageDrawer={() => setImageGenOpen(true)}
         isLoading={isLoading}
         chatId={props.chatId}
       />
