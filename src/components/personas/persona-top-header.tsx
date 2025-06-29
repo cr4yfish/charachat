@@ -31,8 +31,9 @@ function PurePersonaTopHeader({ persona, isOwner, isDefault } : { persona: Perso
 
     const handleSetDefault = () => {
         setIsSettingDefault(true);
-        setInternalIsDefault(prev => !prev);
-        setPersonaDefault(persona.id, internalIsDefault)
+        const newState = !internalIsDefault;
+        setInternalIsDefault(newState);
+        setPersonaDefault(persona.id, newState)
         .then(() => {
             mutateProfile((prev) => {
                 if (!prev) return prev;
@@ -40,7 +41,7 @@ function PurePersonaTopHeader({ persona, isOwner, isDefault } : { persona: Perso
                     ...prev,
                     settings: {
                         ...prev.settings,
-                        default_persona_id: internalIsDefault ? undefined : persona.id,
+                        default_persona_id: newState ? persona.id :undefined
                     }
                 };
             });
