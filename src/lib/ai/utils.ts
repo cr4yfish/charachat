@@ -74,6 +74,8 @@ export const getProviderAPIKey = (providerId: ProviderId | string, profile: Prof
         case "ArliAI":
             return profile.api_keys?.find(key => key.provider === "ArliAI")?.encrypted_api_key;
         
+        case "Chutes":
+            return profile.api_keys?.find(key => key.provider === "Chutes")?.encrypted_api_key;
 
         default:
             return undefined;

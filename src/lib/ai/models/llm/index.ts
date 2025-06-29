@@ -97,7 +97,13 @@ export type TextModelId =
      * ArliAI
      */
     "DS-R1-Distill-70B-ArliAI-RpR-v4-Large" | "Gemma-3-27B-ArliAI-RPMax-v3" | "Llama-3.3-70B-ArliAI-RPMax-v2" | "Gemma-3-27B-CardProjector-v4" |
-    "Llama-3.3-70B-Legion-V2.1"
+    "Llama-3.3-70B-Legion-V2.1" |
+
+    /**
+     * Chutes
+     */
+    "deepseek-ai/DeepSeek-V3-0324" | "TheDrummer/Cydonia-24B-v2.1" | "thedrummer/skyfall-36b-v2" | "deepseek-ai/DeepSeek-R1-0528" | "tngtech/DeepSeek-R1T-Chimera" |
+    "NousResearch/DeepHermes-3-Mistral-24B-Preview" | "unsloth/gemma-3-27b-it"
 
 
 export type Feature = "tools" | "reasoning"
@@ -613,5 +619,67 @@ export const LLMs: LLM[] = [
         "provider": "You",
         "usecase": "Depends on your model"
     },
+
+    /**
+     * Chutes
+     */
+    {
+        key: "deepseek-ai/DeepSeek-V3-0324",
+        name: "DeepSeek V3",
+        provider: "Chutes",
+        usecase: "Fast, high quality",
+        tags: ["Quality", "Fast"],
+        features: ["tools"],
+        isFree: true,
+    },
+    {
+        key: "TheDrummer/Cydonia-24B-v2.1",
+        name: "Cydonia 24B v2.1",
+        provider: "Chutes",
+        usecase: "Cydonia 24B v2.1 is a 24 billion parameter open-source language model based on Mistral's 'Small' model, fine-tuned for improved creative writing and storytelling with reduced artificial positivity.",
+        tags: ["Quality", "Fast"],
+        isFree: true,
+    },
+    {
+        key: "thedrummer/skyfall-36b-v2",
+        name: "Skyfall 36B v2",
+        provider: "Chutes",
+        usecase: "Skyfall 36B v2 is a 36 billion parameter LLM based on Mistral that has been fine-tuned for creative writing and roleplaying capabilities.",
+        tags: ["Quality", "Fast"],
+        isFree: true,
+    },
+    {
+        key: "deepseek-ai/DeepSeek-R1-0528",
+        name: "DeepSeek R1",
+        provider: "Chutes",
+        usecase: "DeepSeek-R1-0528 is an open-source large language model optimized for complex reasoning and inference tasks like mathematics and programming.",
+        tags: ["Quality", "Fast"],
+        isFree: true,
+    },
+    {
+        key: "tngtech/DeepSeek-R1T-Chimera",
+        name: "DeepSeek Chimera",
+        provider: "Chutes",
+        usecase: "DeepSeek-R1T-Chimera is an open-source merged language model combining DeepSeek-R1's intelligence with DeepSeek-V3's token efficiency.",
+        tags: ["Quality", "Fast"],
+        isFree: true,
+    },
+    {
+        key: "NousResearch/DeepHermes-3-Mistral-24B-Preview",
+        name: "Deep Hermes 3 Mistral 24B Preview",
+        provider: "Chutes",
+        usecase: "DeepHermes 3 is a 24B parameter language model that uniquely combines traditional chat responses with deep reasoning capabilities.",
+        tags: ["Quality", "Fast"],
+        isFree: true,
+    },
+    {
+        key: "unsloth/gemma-3-27b-it",
+        name: "Gemma 3 27B IT",
+        provider: "Chutes",
+        usecase: "Gemma 3 is a family of open-source multimodal models from Google DeepMind.",
+        tags: ["Quality", "Fast"],
+        isFree: true,
+        contextLength: 128000
+    }
 
 ]

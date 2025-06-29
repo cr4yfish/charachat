@@ -5,7 +5,7 @@ import { getKeyServerSide } from "../crypto/server";
 import { getLLMById, getProviderAPIKey } from "./utils";
 import { Profile } from "../db/types/profile";
 import { LanguageModelV1 } from "ai";
-import { getAnthropic, getArliAI, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getPerplexity, getXai } from "./providers";
+import { getAnthropic, getArliAI, getChutes, getCohere, getDeepSeek, getGemini, getGroq, getMistral, getOpenAI, getOpenAICompatible, getOpenRouter, getPerplexity, getXai } from "./providers";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { TextModelId } from "./models/llm";
 
@@ -91,6 +91,9 @@ export async function getLanguageModel({ modelId, baseURL, apiKey }: GetLanguage
             
         case "ArliAI":
             return getArliAI(modelId, apiKey);
+
+        case "Chutes":
+            return getChutes(modelId, apiKey);
 
         default:
             throw new Error(ERROR_MESSAGES.LLM_MODEL_NOT_FOUND);
