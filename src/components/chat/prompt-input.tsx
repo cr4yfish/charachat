@@ -198,6 +198,8 @@ const PurePromptInput = (props: Props) => {
                                         if (props.openImageDrawer) {
                                             e.preventDefault();
                                             props.openImageDrawer();
+                                        } else {
+                                            handleSubmit(e);
                                         }
                                     }}
                                 >
