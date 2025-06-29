@@ -318,7 +318,7 @@ const PureNewCharacterFromScratch = ({ initCharacter, small, defaultOpen }: Prop
 
                 {step === "details" &&
                 <motion.div 
-                    className="flex flex-col gap-4 p-4 overflow-y-auto h-full"
+                    className="flex flex-col gap-4 p-4 overflow-y-auto h-fit"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
