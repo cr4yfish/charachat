@@ -208,8 +208,6 @@ export async function searchFandom(search: string): Promise<ImportCharType[]> {
         } as ImportCharType);
     })
 
-    console.log("Fandom search results:", results);
-
     if (results.length === 0) {
         console.warn("No characters found for Fandom search:", search);
     }

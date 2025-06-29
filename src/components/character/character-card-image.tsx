@@ -73,7 +73,6 @@ const PureImageCard = (props: CardProps) => {
         if (props.data.image_link && !hoverColor) {
             // Extract color on each hover - it's fast enough for small canvas
             const color = await extractPrimaryColor(props.data.image_link);
-            console.log("Extracted color:", color);
             setHoverColor(color);
         }
     }, [props.data.image_link, hoverColor]);
