@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { isValidURL, safeParseLink } from "@/lib/utils/text";
 import { imageModels } from "@/lib/ai/models/image";
 import Image from "next/image";
+import { AspectRatio } from "../ui/aspect-ratio";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 type Step = "prompt" | "model" | "result";
 
@@ -100,7 +102,7 @@ const PureImageGenDrawer = (props: Props) => {
 
     return (
         <Drawer open={props.isOpen} onOpenChange={props.onOpenChange}>
-            <DrawerContent className="h-screen ios-safe-header-padding">
+            <DrawerContent className="max-h-screen min-h-screen ios-safe-header-padding-drawer">
                 <DrawerHeader>
                     <DrawerTitle>Image Generator</DrawerTitle>
                     <DrawerDescription>This action cannot be undone.</DrawerDescription>
@@ -115,27 +117,48 @@ const PureImageGenDrawer = (props: Props) => {
                         <TabsContent value="prompt">
                             <TextareaWithCounter 
                                 maxLength={1000} 
+                                rows={12}
+                                className="min-h-[300px] h-full"
                                 placeholder="Image prompt" 
                                 onChange={setImagePrompt}
                                 description="Describe the image you want to generate. Use keyword for best results. Order matters." 
                             />
                         </TabsContent>
                         <TabsContent value="model">
+                            <ScrollArea className="w-full h-[160px]">
+                                <div  className="flex flex-row gap-2 w-max">
+                                    {imageModels.map((model) => (
+                                        <div
+                                            key={model.id}
+                                            className={cn("relative border border-border flex flex-col items-center gap-2 rounded-xl shrink-0 w-[90px] h-[150px] px-2 py-1 cursor-pointer transition-all overflow-hidden")}
+                                            onClick={() => setImageModel(model)}
+                                        >
+                                            {/* Image */}
+                                            {model.image && (
+                                                <AspectRatio ratio={3/4} className="w-[75px] overflow-hidden rounded-md" >
+                                                    <Image 
+                                                        src={safeParseLink(model.image)} 
+                                                        alt={model.name} fill
+                                                        className={cn("pointer-events-none object-center object-cover")}
+                                                    />
+                                                </AspectRatio>
+                                            )}
+                                            
+                                            {/* Bg blur */}
+                                            <div className={cn("absolute top-0 left-0 size-full -z-10 blur-xl pointer-events-none opacity-10 transition-all", { "opacity-100": imageModel?.id === model.id })}>
+                                                <Image 
+                                                    src={safeParseLink(model.image || "https://via.placeholder.com/32")} 
+                                                    alt={model.name} fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
 
-                            <div className="flex flex-row flex-wrap overflow-x-auto gap-2">
-                                {imageModels.map((model) => (
-                                    <Button
-                                        key={model.id}
-                                        variant={"ghost"}
-                                        className={cn("", {  
-                                            "bg-neutral-800": imageModel?.id === model.id,
-                                        })}
-                                        onClick={() => setImageModel(model)}
-                                    >
-                                        {model.title} ({model.style})
-                                    </Button>
-                                ))}
-                            </div>
+                                            <span className="text-xs">{model.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
 
                         </TabsContent>
                         <TabsContent value="result">
