@@ -69,7 +69,7 @@ type Props = {
 }
 
 function PureCharacterBubbles({ variant }: Props) {
-    const { data: chars } = useSWR<Character[] | Persona[]>((variant === "character" ? API_ROUTES.GET_CHARACTERS : API_ROUTES.GET_PERSONAS )+ "?limit=100", fetcher, {
+    const { data: chars } = useSWR<Character[] | Persona[]>((variant === "character" ? API_ROUTES.GET_CHARACTERS : API_ROUTES.GET_PERSONAS )+ "?limit=25", fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
