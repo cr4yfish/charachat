@@ -10,10 +10,10 @@ import { setSettingsCookie } from "../actions";
  * isDefault is the current state of the persona.
  
  * @param id 
- * @param isDefault 
+ * @param shouldBeDefault 
  * @returns 
  */
-export async function setPersonaDefault(id: string, isDefault: boolean) {
+export async function setPersonaDefault(id: string, shouldBeDefault: boolean) {
     try {
         const user = await currentUser();
         if (!user) {
@@ -27,13 +27,13 @@ export async function setPersonaDefault(id: string, isDefault: boolean) {
             ...profile,
             settings: {
                 ...profile.settings,
-                default_persona_id: isDefault ? undefined : id,
+                default_persona_id: shouldBeDefault ? id : undefined,
             }
         })
 
         await setSettingsCookie(JSON.stringify({
             ...profile.settings,
-            default_persona_id: isDefault ? undefined : id,
+            default_persona_id: shouldBeDefault ? id : undefined,
         }));
 
         return { success: true };
