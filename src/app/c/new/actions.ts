@@ -158,9 +158,63 @@ export async function searchAnime(search: string): Promise<ImportCharType[]> {
 
 }
 
-export async function searchFandomPages(search: string) {
-    const res = await fetch(`https://community.fandom.com/wiki/Special:Search?query=${search}&scope=cross-wiki`);
-    return res.text();
+export async function searchFandom(search: string): Promise<ImportCharType[]> {
+    const text = await unstable_cache(
+        async () => {
+            const res = await fetch(`https://community.fandom.com/wiki/Special:Search?query=${search}&scope=cross-wiki`);
+
+            if (!res.ok) {
+                console.error("Failed to fetch from Fandom:", res.statusText);
+                throw new Error("Failed to fetch from Fandom");
+            }
+
+            return await res.text();
+        }
+        , 
+        [`search-fandom-${search}`], 
+        {
+            revalidate: TIMINGS.SIX_HOURS // Cache for 6 hours
+        }
+    )();
+
+    const $ = cheerio.load(text);
+
+    const results: ImportCharType[] = [];
+
+    const listItems = $(".unified-search__result");
+    
+    listItems.each((_, el) => {
+        const $el = $(el);
+
+        // is in format [link].png|.jpg/revision/...
+        const rawImageLink = $el.find(".unified-search__result__title").attr("data-thumbnail");
+
+        // Extract the image link from the rawImageLink
+        let imageLink = "";
+        if (rawImageLink) {
+            const match = rawImageLink.match(/^(.*?)(\.png|\.jpg)/);
+            if (match && match[1]) {
+                imageLink = match[1] + match[2]; // Append the file extension
+            }
+        }
+        
+
+        results.push({
+            name: $el.find(".unified-search__result__title").text().trim(),
+            description: $el.find(".unified-search__result__content").text().trim(),
+            imageLink: imageLink,
+            source: "Fandom",
+            sourceId:$el.find(".unified-search__result__title").attr("href") || "",
+        } as ImportCharType);
+    })
+
+    console.log("Fandom search results:", results);
+
+    if (results.length === 0) {
+        console.warn("No characters found for Fandom search:", search);
+    }
+
+    return results;
 }
 
 export async function searchSillyTavern(search: string): Promise<ImportCharType[]> {
