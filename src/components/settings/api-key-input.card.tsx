@@ -17,6 +17,7 @@ import equal from 'fast-deep-equal';
 import Spinner from "../ui/spinner";
 import { CheckIcon } from "lucide-react";
 import { useProfile } from "@/hooks/use-profile";
+import { imageModels } from "@/lib/ai/models/image";
 
 const PureAPIKeyInputCard = () => {
     const { profile, mutateProfile, isLoading, isValidating, } = useProfile();
@@ -159,6 +160,15 @@ const PureAPIKeyInputCard = () => {
                             llm={model} 
                             key={model.key} 
                             isActive={hasApiKey}
+                            type="text"
+                          />
+                        )}
+                        {imageModels.filter(model => model.provider === provider.id).map(model => 
+                          <LLMBadge
+                            llm={model}
+                            key={model.id}
+                            isActive={hasApiKey}
+                            type="image"
                           />
                         )}
                       </div>
