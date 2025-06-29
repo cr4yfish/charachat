@@ -4,70 +4,140 @@ import { ProviderId } from "../providers";
 
 
 export type ImageModelId = 
-    "black-forest-labs/FLUX.1-schnell" |
-    "strangerzonehf/Flux-Midjourney-Mix2-LoRA" |
-    "XLabs-AI/flux-RealismLora" |
-    "xey/sldr_flux_nsfw_v2-studio" |
-    "shuttleai/shuttle-3.1-aesthetic" |
-    "Djrango/Qwen2vl-Flux" |
-    "Shakker-Labs/AWPortraitCN" |
-    "stabilityai/sdxl-turbo" |
-    "luma/photon-flash" |
+/**
+ * Replicate models
+ */
+    /**
+     * Black Forest Labs models
+     */
     "black-forest-labs/flux-schnell" |
-    "nvidia/sana:c6b5d2b7459910fec94432e9e1203c3cdce92d6db20f714f1355747990b52fa6" |
     "black-forest-labs/flux-1.1-pro-ultra" |
     "black-forest-labs/flux-1.1-pro" |
-    "stability-ai/stable-diffusion-3.5-large" |
-    "stability-ai/stable-diffusion-3.5-large-turbo" |
-    "datacte/proteus-v0.3:b28b79d725c8548b173b6a19ff9bffd16b9b80df5b18b8dc5cb9e1ee471bfa48" |
-    "makinsongary698/jh:4423082b68f497cf91a93031872cb5c3f7d5f8a9de8fa32d4db94e17094049b9" |
-    "datacte/flux-aesthetic-anime:2c3677b83922a0ac99493467805fb0259f55c4f4f7b1988b1dd1d92f083a8304" |
-    "delta-lock/ponynai3:ea38949bfddea2db315b598620110edfa76ddaf6313a18e6cbc6a98f496a34e9" |
-    "charlesmccarthy/pony-sdxl:b070dedae81324788c3c933a5d9e1270093dc74636214b9815dae044b4b3a58a" |
-    "delta-lock/noobai-xl:dceca5ec09fd6fd0e5dbd5d3dcefb25f73802560e5b89008021fd07c9691e880" |
-    "lucataco/flux-dev-lora:091495765fa5ef2725a175a57b276ec30dc9d39c22d30410f2ede68a3eab66b3" |
+    "black-forest-labs/flux-kontext-pro" |
+    
+    /**
+     * Anime style stuff
+     */
     "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9" |
-    "aisha-ai-official/animagine-xl-4.0:057e2276ac5dcd8d1575dc37b131f903df9c10c41aed53d47cd7d4f068c19fa5" |
-    "aisha-ai-official/wai-nsfw-illustrious-v11:152992479714a33337898ed89d84dd2e74a6111834638d04135f4efc2cba94f2" |
-    "google/imagen-3"
+    "delta-lock/ponynai3:848da0d3e5a762b8662592acd1818003a3b4672f513d7250895bd0d96c6a48c9" |
+
+    /**
+     * Google models
+     */
+    "google/imagen-4" |
+    "google/imagen-4-fast" |
+    "google/imagen-4-ultra" |
+
+    /**
+     * Bytedance
+     */
+    "bytedance/seedream-3" |
+
+    /**
+     * Minimax
+     */
+    "minimax/image-01"
+
+export type ImageFeature = "character_reference"
 
 export type ImageModel = {
     id: ImageModelId;
-    title: string;
-    style: string;
+    name: string;
+    style?: string;
     provider: ProviderId;
     extra_lora?: Lora[];
+    features?: ImageFeature[];
+    image?: string; // URL to an image representing the model
 }
 
 export const imageModels: ImageModel[] = [
+/**
+ * Replicate models
+ */
+    /**
+     * Black Forest Labs models
+     */
     {
         id: "black-forest-labs/flux-schnell",
-        title: "Flux Schnell",
-        style: "Flux Fast",
+        name: "Flux Schnell",
         provider: "Replicate",
+        image: "https://tjzk.replicate.delivery/models_models_featured_image/67c990ba-bb67-4355-822f-2bd8c42b2f0d/flux-schnell.webp"
     },
     {
         id: "black-forest-labs/flux-1.1-pro",
-        title: "Flux Pro",
-        style: "Flux Pro",
+        name: "Flux Pro",
         provider: "Replicate",
+        image: "https://tjzk.replicate.delivery/models_models_featured_image/bd872eff-363a-4e10-8cc1-84057afa9f57/flux-1.1-cover.webp"
     },
     {
         id: "black-forest-labs/flux-1.1-pro-ultra",
-        title: "Flux Pro Ultra",
-        style: "Flux Ultra",
+        name: "Flux Ultra",
         provider: "Replicate",
+        image: "https://tjzk.replicate.delivery/models_models_featured_image/8121c76b-fbff-41d9-834d-c70dea9d2191/flux-ultra-cover.jpg"
     },
     {
-        id: "google/imagen-3",
-        title: "Imagen 3",
-        style: "Imagen 3",
+        id: "black-forest-labs/flux-kontext-pro",
+        name: "Flux Kontext",
         provider: "Replicate",
+        features: ["character_reference"],
+        image: "https://replicate.delivery/xezq/83OKs6yfdoT5YCpfREnrFFbqLbfWbus8Q0e06fQ0BAMDRKamC/tmpu3nqollf.jpg"
     },
+
+    /**
+     * Google
+     */
+    {
+        id: "google/imagen-4",
+        name: "Imagen",
+        provider: "Replicate",
+        image: "https://tjzk.replicate.delivery/models_models_featured_image/895ffdc5-07d6-4b16-ac62-b27ba5b24468/4ccgkq0a6xrm80cpykfszajfaw.webp"
+    },
+    {
+        id: "google/imagen-4-fast",
+        name: "Imagen Fast",
+        provider: "Replicate",
+        image: "https://tjzk.replicate.delivery/models_models_featured_image/73c5af65-f578-4113-b62c-2a56971cff2f/replicate-prediction-trmpwr78.webp"
+    },
+    {
+        id: "google/imagen-4-ultra",
+        name: "Imagen Ultra",
+        provider: "Replicate",
+        image: "https://replicate.delivery/xezq/eAsULzF8tzzXVSUtp7rvlDPqEkePBcLeTTWnqsSaCKYRtLspA/tmpikc6119g.jpg"
+    },
+
+    /**
+     * Bytedance
+     */
+    {
+        id: "bytedance/seedream-3",
+        name: "Seedream",
+        provider: "Replicate",
+        image: "https://tjzk.replicate.delivery/models_models_featured_image/de2ae1dd-f7b8-4b9e-901e-86125ac2b4a8/tmpcoezojc2.jpg"
+    },
+
+
     {
         id: "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9",
-        title: "animagine xl 3.1",
-        style: "Animagine3",
+        name: "Animagine",
         provider: "Replicate",
+        image: "https://replicate.delivery/pbxt/eoW2VutuKlU6VCWExLyif2ETCw7eqbeg6c9U2ewf2Uq2cAioE/out.png"
+    },
+    {
+        id: "delta-lock/ponynai3:848da0d3e5a762b8662592acd1818003a3b4672f513d7250895bd0d96c6a48c9",
+        name: "PonyNai",
+        provider: "Replicate",
+        features: ["character_reference"],
+        image: "https://replicate.delivery/xezq/Z0fpC39b1awejU1b0CqGnleieJnyd0p1ZHN7WW0KINJLDNuSB/0.png"
+    },
+
+    /**
+     * Minimax
+     */
+    {
+        id: "minimax/image-01",
+        name: "Minimax",
+        provider: "Replicate",
+        features: ["character_reference"],
+        image: "https://tjzk.replicate.delivery/models_models_cover_image/926994db-2c8e-4b7d-934f-2f86b2480e55/43b05178-4b2a-42d9-9130-4fedae65.webp"
     },
 ]
