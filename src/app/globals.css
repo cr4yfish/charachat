@@ -314,6 +314,11 @@
   padding-top: max(8px, env(safe-area-inset-top));
 }
 
+.ios-safe-header-padding-drawer {
+  padding-top: 8px;
+  padding-top: max(8px, env(safe-area-inset-top) + 16px);
+}
+
 .ios-safe-header-padding-chat {
   padding-top: 110px;
   padding-top: max(110px, calc(env(safe-area-inset-top) + 110px));

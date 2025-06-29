@@ -35,7 +35,7 @@ function MarketingCard() {
                     </div>
                 </div>
             </DialogTrigger>            
-            <DialogContent className="max-w-md max-h-screen max-sm:h-screen">
+            <DialogContent className="max-w-md max-h-screen max-sm:h-screen ios-safe-header-padding-drawer">
                 <DialogHeader>
                     <DialogTitle>🔒 Why Charachat is Different</DialogTitle>
                     <DialogDescription>
