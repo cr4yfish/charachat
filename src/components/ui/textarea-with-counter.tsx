@@ -45,6 +45,7 @@ type Props = {
     height?: number; // Optional height prop, not used in the component but can be passed
     name?: string; // Optional name prop, not used in the component but can be passed
     disabled?: boolean; // Optional disabled prop, not used in the component but can be passed
+    className?: string; // Optional className prop for additional styling
     ai?: {
         prompt?: string;
     }
@@ -128,7 +129,7 @@ export const PureTextareaWithCounter = (props: Props) => {
                     id={props.name  || props.label?.toLowerCase().replace(/\s+/g, '-') || 'textarea'}
                     onChange={handleChange}
                     ref={props.ref}
-                    className={cn("pb-6 h-full bg-black border-border max-h-[250px] text-sm md:text-base", props.noResize ? "resize-none" : "resize-y")}
+                    className={cn("pb-6 h-full bg-black border-border max-h-[250px] text-sm md:text-base", props.noResize ? "resize-none" : "resize-y", props.className)}
                     rows={props.rows || 4}
                     maxLength={props.maxLength}
                     placeholder={props.placeholder || "Type your message here..."}
@@ -162,5 +163,13 @@ export const TextareaWithCounter = memo(PureTextareaWithCounter, (prevProps, nex
             prevProps.label === nextProps.label &&
             prevProps.optional === nextProps.optional &&
             prevProps.onChange === nextProps.onChange &&
-            prevProps.ref === nextProps.ref;
+            prevProps.ref === nextProps.ref &&
+            prevProps.noResize === nextProps.noResize &&
+            prevProps.rows === nextProps.rows &&
+            prevProps.height === nextProps.height &&
+            prevProps.name === nextProps.name &&
+            prevProps.disabled === nextProps.disabled &&
+            prevProps.ai?.prompt === nextProps.ai?.prompt &&
+            prevProps.className === nextProps.className;
+
 });
