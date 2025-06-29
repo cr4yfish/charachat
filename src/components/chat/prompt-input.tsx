@@ -22,8 +22,8 @@ const PureSuggestion = ({ suggestion, onClick }: { suggestion: SuggestionType, o
             transition={{ duration: 0.2, ease: "easeInOut" }}
         >
             <Button 
-                variant={"secondary"} 
-                className="rounded-full text-xs border text-white/75 bg-primary/25 backdrop-blur"
+                variant={"ghost"} 
+                className="rounded-full text-xs border"
                 onClick={handleClick}
             >
                 {suggestion.title}
@@ -167,7 +167,9 @@ const PurePromptInput = (props: Props) => {
         >
             <div className={cn("flex flex-col items-center gap-2 w-full max-w-[500px] relative")}>
                 <AnimatePresence presenceAffectsLayout>
-                    {props.chatId && isFocused && <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />}
+                    {props.chatId && !isFocused && 
+                        <Suggestions onClick={handleClickSuggestion} chatId={props.chatId} />
+                    }
                 </AnimatePresence>
                 <motion.form 
                     onSubmit={handleSubmit} 
@@ -185,15 +187,13 @@ const PurePromptInput = (props: Props) => {
                         onFocus={() => setIsFocused(true)}
                         onBlur={handleBlur}
                         endContent={
-                            <motion.div layout className=''>
+                            <motion.div layout className='flex items-end h-full py-3'>
                                 <Button variant={"secondary"} className='z-10 rounded-full p-4 transition-all shrink-0 min-h-[36px] !size-[36px]' size={"icon"} type='submit'>
                                     {props.isLoading ? <PauseIcon fill="currentColor" /> : <SendIcon />}
                                 </Button>
                             </motion.div>
                         }
                     />
-
-            
                 </motion.form>
             </div>
         </div>
