@@ -51,7 +51,7 @@ export type TextModelId =
     /**
      *  Anthropic
      */
-    "claude-3-5-haiku-latest" | "claude-sonnet-4-20250514" |  "claude-opus-4-20250514" |
+    "claude-3-5-haiku-latest" | "claude-sonnet-4-20250514" |  "claude-opus-4-20250514" | "claude-3-7-sonnet-latest" |
 
     /**
      * miscellaneous models
@@ -287,7 +287,7 @@ export const LLMs: LLM[] = [
         alias: "Claude",
         provider: "Anthropic",
         usecase: "Storytelling beast",
-        tags: ["Quality", "Uncensored"],
+        tags: ["Quality"],
         features: ["tools"],
         contextLength: 200000,
         recommended: true,
@@ -300,6 +300,17 @@ export const LLMs: LLM[] = [
         tags: ["Quality", "Uncensored"],
         features: ["tools"],
         contextLength: 200000
+    },
+    {
+        key: "claude-3-7-sonnet-latest",
+        name: "Claude Sonnet 3.7",
+        alias: "Sonnet 3.7",
+        provider: "Anthropic",
+        usecase: "Storytelling beast",
+        tags: ["Quality", "Uncensored"],
+        features: ["tools"],
+        contextLength: 200000,
+        recommended: true,
     },
     {
         "key": "claude-3-5-haiku-latest",
