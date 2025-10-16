@@ -84,7 +84,7 @@ export default function ChatMain(props : Props) {
             selfDestruct: isSelfDestruct
         },
         onFinish: async (message, { usage, finishReason }) => {
-            scrollToBottom();
+            // scrollToBottom();
             if (inputRef.current) {
                 inputRef.current.focus();
             }
