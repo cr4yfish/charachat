@@ -192,9 +192,9 @@ export default function ChatMain(props : Props) {
     }, [props.initMessages])
 
     useEffect(() => {
-        if(isLoading && messages.length > 0) {
-            scrollToBottom();
-        }
+        // if(isLoading && messages.length > 0) {
+        //     scrollToBottom();
+        // }
         if(!isLoading && messages.length > _MAX_MESSAGES_IN_CHAT) {
             setMessages(messages.slice(-_MAX_MESSAGES_IN_CHAT));
         }
